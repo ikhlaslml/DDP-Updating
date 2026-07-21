@@ -1,0 +1,2000 @@
+{
+  "_meta": {
+    "generated_by": "scripts/build-indikator-mapping.js",
+    "total_kolom": 269,
+    "kelompok": {
+      "identitas_keluarga": "Identitas Keluarga",
+      "pendidikan_kebudayaan": "Pendidikan dan Kebudayaan",
+      "infrastruktur_lingkungan": "Infrastruktur dan Lingkungan Hidup",
+      "sosial_hukum_ham": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "kesehatan_kerja_jamsos": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "sandang_pangan_papan": "Sandang, Pangan, dan Papan"
+    },
+    "jumlah_per_kelompok": {
+      "identitas_keluarga": 41,
+      "pendidikan_kebudayaan": 9,
+      "infrastruktur_lingkungan": 16,
+      "sosial_hukum_ham": 50,
+      "kesehatan_kerja_jamsos": 80,
+      "sandang_pangan_papan": 73
+    },
+    "target_per_kelompok": {
+      "identitas_keluarga": 41,
+      "pendidikan_kebudayaan": 9,
+      "infrastruktur_lingkungan": 16,
+      "sosial_hukum_ham": 50,
+      "kesehatan_kerja_jamsos": 72,
+      "sandang_pangan_papan": 71
+    },
+    "selisih_per_kelompok": {
+      "identitas_keluarga": 0,
+      "pendidikan_kebudayaan": 0,
+      "infrastruktur_lingkungan": 0,
+      "sosial_hukum_ham": 0,
+      "kesehatan_kerja_jamsos": 8,
+      "sandang_pangan_papan": 2
+    },
+    "perlu_konfirmasi": [
+      "subjek",
+      "responden",
+      "dinamika",
+      "aset_ekonomi",
+      "kandung",
+      "kesediaan",
+      "kb",
+      "pkb",
+      "ppkb",
+      "ppkt",
+      "miskin_uufm",
+      "nel_pernah",
+      "nel_waktu",
+      "nel_penangkapan",
+      "lahanmilik_lokasi",
+      "lahangarap_lokasi",
+      "lahansewa_lokasi"
+    ]
+  },
+  "kolom": {
+    "abs_id": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Abs Id",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "subjek": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Subjek",
+      "tipe": "string",
+      "enum": [
+        "Individu",
+        "Keluarga"
+      ],
+      "perlu_konfirmasi": true
+    },
+    "datamasuk": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Datamasuk",
+      "tipe": "date",
+      "perlu_konfirmasi": false
+    },
+    "enumerator": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Enumerator",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kode_bangunan": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Kode Bangunan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kode_deskel": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Kode Deskel",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "deskel": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Deskel",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "dusun": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Dusun",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rw": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Rw",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rt": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Rt",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lat": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Lat",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "lng": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Lng",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "responden": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Responden",
+      "tipe": "boolean",
+      "perlu_konfirmasi": true
+    },
+    "nkk": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Nkk",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nama": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Nama",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nik": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Nik",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "alamat": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Alamat",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "status_dalam_keluarga": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Status Dalam Keluarga",
+      "tipe": "string",
+      "enum": [
+        "Kepala Keluarga",
+        "Istri",
+        "Anak",
+        "Menantu",
+        "Cucu",
+        "Orang Tua",
+        "Famili Lain",
+        "Lainnya"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "status_kawin": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Status Kawin",
+      "tipe": "string",
+      "enum": [
+        "Belum Kawin",
+        "Kawin",
+        "Cerai Hidup",
+        "Cerai Mati"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "punya_ktp": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Punya Ktp",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "punya_aktalahir": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Punya Aktalahir",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "nama_kepala_rumah": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Nama Kepala Rumah",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nama_tulang_punggung": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Nama Tulang Punggung",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "no_hp": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "No Hp",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "jml_keluarga": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Jml Keluarga",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "tgl_lahir": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Tgl Lahir",
+      "tipe": "date",
+      "perlu_konfirmasi": false
+    },
+    "jk": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Jk",
+      "tipe": "string",
+      "enum": [
+        "L",
+        "P"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "thn_datang": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Thn Datang",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "dinamika": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Dinamika",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "agama": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Agama",
+      "tipe": "string",
+      "enum": [
+        "Islam",
+        "Kristen",
+        "Katolik",
+        "Hindu",
+        "Buddha",
+        "Khonghucu",
+        "Lainnya"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "suku": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Suku",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "bhs_keluarga": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Bhs Keluarga",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "bhs_daerah": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Bhs Daerah",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "tgl_kawin": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Tgl Kawin",
+      "tipe": "date",
+      "perlu_konfirmasi": false
+    },
+    "usia": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Usia",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "lama_tinggal": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Lama Tinggal",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "punya_kk": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Punya Kk",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "menetap": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Menetap",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "dead_jml": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Dead Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "akta_nikah": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Akta Nikah",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "akta_cerai": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Akta Cerai",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "partisipasi_sekolah": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Partisipasi Sekolah",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ijazah": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Ijazah",
+      "tipe": "string",
+      "enum": [
+        "Tidak/Belum Sekolah",
+        "SD",
+        "SMP",
+        "SMA",
+        "D1/D2/D3",
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "rp_pendidikan": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Rp Pendidikan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "bantuan_pendidikan": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Bantuan Pendidikan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "pendidikan_anggota": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Pendidikan Anggota",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "keterampilan": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Keterampilan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "pelatihan": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Pelatihan",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "pelatihan_ket": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Pelatihan Ket",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "refreshing": {
+      "kelompok": "pendidikan_kebudayaan",
+      "kelompok_label": "Pendidikan dan Kebudayaan",
+      "label": "Refreshing",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "pekarangan": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Pekarangan",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "pekarangan_luas": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Pekarangan Luas",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "pekarangan_air": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Pekarangan Air",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "pekarangan_tinggi": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Pekarangan Tinggi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "pekarangan_jenis": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Pekarangan Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "pekarangan_komoditas": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Pekarangan Komoditas",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "sampah_buang": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Sampah Buang",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "sampah_pilah": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Sampah Pilah",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "sampah_olah": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Sampah Olah",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "rumah_pln": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Rumah Pln",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "rp_listrik": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Rp Listrik",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "wifi": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Wifi",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "airbersih": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Airbersih",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "airminum": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Airminum",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "bahanbakar_masak": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Bahanbakar Masak",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rumah_solar": {
+      "kelompok": "infrastruktur_lingkungan",
+      "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
+      "label": "Rumah Solar",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "par_organisasi": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Par Organisasi",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "organisasi_nama": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Organisasi Nama",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "par_masyarakat": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Par Masyarakat",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "par_pemilu": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Par Pemilu",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "par_kebijakan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Par Kebijakan",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "bansos": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Bansos",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rp_zakat": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Zakat",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "wakaf": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Wakaf",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rp_persepuluh": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Persepuluh",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rp_dharma": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Dharma",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rp_paramita": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Paramita",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rp_sumbangan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Sumbangan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "disabilitas": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Disabilitas",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "korban_kejahatan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Korban Kejahatan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "hukum_bantuan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Hukum Bantuan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "hukum_jenis": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Hukum Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "tanah_nama": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Tanah Nama",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "tanah_nomor": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Tanah Nomor",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nomor_objek_pajak": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Nomor Objek Pajak",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "tanah_bukti": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Tanah Bukti",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "pbb_punya": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Pbb Punya",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "pbb_tahunbayar": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Pbb Tahunbayar",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "kesediaan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Kesediaan",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "medsos": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Medsos",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "media_informasi": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Media Informasi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kandung": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Kandung",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "aset_ekonomi": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Aset Ekonomi",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "pinjaman": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Pinjaman",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kb": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Kb",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "kulkas": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Kulkas",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "sepeda_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Sepeda Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "motor_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Motor Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "motor_merk": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Motor Merk",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "mobil_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Mobil Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "mobil_merk": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Mobil Merk",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "perahu_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Perahu Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "perahu_motor_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Perahu Motor Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "kapal_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Kapal Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "motorlistrik_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Motorlistrik Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "mobillistrik_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Mobillistrik Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "kendaraan_jml": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Kendaraan Jml",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "rp_kendaraan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Kendaraan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "hp_punya": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Hp Punya",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "hp_jumlah": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Hp Jumlah",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "hp_merk": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Hp Merk",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "hp_provider": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Hp Provider",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rp_komunikasi": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Komunikasi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "elektronik_rumah": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Elektronik Rumah",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rp_transportasi": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Transportasi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rp_cicilan": {
+      "kelompok": "sosial_hukum_ham",
+      "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
+      "label": "Rp Cicilan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kerja_profesi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Profesi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kerja_status": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Status",
+      "tipe": "string",
+      "enum": [
+        "Bekerja",
+        "Tidak Bekerja",
+        "Belum Bekerja",
+        "Pensiun",
+        "Pelajar/Mahasiswa"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "kerja_ket": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Ket",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kerja_lokusaha": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Lokusaha",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kerja_sampingan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Sampingan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kerja_sampingan_ket": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Sampingan Ket",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "kerja_skalausaha": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Kerja Skalausaha",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_kategori": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Kategori",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_jenis": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_jenis_budidaya": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Jenis Budidaya",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_alat_tangkap": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Alat Tangkap",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_alat_bantu": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Alat Bantu",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_ikan_tangkap": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Ikan Tangkap",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_ikan_tangkap_lain": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Ikan Tangkap Lain",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_ikan_kecil_perlakuan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Ikan Kecil Perlakuan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_buang_sampah": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Buang Sampah",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_ikan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Ikan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_pakan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Pakan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_rucah": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Rucah",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_rumputlaut": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Rumputlaut",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_alat": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Alat",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_pelatihan_jenis": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Pelatihan Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_asuransi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Asuransi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_asuransi_rp": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Asuransi Rp",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_kredit": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Kredit",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_pembiayaan_budidaya": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Pembiayaan Budidaya",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_kepemilikan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Kepemilikan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_waktu": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Waktu",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "nel_ukurankapal": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Ukurankapal",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_penangkapan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Penangkapan",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "nel_pelatihan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Pelatihan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_jenis": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_biota_jenis": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Biota Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_budidaya_sarana": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Budidaya Sarana",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_sumber_air": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Sumber Air",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_bibit": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Bibit",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_produksi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Produksi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_hasil_jual": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Hasil Jual",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "nel_pernah": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Nel Pernah",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "bpjs_kes": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bpjs Kes",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "bpjs_tk": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bpjs Tk",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "menabung": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Menabung",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "rp_tabungan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Rp Tabungan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "tki": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Tki",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "tki_tujuan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Tki Tujuan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "penyakit_jumlah": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Penyakit Jumlah",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "penyakit_jenis": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Penyakit Jenis",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "anak_asi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Anak Asi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "anak_periksa": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Anak Periksa",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "anak_mpasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Anak Mpasi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "anak_tb": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Anak Tb",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "anak_bb": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Anak Bb",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "perokok": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Perokok",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "lahan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahan",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "lahan_guna": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahan Guna",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahan_luasnon": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahan Luasnon",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "lahan_status": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahan Status",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahan_luas_dikelola": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahan Luas Dikelola",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "lahan_luas_tidakdikelola": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahan Luas Tidakdikelola",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "lahanmilik_irigasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahanmilik Irigasi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahanmilik_bukti": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahanmilik Bukti",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahanmilik_komoditas": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahanmilik Komoditas",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahanmilik_lokasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahanmilik Lokasi",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "lahangarap_luas": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahangarap Luas",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "lahangarap_irigasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahangarap Irigasi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahangarap_komoditas": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahangarap Komoditas",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahangarap_lokasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahangarap Lokasi",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "lahansewa_luas": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahansewa Luas",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "lahansewa_irigasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahansewa Irigasi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahansewa_komoditas": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahansewa Komoditas",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "lahansewa_lokasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Lahansewa Lokasi",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "ppkb": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Ppkb",
+      "tipe": "float",
+      "perlu_konfirmasi": true
+    },
+    "ppkt": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Ppkt",
+      "tipe": "float",
+      "perlu_konfirmasi": true
+    },
+    "skor_kls": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Skor Kls",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "miskin_uufm": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Miskin Uufm",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "pkb": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Pkb",
+      "tipe": "string",
+      "perlu_konfirmasi": true
+    },
+    "miskin_wb": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Miskin Wb",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "miskin_bps": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Miskin Bps",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "miskin_ekstrem": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Miskin Ekstrem",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "asuransi_kes": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Asuransi Kes",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "baju_frek": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Baju Frek",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rp_sph": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rp Sph",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "makan_frek": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Makan Frek",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "makan_menu": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Makan Menu",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "tempat_belanja": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Tempat Belanja",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rp_belanja": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rp Belanja",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rp_pangan": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rp Pangan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rp_non_pangan": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rp Non Pangan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_beras": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Beras",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_biskuit": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Biskuit",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_jagung": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Jagung",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kentang": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kentang",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_mie": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Mie",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_roti": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Roti",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_singkong": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Singkong",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_sukun": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Sukun",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_ketan": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Ketan",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_sapi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Sapi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_ayam": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Ayam",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_babi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Babi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_ikan_segar": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Ikan Segar",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_ikan_asin": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Ikan Asin",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_telur": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Telur",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kacang_hijau": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kacang Hijau",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kacang_merah": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kacang Merah",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kacang_kedelai": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kacang Kedelai",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kacang_mede": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kacang Mede",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_tahu": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Tahu",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_tempe": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Tempe",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_bayam": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Bayam",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kangkung": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kangkung",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_sawi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Sawi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_terong": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Terong",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_oyong": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Oyong",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_daun_singkong": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Daun Singkong",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_daun_ubi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Daun Ubi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_jeruk": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Jeruk",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_mangga": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Mangga",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_pepaya": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Pepaya",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_pisang": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Pisang",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_alpukat": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Alpukat",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_semangka": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Semangka",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_melon": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Melon",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_cabai": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Cabai",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_bamer": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Bamer",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_baput": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Baput",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_migor": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Migor",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_gas": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Gas",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_garam": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Garam",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_gula": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Gula",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_susu": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Susu",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_teh": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Teh",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kopi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kopi",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_rokok": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Rokok",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "kon_kelor": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Kon Kelor",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "rumah_lantai": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Lantai",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rumah_dinding": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Dinding",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rumah_atap": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Atap",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rumah_jamban": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Jamban",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rumah_kamar": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Kamar",
+      "tipe": "int",
+      "perlu_konfirmasi": false
+    },
+    "rumah_milik": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Milik",
+      "tipe": "string",
+      "enum": [
+        "Milik Sendiri",
+        "Sewa",
+        "Kontrak",
+        "Menumpang",
+        "Dinas",
+        "Lainnya"
+      ],
+      "perlu_konfirmasi": false
+    },
+    "rumah_tingkat": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Tingkat",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "rumah_luas": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Rumah Luas",
+      "tipe": "float",
+      "perlu_konfirmasi": false
+    },
+    "ternak": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak",
+      "tipe": "boolean",
+      "perlu_konfirmasi": false
+    },
+    "ternak_sapi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Sapi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_kerbau": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Kerbau",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_domba": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Domba",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_kambing": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Kambing",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_ayam": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Ayam",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_itik": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Itik",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_kuda": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Kuda",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_babi": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Babi",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    },
+    "ternak_ikan": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Ternak Ikan",
+      "tipe": "string",
+      "perlu_konfirmasi": false
+    }
+  }
+}
