@@ -44,6 +44,9 @@ export async function GET() {
       miskin_ekstrem: true,
       skor_kls: true,
       status_dalam_keluarga: true,
+      punya_ktp: true,
+      punya_aktalahir: true,
+      bpjs_kes: true,
     },
   });
 
@@ -59,6 +62,9 @@ export async function GET() {
   let miskinEkstremCount = 0;
   let skorSum = 0;
   let skorN = 0;
+  let ktpCount = 0;
+  let aktaLahirCount = 0;
+  let bpjsKesCount = 0;
 
   for (const r of all) {
     if (r.dusun) perDusun[r.dusun] = (perDusun[r.dusun] || 0) + 1;
@@ -77,7 +83,12 @@ export async function GET() {
       skorSum += r.skor_kls;
       skorN += 1;
     }
+    if (r.punya_ktp) ktpCount += 1;
+    if (r.punya_aktalahir) aktaLahirCount += 1;
+    if (r.bpjs_kes) bpjsKesCount += 1;
   }
+
+  const pct = (n: number) => (totalPenduduk ? Math.round((n / totalPenduduk) * 100) : 0);
 
   return NextResponse.json({
     totalPenduduk,
@@ -96,6 +107,11 @@ export async function GET() {
       miskinEkstrem: miskinEkstremCount,
       tidakMiskin: totalPenduduk - miskinBpsCount,
       rataSkorKls: skorN ? Math.round((skorSum / skorN) * 10) / 10 : null,
+    },
+    cakupan: {
+      ktp: pct(ktpCount),
+      aktaLahir: pct(aktaLahirCount),
+      bpjsKes: pct(bpjsKesCount),
     },
   });
 }

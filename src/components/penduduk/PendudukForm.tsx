@@ -102,7 +102,7 @@ export function PendudukForm({
             className={clsx(
               "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
               idx === currentStep
-                ? "border-blue-600 bg-blue-600 text-white"
+                ? "border-indigo-600 bg-indigo-600 text-white"
                 : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"
             )}
           >
@@ -125,7 +125,7 @@ export function PendudukForm({
         </p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 rounded-xl border border-slate-200 bg-white p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] p-5">
         {fields.map(([name, def]) => (
           <FieldInput
             key={name}
@@ -162,7 +162,7 @@ export function PendudukForm({
             type="button"
             disabled={submitting}
             onClick={handleSubmit}
-            className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+            className="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
           >
             {submitting ? "Menyimpan..." : mode === "create" ? "Simpan Data" : "Simpan Perubahan"}
           </button>

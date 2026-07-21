@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   ResponsiveContainer,
   BarChart,
@@ -12,8 +13,12 @@ import {
   Legend,
   LabelList,
   Cell,
+  PieChart,
+  Pie,
 } from "recharts";
+import { Users, Home as HomeIcon, MapPinned, Gauge } from "lucide-react";
 import { StatCard } from "./StatCard";
+import { CircularProgress } from "./CircularProgress";
 import { SERIES, STATUS, CHART_INK } from "@/lib/chart-colors";
 
 type Stats = {
@@ -30,12 +35,37 @@ type Stats = {
     tidakMiskin: number;
     rataSkorKls: number | null;
   };
+  cakupan: {
+    ktp: number;
+    aktaLahir: number;
+    bpjsKes: number;
+  };
 };
 
-function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
+const AGAMA_COLORS = [SERIES.blue, SERIES.orange, SERIES.aqua, SERIES.yellow, SERIES.magenta, SERIES.green];
+
+function ChartCard({
+  title,
+  action,
+  children,
+}: {
+  title: string;
+  action?: { href: string; label: string };
+  children: React.ReactNode;
+}) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
-      <h3 className="text-sm font-semibold text-slate-800 mb-4">{title}</h3>
+    <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
+        {action && (
+          <Link
+            href={action.href}
+            className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
+          >
+            {action.label}
+          </Link>
+        )}
+      </div>
       {children}
     </div>
   );
@@ -66,13 +96,14 @@ export function DashboardCharts() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <StatCard label="Total Penduduk" value={stats.totalPenduduk.toLocaleString("id-ID")} />
-        <StatCard label="Total KK" value={stats.totalKk.toLocaleString("id-ID")} />
-        <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} />
+        <StatCard label="Total Penduduk" value={stats.totalPenduduk.toLocaleString("id-ID")} icon={Users} />
+        <StatCard label="Total KK" value={stats.totalKk.toLocaleString("id-ID")} icon={HomeIcon} />
+        <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
         <StatCard
           label="Rata-rata Skor Kesejahteraan"
           value={stats.kemiskinan.rataSkorKls?.toLocaleString("id-ID") ?? "-"}
           hint="skor_kls, skala 0-100"
+          icon={Gauge}
         />
       </div>
 
@@ -95,8 +126,16 @@ export function DashboardCharts() {
         <StatCard label="Jumlah Data Ditampilkan" value={stats.totalPenduduk.toLocaleString("id-ID")} />
       </div>
 
+      <ChartCard title="Cakupan Kepemilikan Dokumen & Jaminan Sosial">
+        <div className="flex flex-wrap items-center justify-around gap-6 py-2">
+          <CircularProgress value={stats.cakupan.ktp} label="Punya KTP" color={SERIES.violet} />
+          <CircularProgress value={stats.cakupan.aktaLahir} label="Punya Akta Lahir" color={SERIES.aqua} />
+          <CircularProgress value={stats.cakupan.bpjsKes} label="Peserta BPJS Kesehatan" color={SERIES.yellow} />
+        </div>
+      </ChartCard>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartCard title="Sebaran Penduduk per Dusun">
+        <ChartCard title="Sebaran Penduduk per Dusun" action={{ href: "/penduduk", label: "Lihat Data" }}>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={stats.perDusun} layout="vertical" margin={{ left: 24 }}>
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
@@ -116,7 +155,7 @@ export function DashboardCharts() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Status Kemiskinan (BPS)">
+        <ChartCard title="Status Kemiskinan (BPS)" action={{ href: "/penduduk", label: "Lihat Data" }}>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart
               data={[
@@ -190,15 +229,32 @@ export function DashboardCharts() {
 
         <ChartCard title="Komposisi Agama">
           <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={stats.agama} layout="vertical" margin={{ left: 24 }}>
-              <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
-              <XAxis type="number" tick={{ fill: CHART_INK.muted, fontSize: 11 }} axisLine={{ stroke: CHART_INK.axis }} />
-              <YAxis type="category" dataKey="label" width={90} tick={{ fill: CHART_INK.secondary, fontSize: 11 }} axisLine={{ stroke: CHART_INK.axis }} />
+            <PieChart>
+              <Pie
+                data={stats.agama}
+                dataKey="value"
+                nameKey="label"
+                cx="50%"
+                cy="50%"
+                innerRadius={55}
+                outerRadius={85}
+                paddingAngle={2}
+                stroke="#fff"
+                strokeWidth={2}
+                isAnimationActive={false}
+              >
+                {stats.agama.map((_, i) => (
+                  <Cell key={i} fill={AGAMA_COLORS[i % AGAMA_COLORS.length]} />
+                ))}
+              </Pie>
               <Tooltip />
-              <Bar dataKey="value" name="Penduduk" fill={SERIES.violet} radius={[0, 4, 4, 0]} barSize={14}>
-                <LabelList dataKey="value" position="right" fill={CHART_INK.secondary} fontSize={11} />
-              </Bar>
-            </BarChart>
+              <Legend
+                layout="vertical"
+                align="right"
+                verticalAlign="middle"
+                wrapperStyle={{ fontSize: 11, color: CHART_INK.secondary }}
+              />
+            </PieChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>

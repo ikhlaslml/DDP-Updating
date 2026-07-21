@@ -62,7 +62,7 @@ export function ColumnToggle({
                   <button
                     type="button"
                     onClick={() => toggleGroup(kelompok, allVisible)}
-                    className="text-xs text-blue-600 hover:underline"
+                    className="text-xs text-indigo-600 hover:underline"
                   >
                     {allVisible ? "Sembunyikan semua" : "Tampilkan semua"}
                   </button>

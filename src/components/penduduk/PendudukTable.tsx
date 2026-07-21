@@ -107,7 +107,7 @@ export function PendudukTable() {
         header: "Aksi",
         cell: ({ row }) => (
           <div className="flex items-center gap-3 whitespace-nowrap">
-            <Link href={`/penduduk/${row.original.id}`} className="text-sm font-medium text-blue-600 hover:underline">
+            <Link href={`/penduduk/${row.original.id}`} className="text-sm font-medium text-indigo-600 hover:underline">
               Lihat
             </Link>
             <Link href={`/penduduk/${row.original.id}/edit`} className="text-sm font-medium text-amber-600 hover:underline">
@@ -144,7 +144,7 @@ export function PendudukTable() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama, NIK, NKK, alamat..."
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="rounded-lg border border-slate-300 px-3 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua Dusun</option>
@@ -192,7 +192,7 @@ export function PendudukTable() {
           </a>
           <Link
             href="/penduduk/baru"
-            className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
           >
             + Tambah Data
           </Link>
@@ -201,7 +201,7 @@ export function PendudukTable() {
 
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <table className="min-w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-200">
             {table.getHeaderGroups().map((hg) => (

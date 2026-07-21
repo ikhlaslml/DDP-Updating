@@ -18,7 +18,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
     <div>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <Link href="/penduduk" className="text-sm text-blue-600 hover:underline">
+          <Link href="/penduduk" className="text-sm text-indigo-600 hover:underline">
             &larr; Kembali ke Data Penduduk
           </Link>
           <h1 className="text-2xl font-bold text-slate-900 mt-1">{String(data.nama ?? "-")}</h1>
@@ -39,7 +39,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
 
       <div className="space-y-6">
         {KELOMPOK_ORDER.map((kelompok) => (
-          <section key={kelompok} className="rounded-xl border border-slate-200 bg-white p-5">
+          <section key={kelompok} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
             <h2 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-4">
               {KELOMPOK_LABEL[kelompok]}
             </h2>
