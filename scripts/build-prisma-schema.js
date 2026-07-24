@@ -26,8 +26,13 @@ lines.push(``);
 // run: DB_PROVIDER=postgresql node scripts/build-prisma-schema.js  (see README.md).
 const DB_PROVIDER = process.env.DB_PROVIDER || "sqlite";
 lines.push(`datasource db {`);
-lines.push(`  provider = "${DB_PROVIDER}"`);
-lines.push(`  url      = env("DATABASE_URL")`);
+lines.push(`  provider  = "${DB_PROVIDER}"`);
+lines.push(`  url       = env("DATABASE_URL")`);
+if (DB_PROVIDER === "postgresql") {
+  // Neon injects both. Pooled (DATABASE_URL) for runtime; unpooled
+  // (DATABASE_URL_UNPOOLED) for migrations — migrate can't run on PgBouncer.
+  lines.push(`  directUrl = env("DATABASE_URL_UNPOOLED")`);
+}
 lines.push(`}`);
 lines.push(``);
 lines.push(`// Tenant: one village (desapresisi.id subdomain).`);
