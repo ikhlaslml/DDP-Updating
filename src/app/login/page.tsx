@@ -29,7 +29,7 @@ export default async function LoginPage({
             <div className="relative w-full max-w-sm mx-auto lg:mx-0 lg:justify-self-end">
               <HeroGraphic className="hidden lg:block pointer-events-none absolute -top-20 -left-20 w-56 h-56 opacity-80" />
               <div className="relative bg-white rounded-2xl border border-slate-100 shadow-[0_1px_2px_rgba(16,24,40,0.04)] p-8">
-                <h2 className="text-xl font-bold text-slate-900">Portal Data</h2>
+                <h2 className="text-xl font-bold text-slate-900">Login Data Desa Presisi</h2>
                 <p className="text-sm text-slate-500 mt-1 mb-6">
                   Silakan login untuk melanjutkan
                 </p>
