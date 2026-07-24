@@ -1,0 +1,129 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { pendudukCreateSchema, pendudukUpdateSchema, flattenZodError } from "@/lib/validation";
+import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+
+// GET: list all pending staged changes, enriched for the "Data Perubahan
+// Sementara" table.
+export async function GET() {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
+  const changes = await prisma.stagingChange.findMany({
+    where: { desaId: ctx.desaId, status: "PENDING" },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const targetIds = changes.map((c) => c.pendudukId).filter(Boolean) as string[];
+  const targets = targetIds.length
+    ? await prisma.penduduk.findMany({ where: { id: { in: targetIds }, desaId: ctx.desaId } })
+    : [];
+  const targetMap = new Map(targets.map((t) => [t.id, t as Record<string, unknown>]));
+
+  const data = changes.map((c) => {
+    const proposed = c.data ? (JSON.parse(c.data) as Record<string, unknown>) : {};
+    const base = c.pendudukId ? targetMap.get(c.pendudukId) ?? {} : {};
+    const merged = { ...base, ...proposed };
+    return {
+      id: c.id,
+      aksi: c.aksi,
+      pendudukId: c.pendudukId,
+      ringkasan: c.ringkasan,
+      createdAt: c.createdAt,
+      row: {
+        nkk: merged.nkk ?? null,
+        nik: c.nik ?? merged.nik ?? null,
+        nama: c.nama ?? merged.nama ?? null,
+        jk: merged.jk ?? null,
+        dusun: merged.dusun ?? null,
+        tgl_lahir: merged.tgl_lahir ?? null,
+        alamat: merged.alamat ?? null,
+      },
+    };
+  });
+
+  return NextResponse.json({ data, total: data.length });
+}
+
+// POST: stage a CREATE / UPDATE / DELETE against the baseline.
+export async function POST(req: NextRequest) {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
+  if (!isOperator(ctx.role)) return FORBIDDEN;
+
+  const body = await req.json().catch(() => null);
+  if (!body || typeof body.aksi !== "string") {
+    return NextResponse.json({ error: "Body tidak valid" }, { status: 400 });
+  }
+  const aksi = body.aksi as "CREATE" | "UPDATE" | "DELETE";
+
+  if (aksi === "CREATE") {
+    const parsed = pendudukCreateSchema.safeParse(body.data);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Validasi gagal", fields: flattenZodError(parsed.error) }, { status: 400 });
+    }
+    const data = { ...parsed.data } as Record<string, unknown>;
+    if (!data.abs_id) data.abs_id = `ABS${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    const dupe = await prisma.penduduk.findUnique({ where: { nik: data.nik as string } });
+    if (dupe) return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah terdaftar di baseline" } }, { status: 400 });
+
+    const created = await prisma.stagingChange.create({
+      data: {
+        desaId: ctx.desaId,
+        aksi: "CREATE",
+        nik: (data.nik as string) ?? null,
+        nama: (data.nama as string) ?? null,
+        ringkasan: "Penambahan data baru.",
+        data: JSON.stringify(data),
+      },
+    });
+    return NextResponse.json({ data: created }, { status: 201 });
+  }
+
+  if (aksi === "UPDATE") {
+    const pendudukId = body.pendudukId as string | undefined;
+    if (!pendudukId) return NextResponse.json({ error: "pendudukId wajib" }, { status: 400 });
+    const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
+    if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
+
+    const parsed = pendudukUpdateSchema.safeParse(body.data);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Validasi gagal", fields: flattenZodError(parsed.error) }, { status: 400 });
+    }
+    // Replace any earlier pending change for the same person.
+    await prisma.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
+    const created = await prisma.stagingChange.create({
+      data: {
+        desaId: ctx.desaId,
+        aksi: "UPDATE",
+        pendudukId,
+        nik: existing.nik,
+        nama: existing.nama,
+        ringkasan: "Data diperbarui.",
+        data: JSON.stringify(parsed.data),
+      },
+    });
+    return NextResponse.json({ data: created }, { status: 201 });
+  }
+
+  if (aksi === "DELETE") {
+    const pendudukId = body.pendudukId as string | undefined;
+    if (!pendudukId) return NextResponse.json({ error: "pendudukId wajib" }, { status: 400 });
+    const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
+    if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
+
+    await prisma.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
+    const created = await prisma.stagingChange.create({
+      data: {
+        desaId: ctx.desaId,
+        aksi: "DELETE",
+        pendudukId,
+        nik: existing.nik,
+        nama: existing.nama,
+        ringkasan: "Penghapusan data.",
+      },
+    });
+    return NextResponse.json({ data: created }, { status: 201 });
+  }
+
+  return NextResponse.json({ error: "Aksi tidak dikenali" }, { status: 400 });
+}

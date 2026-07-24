@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 
 function ageBucket(usia: number | null): string {
   if (usia === null) return "Tidak diketahui";
@@ -31,7 +32,10 @@ function topN(counts: Record<string, number>, n: number) {
 }
 
 export async function GET() {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
   const all = await prisma.penduduk.findMany({
+    where: { desaId: ctx.desaId },
     select: {
       nkk: true,
       dusun: true,
@@ -77,15 +81,16 @@ export async function GET() {
     if (r.ijazah) ijazahCount[r.ijazah] = (ijazahCount[r.ijazah] || 0) + 1;
     if (r.kerja_profesi) profesiCount[r.kerja_profesi] = (profesiCount[r.kerja_profesi] || 0) + 1;
     if (r.agama) agamaCount[r.agama] = (agamaCount[r.agama] || 0) + 1;
-    if (r.miskin_bps) miskinBpsCount += 1;
-    if (r.miskin_ekstrem) miskinEkstremCount += 1;
+    // Yes/no fields are "Ya"/"Tidak" strings in the `ajaib` schema.
+    if (r.miskin_bps === "Ya") miskinBpsCount += 1;
+    if (r.miskin_ekstrem === "Ya") miskinEkstremCount += 1;
     if (typeof r.skor_kls === "number") {
       skorSum += r.skor_kls;
       skorN += 1;
     }
-    if (r.punya_ktp) ktpCount += 1;
-    if (r.punya_aktalahir) aktaLahirCount += 1;
-    if (r.bpjs_kes) bpjsKesCount += 1;
+    if (r.punya_ktp === "Ya") ktpCount += 1;
+    if (r.punya_aktalahir === "Ya") aktaLahirCount += 1;
+    if (r.bpjs_kes === "Ya") bpjsKesCount += 1;
   }
 
   const pct = (n: number) => (totalPenduduk ? Math.round((n / totalPenduduk) * 100) : 0);

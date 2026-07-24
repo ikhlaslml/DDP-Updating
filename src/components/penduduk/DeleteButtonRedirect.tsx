@@ -11,13 +11,17 @@ export function DeleteButtonRedirect({ id, nama }: { id: string; nama: string })
   if (confirming) {
     return (
       <span className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm">
-        <span className="text-red-700">Hapus {nama}?</span>
+        <span className="text-red-700">Ajukan hapus {nama}?</span>
         <button
           type="button"
           disabled={loading}
           onClick={async () => {
             setLoading(true);
-            const res = await fetch(`/api/penduduk/${id}`, { method: "DELETE" });
+            const res = await fetch("/api/staging", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ aksi: "DELETE", pendudukId: id }),
+            });
             if (res.ok) {
               router.push("/penduduk");
               router.refresh();
@@ -27,7 +31,7 @@ export function DeleteButtonRedirect({ id, nama }: { id: string; nama: string })
           }}
           className="font-semibold text-red-700 hover:underline disabled:opacity-50"
         >
-          {loading ? "Menghapus..." : "Ya, hapus"}
+          {loading ? "Mengajukan..." : "Ya, ajukan hapus"}
         </button>
         <button type="button" onClick={() => setConfirming(false)} className="text-slate-500 hover:underline">
           Batal

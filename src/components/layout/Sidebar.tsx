@@ -3,16 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { LayoutDashboard, Users, Map, FileSpreadsheet, Home } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { NAV } from "./nav";
+import { useAuthInfo } from "@/components/providers/AuthInfo";
 
-const NAV = [
-  { href: "/", label: "Ringkasan", icon: LayoutDashboard },
-  { href: "/penduduk", label: "Pembaruan Data", icon: Users },
-  { href: "/peta", label: "Peta Sebaran", icon: Map },
-  { href: "/impor-ekspor", label: "Impor / Ekspor", icon: FileSpreadsheet },
-];
-
-function NavLink({ href, label, icon: Icon, active }: { href: string; label: string; icon: typeof Home; active: boolean }) {
+function NavLink({ href, label, icon: Icon, active }: { href: string; label: string; icon: LucideIcon; active: boolean }) {
   return (
     <Link
       href={href}
@@ -31,6 +26,7 @@ function NavLink({ href, label, icon: Icon, active }: { href: string; label: str
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { desaNama } = useAuthInfo();
 
   return (
     <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-slate-100 bg-white">
@@ -38,7 +34,7 @@ export function Sidebar() {
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold text-sm">
           D
         </div>
-        <span className="font-bold text-slate-900 tracking-tight">Dashboard Desa</span>
+        <span className="font-bold text-slate-900 tracking-tight truncate">{desaNama}</span>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4 py-4">

@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { Prisma } from "@prisma/client";
 
-export function buildPendudukWhere(sp: URLSearchParams): Prisma.PendudukWhereInput {
+export function buildPendudukWhere(sp: URLSearchParams, desaId?: string): Prisma.PendudukWhereInput {
   const q = sp.get("q")?.trim();
   const dusun = sp.get("dusun")?.trim();
   const rw = sp.get("rw")?.trim();
@@ -11,6 +11,7 @@ export function buildPendudukWhere(sp: URLSearchParams): Prisma.PendudukWhereInp
   const miskinEkstrem = sp.get("miskin_ekstrem");
 
   const where: Prisma.PendudukWhereInput = {};
+  if (desaId) where.desaId = desaId;
   if (q) {
     where.OR = [
       { nama: { contains: q } },
@@ -20,13 +21,17 @@ export function buildPendudukWhere(sp: URLSearchParams): Prisma.PendudukWhereInp
     ];
   }
   if (dusun) where.dusun = dusun;
-  if (rw) where.rw = rw;
-  if (rt) where.rt = rt;
+  // rw/rt are integers in the `ajaib` schema.
+  const rwNum = rw ? Number(rw) : NaN;
+  const rtNum = rt ? Number(rt) : NaN;
+  if (!Number.isNaN(rwNum)) where.rw = rwNum;
+  if (!Number.isNaN(rtNum)) where.rt = rtNum;
   if (jk) where.jk = jk;
-  if (miskinBps === "true") where.miskin_bps = true;
-  if (miskinBps === "false") where.miskin_bps = false;
-  if (miskinEkstrem === "true") where.miskin_ekstrem = true;
-  if (miskinEkstrem === "false") where.miskin_ekstrem = false;
+  // miskin_* are "Ya"/"Tidak" strings (character varying) in the `ajaib` schema.
+  if (miskinBps === "true") where.miskin_bps = "Ya";
+  if (miskinBps === "false") where.miskin_bps = "Tidak";
+  if (miskinEkstrem === "true") where.miskin_ekstrem = "Ya";
+  if (miskinEkstrem === "false") where.miskin_ekstrem = "Tidak";
   return where;
 }
 

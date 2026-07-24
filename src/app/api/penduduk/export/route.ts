@@ -5,11 +5,14 @@ import { prisma } from "@/lib/prisma";
 import { buildPendudukWhere } from "@/lib/query";
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
 import { toExportValue } from "@/lib/export-import";
+import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 
 export async function GET(req: NextRequest) {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
   const sp = req.nextUrl.searchParams;
   const format = sp.get("format") === "csv" ? "csv" : "xlsx";
-  const where = buildPendudukWhere(sp);
+  const where = buildPendudukWhere(sp, ctx.desaId);
 
   const isTemplate = sp.get("template") === "1";
   const rows = isTemplate ? [] : await prisma.penduduk.findMany({ where, orderBy: { createdAt: "asc" } });

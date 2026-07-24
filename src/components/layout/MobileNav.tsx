@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { LayoutDashboard, Users, Map, FileSpreadsheet } from "lucide-react";
-
-const NAV = [
-  { href: "/", label: "Ringkasan", icon: LayoutDashboard },
-  { href: "/penduduk", label: "Pembaruan Data", icon: Users },
-  { href: "/peta", label: "Peta Sebaran", icon: Map },
-  { href: "/impor-ekspor", label: "Impor/Ekspor", icon: FileSpreadsheet },
-];
+import { NAV } from "./nav";
 
 export function MobileNav() {
   const pathname = usePathname();

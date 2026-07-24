@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { ALL_COLUMNS } from "@/lib/indikator";
 import { buildPendudukWhere } from "@/lib/query";
+import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
 const COLUMN_SET = new Set(ALL_COLUMNS);
 const SORTABLE = new Set([...ALL_COLUMNS, "createdAt", "updatedAt"]);
@@ -18,6 +19,8 @@ function parseSelect(columnsParam: string | null): Record<string, true> | undefi
 }
 
 export async function GET(req: NextRequest) {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
   const sp = req.nextUrl.searchParams;
 
   const page = Math.max(1, Number(sp.get("page")) || 1);
@@ -26,7 +29,7 @@ export async function GET(req: NextRequest) {
   const sortDir = sp.get("sortDir") === "asc" ? "asc" : "desc";
   const sortBy = SORTABLE.has(sortByParam) ? sortByParam : "createdAt";
 
-  const where = buildPendudukWhere(sp);
+  const where = buildPendudukWhere(sp, ctx.desaId);
   const select = parseSelect(sp.get("columns"));
 
   const [total, data] = await Promise.all([
@@ -47,6 +50,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
+  if (!isOperator(ctx.role)) return FORBIDDEN;
+
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Body tidak valid" }, { status: 400 });
 
@@ -55,7 +62,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Validasi gagal", fields: flattenZodError(parsed.error) }, { status: 400 });
   }
 
-  const data = { ...parsed.data };
+  const data = { ...parsed.data, desaId: ctx.desaId } as Record<string, unknown>;
   if (!data.abs_id) {
     data.abs_id = `ABS${Date.now()}${Math.floor(Math.random() * 1000)}`;
   }

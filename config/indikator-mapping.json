@@ -1,7 +1,8 @@
 {
   "_meta": {
     "generated_by": "scripts/build-indikator-mapping.js",
-    "total_kolom": 269,
+    "sumber_tipe": "ajaib_datatype.csv (tabel `ajaib`)",
+    "total_kolom": 286,
     "kelompok": {
       "identitas_keluarga": "Identitas Keluarga",
       "pendidikan_kebudayaan": "Pendidikan dan Kebudayaan",
@@ -11,11 +12,11 @@
       "sandang_pangan_papan": "Sandang, Pangan, dan Papan"
     },
     "jumlah_per_kelompok": {
-      "identitas_keluarga": 41,
+      "identitas_keluarga": 42,
       "pendidikan_kebudayaan": 9,
       "infrastruktur_lingkungan": 16,
       "sosial_hukum_ham": 50,
-      "kesehatan_kerja_jamsos": 80,
+      "kesehatan_kerja_jamsos": 96,
       "sandang_pangan_papan": 73
     },
     "target_per_kelompok": {
@@ -27,11 +28,11 @@
       "sandang_pangan_papan": 71
     },
     "selisih_per_kelompok": {
-      "identitas_keluarga": 0,
+      "identitas_keluarga": 1,
       "pendidikan_kebudayaan": 0,
       "infrastruktur_lingkungan": 0,
       "sosial_hukum_ham": 0,
-      "kesehatan_kerja_jamsos": 8,
+      "kesehatan_kerja_jamsos": 24,
       "sandang_pangan_papan": 2
     },
     "perlu_konfirmasi": [
@@ -46,12 +47,29 @@
       "ppkb",
       "ppkt",
       "miskin_uufm",
+      "miskin_bpsd",
+      "usia_dec",
       "nel_pernah",
       "nel_waktu",
       "nel_penangkapan",
       "lahanmilik_lokasi",
       "lahangarap_lokasi",
-      "lahansewa_lokasi"
+      "lahansewa_lokasi",
+      "bencana_kesfungsional",
+      "bencana_lap_usaha",
+      "bencana_lapusaha_nama",
+      "bencana_lapusaha_alamat",
+      "bencana_lapusaha_izin",
+      "bencana_lapusaha_omzet",
+      "bencana_lapusaha_tk",
+      "bencana_kerja_pasca",
+      "bencana_kerjapasca_lokasi",
+      "bencana_kerjapasca_penghasilan",
+      "bencana_kerjapasca_harapan",
+      "bencana_pemulihan_pasca",
+      "bencana_rumah_kondisi",
+      "bencana_rumah_bagianrusak",
+      "bencana_ketenum_bangunan"
     ]
   },
   "kolom": {
@@ -60,6 +78,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Abs Id",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "subjek": {
@@ -67,6 +86,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Subjek",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Individu",
         "Keluarga"
@@ -78,6 +98,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Datamasuk",
       "tipe": "date",
+      "pg_tipe": "timestamp without time zone",
       "perlu_konfirmasi": false
     },
     "enumerator": {
@@ -85,13 +106,15 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Enumerator",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "kode_bangunan": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Kode Bangunan",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kode_deskel": {
@@ -99,6 +122,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Kode Deskel",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "deskel": {
@@ -106,6 +130,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Deskel",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "dusun": {
@@ -113,41 +138,51 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Dusun",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rw": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Rw",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "rt": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Rt",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "lat": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Lat",
-      "tipe": "float",
+      "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lng": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Lng",
-      "tipe": "float",
+      "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "responden": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Responden",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": true
     },
     "nkk": {
@@ -155,6 +190,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Nkk",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nama": {
@@ -162,6 +198,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Nama",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nik": {
@@ -169,6 +206,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Nik",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "alamat": {
@@ -176,6 +214,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Alamat",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "status_dalam_keluarga": {
@@ -183,6 +222,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Status Dalam Keluarga",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Kepala Keluarga",
         "Istri",
@@ -200,6 +240,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Status Kawin",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Belum Kawin",
         "Kawin",
@@ -212,14 +253,24 @@
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Punya Ktp",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "punya_aktalahir": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Punya Aktalahir",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "nama_kepala_rumah": {
@@ -227,6 +278,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Nama Kepala Rumah",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nama_tulang_punggung": {
@@ -234,6 +286,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Nama Tulang Punggung",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "no_hp": {
@@ -241,6 +294,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "No Hp",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "jml_keluarga": {
@@ -248,6 +302,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Jml Keluarga",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "tgl_lahir": {
@@ -255,6 +310,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Tgl Lahir",
       "tipe": "date",
+      "pg_tipe": "date",
       "perlu_konfirmasi": false
     },
     "jk": {
@@ -262,6 +318,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Jk",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "L",
         "P"
@@ -273,6 +330,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Thn Datang",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "dinamika": {
@@ -280,6 +338,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Dinamika",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": true
     },
     "agama": {
@@ -287,6 +346,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Agama",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Islam",
         "Kristen",
@@ -303,6 +363,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Suku",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "bhs_keluarga": {
@@ -310,6 +371,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Bhs Keluarga",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "bhs_daerah": {
@@ -317,6 +379,7 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Bhs Daerah",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "tgl_kawin": {
@@ -324,34 +387,55 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Tgl Kawin",
       "tipe": "date",
+      "pg_tipe": "date",
       "perlu_konfirmasi": false
     },
     "usia": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Usia",
-      "tipe": "int",
+      "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
+    },
+    "usia_dec": {
+      "kelompok": "identitas_keluarga",
+      "kelompok_label": "Identitas Keluarga",
+      "label": "Usia Dec",
+      "tipe": "float",
+      "pg_tipe": "numeric",
+      "perlu_konfirmasi": true
     },
     "lama_tinggal": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Lama Tinggal",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "punya_kk": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Punya Kk",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "menetap": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Menetap",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "dead_jml": {
@@ -359,20 +443,31 @@
       "kelompok_label": "Identitas Keluarga",
       "label": "Dead Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "akta_nikah": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Akta Nikah",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "akta_cerai": {
       "kelompok": "identitas_keluarga",
       "kelompok_label": "Identitas Keluarga",
       "label": "Akta Cerai",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "partisipasi_sekolah": {
@@ -380,6 +475,7 @@
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Partisipasi Sekolah",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "ijazah": {
@@ -387,6 +483,7 @@
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Ijazah",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Tidak/Belum Sekolah",
         "SD",
@@ -404,6 +501,7 @@
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Rp Pendidikan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "bantuan_pendidikan": {
@@ -411,13 +509,15 @@
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Bantuan Pendidikan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "pendidikan_anggota": {
       "kelompok": "pendidikan_kebudayaan",
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Pendidikan Anggota",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "keterampilan": {
@@ -425,13 +525,19 @@
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Keterampilan",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "pelatihan": {
       "kelompok": "pendidikan_kebudayaan",
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Pelatihan",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "pelatihan_ket": {
@@ -439,20 +545,31 @@
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Pelatihan Ket",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "refreshing": {
       "kelompok": "pendidikan_kebudayaan",
       "kelompok_label": "Pendidikan dan Kebudayaan",
       "label": "Refreshing",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "pekarangan": {
       "kelompok": "infrastruktur_lingkungan",
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Pekarangan",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "pekarangan_luas": {
@@ -460,6 +577,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Pekarangan Luas",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "pekarangan_air": {
@@ -467,6 +585,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Pekarangan Air",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "pekarangan_tinggi": {
@@ -474,6 +593,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Pekarangan Tinggi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "pekarangan_jenis": {
@@ -481,6 +601,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Pekarangan Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "pekarangan_komoditas": {
@@ -488,6 +609,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Pekarangan Komoditas",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "sampah_buang": {
@@ -495,27 +617,43 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Sampah Buang",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "sampah_pilah": {
       "kelompok": "infrastruktur_lingkungan",
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Sampah Pilah",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "sampah_olah": {
       "kelompok": "infrastruktur_lingkungan",
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Sampah Olah",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "rumah_pln": {
       "kelompok": "infrastruktur_lingkungan",
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Rumah Pln",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "rp_listrik": {
@@ -523,13 +661,19 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Rp Listrik",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "wifi": {
       "kelompok": "infrastruktur_lingkungan",
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Wifi",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "airbersih": {
@@ -537,6 +681,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Airbersih",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "airminum": {
@@ -544,6 +689,7 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Airminum",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "bahanbakar_masak": {
@@ -551,20 +697,31 @@
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Bahanbakar Masak",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rumah_solar": {
       "kelompok": "infrastruktur_lingkungan",
       "kelompok_label": "Infrastruktur dan Lingkungan Hidup",
       "label": "Rumah Solar",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "par_organisasi": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Par Organisasi",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "organisasi_nama": {
@@ -572,27 +729,43 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Organisasi Nama",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "par_masyarakat": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Par Masyarakat",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "par_pemilu": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Par Pemilu",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "par_kebijakan": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Par Kebijakan",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "bansos": {
@@ -600,6 +773,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Bansos",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "rp_zakat": {
@@ -607,6 +781,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Zakat",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "wakaf": {
@@ -614,6 +789,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Wakaf",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "rp_persepuluh": {
@@ -621,6 +797,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Persepuluh",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "rp_dharma": {
@@ -628,6 +805,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Dharma",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "rp_paramita": {
@@ -635,6 +813,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Paramita",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "rp_sumbangan": {
@@ -642,6 +821,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Sumbangan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "disabilitas": {
@@ -649,6 +829,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Disabilitas",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "korban_kejahatan": {
@@ -656,6 +837,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Korban Kejahatan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "hukum_bantuan": {
@@ -663,6 +845,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Hukum Bantuan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "hukum_jenis": {
@@ -670,6 +853,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Hukum Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "tanah_nama": {
@@ -677,6 +861,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Tanah Nama",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "tanah_nomor": {
@@ -684,6 +869,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Tanah Nomor",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nomor_objek_pajak": {
@@ -691,6 +877,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Nomor Objek Pajak",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "tanah_bukti": {
@@ -698,13 +885,19 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Tanah Bukti",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "pbb_punya": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Pbb Punya",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "pbb_tahunbayar": {
@@ -712,6 +905,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Pbb Tahunbayar",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kesediaan": {
@@ -719,6 +913,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Kesediaan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": true
     },
     "medsos": {
@@ -726,6 +921,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Medsos",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "media_informasi": {
@@ -733,6 +929,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Media Informasi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "kandung": {
@@ -740,6 +937,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Kandung",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": true
     },
     "aset_ekonomi": {
@@ -747,6 +945,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Aset Ekonomi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "pinjaman": {
@@ -754,6 +953,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Pinjaman",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "kb": {
@@ -761,13 +961,19 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Kb",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": true
     },
     "kulkas": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Kulkas",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "sepeda_jml": {
@@ -775,6 +981,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Sepeda Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "motor_jml": {
@@ -782,6 +989,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Motor Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "motor_merk": {
@@ -789,6 +997,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Motor Merk",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "mobil_jml": {
@@ -796,6 +1005,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Mobil Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "mobil_merk": {
@@ -803,6 +1013,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Mobil Merk",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "perahu_jml": {
@@ -810,6 +1021,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Perahu Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "perahu_motor_jml": {
@@ -817,6 +1029,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Perahu Motor Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kapal_jml": {
@@ -824,6 +1037,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Kapal Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "motorlistrik_jml": {
@@ -831,6 +1045,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Motorlistrik Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "mobillistrik_jml": {
@@ -838,6 +1053,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Mobillistrik Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kendaraan_jml": {
@@ -845,6 +1061,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Kendaraan Jml",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "rp_kendaraan": {
@@ -852,13 +1069,19 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Kendaraan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "hp_punya": {
       "kelompok": "sosial_hukum_ham",
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Hp Punya",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "hp_jumlah": {
@@ -866,6 +1089,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Hp Jumlah",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "hp_merk": {
@@ -873,6 +1097,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Hp Merk",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "hp_provider": {
@@ -880,6 +1105,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Hp Provider",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rp_komunikasi": {
@@ -887,6 +1113,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Komunikasi",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "elektronik_rumah": {
@@ -894,6 +1121,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Elektronik Rumah",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "rp_transportasi": {
@@ -901,6 +1129,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Transportasi",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "rp_cicilan": {
@@ -908,6 +1137,7 @@
       "kelompok_label": "Kehidupan Sosial, Perlindungan Hukum dan HAM",
       "label": "Rp Cicilan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kerja_profesi": {
@@ -915,6 +1145,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Profesi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "kerja_status": {
@@ -922,6 +1153,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Status",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Bekerja",
         "Tidak Bekerja",
@@ -936,6 +1168,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Ket",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "kerja_lokusaha": {
@@ -943,6 +1176,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Lokusaha",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "kerja_sampingan": {
@@ -950,6 +1184,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Sampingan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "kerja_sampingan_ket": {
@@ -957,6 +1192,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Sampingan Ket",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "kerja_skalausaha": {
@@ -964,6 +1200,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Kerja Skalausaha",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_kategori": {
@@ -971,6 +1208,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Kategori",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_jenis": {
@@ -978,6 +1216,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_jenis_budidaya": {
@@ -985,6 +1224,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Jenis Budidaya",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_alat_tangkap": {
@@ -992,6 +1232,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Alat Tangkap",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_alat_bantu": {
@@ -999,6 +1240,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Alat Bantu",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_ikan_tangkap": {
@@ -1006,6 +1248,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Ikan Tangkap",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_ikan_tangkap_lain": {
@@ -1013,6 +1256,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Ikan Tangkap Lain",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_ikan_kecil_perlakuan": {
@@ -1020,6 +1264,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Ikan Kecil Perlakuan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_buang_sampah": {
@@ -1027,6 +1272,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Buang Sampah",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_ikan": {
@@ -1034,6 +1280,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Ikan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_pakan": {
@@ -1041,6 +1288,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Pakan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_rucah": {
@@ -1048,6 +1296,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Rucah",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_rumputlaut": {
@@ -1055,6 +1304,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Rumputlaut",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_alat": {
@@ -1062,6 +1312,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Alat",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_pelatihan_jenis": {
@@ -1069,6 +1320,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Pelatihan Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_asuransi": {
@@ -1076,13 +1328,15 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Asuransi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_asuransi_rp": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Asuransi Rp",
-      "tipe": "string",
+      "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "nel_kredit": {
@@ -1090,6 +1344,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Kredit",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_pembiayaan_budidaya": {
@@ -1097,6 +1352,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Pembiayaan Budidaya",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "nel_kepemilikan": {
@@ -1104,6 +1360,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Kepemilikan",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_waktu": {
@@ -1111,6 +1368,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Waktu",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "nel_ukurankapal": {
@@ -1118,6 +1376,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Ukurankapal",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_penangkapan": {
@@ -1125,6 +1384,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Penangkapan",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "nel_pelatihan": {
@@ -1132,6 +1392,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Pelatihan",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_jenis": {
@@ -1139,6 +1400,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_biota_jenis": {
@@ -1146,6 +1408,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Biota Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_budidaya_sarana": {
@@ -1153,6 +1416,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Budidaya Sarana",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_sumber_air": {
@@ -1160,6 +1424,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Sumber Air",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_bibit": {
@@ -1167,6 +1432,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Bibit",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_produksi": {
@@ -1174,6 +1440,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Produksi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_hasil_jual": {
@@ -1181,6 +1448,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Hasil Jual",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "nel_pernah": {
@@ -1188,27 +1456,43 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Nel Pernah",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "bpjs_kes": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Bpjs Kes",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "bpjs_tk": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Bpjs Tk",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "menabung": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Menabung",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "rp_tabungan": {
@@ -1216,13 +1500,19 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Rp Tabungan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "tki": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Tki",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "tki_tujuan": {
@@ -1230,6 +1520,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Tki Tujuan",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "penyakit_jumlah": {
@@ -1237,6 +1528,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Penyakit Jumlah",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "penyakit_jenis": {
@@ -1244,6 +1536,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Penyakit Jenis",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "anak_asi": {
@@ -1251,6 +1544,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Anak Asi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "anak_periksa": {
@@ -1258,6 +1552,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Anak Periksa",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "anak_mpasi": {
@@ -1265,34 +1560,47 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Anak Mpasi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "anak_tb": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Anak Tb",
-      "tipe": "string",
+      "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "anak_bb": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Anak Bb",
-      "tipe": "string",
+      "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "perokok": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Perokok",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "lahan": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahan",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "lahan_guna": {
@@ -1300,6 +1608,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahan Guna",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lahan_luasnon": {
@@ -1307,6 +1616,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahan Luasnon",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "lahan_status": {
@@ -1314,6 +1624,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahan Status",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lahan_luas_dikelola": {
@@ -1321,6 +1632,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahan Luas Dikelola",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "lahan_luas_tidakdikelola": {
@@ -1328,6 +1640,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahan Luas Tidakdikelola",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "lahanmilik_irigasi": {
@@ -1335,6 +1648,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahanmilik Irigasi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lahanmilik_bukti": {
@@ -1342,6 +1656,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahanmilik Bukti",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lahanmilik_komoditas": {
@@ -1349,6 +1664,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahanmilik Komoditas",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "lahanmilik_lokasi": {
@@ -1356,6 +1672,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahanmilik Lokasi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "lahangarap_luas": {
@@ -1363,6 +1680,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahangarap Luas",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "lahangarap_irigasi": {
@@ -1370,6 +1688,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahangarap Irigasi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lahangarap_komoditas": {
@@ -1377,6 +1696,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahangarap Komoditas",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "lahangarap_lokasi": {
@@ -1384,6 +1704,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahangarap Lokasi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "lahansewa_luas": {
@@ -1391,6 +1712,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahansewa Luas",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "lahansewa_irigasi": {
@@ -1398,6 +1720,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahansewa Irigasi",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "lahansewa_komoditas": {
@@ -1405,6 +1728,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahansewa Komoditas",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": false
     },
     "lahansewa_lokasi": {
@@ -1412,6 +1736,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Lahansewa Lokasi",
       "tipe": "string",
+      "pg_tipe": "text",
       "perlu_konfirmasi": true
     },
     "ppkb": {
@@ -1419,6 +1744,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Ppkb",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": true
     },
     "ppkt": {
@@ -1426,6 +1752,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Ppkt",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": true
     },
     "skor_kls": {
@@ -1433,6 +1760,7 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Skor Kls",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "miskin_uufm": {
@@ -1440,13 +1768,15 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Miskin Uufm",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": true
     },
     "pkb": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Pkb",
-      "tipe": "string",
+      "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": true
     },
     "miskin_wb": {
@@ -1454,34 +1784,179 @@
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Miskin Wb",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "miskin_bps": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Miskin Bps",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "miskin_ekstrem": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Miskin Ekstrem",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
+    },
+    "miskin_bpsd": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Miskin Bpsd",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
+      "perlu_konfirmasi": true
     },
     "asuransi_kes": {
       "kelompok": "kesehatan_kerja_jamsos",
       "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
       "label": "Asuransi Kes",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
+    },
+    "bencana_kesfungsional": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Kesfungsional",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_lap_usaha": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Lap Usaha",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_lapusaha_nama": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Lapusaha Nama",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_lapusaha_alamat": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Lapusaha Alamat",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_lapusaha_izin": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Lapusaha Izin",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "perlu_konfirmasi": true
+    },
+    "bencana_lapusaha_omzet": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Lapusaha Omzet",
+      "tipe": "float",
+      "pg_tipe": "numeric",
+      "perlu_konfirmasi": true
+    },
+    "bencana_lapusaha_tk": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Lapusaha Tk",
+      "tipe": "int",
+      "pg_tipe": "integer",
+      "perlu_konfirmasi": true
+    },
+    "bencana_kerja_pasca": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Kerja Pasca",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_kerjapasca_lokasi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Kerjapasca Lokasi",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_kerjapasca_penghasilan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Kerjapasca Penghasilan",
+      "tipe": "float",
+      "pg_tipe": "numeric",
+      "perlu_konfirmasi": true
+    },
+    "bencana_kerjapasca_harapan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Kerjapasca Harapan",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_pemulihan_pasca": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Pemulihan Pasca",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_rumah_kondisi": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Rumah Kondisi",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_rumah_bagianrusak": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Rumah Bagianrusak",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
+    },
+    "bencana_ketenum_bangunan": {
+      "kelompok": "kesehatan_kerja_jamsos",
+      "kelompok_label": "Kesehatan, Pekerjaan, dan Jaminan Sosial",
+      "label": "Bencana Ketenum Bangunan",
+      "tipe": "string",
+      "pg_tipe": "text",
+      "perlu_konfirmasi": true
     },
     "baju_frek": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Baju Frek",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rp_sph": {
@@ -1489,6 +1964,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rp Sph",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "makan_frek": {
@@ -1496,6 +1972,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Makan Frek",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "makan_menu": {
@@ -1503,6 +1980,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Makan Menu",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "tempat_belanja": {
@@ -1510,6 +1988,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Tempat Belanja",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rp_belanja": {
@@ -1517,6 +1996,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rp Belanja",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "rp_pangan": {
@@ -1524,6 +2004,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rp Pangan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "rp_non_pangan": {
@@ -1531,6 +2012,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rp Non Pangan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_beras": {
@@ -1538,6 +2020,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Beras",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_biskuit": {
@@ -1545,6 +2028,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Biskuit",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_jagung": {
@@ -1552,6 +2036,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Jagung",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_kentang": {
@@ -1559,20 +2044,23 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kentang",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_mie": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Mie",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_roti": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Roti",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_singkong": {
@@ -1580,6 +2068,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Singkong",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_sukun": {
@@ -1587,6 +2076,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Sukun",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_ketan": {
@@ -1594,6 +2084,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Ketan",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_sapi": {
@@ -1601,6 +2092,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Sapi",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_ayam": {
@@ -1608,6 +2100,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Ayam",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_babi": {
@@ -1615,6 +2108,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Babi",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_ikan_segar": {
@@ -1622,6 +2116,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Ikan Segar",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_ikan_asin": {
@@ -1629,6 +2124,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Ikan Asin",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_telur": {
@@ -1636,6 +2132,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Telur",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_kacang_hijau": {
@@ -1643,6 +2140,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kacang Hijau",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_kacang_merah": {
@@ -1650,6 +2148,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kacang Merah",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_kacang_kedelai": {
@@ -1657,6 +2156,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kacang Kedelai",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_kacang_mede": {
@@ -1664,41 +2164,47 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kacang Mede",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_tahu": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Tahu",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_tempe": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Tempe",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_bayam": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Bayam",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_kangkung": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kangkung",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_sawi": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Sawi",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_terong": {
@@ -1706,6 +2212,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Terong",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_oyong": {
@@ -1713,20 +2220,23 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Oyong",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_daun_singkong": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Daun Singkong",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_daun_ubi": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Daun Ubi",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_jeruk": {
@@ -1734,6 +2244,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Jeruk",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_mangga": {
@@ -1741,6 +2252,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Mangga",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_pepaya": {
@@ -1748,6 +2260,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Pepaya",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_pisang": {
@@ -1755,6 +2268,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Pisang",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_alpukat": {
@@ -1762,6 +2276,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Alpukat",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_semangka": {
@@ -1769,6 +2284,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Semangka",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_melon": {
@@ -1776,6 +2292,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Melon",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_cabai": {
@@ -1783,6 +2300,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Cabai",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_bamer": {
@@ -1790,6 +2308,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Bamer",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_baput": {
@@ -1797,6 +2316,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Baput",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_migor": {
@@ -1804,6 +2324,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Migor",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_gas": {
@@ -1811,6 +2332,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Gas",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_garam": {
@@ -1818,6 +2340,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Garam",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_gula": {
@@ -1825,41 +2348,47 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Gula",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "kon_susu": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Susu",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_teh": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Teh",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_kopi": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kopi",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_rokok": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Rokok",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "kon_kelor": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Kon Kelor",
-      "tipe": "float",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "rumah_lantai": {
@@ -1867,6 +2396,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Lantai",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rumah_dinding": {
@@ -1874,6 +2404,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Dinding",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rumah_atap": {
@@ -1881,6 +2412,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Atap",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rumah_jamban": {
@@ -1888,6 +2420,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Jamban",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rumah_kamar": {
@@ -1895,6 +2428,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Kamar",
       "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "rumah_milik": {
@@ -1902,6 +2436,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Milik",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "enum": [
         "Milik Sendiri",
         "Sewa",
@@ -1917,6 +2452,7 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Tingkat",
       "tipe": "string",
+      "pg_tipe": "character varying",
       "perlu_konfirmasi": false
     },
     "rumah_luas": {
@@ -1924,76 +2460,91 @@
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Rumah Luas",
       "tipe": "float",
+      "pg_tipe": "numeric",
       "perlu_konfirmasi": false
     },
     "ternak": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak",
-      "tipe": "boolean",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "Ya",
+        "Tidak"
+      ],
       "perlu_konfirmasi": false
     },
     "ternak_sapi": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Sapi",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_kerbau": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Kerbau",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_domba": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Domba",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_kambing": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Kambing",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_ayam": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Ayam",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_itik": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Itik",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_kuda": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Kuda",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_babi": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Babi",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     },
     "ternak_ikan": {
       "kelompok": "sandang_pangan_papan",
       "kelompok_label": "Sandang, Pangan, dan Papan",
       "label": "Ternak Ikan",
-      "tipe": "string",
+      "tipe": "int",
+      "pg_tipe": "integer",
       "perlu_konfirmasi": false
     }
   }

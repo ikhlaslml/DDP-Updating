@@ -12,15 +12,33 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Print: only the letter sheet is visible. */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .surat-print,
+  .surat-print * {
+    visibility: visible !important;
+  }
+  .surat-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #fff;
+  }
+  .surat-print .surat-sheet {
+    max-width: 100%;
+    box-shadow: none;
+  }
 }
