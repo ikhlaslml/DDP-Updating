@@ -3,7 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
-import { Map as MapIcon, LayoutDashboard, Columns } from "lucide-react";
+import { Map as MapIcon, LayoutDashboard } from "lucide-react";
 import { DashboardCharts } from "./DashboardCharts";
 import { SuratKeluarCard } from "./SuratKeluarCard";
 
@@ -16,12 +16,11 @@ const MapView = dynamic(() => import("@/components/peta/MapView").then((m) => m.
   ),
 });
 
-type Mode = "peta" | "dashboard" | "split";
+type Mode = "peta" | "dashboard";
 
 const TABS: { id: Mode; label: string; icon: typeof MapIcon }[] = [
   { id: "peta", label: "Peta", icon: MapIcon },
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "split", label: "Peta & Dashboard", icon: Columns },
 ];
 
 function MapPanel() {
@@ -70,18 +69,7 @@ export function DashboardView() {
         ))}
       </div>
 
-      {mode === "peta" && <MapPanel />}
-      {mode === "dashboard" && <DashboardPanel />}
-      {mode === "split" && (
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <div className="xl:sticky xl:top-24 xl:self-start">
-            <MapPanel />
-          </div>
-          <div className="min-w-0">
-            <DashboardPanel />
-          </div>
-        </div>
-      )}
+      {mode === "peta" ? <MapPanel /> : <DashboardPanel />}
     </div>
   );
 }
