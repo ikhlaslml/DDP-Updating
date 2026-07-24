@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 
 export async function GET() {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
   const rows = await prisma.penduduk.findMany({
-    where: { lat: { not: null }, lng: { not: null } },
+    where: { desaId: ctx.desaId, lat: { not: null }, lng: { not: null } },
     select: {
       id: true,
       nkk: true,
@@ -28,8 +31,8 @@ export async function GET() {
       nkk: string;
       namaKepalaKeluarga: string;
       dusun: string | null;
-      rw: string | null;
-      rt: string | null;
+      rw: number | null;
+      rt: number | null;
       alamat: string | null;
       lat: number;
       lng: number;
@@ -40,7 +43,11 @@ export async function GET() {
   >();
 
   for (const r of rows) {
-    if (r.lat === null || r.lng === null || !r.nkk) continue;
+    if (!r.nkk) continue;
+    // lat/lng are character varying in the `ajaib` schema — parse to numbers.
+    const latNum = r.lat != null ? parseFloat(r.lat) : NaN;
+    const lngNum = r.lng != null ? parseFloat(r.lng) : NaN;
+    if (Number.isNaN(latNum) || Number.isNaN(lngNum)) continue;
     const key = r.nkk;
     const existing = households.get(key);
     if (!existing) {
@@ -52,18 +59,18 @@ export async function GET() {
         rw: r.rw,
         rt: r.rt,
         alamat: r.alamat,
-        lat: r.lat,
-        lng: r.lng,
+        lat: latNum,
+        lng: lngNum,
         jumlahAnggota: 1,
-        miskinBps: !!r.miskin_bps,
-        miskinEkstrem: !!r.miskin_ekstrem,
+        miskinBps: r.miskin_bps === "Ya",
+        miskinEkstrem: r.miskin_ekstrem === "Ya",
       });
     } else {
       existing.jumlahAnggota += 1;
       if (r.status_dalam_keluarga === "Kepala Keluarga") {
         existing.namaKepalaKeluarga = r.nama || "-";
-        existing.miskinBps = !!r.miskin_bps;
-        existing.miskinEkstrem = !!r.miskin_ekstrem;
+        existing.miskinBps = r.miskin_bps === "Ya";
+        existing.miskinEkstrem = r.miskin_ekstrem === "Ya";
       }
     }
   }

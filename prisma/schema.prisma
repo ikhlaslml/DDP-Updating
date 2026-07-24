@@ -6,11 +6,17 @@ generator client {
 }
 
 datasource db {
-  // Local dev uses SQLite (zero setup). For production (Vercel), set
-  // provider = "postgresql" and DATABASE_URL to a Postgres/Supabase URL,
-  // then run `npx prisma migrate dev` again. See README.md.
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+// Tenant: one village (desapresisi.id subdomain).
+model Desa {
+  id        String   @id @default(cuid())
+  slug      String   @unique // subdomain, e.g. "desa-setu"
+  nama      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model User {
@@ -18,12 +24,17 @@ model User {
   email     String   @unique
   name      String?
   password  String
+  desaId    String?  // tenant this user belongs to
+  role      String   @default("operator") // "operator" | "pemerintah_desa"
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([desaId])
 }
 
 model Penduduk {
   id        String   @id @default(cuid())
+  desaId    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -31,23 +42,23 @@ model Penduduk {
   subjek                      String?
   datamasuk                   DateTime?
   enumerator                  String?
-  kode_bangunan               String?
+  kode_bangunan               Int?
   kode_deskel                 String?
   deskel                      String?
   dusun                       String?
-  rw                          String?
-  rt                          String?
-  lat                         Float?
-  lng                         Float?
-  responden                   Boolean?
+  rw                          Int?
+  rt                          Int?
+  lat                         String?
+  lng                         String?
+  responden                   String?
   nkk                         String?
   nama                        String?
   nik                         String? @unique
   alamat                      String?
   status_dalam_keluarga       String?
   status_kawin                String?
-  punya_ktp                   Boolean?
-  punya_aktalahir             Boolean?
+  punya_ktp                   String?
+  punya_aktalahir             String?
   nama_kepala_rumah           String?
   nama_tulang_punggung        String?
   no_hp                       String?
@@ -61,43 +72,44 @@ model Penduduk {
   bhs_keluarga                String?
   bhs_daerah                  String?
   tgl_kawin                   DateTime?
-  usia                        Int?
+  usia                        Float?
+  usia_dec                    Float?
   lama_tinggal                Int?
-  punya_kk                    Boolean?
-  menetap                     Boolean?
+  punya_kk                    String?
+  menetap                     String?
   dead_jml                    Int?
-  akta_nikah                  Boolean?
-  akta_cerai                  Boolean?
+  akta_nikah                  String?
+  akta_cerai                  String?
   partisipasi_sekolah         String?
   ijazah                      String?
   rp_pendidikan               Float?
   bantuan_pendidikan          String?
-  pendidikan_anggota          String?
+  pendidikan_anggota          Int?
   keterampilan                String?
-  pelatihan                   Boolean?
+  pelatihan                   String?
   pelatihan_ket               String?
-  refreshing                  Boolean?
-  pekarangan                  Boolean?
+  refreshing                  String?
+  pekarangan                  String?
   pekarangan_luas             Float?
   pekarangan_air              String?
   pekarangan_tinggi           String?
   pekarangan_jenis            String?
   pekarangan_komoditas        String?
   sampah_buang                String?
-  sampah_pilah                Boolean?
-  sampah_olah                 Boolean?
-  rumah_pln                   Boolean?
+  sampah_pilah                String?
+  sampah_olah                 String?
+  rumah_pln                   String?
   rp_listrik                  Float?
-  wifi                        Boolean?
+  wifi                        String?
   airbersih                   String?
   airminum                    String?
   bahanbakar_masak            String?
-  rumah_solar                 Boolean?
-  par_organisasi              Boolean?
+  rumah_solar                 String?
+  par_organisasi              String?
   organisasi_nama             String?
-  par_masyarakat              Boolean?
-  par_pemilu                  Boolean?
-  par_kebijakan               Boolean?
+  par_masyarakat              String?
+  par_pemilu                  String?
+  par_kebijakan               String?
   bansos                      String?
   rp_zakat                    Float?
   wakaf                       String?
@@ -113,7 +125,7 @@ model Penduduk {
   tanah_nomor                 String?
   nomor_objek_pajak           String?
   tanah_bukti                 String?
-  pbb_punya                   Boolean?
+  pbb_punya                   String?
   pbb_tahunbayar              Int?
   kesediaan                   String?
   medsos                      String?
@@ -122,7 +134,7 @@ model Penduduk {
   aset_ekonomi                String?
   pinjaman                    String?
   kb                          String?
-  kulkas                      Boolean?
+  kulkas                      String?
   sepeda_jml                  Int?
   motor_jml                   Int?
   motor_merk                  String?
@@ -135,7 +147,7 @@ model Penduduk {
   mobillistrik_jml            Int?
   kendaraan_jml               Int?
   rp_kendaraan                Float?
-  hp_punya                    Boolean?
+  hp_punya                    String?
   hp_jumlah                   Int?
   hp_merk                     String?
   hp_provider                 String?
@@ -166,7 +178,7 @@ model Penduduk {
   nel_budidaya_alat           String?
   nel_pelatihan_jenis         String?
   nel_asuransi                String?
-  nel_asuransi_rp             String?
+  nel_asuransi_rp             Float?
   nel_kredit                  String?
   nel_pembiayaan_budidaya     String?
   nel_kepemilikan             String?
@@ -182,21 +194,21 @@ model Penduduk {
   nel_produksi                String?
   nel_hasil_jual              String?
   nel_pernah                  String?
-  bpjs_kes                    Boolean?
-  bpjs_tk                     Boolean?
-  menabung                    Boolean?
+  bpjs_kes                    String?
+  bpjs_tk                     String?
+  menabung                    String?
   rp_tabungan                 Float?
-  tki                         Boolean?
+  tki                         String?
   tki_tujuan                  String?
   penyakit_jumlah             Int?
   penyakit_jenis              String?
   anak_asi                    String?
   anak_periksa                String?
   anak_mpasi                  String?
-  anak_tb                     String?
-  anak_bb                     String?
-  perokok                     Boolean?
-  lahan                       Boolean?
+  anak_tb                     Float?
+  anak_bb                     Float?
+  perokok                     String?
+  lahan                       String?
   lahan_guna                  String?
   lahan_luasnon               Float?
   lahan_status                String?
@@ -218,11 +230,27 @@ model Penduduk {
   ppkt                        Float?
   skor_kls                    Float?
   miskin_uufm                 String?
-  pkb                         String?
+  pkb                         Float?
   miskin_wb                   String?
-  miskin_bps                  Boolean?
-  miskin_ekstrem              Boolean?
+  miskin_bps                  String?
+  miskin_ekstrem              String?
+  miskin_bpsd                 String?
   asuransi_kes                String?
+  bencana_kesfungsional       String?
+  bencana_lap_usaha           String?
+  bencana_lapusaha_nama       String?
+  bencana_lapusaha_alamat     String?
+  bencana_lapusaha_izin       String?
+  bencana_lapusaha_omzet      Float?
+  bencana_lapusaha_tk         Int?
+  bencana_kerja_pasca         String?
+  bencana_kerjapasca_lokasi   String?
+  bencana_kerjapasca_penghasilan Float?
+  bencana_kerjapasca_harapan  String?
+  bencana_pemulihan_pasca     String?
+  bencana_rumah_kondisi       String?
+  bencana_rumah_bagianrusak   String?
+  bencana_ketenum_bangunan    String?
   baju_frek                   String?
   rp_sph                      Float?
   makan_frek                  String?
@@ -235,8 +263,8 @@ model Penduduk {
   kon_biskuit                 Float?
   kon_jagung                  Float?
   kon_kentang                 Float?
-  kon_mie                     Float?
-  kon_roti                    Float?
+  kon_mie                     Int?
+  kon_roti                    Int?
   kon_singkong                Float?
   kon_sukun                   Float?
   kon_ketan                   Float?
@@ -250,15 +278,15 @@ model Penduduk {
   kon_kacang_merah            Float?
   kon_kacang_kedelai          Float?
   kon_kacang_mede             Float?
-  kon_tahu                    Float?
-  kon_tempe                   Float?
-  kon_bayam                   Float?
-  kon_kangkung                Float?
-  kon_sawi                    Float?
+  kon_tahu                    Int?
+  kon_tempe                   Int?
+  kon_bayam                   Int?
+  kon_kangkung                Int?
+  kon_sawi                    Int?
   kon_terong                  Float?
   kon_oyong                   Float?
-  kon_daun_singkong           Float?
-  kon_daun_ubi                Float?
+  kon_daun_singkong           Int?
+  kon_daun_ubi                Int?
   kon_jeruk                   Float?
   kon_mangga                  Float?
   kon_pepaya                  Float?
@@ -273,11 +301,11 @@ model Penduduk {
   kon_gas                     Float?
   kon_garam                   Float?
   kon_gula                    Float?
-  kon_susu                    Float?
-  kon_teh                     Float?
-  kon_kopi                    Float?
-  kon_rokok                   Float?
-  kon_kelor                   Float?
+  kon_susu                    Int?
+  kon_teh                     Int?
+  kon_kopi                    Int?
+  kon_rokok                   Int?
+  kon_kelor                   Int?
   rumah_lantai                String?
   rumah_dinding               String?
   rumah_atap                  String?
@@ -286,19 +314,114 @@ model Penduduk {
   rumah_milik                 String?
   rumah_tingkat               String?
   rumah_luas                  Float?
-  ternak                      Boolean?
-  ternak_sapi                 String?
-  ternak_kerbau               String?
-  ternak_domba                String?
-  ternak_kambing              String?
-  ternak_ayam                 String?
-  ternak_itik                 String?
-  ternak_kuda                 String?
-  ternak_babi                 String?
-  ternak_ikan                 String?
+  ternak                      String?
+  ternak_sapi                 Int?
+  ternak_kerbau               Int?
+  ternak_domba                Int?
+  ternak_kambing              Int?
+  ternak_ayam                 Int?
+  ternak_itik                 Int?
+  ternak_kuda                 Int?
+  ternak_babi                 Int?
+  ternak_ikan                 Int?
 
+  @@index([desaId])
   @@index([nik])
   @@index([nkk])
   @@index([dusun])
   @@index([rw, rt])
+}
+
+// Immutable point-in-time baseline (periode T0, T1, ...).
+model Snapshot {
+  id        String   @id @default(cuid())
+  desaId    String?
+  kode      String   // "T0", "T1", ...
+  urutan    Int      // 0, 1, 2, ...
+  label     String?
+  catatan   String?
+  jumlah    Int      @default(0)
+  createdAt DateTime @default(now())
+  rows      SnapshotPenduduk[]
+
+  @@unique([desaId, kode])
+  @@unique([desaId, urutan])
+  @@index([desaId])
+}
+
+// Frozen copy of one Penduduk row inside a snapshot.
+model SnapshotPenduduk {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  nik        String?
+  nkk        String?
+  nama       String?
+  dusun      String?
+  data       String   // full record as JSON
+
+  @@index([snapshotId])
+  @@index([nik])
+}
+
+// Pending change against the live baseline (Data Perubahan Sementara).
+model StagingChange {
+  id         String   @id @default(cuid())
+  desaId     String?
+  aksi       String   // "CREATE" | "UPDATE" | "DELETE"
+  pendudukId String?  // target for UPDATE/DELETE
+  nik        String?
+  nama       String?
+  ringkasan  String?
+  data       String?  // proposed field values as JSON (CREATE/UPDATE)
+  status     String   @default("PENDING")
+  createdBy  String?
+  createdAt  DateTime @default(now())
+
+  @@index([status])
+  @@index([desaId])
+}
+
+// Village profile + letterhead settings (single row).
+model PengaturanDesa {
+  id         String   @id @default(cuid())
+  desaId     String?  @unique
+  namaKepala String?
+  kopBaris1  String?  // e.g. PEMERINTAH KABUPATEN ...
+  kopBaris2  String?  // e.g. KECAMATAN ...
+  kopBaris3  String?  // nama desa
+  kopBaris4  String?  // alamat lengkap
+  penutup    String?
+  disclaimer String?
+  updatedAt  DateTime @updatedAt
+}
+
+// Reusable letter template.
+model SuratTemplate {
+  id        String   @id @default(cuid())
+  desaId    String?
+  nama      String
+  kode      String
+  kategori  String
+  isi       String   // body with {{placeholder}} tokens
+  createdAt DateTime @default(now())
+
+  @@index([desaId])
+}
+
+// One issued letter (for the "Surat Keluar" log).
+model SuratTerbit {
+  id           String   @id @default(cuid())
+  desaId       String?
+  nomor        String
+  templateId   String?
+  templateNama String?
+  pendudukId   String?
+  namaWarga    String?
+  nik          String?
+  keperluan    String?
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([desaId])
 }

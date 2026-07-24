@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
 import { REQUIRED_FIELDS, pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { fromImportValue } from "@/lib/export-import";
+import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
 export const runtime = "nodejs";
 
@@ -20,6 +21,10 @@ function toAoa(filename: string, buf: ArrayBuffer): unknown[][] {
 }
 
 export async function POST(req: NextRequest) {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
+  if (!isOperator(ctx.role)) return FORBIDDEN;
+
   const form = await req.formData().catch(() => null);
   const file = form?.get("file");
   if (!file || typeof file === "string") {
@@ -95,7 +100,7 @@ export async function POST(req: NextRequest) {
     }
     seenNiksInFile.add(nik);
 
-    const data = { ...validated.data };
+    const data = { ...validated.data, desaId: ctx.desaId } as Record<string, unknown>;
     if (!data.abs_id) data.abs_id = `ABS${Date.now()}${i}${Math.floor(Math.random() * 1000)}`;
     toCreate.push(data);
   });

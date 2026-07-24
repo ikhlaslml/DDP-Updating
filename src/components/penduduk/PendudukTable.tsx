@@ -14,13 +14,15 @@ import { mapping, DEFAULT_VISIBLE_COLUMNS } from "@/lib/indikator";
 import { formatCell } from "@/lib/format";
 import { ColumnToggle } from "./ColumnToggle";
 import { DeleteButton } from "./DeleteButton";
+import { useCanWrite } from "@/components/providers/AuthInfo";
 
 type Row = Record<string, unknown> & { id: string };
-type Facets = { dusun: string[]; rw: string[]; rt: string[] };
+type Facets = { dusun: string[]; rw: number[]; rt: number[] };
 
 const columnHelper = createColumnHelper<Row>();
 
 export function PendudukTable() {
+  const canWrite = useCanWrite();
   const [rows, setRows] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -110,16 +112,20 @@ export function PendudukTable() {
             <Link href={`/penduduk/${row.original.id}`} className="text-sm font-medium text-indigo-600 hover:underline">
               Lihat
             </Link>
-            <Link href={`/penduduk/${row.original.id}/edit`} className="text-sm font-medium text-amber-600 hover:underline">
-              Ubah
-            </Link>
-            <DeleteButton id={row.original.id} nama={String(row.original.nama ?? "")} onDeleted={fetchData} />
+            {canWrite && (
+              <>
+                <Link href={`/penduduk/${row.original.id}/edit`} className="text-sm font-medium text-amber-600 hover:underline">
+                  Ubah
+                </Link>
+                <DeleteButton id={row.original.id} nama={String(row.original.nama ?? "")} onDeleted={fetchData} />
+              </>
+            )}
           </div>
         ),
       })
     );
     return cols;
-  }, [visible, fetchData]);
+  }, [visible, fetchData, canWrite]);
 
   const table = useReactTable({
     data: rows,
@@ -190,12 +196,14 @@ export function PendudukTable() {
           >
             Ekspor
           </a>
-          <Link
-            href="/penduduk/baru"
-            className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-          >
-            + Tambah Data
-          </Link>
+          {canWrite && (
+            <Link
+              href="/penduduk/baru"
+              className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+            >
+              + Tambah Data
+            </Link>
+          )}
         </div>
       </div>
 

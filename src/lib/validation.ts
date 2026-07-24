@@ -22,6 +22,16 @@ function coreZodType(name: string, def: KolomDef): z.ZodTypeAny {
   if (name === "nik" || name === "nkk") {
     return z.string().regex(NIK_NKK_RE, "Harus berupa 16 digit angka");
   }
+  // lat/lng are stored as character varying in `ajaib`, but must still parse to a
+  // coordinate within Indonesia's rough bounding box.
+  if (name === "lat" || name === "lng") {
+    const [min, max] = name === "lat" ? LAT_RANGE : LNG_RANGE;
+    const axis = name === "lat" ? "lintang" : "bujur";
+    return z.string().trim().refine((v) => {
+      const n = Number(v);
+      return v !== "" && !Number.isNaN(n) && n >= min && n <= max;
+    }, `Di luar rentang ${axis} Indonesia`);
+  }
   if (def.enum) {
     return z.enum(def.enum as [string, ...string[]]);
   }

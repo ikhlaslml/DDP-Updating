@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { Search, ChevronDown, LogOut } from "lucide-react";
+import { useAuthInfo } from "@/components/providers/AuthInfo";
 
-export function Topbar({ email }: { email: string | null | undefined }) {
+export function Topbar() {
+  const { email, role } = useAuthInfo();
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -51,8 +53,11 @@ export function Topbar({ email }: { email: string | null | undefined }) {
               {initial}
             </span>
             <span className="hidden sm:block text-left">
-              <span className="block text-sm font-medium text-slate-800 leading-tight max-w-[160px] truncate">
+              <span className="block text-sm font-medium text-slate-800 leading-tight max-w-[180px] truncate">
                 {email}
+              </span>
+              <span className="block text-[11px] leading-tight text-slate-400">
+                {role === "pemerintah_desa" ? "Pemerintah Desa (lihat)" : "Operator"}
               </span>
             </span>
             <ChevronDown className="h-4 w-4 text-slate-400" />

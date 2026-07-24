@@ -9,13 +9,17 @@ export function DeleteButton({ id, nama, onDeleted }: { id: string; nama: string
   if (confirming) {
     return (
       <span className="inline-flex items-center gap-1 text-xs">
-        <span className="text-slate-600">Hapus {nama}?</span>
+        <span className="text-slate-600">Ajukan hapus {nama}?</span>
         <button
           type="button"
           disabled={loading}
           onClick={async () => {
             setLoading(true);
-            const res = await fetch(`/api/penduduk/${id}`, { method: "DELETE" });
+            const res = await fetch("/api/staging", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ aksi: "DELETE", pendudukId: id }),
+            });
             setLoading(false);
             if (res.ok) {
               setConfirming(false);

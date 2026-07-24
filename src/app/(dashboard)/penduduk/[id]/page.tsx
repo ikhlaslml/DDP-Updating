@@ -4,12 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { KELOMPOK_ORDER, KELOMPOK_LABEL, kolomByKelompok } from "@/lib/indikator";
 import { formatCell } from "@/lib/format";
 import { DeleteButtonRedirect } from "@/components/penduduk/DeleteButtonRedirect";
+import { getAuthContext } from "@/lib/tenant";
 
 const GROUPED = kolomByKelompok();
 
 export default async function DetailPendudukPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const record = await prisma.penduduk.findUnique({ where: { id } });
+  const ctx = await getAuthContext();
+  if (!ctx) notFound();
+  const record = await prisma.penduduk.findFirst({ where: { id, desaId: ctx.desaId } });
   if (!record) notFound();
 
   const data = record as unknown as Record<string, unknown>;

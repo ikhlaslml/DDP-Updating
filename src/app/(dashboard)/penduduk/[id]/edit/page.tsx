@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PendudukForm } from "@/components/penduduk/PendudukForm";
+import { getAuthContext } from "@/lib/tenant";
 
 export default async function EditPendudukPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const record = await prisma.penduduk.findUnique({ where: { id } });
+  const ctx = await getAuthContext();
+  if (!ctx) notFound();
+  const record = await prisma.penduduk.findFirst({ where: { id, desaId: ctx.desaId } });
   if (!record) notFound();
 
   return (

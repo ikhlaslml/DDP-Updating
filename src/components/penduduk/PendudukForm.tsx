@@ -59,20 +59,24 @@ export function PendudukForm({
     setGeneralError(null);
     const payload = buildPayload(formData, ALL_COLUMNS.map((n) => [n, mapping.kolom[n]] as [string, typeof mapping.kolom[string]]));
 
-    const url = mode === "create" ? "/api/penduduk" : `/api/penduduk/${id}`;
-    const method = mode === "create" ? "POST" : "PUT";
+    // Changes are staged (Data Perubahan Sementara), not written to the baseline
+    // directly. They apply only when the operator clicks "Gabungkan".
+    const stagingBody =
+      mode === "create"
+        ? { aksi: "CREATE", data: payload }
+        : { aksi: "UPDATE", pendudukId: id, data: payload };
 
     try {
-      const res = await fetch(url, {
-        method,
+      const res = await fetch("/api/staging", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(stagingBody),
       });
       const json = await res.json();
 
       if (!res.ok) {
         setErrors(json.fields || {});
-        setGeneralError(json.error || "Gagal menyimpan data.");
+        setGeneralError(json.error || "Gagal menyimpan perubahan.");
         const firstField = Object.keys(json.fields || {})[0];
         const kelompok = firstField ? mapping.kolom[firstField]?.kelompok : undefined;
         const stepIdx = kelompok ? KELOMPOK_ORDER.indexOf(kelompok as (typeof KELOMPOK_ORDER)[number]) : -1;
@@ -81,7 +85,7 @@ export function PendudukForm({
         return;
       }
 
-      router.push(`/penduduk/${json.data.id}`);
+      router.push("/penduduk");
     } catch {
       setGeneralError("Terjadi kesalahan jaringan.");
       setSubmitting(false);
@@ -164,7 +168,7 @@ export function PendudukForm({
             onClick={handleSubmit}
             className="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
           >
-            {submitting ? "Menyimpan..." : mode === "create" ? "Simpan Data" : "Simpan Perubahan"}
+            {submitting ? "Menyimpan..." : mode === "create" ? "Ajukan Penambahan" : "Ajukan Perubahan"}
           </button>
         </div>
       </div>
