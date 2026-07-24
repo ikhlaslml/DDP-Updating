@@ -24,24 +24,7 @@ export default async function LoginPage({
 
         <main className="flex flex-1 items-center">
           <div className="grid w-full grid-cols-1 lg:grid-cols-2 items-center gap-12">
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-[#7A1F2E] mb-3">
-                SOLUSI SATU DATA INDONESIA
-              </p>
-              <h1
-                className="text-5xl sm:text-6xl font-extrabold leading-[1.05] tracking-tight"
-                style={{ color: "#16324f" }}
-              >
-                DATA DESA
-                <br />
-                PRESISI
-              </h1>
-              <p className="mt-5 max-w-md text-slate-500">
-                Portal login pengelolaan data kependudukan desa berbasis skema
-                sensus Data Desa Presisi — masuk untuk mengelola data, statistik,
-                dan peta sebaran penduduk.
-              </p>
-            </div>
+            
 
             <div className="relative w-full max-w-sm mx-auto lg:mx-0 lg:justify-self-end">
               <HeroGraphic className="hidden lg:block pointer-events-none absolute -top-20 -left-20 w-56 h-56 opacity-80" />

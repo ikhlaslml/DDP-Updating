@@ -19,7 +19,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="email"
           required
           autoComplete="email"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
           placeholder="you@example.com"
         />
       </div>
@@ -33,7 +33,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="password"
           required
           autoComplete="current-password"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
           placeholder="********"
         />
       </div>

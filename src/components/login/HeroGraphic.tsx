@@ -9,9 +9,10 @@ export function HeroGraphic({ className = "" }: { className?: string }) {
         strokeDasharray="8 8"
         strokeLinecap="round"
       />
-      <rect x="70" y="60" width="120" height="120" rx="10" fill="#7A1F2E" />
-      <rect x="70" y="60" width="60" height="60" rx="8" fill="#F5F6F8" />
-      <rect x="150" y="140" width="130" height="130" rx="10" fill="#122A44" />
+      <rect x="60" y="85" width="168" height="54" rx="6" fill="#7A1F2E" />
+      <rect x="60" y="85" width="54" height="126" rx="6" fill="#7A1F2E" />
+      <rect x="114" y="181" width="146" height="54" rx="6" fill="#122A44" />
+      <rect x="212" y="139" width="48" height="96" rx="6" fill="#122A44" />
     </svg>
   );
 }

@@ -1,9 +1,10 @@
 export function BrandMarkIcon({ size = 40 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="3" width="19" height="19" rx="2.5" fill="#7A1F2E" />
-      <rect x="3" y="3" width="9.5" height="9.5" rx="2" fill="white" />
-      <rect x="17" y="17" width="20" height="20" rx="2.5" fill="#122A44" />
+    <svg width={size} height={size} viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="168" height="54" rx="6" fill="#7A1F2E" />
+      <rect x="0" y="0" width="54" height="126" rx="6" fill="#7A1F2E" />
+      <rect x="54" y="96" width="146" height="54" rx="6" fill="#122A44" />
+      <rect x="152" y="54" width="48" height="96" rx="6" fill="#122A44" />
     </svg>
   );
 }
