@@ -279,6 +279,13 @@ async function upsertUser(email: string, name: string, password: string, desaId:
 async function main() {
   const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Admin12345!";
 
+  // Idempotent: on redeploys (data already exists) skip the destructive reseed so
+  // production data persists. Set SEED_FORCE=1 to force a full reseed.
+  if ((await prisma.desa.count()) > 0 && !process.env.SEED_FORCE) {
+    console.log("Data desa sudah ada — seed dilewati (set SEED_FORCE=1 untuk paksa reseed).");
+    return;
+  }
+
   console.log("Clearing existing data...");
   await prisma.stagingChange.deleteMany();
   await prisma.snapshotPenduduk.deleteMany();

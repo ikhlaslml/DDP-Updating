@@ -1,33 +1,40 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
 -- CreateTable
 CREATE TABLE "Desa" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "nama" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Desa_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "password" TEXT NOT NULL,
     "desaId" TEXT,
     "role" TEXT NOT NULL DEFAULT 'operator',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Penduduk" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "desaId" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "abs_id" TEXT,
     "subjek" TEXT,
-    "datamasuk" DATETIME,
+    "datamasuk" TIMESTAMP(3),
     "enumerator" TEXT,
     "kode_bangunan" INTEGER,
     "kode_deskel" TEXT,
@@ -50,7 +57,7 @@ CREATE TABLE "Penduduk" (
     "nama_tulang_punggung" TEXT,
     "no_hp" TEXT,
     "jml_keluarga" INTEGER,
-    "tgl_lahir" DATETIME,
+    "tgl_lahir" TIMESTAMP(3),
     "jk" TEXT,
     "thn_datang" INTEGER,
     "dinamika" TEXT,
@@ -58,9 +65,9 @@ CREATE TABLE "Penduduk" (
     "suku" TEXT,
     "bhs_keluarga" TEXT,
     "bhs_daerah" TEXT,
-    "tgl_kawin" DATETIME,
-    "usia" REAL,
-    "usia_dec" REAL,
+    "tgl_kawin" TIMESTAMP(3),
+    "usia" DOUBLE PRECISION,
+    "usia_dec" DOUBLE PRECISION,
     "lama_tinggal" INTEGER,
     "punya_kk" TEXT,
     "menetap" TEXT,
@@ -69,7 +76,7 @@ CREATE TABLE "Penduduk" (
     "akta_cerai" TEXT,
     "partisipasi_sekolah" TEXT,
     "ijazah" TEXT,
-    "rp_pendidikan" REAL,
+    "rp_pendidikan" DOUBLE PRECISION,
     "bantuan_pendidikan" TEXT,
     "pendidikan_anggota" INTEGER,
     "keterampilan" TEXT,
@@ -77,7 +84,7 @@ CREATE TABLE "Penduduk" (
     "pelatihan_ket" TEXT,
     "refreshing" TEXT,
     "pekarangan" TEXT,
-    "pekarangan_luas" REAL,
+    "pekarangan_luas" DOUBLE PRECISION,
     "pekarangan_air" TEXT,
     "pekarangan_tinggi" TEXT,
     "pekarangan_jenis" TEXT,
@@ -86,7 +93,7 @@ CREATE TABLE "Penduduk" (
     "sampah_pilah" TEXT,
     "sampah_olah" TEXT,
     "rumah_pln" TEXT,
-    "rp_listrik" REAL,
+    "rp_listrik" DOUBLE PRECISION,
     "wifi" TEXT,
     "airbersih" TEXT,
     "airminum" TEXT,
@@ -98,12 +105,12 @@ CREATE TABLE "Penduduk" (
     "par_pemilu" TEXT,
     "par_kebijakan" TEXT,
     "bansos" TEXT,
-    "rp_zakat" REAL,
+    "rp_zakat" DOUBLE PRECISION,
     "wakaf" TEXT,
-    "rp_persepuluh" REAL,
-    "rp_dharma" REAL,
-    "rp_paramita" REAL,
-    "rp_sumbangan" REAL,
+    "rp_persepuluh" DOUBLE PRECISION,
+    "rp_dharma" DOUBLE PRECISION,
+    "rp_paramita" DOUBLE PRECISION,
+    "rp_sumbangan" DOUBLE PRECISION,
     "disabilitas" TEXT,
     "korban_kejahatan" TEXT,
     "hukum_bantuan" TEXT,
@@ -133,15 +140,15 @@ CREATE TABLE "Penduduk" (
     "motorlistrik_jml" INTEGER,
     "mobillistrik_jml" INTEGER,
     "kendaraan_jml" INTEGER,
-    "rp_kendaraan" REAL,
+    "rp_kendaraan" DOUBLE PRECISION,
     "hp_punya" TEXT,
     "hp_jumlah" INTEGER,
     "hp_merk" TEXT,
     "hp_provider" TEXT,
-    "rp_komunikasi" REAL,
+    "rp_komunikasi" DOUBLE PRECISION,
     "elektronik_rumah" TEXT,
-    "rp_transportasi" REAL,
-    "rp_cicilan" REAL,
+    "rp_transportasi" DOUBLE PRECISION,
+    "rp_cicilan" DOUBLE PRECISION,
     "kerja_profesi" TEXT,
     "kerja_status" TEXT,
     "kerja_ket" TEXT,
@@ -165,7 +172,7 @@ CREATE TABLE "Penduduk" (
     "nel_budidaya_alat" TEXT,
     "nel_pelatihan_jenis" TEXT,
     "nel_asuransi" TEXT,
-    "nel_asuransi_rp" REAL,
+    "nel_asuransi_rp" DOUBLE PRECISION,
     "nel_kredit" TEXT,
     "nel_pembiayaan_budidaya" TEXT,
     "nel_kepemilikan" TEXT,
@@ -184,7 +191,7 @@ CREATE TABLE "Penduduk" (
     "bpjs_kes" TEXT,
     "bpjs_tk" TEXT,
     "menabung" TEXT,
-    "rp_tabungan" REAL,
+    "rp_tabungan" DOUBLE PRECISION,
     "tki" TEXT,
     "tki_tujuan" TEXT,
     "penyakit_jumlah" INTEGER,
@@ -192,32 +199,32 @@ CREATE TABLE "Penduduk" (
     "anak_asi" TEXT,
     "anak_periksa" TEXT,
     "anak_mpasi" TEXT,
-    "anak_tb" REAL,
-    "anak_bb" REAL,
+    "anak_tb" DOUBLE PRECISION,
+    "anak_bb" DOUBLE PRECISION,
     "perokok" TEXT,
     "lahan" TEXT,
     "lahan_guna" TEXT,
-    "lahan_luasnon" REAL,
+    "lahan_luasnon" DOUBLE PRECISION,
     "lahan_status" TEXT,
-    "lahan_luas_dikelola" REAL,
-    "lahan_luas_tidakdikelola" REAL,
+    "lahan_luas_dikelola" DOUBLE PRECISION,
+    "lahan_luas_tidakdikelola" DOUBLE PRECISION,
     "lahanmilik_irigasi" TEXT,
     "lahanmilik_bukti" TEXT,
     "lahanmilik_komoditas" TEXT,
     "lahanmilik_lokasi" TEXT,
-    "lahangarap_luas" REAL,
+    "lahangarap_luas" DOUBLE PRECISION,
     "lahangarap_irigasi" TEXT,
     "lahangarap_komoditas" TEXT,
     "lahangarap_lokasi" TEXT,
-    "lahansewa_luas" REAL,
+    "lahansewa_luas" DOUBLE PRECISION,
     "lahansewa_irigasi" TEXT,
     "lahansewa_komoditas" TEXT,
     "lahansewa_lokasi" TEXT,
-    "ppkb" REAL,
-    "ppkt" REAL,
-    "skor_kls" REAL,
+    "ppkb" DOUBLE PRECISION,
+    "ppkt" DOUBLE PRECISION,
+    "skor_kls" DOUBLE PRECISION,
     "miskin_uufm" TEXT,
-    "pkb" REAL,
+    "pkb" DOUBLE PRECISION,
     "miskin_wb" TEXT,
     "miskin_bps" TEXT,
     "miskin_ekstrem" TEXT,
@@ -228,66 +235,66 @@ CREATE TABLE "Penduduk" (
     "bencana_lapusaha_nama" TEXT,
     "bencana_lapusaha_alamat" TEXT,
     "bencana_lapusaha_izin" TEXT,
-    "bencana_lapusaha_omzet" REAL,
+    "bencana_lapusaha_omzet" DOUBLE PRECISION,
     "bencana_lapusaha_tk" INTEGER,
     "bencana_kerja_pasca" TEXT,
     "bencana_kerjapasca_lokasi" TEXT,
-    "bencana_kerjapasca_penghasilan" REAL,
+    "bencana_kerjapasca_penghasilan" DOUBLE PRECISION,
     "bencana_kerjapasca_harapan" TEXT,
     "bencana_pemulihan_pasca" TEXT,
     "bencana_rumah_kondisi" TEXT,
     "bencana_rumah_bagianrusak" TEXT,
     "bencana_ketenum_bangunan" TEXT,
     "baju_frek" TEXT,
-    "rp_sph" REAL,
+    "rp_sph" DOUBLE PRECISION,
     "makan_frek" TEXT,
     "makan_menu" TEXT,
     "tempat_belanja" TEXT,
-    "rp_belanja" REAL,
-    "rp_pangan" REAL,
-    "rp_non_pangan" REAL,
-    "kon_beras" REAL,
-    "kon_biskuit" REAL,
-    "kon_jagung" REAL,
-    "kon_kentang" REAL,
+    "rp_belanja" DOUBLE PRECISION,
+    "rp_pangan" DOUBLE PRECISION,
+    "rp_non_pangan" DOUBLE PRECISION,
+    "kon_beras" DOUBLE PRECISION,
+    "kon_biskuit" DOUBLE PRECISION,
+    "kon_jagung" DOUBLE PRECISION,
+    "kon_kentang" DOUBLE PRECISION,
     "kon_mie" INTEGER,
     "kon_roti" INTEGER,
-    "kon_singkong" REAL,
-    "kon_sukun" REAL,
-    "kon_ketan" REAL,
-    "kon_sapi" REAL,
-    "kon_ayam" REAL,
-    "kon_babi" REAL,
-    "kon_ikan_segar" REAL,
-    "kon_ikan_asin" REAL,
-    "kon_telur" REAL,
-    "kon_kacang_hijau" REAL,
-    "kon_kacang_merah" REAL,
-    "kon_kacang_kedelai" REAL,
-    "kon_kacang_mede" REAL,
+    "kon_singkong" DOUBLE PRECISION,
+    "kon_sukun" DOUBLE PRECISION,
+    "kon_ketan" DOUBLE PRECISION,
+    "kon_sapi" DOUBLE PRECISION,
+    "kon_ayam" DOUBLE PRECISION,
+    "kon_babi" DOUBLE PRECISION,
+    "kon_ikan_segar" DOUBLE PRECISION,
+    "kon_ikan_asin" DOUBLE PRECISION,
+    "kon_telur" DOUBLE PRECISION,
+    "kon_kacang_hijau" DOUBLE PRECISION,
+    "kon_kacang_merah" DOUBLE PRECISION,
+    "kon_kacang_kedelai" DOUBLE PRECISION,
+    "kon_kacang_mede" DOUBLE PRECISION,
     "kon_tahu" INTEGER,
     "kon_tempe" INTEGER,
     "kon_bayam" INTEGER,
     "kon_kangkung" INTEGER,
     "kon_sawi" INTEGER,
-    "kon_terong" REAL,
-    "kon_oyong" REAL,
+    "kon_terong" DOUBLE PRECISION,
+    "kon_oyong" DOUBLE PRECISION,
     "kon_daun_singkong" INTEGER,
     "kon_daun_ubi" INTEGER,
-    "kon_jeruk" REAL,
-    "kon_mangga" REAL,
-    "kon_pepaya" REAL,
-    "kon_pisang" REAL,
-    "kon_alpukat" REAL,
-    "kon_semangka" REAL,
-    "kon_melon" REAL,
-    "kon_cabai" REAL,
-    "kon_bamer" REAL,
-    "kon_baput" REAL,
-    "kon_migor" REAL,
-    "kon_gas" REAL,
-    "kon_garam" REAL,
-    "kon_gula" REAL,
+    "kon_jeruk" DOUBLE PRECISION,
+    "kon_mangga" DOUBLE PRECISION,
+    "kon_pepaya" DOUBLE PRECISION,
+    "kon_pisang" DOUBLE PRECISION,
+    "kon_alpukat" DOUBLE PRECISION,
+    "kon_semangka" DOUBLE PRECISION,
+    "kon_melon" DOUBLE PRECISION,
+    "kon_cabai" DOUBLE PRECISION,
+    "kon_bamer" DOUBLE PRECISION,
+    "kon_baput" DOUBLE PRECISION,
+    "kon_migor" DOUBLE PRECISION,
+    "kon_gas" DOUBLE PRECISION,
+    "kon_garam" DOUBLE PRECISION,
+    "kon_gula" DOUBLE PRECISION,
     "kon_susu" INTEGER,
     "kon_teh" INTEGER,
     "kon_kopi" INTEGER,
@@ -300,7 +307,7 @@ CREATE TABLE "Penduduk" (
     "rumah_kamar" INTEGER,
     "rumah_milik" TEXT,
     "rumah_tingkat" TEXT,
-    "rumah_luas" REAL,
+    "rumah_luas" DOUBLE PRECISION,
     "ternak" TEXT,
     "ternak_sapi" INTEGER,
     "ternak_kerbau" INTEGER,
@@ -310,36 +317,41 @@ CREATE TABLE "Penduduk" (
     "ternak_itik" INTEGER,
     "ternak_kuda" INTEGER,
     "ternak_babi" INTEGER,
-    "ternak_ikan" INTEGER
+    "ternak_ikan" INTEGER,
+
+    CONSTRAINT "Penduduk_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Snapshot" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "desaId" TEXT,
     "kode" TEXT NOT NULL,
     "urutan" INTEGER NOT NULL,
     "label" TEXT,
     "catatan" TEXT,
     "jumlah" INTEGER NOT NULL DEFAULT 0,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Snapshot_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SnapshotPenduduk" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "snapshotId" TEXT NOT NULL,
     "nik" TEXT,
     "nkk" TEXT,
     "nama" TEXT,
     "dusun" TEXT,
     "data" TEXT NOT NULL,
-    CONSTRAINT "SnapshotPenduduk_snapshotId_fkey" FOREIGN KEY ("snapshotId") REFERENCES "Snapshot" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+
+    CONSTRAINT "SnapshotPenduduk_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "StagingChange" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "desaId" TEXT,
     "aksi" TEXT NOT NULL,
     "pendudukId" TEXT,
@@ -349,12 +361,14 @@ CREATE TABLE "StagingChange" (
     "data" TEXT,
     "status" TEXT NOT NULL DEFAULT 'PENDING',
     "createdBy" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "StagingChange_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PengaturanDesa" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "desaId" TEXT,
     "namaKepala" TEXT,
     "kopBaris1" TEXT,
@@ -363,23 +377,27 @@ CREATE TABLE "PengaturanDesa" (
     "kopBaris4" TEXT,
     "penutup" TEXT,
     "disclaimer" TEXT,
-    "updatedAt" DATETIME NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PengaturanDesa_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SuratTemplate" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "desaId" TEXT,
     "nama" TEXT NOT NULL,
     "kode" TEXT NOT NULL,
     "kategori" TEXT NOT NULL,
     "isi" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SuratTemplate_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SuratTerbit" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "desaId" TEXT,
     "nomor" TEXT NOT NULL,
     "templateId" TEXT,
@@ -388,7 +406,9 @@ CREATE TABLE "SuratTerbit" (
     "namaWarga" TEXT,
     "nik" TEXT,
     "keperluan" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SuratTerbit_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -453,3 +473,7 @@ CREATE INDEX "SuratTerbit_createdAt_idx" ON "SuratTerbit"("createdAt");
 
 -- CreateIndex
 CREATE INDEX "SuratTerbit_desaId_idx" ON "SuratTerbit"("desaId");
+
+-- AddForeignKey
+ALTER TABLE "SnapshotPenduduk" ADD CONSTRAINT "SnapshotPenduduk_snapshotId_fkey" FOREIGN KEY ("snapshotId") REFERENCES "Snapshot"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
