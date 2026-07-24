@@ -19,7 +19,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="email"
           required
           autoComplete="email"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
           placeholder="you@example.com"
         />
       </div>
@@ -33,7 +33,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="password"
           required
           autoComplete="current-password"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
           placeholder="********"
         />
       </div>
@@ -45,7 +45,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-indigo-600 text-white font-medium py-2 hover:bg-indigo-700 disabled:opacity-60"
+        className="w-full rounded-lg bg-[#7A1F2E] text-white font-medium py-2 hover:bg-[#651825] disabled:opacity-60"
       >
         {pending ? "Memproses..." : "Masuk"}
       </button>
