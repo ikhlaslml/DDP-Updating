@@ -19,7 +19,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
       <div className="flex items-start justify-between mb-6">
         <div>
           <Link href="/penduduk" className="text-sm text-indigo-600 hover:underline">
-            &larr; Kembali ke Data Penduduk
+            &larr; Kembali ke Pembaruan Data
           </Link>
           <h1 className="text-2xl font-bold text-slate-900 mt-1">{String(data.nama ?? "-")}</h1>
           <p className="text-sm text-slate-500">

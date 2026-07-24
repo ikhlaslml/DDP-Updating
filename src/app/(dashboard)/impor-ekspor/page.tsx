@@ -21,7 +21,7 @@ export default function ImporEksporPage() {
         <h2 className="text-sm font-semibold text-slate-800 mb-1">Ekspor Data</h2>
         <p className="text-xs text-slate-500 mb-4">
           Mengekspor seluruh data penduduk (269 kolom). Untuk mengekspor hasil filter tertentu, gunakan tombol
-          Ekspor pada halaman Data Penduduk.
+          Ekspor pada halaman Pembaruan Data.
         </p>
         <div className="flex gap-3">
           {/* File downloads, not app navigation — <Link> isn't appropriate here. */}
