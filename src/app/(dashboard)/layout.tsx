@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -5,6 +6,16 @@ import { Topbar } from "@/components/layout/Topbar";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { RoleBanner } from "@/components/layout/RoleBanner";
 import { AuthInfoProvider } from "@/components/providers/AuthInfo";
+
+// Per-tenant browser tab title (icon comes from src/app/icon.svg).
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await auth();
+  const desa = session?.user?.desaId
+    ? await prisma.desa.findUnique({ where: { id: session.user.desaId }, select: { nama: true } })
+    : null;
+  const nama = desa?.nama ?? "Data Desa Presisi";
+  return { title: `${nama} — Data Desa Presisi` };
+}
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();

@@ -1,5 +1,9 @@
-import { auth } from "@/auth";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { authConfig } from "@/auth.config";
+
+// Middleware uses the edge-safe config (no Prisma).
+const { auth } = NextAuth(authConfig);
 
 // Resolve tenant context from the request host.
 // - <slug>.desapresisi.id / <slug>.desapresisi.local  -> tenant (dashboard)
