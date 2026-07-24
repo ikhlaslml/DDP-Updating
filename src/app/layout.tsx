@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard Kependudukan Desa",
+  title: "Data Desa Presisi",
   description: "Dashboard kependudukan desa berbasis Data Desa Presisi (DDP)",
 };
 

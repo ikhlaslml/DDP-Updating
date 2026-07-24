@@ -30,15 +30,23 @@ statistik, dan peta sebaran.
 - **Layanan Surat** — pilih penduduk → template (Domisili/SKTM/Usaha/SKCK) → terbitkan
   (penomoran otomatis) + cetak. Kop/kepala desa/penutup diatur di **Pengaturan**.
 
-## Instalasi & menjalankan (lokal, SQLite)
+## Instalasi & menjalankan (lokal, PostgreSQL)
+
+Proyek ini memakai PostgreSQL (Neon/Supabase) di lokal maupun produksi.
 
 ```bash
 npm install
 cp .env.example .env
+# isi DATABASE_URL dengan connection string Postgres (mis. Neon)
 # ganti AUTH_SECRET:  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-npx prisma migrate dev      # buat prisma/dev.db + jalankan seed
+npx prisma migrate deploy   # terapkan migrasi ke database
+npm run db:seed             # isi 2 desa + user + data (idempoten)
 npm run dev                 # http://localhost:3000
 ```
+
+> Ingin SQLite lokal tanpa Postgres? Set `DB_PROVIDER=sqlite` + `DATABASE_URL="file:./dev.db"`,
+> jalankan `DB_PROVIDER=sqlite node scripts/build-prisma-schema.js`, lalu `npx prisma migrate dev`.
+> (Jangan commit perubahan provider itu.)
 
 > Catatan Windows: `dev`/`build` memakai flag `--webpack` (Turbopack crash saat
 > memproses `globals.css` di lingkungan ini). Jangan hapus flag itu.
@@ -73,50 +81,30 @@ Tanpa hosts, `http://localhost:3000` tetap berjalan penuh sebagai aplikasi dashb
 
 ## Deploy ke Vercel (gratis) — langkah demi langkah
 
-Vercel free tidak menyimpan file (SQLite tidak persisten), jadi produksi memakai
-**PostgreSQL gratis** (Neon/Supabase). Ringkasnya lihat bagian bawah README ini juga.
+Schema sudah di-set ke **PostgreSQL** dan migration Postgres tersedia di
+`prisma/migrations`. Build command (`package.json`) menjalankan
+`prisma migrate deploy` (buat tabel) → `prisma db seed` (isi data, idempoten
+sehingga hanya sekali) → `next build`. Jadi cukup:
 
-**1. Siapkan Postgres gratis** — buat project di [Neon](https://neon.tech) atau
-[Supabase](https://supabase.com), salin *connection string* (`postgresql://...`).
+**1. Siapkan Postgres gratis** — [Neon](https://neon.tech) atau Vercel **Storage → Postgres**;
+salin *connection string* (`postgresql://...?sslmode=require`).
 
-**2. Generate schema + migration Postgres (lokal, sekali):**
+**2. Add New Project di Vercel** → Import repo `ikhlaslml/DDP-Updating` (branch `main`).
 
-```bash
-# arahkan Prisma ke Postgres cloud
-export DATABASE_URL="postgresql://...(connection string)..."
-# regenerasi schema.prisma dengan provider postgresql
-DB_PROVIDER=postgresql node scripts/build-prisma-schema.js
-# hapus migration SQLite lama, buat migration Postgres + seed data ke cloud
-rm -rf prisma/migrations
-npx prisma migrate dev --name init
-```
-
-(Di PowerShell: `$env:DATABASE_URL="..."; $env:DB_PROVIDER="postgresql"; node scripts/build-prisma-schema.js; Remove-Item -Recurse -Force prisma/migrations; npx prisma migrate dev --name init`)
-
-Commit `prisma/schema.prisma` + `prisma/migrations` yang baru.
-
-**3. Set build command** agar migrasi berjalan saat deploy. Di `package.json`:
-
-```json
-"build": "prisma migrate deploy && next build --webpack"
-```
-
-**4. Push ke GitHub**, lalu di Vercel: **Add New Project → Import** repo ini.
-
-**5. Environment variables di Vercel** (Settings → Environment Variables):
+**3. Environment Variables** (set ke *Production* + *Preview*):
 
 | Nama | Nilai |
 |---|---|
 | `DATABASE_URL` | connection string Postgres |
 | `DB_PROVIDER` | `postgresql` |
-| `AUTH_SECRET` | 32-byte hex acak |
+| `AUTH_SECRET` | 32-byte hex acak (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
 | `AUTH_TRUST_HOST` | `true` |
 
-**6. Deploy.** Vercel mendeteksi Next.js otomatis. Setelah live, buka URL
-`*.vercel.app` dan login dengan akun demo di atas (data sudah ter-seed di langkah 2).
+**4. Deploy.** Deploy pertama otomatis migrasi + seed (2 desa, user, data). Buka URL
+`*.vercel.app`, login dengan akun demo di atas.
 
-**7. (Opsional) Custom domain & subdomain** — untuk `desapresisi.id` + subdomain
-per desa, tambahkan domain di Vercel dan set wildcard `*.desapresisi.id`.
+**5. (Opsional) Custom domain & subdomain** — tambah `desapresisi.id` + wildcard
+`*.desapresisi.id` di Vercel untuk subdomain per desa.
 
 ## Struktur penting
 

@@ -235,6 +235,17 @@ const TEMPLATES = [
   { nama: "Surat Pengantar SKCK", kode: "331", kategori: "PEM", isi: "Yang bersangkutan tersebut di atas adalah benar warga {{nama_desa}} dan bermaksud mengurus SKCK untuk keperluan {{keperluan}}." },
   { nama: "Surat Keterangan Tidak Mampu", kode: "460", kategori: "KESOS", isi: "Berdasarkan data kependudukan desa, yang bersangkutan tergolong keluarga kurang mampu. Surat ini dibuat untuk keperluan {{keperluan}}." },
   { nama: "Surat Keterangan Usaha", kode: "503", kategori: "EKbang", isi: "Yang bersangkutan adalah benar memiliki dan menjalankan usaha di wilayah {{nama_desa}}. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Kelahiran", kode: "474.1", kategori: "PEM", isi: "Menerangkan bahwa telah lahir seorang anak dari orang tua tersebut di atas, warga {{nama_desa}}. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Kematian", kode: "474.3", kategori: "PEM", isi: "Menerangkan bahwa nama tersebut di atas adalah benar warga {{nama_desa}} yang telah meninggal dunia. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Belum Menikah", kode: "474.2", kategori: "PEM", isi: "Menerangkan bahwa yang bersangkutan sampai saat ini berstatus belum pernah menikah. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Pindah", kode: "470", kategori: "PEM", isi: "Menerangkan bahwa yang bersangkutan adalah warga {{nama_desa}} yang akan pindah tempat tinggal. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Kehilangan", kode: "300", kategori: "TRANTIB", isi: "Menerangkan bahwa yang bersangkutan telah kehilangan dokumen/barang miliknya. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Penghasilan", kode: "474", kategori: "KESOS", isi: "Menerangkan penghasilan yang bersangkutan sebagai warga {{nama_desa}}. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Pengantar Nikah (N-1)", kode: "474.2", kategori: "PEM", isi: "Sebagai surat pengantar nikah bagi yang bersangkutan, warga {{nama_desa}}. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Ahli Waris", kode: "474", kategori: "PEM", isi: "Menerangkan bahwa yang bersangkutan adalah ahli waris yang sah. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Beda Nama", kode: "470", kategori: "PEM", isi: "Menerangkan bahwa perbedaan penulisan nama pada dokumen yang bersangkutan adalah menunjuk pada orang yang sama. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Izin Keramaian", kode: "300", kategori: "TRANTIB", isi: "Memberikan izin penyelenggaraan keramaian kepada yang bersangkutan di wilayah {{nama_desa}}. Surat ini dibuat untuk keperluan {{keperluan}}." },
+  { nama: "Surat Keterangan Tidak Memiliki Rumah", kode: "470", kategori: "PEM", isi: "Menerangkan bahwa yang bersangkutan belum memiliki rumah/tempat tinggal sendiri. Surat ini dibuat untuk keperluan {{keperluan}}." },
 ];
 
 async function seedDesaSettings(desaId: string, nama: string, kop2: string, alamat: string) {
@@ -267,6 +278,13 @@ async function upsertUser(email: string, name: string, password: string, desaId:
 
 async function main() {
   const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Admin12345!";
+
+  // Idempotent: on redeploys (data already exists) skip the destructive reseed so
+  // production data persists. Set SEED_FORCE=1 to force a full reseed.
+  if ((await prisma.desa.count()) > 0 && !process.env.SEED_FORCE) {
+    console.log("Data desa sudah ada — seed dilewati (set SEED_FORCE=1 untuk paksa reseed).");
+    return;
+  }
 
   console.log("Clearing existing data...");
   await prisma.stagingChange.deleteMany();

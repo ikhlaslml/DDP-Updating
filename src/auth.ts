@@ -2,10 +2,10 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { authConfig } from "@/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -28,23 +28,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
+    ...authConfig.callbacks,
+    // Runs in the Node.js app context (route handlers / server components), so it
+    // can rehydrate tokens created before desaId/role existed, or that lost them.
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // desaId/role come from the DB user record on sign-in.
-        const u = user as { desaId?: string | null; role?: string };
-        token.desaId = u.desaId ?? null;
-        token.role = u.role ?? "operator";
+        token.desaId = user.desaId ?? null;
+        token.role = user.role ?? "operator";
+        return token;
+      }
+      if (token.id && token.desaId === undefined) {
+        const u = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { desaId: true, role: true },
+        });
+        if (u) {
+          token.desaId = u.desaId ?? null;
+          token.role = u.role ?? "operator";
+        }
       }
       return token;
-    },
-    session({ session, token }) {
-      if (session.user) {
-        session.user.id = (token.id as string) ?? session.user.id;
-        session.user.desaId = (token.desaId as string | null) ?? null;
-        session.user.role = (token.role as string) ?? "operator";
-      }
-      return session;
     },
   },
 });
