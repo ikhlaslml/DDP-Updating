@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Search, ChevronDown, LogOut } from "lucide-react";
+import { Search, ChevronDown, LogOut, Menu } from "lucide-react";
 import { useAuthInfo } from "@/components/providers/AuthInfo";
 
-export function Topbar() {
+export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   const { email, role } = useAuthInfo();
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -30,7 +30,15 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-20 h-16 shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur">
-      <div className="flex h-full items-center gap-4 px-4 sm:px-6">
+      <div className="flex h-full items-center gap-3 px-4 sm:px-6">
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label="Buka/tutup menu"
+          className="rounded-lg p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
         <form onSubmit={handleSearch} className="flex-1 max-w-md">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />

@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Topbar } from "@/components/layout/Topbar";
-import { MobileNav } from "@/components/layout/MobileNav";
-import { RoleBanner } from "@/components/layout/RoleBanner";
+import { AppShell } from "@/components/layout/AppShell";
 import { AuthInfoProvider } from "@/components/providers/AuthInfo";
 
 // Per-tenant browser tab title (icon comes from src/app/icon.svg).
@@ -31,15 +28,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <AuthInfoProvider value={info}>
-      <div className="min-h-screen bg-[#F7F7FB]">
-        <Sidebar />
-        <div className="lg:pl-64 flex min-h-screen flex-col">
-          <Topbar />
-          <RoleBanner />
-          <MobileNav />
-          <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 py-6">{children}</main>
-        </div>
-      </div>
+      <AppShell>{children}</AppShell>
     </AuthInfoProvider>
   );
 }

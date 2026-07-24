@@ -1,0 +1,87 @@
+"use client";
+
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import clsx from "clsx";
+import { Map as MapIcon, LayoutDashboard, Columns } from "lucide-react";
+import { DashboardCharts } from "./DashboardCharts";
+import { SuratKeluarCard } from "./SuratKeluarCard";
+
+const MapView = dynamic(() => import("@/components/peta/MapView").then((m) => m.MapView), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-[560px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-400">
+      Memuat peta...
+    </div>
+  ),
+});
+
+type Mode = "peta" | "dashboard" | "split";
+
+const TABS: { id: Mode; label: string; icon: typeof MapIcon }[] = [
+  { id: "peta", label: "Peta", icon: MapIcon },
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "split", label: "Peta & Dashboard", icon: Columns },
+];
+
+function MapPanel() {
+  return (
+    <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <h2 className="mb-4 text-lg font-bold text-slate-900">Peta Sebaran</h2>
+      <MapView />
+    </section>
+  );
+}
+
+function DashboardPanel() {
+  return (
+    <div className="space-y-8">
+      <DashboardCharts />
+      <div>
+        <h2 className="mb-1 text-lg font-bold text-slate-900">Layanan Desa</h2>
+        <p className="mb-4 text-sm text-slate-500">Ringkasan layanan administrasi untuk warga.</p>
+        <SuratKeluarCard />
+      </div>
+    </div>
+  );
+}
+
+export function DashboardView() {
+  const [mode, setMode] = useState<Mode>("dashboard");
+
+  return (
+    <div className="space-y-6">
+      <div className="inline-flex flex-wrap gap-1 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => setMode(t.id)}
+            className={clsx(
+              "flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-colors",
+              mode === t.id
+                ? "bg-indigo-600 text-white shadow-sm"
+                : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+            )}
+          >
+            <t.icon className="h-4 w-4" />
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {mode === "peta" && <MapPanel />}
+      {mode === "dashboard" && <DashboardPanel />}
+      {mode === "split" && (
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <div className="xl:sticky xl:top-24 xl:self-start">
+            <MapPanel />
+          </div>
+          <div className="min-w-0">
+            <DashboardPanel />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
