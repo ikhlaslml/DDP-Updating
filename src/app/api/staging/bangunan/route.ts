@@ -1,0 +1,308 @@
+import { randomUUID } from "node:crypto";
+import { NextRequest, NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { buildingSubmissionSchema, validateAndSerializePolygon } from "@/lib/building";
+import { HOUSEHOLD_INHERITED_FIELDS } from "@/lib/survey";
+import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
+import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+
+export const runtime = "nodejs";
+
+function ageFromDate(value: unknown) {
+  const date = value instanceof Date ? value : value ? new Date(String(value)) : null;
+  if (!date || Number.isNaN(date.getTime())) return undefined;
+  const now = new Date();
+  let age = now.getFullYear() - date.getFullYear();
+  const beforeBirthday =
+    now.getMonth() < date.getMonth() ||
+    (now.getMonth() === date.getMonth() && now.getDate() < date.getDate());
+  if (beforeBirthday) age -= 1;
+  return Math.max(0, age);
+}
+
+function withDerivedPersonFields(data: Record<string, unknown>, index: number) {
+  const age = ageFromDate(data.tgl_lahir);
+  return {
+    ...data,
+    abs_id: data.abs_id || `ABS-${Date.now()}-${index}-${Math.floor(Math.random() * 10_000)}`,
+    ...(age === undefined ? {} : { usia: age, usia_dec: age }),
+  };
+}
+
+async function nextBuildingCode(tx: Prisma.TransactionClient, desaId: string) {
+  const [maxBuilding, maxLegacyBuilding, staged] = await Promise.all([
+    tx.bangunan.aggregate({ where: { desaId }, _max: { kode: true } }),
+    // Existing installations only stored the building code on resident rows.
+    // Include that legacy baseline so a newly digitized building can never reuse
+    // a code that already identifies an occupied house.
+    tx.penduduk.aggregate({ where: { desaId }, _max: { kode_bangunan: true } }),
+    tx.stagingChange.findMany({
+      where: { desaId, entityType: "BANGUNAN", aksi: "CREATE", status: "PENDING" },
+      select: { data: true },
+    }),
+  ]);
+  const stagedCodes = staged.flatMap((row) => {
+    try {
+      const code = Number((JSON.parse(row.data ?? "{}") as { kode?: unknown }).kode);
+      return Number.isSafeInteger(code) ? [code] : [];
+    } catch {
+      return [];
+    }
+  });
+  return Math.max(
+    100_000,
+    maxBuilding._max.kode ?? 0,
+    maxLegacyBuilding._max.kode_bangunan ?? 0,
+    ...stagedCodes
+  ) + 1;
+}
+
+export async function POST(req: NextRequest) {
+  const ctx = await getAuthContext();
+  if (!ctx) return UNAUTHORIZED;
+  if (!isOperator(ctx.role)) return FORBIDDEN;
+
+  const raw = await req.json().catch(() => null);
+  const submitted = buildingSubmissionSchema.safeParse(raw);
+  if (!submitted.success) {
+    return NextResponse.json(
+      { error: "Data bangunan belum lengkap", fields: flattenZodError(submitted.error) },
+      { status: 400 }
+    );
+  }
+
+  let spatial: ReturnType<typeof validateAndSerializePolygon>;
+  try {
+    spatial = validateAndSerializePolygon(submitted.data.building.points);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Polygon tidak valid" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const result = await prisma.$transaction(
+      async (tx) => {
+        const desa = await tx.desa.findUnique({ where: { id: ctx.desaId } });
+        if (!desa) throw new Error("Desa pengguna tidak ditemukan");
+        const code = await nextBuildingCode(tx, ctx.desaId);
+        const groupId = randomUUID();
+        const building = submitted.data.building;
+
+        const buildingPayload = {
+          kode: code,
+          jenis: building.jenis,
+          kategori: building.jenis === "TIDAK_BERPENGHUNI" ? building.kategori ?? null : null,
+          keterangan: building.keterangan || null,
+          fotoUrl: building.fotoUrl || null,
+          polygon: spatial.polygon,
+          centroidLat: spatial.centroidLat,
+          centroidLng: spatial.centroidLng,
+          dusun: building.dusun,
+          rw: building.rw,
+          rt: building.rt,
+          alamat: building.alamat || null,
+        };
+
+        await tx.stagingChange.create({
+          data: {
+            desaId: ctx.desaId,
+            entityType: "BANGUNAN",
+            groupId,
+            aksi: "CREATE",
+            ringkasan:
+              building.jenis === "BERPENGHUNI"
+                ? `Bangunan berpenghuni baru #${code}`
+                : `${building.kategori} baru #${code}`,
+            data: JSON.stringify(buildingPayload),
+            createdBy: ctx.userId,
+            createdByName: ctx.userName,
+            createdByEmail: ctx.userEmail,
+          },
+        });
+
+        if (building.jenis === "TIDAK_BERPENGHUNI") {
+          return { groupId, code, occupantCount: 0 };
+        }
+
+        const headInput = submitted.data.head ?? {};
+        const memberInputs = submitted.data.members;
+        const nkk = typeof headInput.nkk === "string" ? headInput.nkk : "";
+        const headName = typeof headInput.nama === "string" ? headInput.nama : "";
+        const totalFamily = memberInputs.length + 1;
+        const shared = {
+          kode_bangunan: code,
+          kode_deskel: desa.kodeWilayah ?? undefined,
+          deskel: desa.nama,
+          dusun: building.dusun,
+          rw: building.rw,
+          rt: building.rt,
+          lat: spatial.centroidLat.toFixed(7),
+          lng: spatial.centroidLng.toFixed(7),
+          alamat: building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`,
+          nkk,
+          nama_kepala_rumah: headName,
+          jml_keluarga: totalFamily,
+          datamasuk: new Date(),
+          enumerator: ctx.userName,
+        };
+
+        const headParsed = pendudukCreateSchema.safeParse(
+          withDerivedPersonFields(
+            {
+              ...headInput,
+              ...shared,
+              subjek: "Keluarga",
+              status_dalam_keluarga: "Kepala Keluarga",
+              responden: headInput.responden === "Tidak" ? "Tidak" : "Ya",
+            },
+            0
+          )
+        );
+        if (!headParsed.success) {
+          const error = new Error("Data kepala keluarga belum lengkap") as Error & { fields?: Record<string, string> };
+          error.fields = flattenZodError(headParsed.error);
+          throw error;
+        }
+
+        const residents = [headParsed.data];
+        for (let index = 0; index < memberInputs.length; index += 1) {
+          const member = memberInputs[index];
+          const status = member.status_dalam_keluarga;
+          if (!status || status === "Kepala Keluarga") {
+            const error = new Error(`Hubungan anggota ${index + 1} belum valid`) as Error & { fields?: Record<string, string> };
+            error.fields = { [`members.${index}.status_dalam_keluarga`]: "Pilih hubungan anggota keluarga" };
+            throw error;
+          }
+          const inherited = Object.fromEntries(
+            HOUSEHOLD_INHERITED_FIELDS.flatMap((field) =>
+              headParsed.data[field as keyof typeof headParsed.data] !== undefined
+                ? [[field, headParsed.data[field as keyof typeof headParsed.data]]]
+                : []
+            )
+          );
+          const parsed = pendudukCreateSchema.safeParse(
+            withDerivedPersonFields(
+              {
+                ...member,
+                // Household answers are authoritative from the head. Keep this
+                // spread after member input so direct API calls cannot diverge.
+                ...inherited,
+                ...shared,
+                subjek: "Individu",
+                status_dalam_keluarga: status,
+                responden: member.responden === "Ya" ? "Ya" : "Tidak",
+              },
+              index + 1
+            )
+          );
+          if (!parsed.success) {
+            const error = new Error(`Data anggota keluarga ${index + 1} belum lengkap`) as Error & { fields?: Record<string, string> };
+            error.fields = Object.fromEntries(
+              Object.entries(flattenZodError(parsed.error)).map(([key, message]) => [`members.${index}.${key}`, message])
+            );
+            throw error;
+          }
+          residents.push(parsed.data);
+        }
+
+        const respondentIndexes = residents.flatMap((resident, index) =>
+          resident.responden === "Ya" ? [index] : []
+        );
+        if (respondentIndexes.length !== 1) {
+          const error = new Error("Pilih tepat satu responden wawancara") as Error & { fields?: Record<string, string> };
+          error.fields = { responden: "Responden dapat berupa kepala, istri, atau anak berusia minimal 18 tahun" };
+          throw error;
+        }
+        const respondentIndex = respondentIndexes[0];
+        if (respondentIndex > 0) {
+          const respondentAge = residents[respondentIndex].usia;
+          if (typeof respondentAge !== "number" || respondentAge < 18) {
+            const error = new Error("Responden anggota keluarga harus berusia minimal 18 tahun") as Error & { fields?: Record<string, string> };
+            error.fields = { [`members.${respondentIndex - 1}.tgl_lahir`]: "Belum memenuhi usia responden" };
+            throw error;
+          }
+        }
+
+        const niks = residents.map((resident) => String(resident.nik));
+        if (new Set(niks).size !== niks.length) {
+          const error = new Error("NIK penghuni tidak boleh duplikat") as Error & { fields?: Record<string, string> };
+          error.fields = { nik: "Ada NIK yang sama dalam satu keluarga" };
+          throw error;
+        }
+        const [baselineDupes, stagingDupes, existingNkk, pendingFamilies] = await Promise.all([
+          tx.penduduk.findMany({ where: { nik: { in: niks } }, select: { nik: true } }),
+          tx.stagingChange.findMany({
+            where: { entityType: "PENDUDUK", status: "PENDING", nik: { in: niks } },
+            select: { nik: true },
+          }),
+          tx.penduduk.count({ where: { desaId: ctx.desaId, nkk } }),
+          tx.stagingChange.findMany({
+            where: {
+              desaId: ctx.desaId,
+              entityType: "PENDUDUK",
+              aksi: "CREATE",
+              status: "PENDING",
+            },
+            select: { data: true },
+          }),
+        ]);
+        const duplicateNik = baselineDupes[0]?.nik ?? stagingDupes[0]?.nik;
+        if (duplicateNik) {
+          const error = new Error("NIK sudah terdaftar") as Error & { fields?: Record<string, string> };
+          error.fields = { nik: `NIK ${duplicateNik} sudah ada di baseline/perubahan sementara` };
+          throw error;
+        }
+        if (existingNkk > 0) {
+          const error = new Error("Nomor KK sudah terdaftar") as Error & { fields?: Record<string, string> };
+          error.fields = { nkk: "Gunakan menu Tambah Anggota Keluarga untuk KK yang sudah disensus" };
+          throw error;
+        }
+        const pendingNkk = pendingFamilies.some((change) => {
+          try {
+            return (JSON.parse(change.data ?? "{}") as { nkk?: unknown }).nkk === nkk;
+          } catch {
+            return false;
+          }
+        });
+        if (pendingNkk) {
+          const error = new Error("Nomor KK sudah ada di perubahan sementara") as Error & { fields?: Record<string, string> };
+          error.fields = { nkk: "Periksa grup penambahan keluarga yang masih menunggu penggabungan" };
+          throw error;
+        }
+
+        await tx.stagingChange.createMany({
+          data: residents.map((resident, index) => ({
+            desaId: ctx.desaId,
+            entityType: "PENDUDUK",
+            groupId,
+            aksi: "CREATE",
+            nik: String(resident.nik),
+            nama: typeof resident.nama === "string" ? resident.nama : null,
+            ringkasan:
+              index === 0
+                ? `Kepala keluarga baru pada bangunan #${code}`
+                : `Anggota keluarga baru pada bangunan #${code}`,
+            data: JSON.stringify(resident),
+            createdBy: ctx.userId,
+            createdByName: ctx.userName,
+            createdByEmail: ctx.userEmail,
+          })),
+        });
+
+        return { groupId, code, occupantCount: residents.length };
+      },
+      { isolationLevel: "Serializable", timeout: 30_000 }
+    );
+
+    return NextResponse.json({ data: result }, { status: 201 });
+  } catch (error) {
+    const known = error as Error & { fields?: Record<string, string> };
+    return NextResponse.json(
+      { error: known.message || "Gagal menyimpan bangunan", fields: known.fields ?? {} },
+      { status: 400 }
+    );
+  }
+}

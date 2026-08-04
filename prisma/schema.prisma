@@ -16,6 +16,10 @@ model Desa {
   id        String   @id @default(cuid())
   slug      String   @unique // subdomain, e.g. "desa-setu"
   nama      String
+  kodeWilayah String? // official village code used by spatial layers
+  droneTilePrefix String? // maps-xyz bucket prefix, e.g. 32.01.02.2004
+  centerLat Float?
+  centerLng Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -333,6 +337,32 @@ model Penduduk {
   @@index([rw, rt])
 }
 
+// Digitized physical building. Occupants keep kode_bangunan in Penduduk.
+model Bangunan {
+  id            String   @id @default(cuid())
+  desaId        String?
+  kode          Int
+  jenis         String   // "BERPENGHUNI" | "TIDAK_BERPENGHUNI"
+  kategori      String?
+  keterangan    String?
+  fotoUrl       String?
+  polygon       String   // GeoJSON polygon coordinates
+  centroidLat   Float
+  centroidLng   Float
+  dusun         String?
+  rw            Int?
+  rt            Int?
+  alamat        String?
+  createdBy     String?
+  createdByName String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([desaId, kode])
+  @@index([desaId])
+  @@index([desaId, jenis])
+}
+
 // Immutable point-in-time baseline (periode T0, T1, ...).
 model Snapshot {
   id        String   @id @default(cuid())
@@ -342,12 +372,33 @@ model Snapshot {
   label     String?
   catatan   String?
   jumlah    Int      @default(0)
+  jumlahBangunan Int @default(0)
+  changeCount Int    @default(0)
+  changeSummary String?
+  changeActors String? // JSON proposer audit summary
+  createdBy String?
+  createdByName String?
+  createdByEmail String?
   createdAt DateTime @default(now())
   rows      SnapshotPenduduk[]
+  buildingRows SnapshotBangunan[]
 
   @@unique([desaId, kode])
   @@unique([desaId, urutan])
   @@index([desaId])
+}
+
+// Frozen copy of one digitized building inside a snapshot.
+model SnapshotBangunan {
+  id         String   @id @default(cuid())
+  snapshotId String
+  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  kode       Int
+  jenis      String
+  data       String
+
+  @@index([snapshotId])
+  @@index([kode])
 }
 
 // Frozen copy of one Penduduk row inside a snapshot.
@@ -369,6 +420,8 @@ model SnapshotPenduduk {
 model StagingChange {
   id         String   @id @default(cuid())
   desaId     String?
+  entityType String   @default("PENDUDUK") // "PENDUDUK" | "BANGUNAN"
+  groupId    String?  // one building + its occupants
   aksi       String   // "CREATE" | "UPDATE" | "DELETE"
   pendudukId String?  // target for UPDATE/DELETE
   nik        String?
@@ -377,10 +430,13 @@ model StagingChange {
   data       String?  // proposed field values as JSON (CREATE/UPDATE)
   status     String   @default("PENDING")
   createdBy  String?
+  createdByName String?
+  createdByEmail String?
   createdAt  DateTime @default(now())
 
   @@index([status])
   @@index([desaId])
+  @@index([desaId, groupId])
 }
 
 // Village profile + letterhead settings (single row).

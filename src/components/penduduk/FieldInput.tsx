@@ -1,6 +1,7 @@
 "use client";
 
 import type { KolomDef } from "@/lib/indikator";
+import { enumOptionLabel, fieldLabel } from "@/lib/field-labels";
 
 export function FieldInput({
   name,
@@ -9,6 +10,7 @@ export function FieldInput({
   onChange,
   error,
   required,
+  inputId,
 }: {
   name: string;
   def: KolomDef;
@@ -16,7 +18,13 @@ export function FieldInput({
   onChange: (v: string) => void;
   error?: string;
   required?: boolean;
+  inputId?: string;
 }) {
+  const id = inputId ?? name;
+  const today = new Date();
+  const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60_000)
+    .toISOString()
+    .slice(0, 10);
   const baseClass =
     "w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 " +
     (error ? "border-red-400" : "border-slate-300");
@@ -25,16 +33,16 @@ export function FieldInput({
 
   if (def.enum) {
     input = (
-      <select id={name} name={name} value={value} onChange={(e) => onChange(e.target.value)} className={baseClass} required={required}>
+      <select id={id} name={name} value={value} onChange={(e) => onChange(e.target.value)} className={baseClass} required={required}>
         <option value="">-- pilih --</option>
         {def.enum.map((opt) => (
-          <option key={opt} value={opt}>{opt}</option>
+          <option key={opt} value={opt}>{enumOptionLabel(name, opt)}</option>
         ))}
       </select>
     );
   } else if (def.tipe === "boolean") {
     input = (
-      <select id={name} name={name} value={value} onChange={(e) => onChange(e.target.value)} className={baseClass}>
+      <select id={id} name={name} value={value} onChange={(e) => onChange(e.target.value)} className={baseClass}>
         <option value="">-- pilih --</option>
         <option value="true">Ya</option>
         <option value="false">Tidak</option>
@@ -43,9 +51,10 @@ export function FieldInput({
   } else if (def.tipe === "date") {
     input = (
       <input
-        id={name}
+        id={id}
         name={name}
         type="date"
+        max={localToday}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={baseClass}
@@ -55,7 +64,7 @@ export function FieldInput({
   } else if (def.tipe === "int" || def.tipe === "float") {
     input = (
       <input
-        id={name}
+        id={id}
         name={name}
         type="number"
         step={def.tipe === "float" ? "any" : "1"}
@@ -70,7 +79,7 @@ export function FieldInput({
   } else {
     input = (
       <input
-        id={name}
+        id={id}
         name={name}
         type="text"
         value={value}
@@ -85,8 +94,8 @@ export function FieldInput({
 
   return (
     <div>
-      <label htmlFor={name} className="block text-xs font-medium text-slate-600 mb-1">
-        {def.label}
+      <label htmlFor={id} className="block text-xs font-medium text-slate-600 mb-1">
+        {fieldLabel(name, def)}
         {required && <span className="text-red-500"> *</span>}
       </label>
       {input}

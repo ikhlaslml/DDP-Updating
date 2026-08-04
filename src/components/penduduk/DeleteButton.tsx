@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 
 export function DeleteButton({ id, nama, onDeleted }: { id: string; nama: string; onDeleted: () => void }) {
   const [confirming, setConfirming] = useState(false);
@@ -44,10 +45,12 @@ export function DeleteButton({ id, nama, onDeleted }: { id: string; nama: string
   return (
     <button
       type="button"
+      title="Hapus data"
+      aria-label={`Hapus data ${nama}`}
       onClick={() => setConfirming(true)}
-      className="text-sm font-medium text-red-600 hover:underline"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-red-600 hover:bg-red-50"
     >
-      Hapus
+      <Trash2 className="h-4 w-4" />
     </button>
   );
 }

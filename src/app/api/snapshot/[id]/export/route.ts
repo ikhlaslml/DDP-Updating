@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 import { prisma } from "@/lib/prisma";
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
 import { toExportValue } from "@/lib/export-import";
+import { fieldLabel } from "@/lib/field-labels";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 
 // Export one frozen period to xlsx.
@@ -23,7 +24,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   });
 
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet([ALL_COLUMNS, ...data]);
+  const headers = ALL_COLUMNS.map((column) => fieldLabel(column, mapping.kolom[column]));
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
   XLSX.utils.book_append_sheet(wb, ws, snap.kode);
   const buf: Buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
 

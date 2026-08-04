@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Validasi gagal", fields: flattenZodError(parsed.error) }, { status: 400 });
   }
 
-  const data = { ...parsed.data, desaId: ctx.desaId } as Record<string, unknown>;
+  const data = { ...parsed.data } as Record<string, unknown>;
   if (!data.abs_id) {
     data.abs_id = `ABS${Date.now()}${Math.floor(Math.random() * 1000)}`;
   }
@@ -71,7 +71,26 @@ export async function POST(req: NextRequest) {
   if (existingNik) {
     return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah terdaftar" } }, { status: 400 });
   }
+  const pendingNik = await prisma.stagingChange.findFirst({
+    where: { entityType: "PENDUDUK", status: "PENDING", nik: String(data.nik) },
+  });
+  if (pendingNik) {
+    return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah ada di perubahan sementara" } }, { status: 400 });
+  }
 
-  const created = await prisma.penduduk.create({ data: data as never });
+  const created = await prisma.stagingChange.create({
+    data: {
+      desaId: ctx.desaId,
+      entityType: "PENDUDUK",
+      aksi: "CREATE",
+      nik: String(data.nik),
+      nama: typeof data.nama === "string" ? data.nama : null,
+      ringkasan: "Penambahan data melalui API.",
+      data: JSON.stringify(data),
+      createdBy: ctx.userId,
+      createdByName: ctx.userName,
+      createdByEmail: ctx.userEmail,
+    },
+  });
   return NextResponse.json({ data: created }, { status: 201 });
 }

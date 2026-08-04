@@ -58,9 +58,14 @@ export async function POST(req: NextRequest) {
     .map((h, idx) => ({ h, idx }))
     .filter(({ h }) => ALL_COLUMNS.includes(h));
 
-  const existingNiks = new Set(
-    (await prisma.penduduk.findMany({ select: { nik: true } })).map((r) => r.nik)
-  );
+  const [baselineNiks, pendingNiks] = await Promise.all([
+    prisma.penduduk.findMany({ select: { nik: true } }),
+    prisma.stagingChange.findMany({
+      where: { entityType: "PENDUDUK", status: "PENDING", nik: { not: null } },
+      select: { nik: true },
+    }),
+  ]);
+  const existingNiks = new Set([...baselineNiks, ...pendingNiks].map((row) => row.nik));
   const seenNiksInFile = new Set<string>();
 
   const rowErrors: { row: number; errors: Record<string, string> }[] = [];
@@ -100,13 +105,30 @@ export async function POST(req: NextRequest) {
     }
     seenNiksInFile.add(nik);
 
-    const data = { ...validated.data, desaId: ctx.desaId } as Record<string, unknown>;
+    const data = { ...validated.data } as Record<string, unknown>;
     if (!data.abs_id) data.abs_id = `ABS${Date.now()}${i}${Math.floor(Math.random() * 1000)}`;
     toCreate.push(data);
   });
 
   if (toCreate.length > 0) {
-    await prisma.$transaction(toCreate.map((data) => prisma.penduduk.create({ data: data as never })));
+    await prisma.$transaction(async (tx) => {
+      for (let index = 0; index < toCreate.length; index += 100) {
+        await tx.stagingChange.createMany({
+          data: toCreate.slice(index, index + 100).map((data) => ({
+            desaId: ctx.desaId,
+            entityType: "PENDUDUK",
+            aksi: "CREATE",
+            nik: String(data.nik),
+            nama: typeof data.nama === "string" ? data.nama : null,
+            ringkasan: `Impor ${file.name}: penambahan penduduk`,
+            data: JSON.stringify(data),
+            createdBy: ctx.userId,
+            createdByName: ctx.userName,
+            createdByEmail: ctx.userEmail,
+          })),
+        });
+      }
+    }, { timeout: 60_000 });
   }
 
   return NextResponse.json({

@@ -25,11 +25,18 @@ export async function GET() {
     const merged = { ...base, ...proposed };
     return {
       id: c.id,
+      entityType: c.entityType,
+      groupId: c.groupId,
       aksi: c.aksi,
       pendudukId: c.pendudukId,
       ringkasan: c.ringkasan,
       createdAt: c.createdAt,
+      createdByName: c.createdByName ?? "Operator Desa",
+      createdByEmail: c.createdByEmail,
       row: {
+        kodeBangunan: c.entityType === "BANGUNAN" ? proposed.kode ?? null : merged.kode_bangunan ?? null,
+        jenisBangunan: c.entityType === "BANGUNAN" ? proposed.jenis ?? null : null,
+        kategoriBangunan: c.entityType === "BANGUNAN" ? proposed.kategori ?? null : null,
         nkk: merged.nkk ?? null,
         nik: c.nik ?? merged.nik ?? null,
         nama: c.nama ?? merged.nama ?? null,
@@ -65,15 +72,25 @@ export async function POST(req: NextRequest) {
     if (!data.abs_id) data.abs_id = `ABS${Date.now()}${Math.floor(Math.random() * 1000)}`;
     const dupe = await prisma.penduduk.findUnique({ where: { nik: data.nik as string } });
     if (dupe) return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah terdaftar di baseline" } }, { status: 400 });
+    const pendingDupe = await prisma.stagingChange.findFirst({
+      where: { entityType: "PENDUDUK", status: "PENDING", nik: data.nik as string },
+    });
+    if (pendingDupe) {
+      return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah ada di perubahan sementara" } }, { status: 400 });
+    }
 
     const created = await prisma.stagingChange.create({
       data: {
         desaId: ctx.desaId,
+        entityType: "PENDUDUK",
         aksi: "CREATE",
         nik: (data.nik as string) ?? null,
         nama: (data.nama as string) ?? null,
         ringkasan: "Penambahan data baru.",
         data: JSON.stringify(data),
+        createdBy: ctx.userId,
+        createdByName: ctx.userName,
+        createdByEmail: ctx.userEmail,
       },
     });
     return NextResponse.json({ data: created }, { status: 201 });
@@ -89,18 +106,25 @@ export async function POST(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: "Validasi gagal", fields: flattenZodError(parsed.error) }, { status: 400 });
     }
-    // Replace any earlier pending change for the same person.
-    await prisma.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
-    const created = await prisma.stagingChange.create({
-      data: {
-        desaId: ctx.desaId,
-        aksi: "UPDATE",
-        pendudukId,
-        nik: existing.nik,
-        nama: existing.nama,
-        ringkasan: "Data diperbarui.",
-        data: JSON.stringify(parsed.data),
-      },
+    // Replace any earlier pending change atomically so a failed insert never
+    // erases the operator's previous proposal.
+    const created = await prisma.$transaction(async (tx) => {
+      await tx.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
+      return tx.stagingChange.create({
+        data: {
+          desaId: ctx.desaId,
+          entityType: "PENDUDUK",
+          aksi: "UPDATE",
+          pendudukId,
+          nik: existing.nik,
+          nama: existing.nama,
+          ringkasan: "Data diperbarui.",
+          data: JSON.stringify(parsed.data),
+          createdBy: ctx.userId,
+          createdByName: ctx.userName,
+          createdByEmail: ctx.userEmail,
+        },
+      });
     });
     return NextResponse.json({ data: created }, { status: 201 });
   }
@@ -111,16 +135,22 @@ export async function POST(req: NextRequest) {
     const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
     if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
 
-    await prisma.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
-    const created = await prisma.stagingChange.create({
-      data: {
-        desaId: ctx.desaId,
-        aksi: "DELETE",
-        pendudukId,
-        nik: existing.nik,
-        nama: existing.nama,
-        ringkasan: "Penghapusan data.",
-      },
+    const created = await prisma.$transaction(async (tx) => {
+      await tx.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
+      return tx.stagingChange.create({
+        data: {
+          desaId: ctx.desaId,
+          entityType: "PENDUDUK",
+          aksi: "DELETE",
+          pendudukId,
+          nik: existing.nik,
+          nama: existing.nama,
+          ringkasan: "Penghapusan data.",
+          createdBy: ctx.userId,
+          createdByName: ctx.userName,
+          createdByEmail: ctx.userEmail,
+        },
+      });
     });
     return NextResponse.json({ data: created }, { status: 201 });
   }

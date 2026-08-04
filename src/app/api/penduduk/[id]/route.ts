@@ -34,10 +34,33 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (dupe) {
       return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah terdaftar" } }, { status: 400 });
     }
+    const pendingDupe = await prisma.stagingChange.findFirst({
+      where: { entityType: "PENDUDUK", status: "PENDING", nik: newNik, NOT: { pendudukId: id } },
+    });
+    if (pendingDupe) {
+      return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah ada di perubahan sementara" } }, { status: 400 });
+    }
   }
 
-  const updated = await prisma.penduduk.update({ where: { id }, data: parsed.data as never });
-  return NextResponse.json({ data: updated });
+  const staged = await prisma.$transaction(async (tx) => {
+    await tx.stagingChange.deleteMany({ where: { pendudukId: id, desaId: ctx.desaId, status: "PENDING" } });
+    return tx.stagingChange.create({
+      data: {
+        desaId: ctx.desaId,
+        entityType: "PENDUDUK",
+        aksi: "UPDATE",
+        pendudukId: id,
+        nik: newNik ?? existing.nik,
+        nama: typeof parsed.data.nama === "string" ? parsed.data.nama : existing.nama,
+        ringkasan: "Data diperbarui melalui API.",
+        data: JSON.stringify(parsed.data),
+        createdBy: ctx.userId,
+        createdByName: ctx.userName,
+        createdByEmail: ctx.userEmail,
+      },
+    });
+  });
+  return NextResponse.json({ data: staged }, { status: 202 });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -48,6 +71,22 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   const existing = await prisma.penduduk.findFirst({ where: { id, desaId: ctx.desaId } });
   if (!existing) return NextResponse.json({ error: "Data tidak ditemukan" }, { status: 404 });
 
-  await prisma.penduduk.delete({ where: { id } });
-  return NextResponse.json({ ok: true });
+  const staged = await prisma.$transaction(async (tx) => {
+    await tx.stagingChange.deleteMany({ where: { pendudukId: id, desaId: ctx.desaId, status: "PENDING" } });
+    return tx.stagingChange.create({
+      data: {
+        desaId: ctx.desaId,
+        entityType: "PENDUDUK",
+        aksi: "DELETE",
+        pendudukId: id,
+        nik: existing.nik,
+        nama: existing.nama,
+        ringkasan: "Penghapusan data melalui API.",
+        createdBy: ctx.userId,
+        createdByName: ctx.userName,
+        createdByEmail: ctx.userEmail,
+      },
+    });
+  });
+  return NextResponse.json({ ok: true, data: staged }, { status: 202 });
 }

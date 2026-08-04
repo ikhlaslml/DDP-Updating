@@ -6,6 +6,7 @@ import {
   Landmark,
   Settings,
   FileSpreadsheet,
+  MapPinned,
 } from "lucide-react";
 
 export const NAV = [
@@ -14,6 +15,7 @@ export const NAV = [
   { href: "/riwayat", label: "Riwayat Data", icon: History },
   { href: "/layanan-surat", label: "Layanan Surat", icon: Mail },
   { href: "/layanan-pbb", label: "Layanan PBB", icon: Landmark },
+  { href: "/penambahan-titik-sarpras", label: "Penambahan Titik Sarpras", icon: MapPinned },
   { href: "/pengaturan", label: "Pengaturan", icon: Settings },
   { href: "/impor-ekspor", label: "Impor / Ekspor", icon: FileSpreadsheet },
 ];

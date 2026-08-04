@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { buildPendudukWhere } from "@/lib/query";
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
 import { toExportValue } from "@/lib/export-import";
+import { fieldLabel } from "@/lib/field-labels";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 
 export async function GET(req: NextRequest) {
@@ -23,9 +24,14 @@ export async function GET(req: NextRequest) {
 
   const stamp = new Date().toISOString().slice(0, 10);
   const baseName = isTemplate ? "template-penduduk" : `penduduk-${stamp}`;
+  // Keep the import template machine-compatible, while normal exports use
+  // operator-friendly names rather than raw database identifiers.
+  const headers = isTemplate
+    ? ALL_COLUMNS
+    : ALL_COLUMNS.map((column) => fieldLabel(column, mapping.kolom[column]));
 
   if (format === "csv") {
-    const csv = Papa.unparse({ fields: ALL_COLUMNS, data });
+    const csv = Papa.unparse({ fields: headers, data });
     return new NextResponse(csv, {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
@@ -35,7 +41,7 @@ export async function GET(req: NextRequest) {
   }
 
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet([ALL_COLUMNS, ...data]);
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
   XLSX.utils.book_append_sheet(wb, ws, "Penduduk");
   const buf: Buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
 

@@ -3,19 +3,29 @@
 import { useCallback, useEffect, useState } from "react";
 import { formatCell } from "@/lib/format";
 import { mapping } from "@/lib/indikator";
+import { fieldLabel } from "@/lib/field-labels";
 
 type Periode = { id: string; kode: string; label: string | null; jumlah: number; createdAt: string };
 type Row = Record<string, unknown>;
+type SnapshotMeta = {
+  createdAt: string;
+  jumlahBangunan: number;
+  changeCount: number;
+  changeSummary: string | null;
+  changeActors: {
+    name: string;
+    email: string | null;
+    firstAt: string;
+    lastAt: string;
+    count: number;
+  }[];
+  createdByName: string | null;
+  createdByEmail: string | null;
+};
 
-const COLS: { key: string; label: string }[] = [
-  { key: "nkk", label: "No. KK" },
-  { key: "nik", label: "NIK" },
-  { key: "nama", label: "Nama Lengkap" },
-  { key: "jk", label: "JK" },
-  { key: "dusun", label: "Dusun" },
-  { key: "tgl_lahir", label: "Tgl Lahir" },
-  { key: "alamat", label: "Alamat" },
-];
+const COLS: { key: string; label: string }[] = ["nkk", "nik", "nama", "jk", "dusun", "tgl_lahir", "alamat"].map(
+  (key) => ({ key, label: fieldLabel(key, mapping.kolom[key]) })
+);
 
 export function RiwayatView() {
   const [periods, setPeriods] = useState<Periode[]>([]);
@@ -27,7 +37,7 @@ export function RiwayatView() {
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState("");
   const [debounced, setDebounced] = useState("");
-  const [snapDate, setSnapDate] = useState<string | null>(null);
+  const [snapshotMeta, setSnapshotMeta] = useState<SnapshotMeta | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -46,8 +56,6 @@ export function RiwayatView() {
     return () => clearTimeout(t);
   }, [search]);
 
-  useEffect(() => setPage(1), [debounced, selected]);
-
   const load = useCallback(async () => {
     if (!selected) return;
     setLoading(true);
@@ -59,7 +67,7 @@ export function RiwayatView() {
       setRows(json.data ?? []);
       setTotal(json.pagination?.total ?? 0);
       setTotalPages(json.pagination?.totalPages ?? 1);
-      setSnapDate(json.snapshot?.createdAt ?? null);
+      setSnapshotMeta(json.snapshot ?? null);
     } catch {
       setRows([]);
     } finally {
@@ -68,7 +76,8 @@ export function RiwayatView() {
   }, [selected, page, pageSize, debounced]);
 
   useEffect(() => {
-    load();
+    const timer = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(timer);
   }, [load]);
 
   return (
@@ -76,18 +85,44 @@ export function RiwayatView() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold text-slate-900">Riwayat Data Kependudukan</h2>
-          {snapDate && (
+          {snapshotMeta ? (
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+              <span>
+                Waktu: {new Date(snapshotMeta.createdAt).toLocaleString("id-ID", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  timeZoneName: "short",
+                })}
+              </span>
+              <span>
+                Digabungkan oleh: <strong className="font-semibold text-slate-700">{snapshotMeta.createdByName ?? "Sistem"}</strong>
+                {snapshotMeta.createdByEmail ? ` (${snapshotMeta.createdByEmail})` : ""}
+              </span>
+              <span>{snapshotMeta.changeCount} perubahan • {snapshotMeta.jumlahBangunan} bangunan</span>
+            </div>
+          ) : null}
+          {snapshotMeta?.changeActors?.length ? (
             <p className="mt-1 text-xs text-slate-500">
-              Snapshot tanggal: {new Date(snapDate).toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" })}
+              Diajukan oleh: {snapshotMeta.changeActors.map((actor) =>
+                `${actor.name}${actor.email ? ` (${actor.email})` : ""} — ${actor.count} perubahan, ${new Date(actor.firstAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "medium" })}`
+              ).join("; ")}
             </p>
-          )}
+          ) : null}
+          {snapshotMeta?.changeSummary ? <p className="mt-1 text-xs font-medium text-indigo-600">{snapshotMeta.changeSummary}</p> : null}
         </div>
         <div className="flex items-end gap-3">
           <label className="text-xs font-medium text-slate-500">
             Pilih Periode Data
             <select
               value={selected}
-              onChange={(e) => setSelected(e.target.value)}
+              onChange={(e) => {
+                setSelected(e.target.value);
+                setPage(1);
+              }}
               className="mt-1 block rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700"
             >
               {periods.map((p) => (
@@ -111,7 +146,10 @@ export function RiwayatView() {
 
       <input
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          setPage(1);
+        }}
         placeholder="Cari nama / NIK / NKK..."
         className="mt-4 w-full max-w-sm rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />

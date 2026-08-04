@@ -13,6 +13,12 @@ export async function GET() {
       kode: s.kode,
       label: s.label,
       jumlah: s.jumlah,
+      jumlahBangunan: s.jumlahBangunan,
+      changeCount: s.changeCount,
+      changeSummary: s.changeSummary,
+      changeActors: s.changeActors ? JSON.parse(s.changeActors) : [],
+      createdByName: s.createdByName,
+      createdByEmail: s.createdByEmail,
       createdAt: s.createdAt,
     })),
   });

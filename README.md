@@ -22,6 +22,12 @@ statistik, dan peta sebaran.
 - **Updating T0/T1** — perubahan (tambah/ubah/hapus) masuk ke `StagingChange`
   ("Data Perubahan Sementara"). Klik **Gabungkan** menerapkannya ke baseline lalu
   membekukan `Snapshot` baru (`T1`, `T2`, …) yang immutable. Lihat via **Riwayat Data**.
+- **Pembaruan spasial bangunan** — operator menggambar polygon atap pada peta
+  OpenStreetMap/Esri/citra drone DDP; centroid dihitung server. Bangunan berpenghuni,
+  kepala keluarga, dan seluruh anggotanya masuk staging sebagai satu grup atomik.
+  Bangunan nonhunian memakai klasifikasi Definisi Operasional DDP.
+- **Audit pembaruan** — staging dan snapshot menyimpan nama, email, serta waktu operator.
+  Snapshot juga membekukan data bangunan dan ringkasan perubahan per periode.
 - **Multi-tenant** — setiap `Desa` adalah tenant. Semua data (`Penduduk`, `Snapshot`,
   `StagingChange`, `SuratTemplate`, `SuratTerbit`, `PengaturanDesa`) di-scope `desaId`.
   Scope diambil dari `desaId` user yang login (otoritatif), subdomain untuk routing.
@@ -37,7 +43,7 @@ Proyek ini memakai PostgreSQL (Neon/Supabase) di lokal maupun produksi.
 ```bash
 npm install
 cp .env.example .env
-# isi DATABASE_URL dengan connection string Postgres (mis. Neon)
+# isi DATABASE_URL dan DATABASE_URL_UNPOOLED dengan connection string Postgres
 # ganti AUTH_SECRET:  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npx prisma migrate deploy   # terapkan migrasi ke database
 npm run db:seed             # isi 2 desa + user + data (idempoten)
@@ -95,7 +101,8 @@ salin *connection string* (`postgresql://...?sslmode=require`).
 
 | Nama | Nilai |
 |---|---|
-| `DATABASE_URL` | connection string Postgres |
+| `DATABASE_URL` | connection string Postgres pooled untuk runtime |
+| `DATABASE_URL_UNPOOLED` | connection string langsung untuk migrasi Prisma; boleh sama dengan `DATABASE_URL` bila bukan PgBouncer |
 | `DB_PROVIDER` | `postgresql` |
 | `AUTH_SECRET` | 32-byte hex acak (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
 | `AUTH_TRUST_HOST` | `true` |

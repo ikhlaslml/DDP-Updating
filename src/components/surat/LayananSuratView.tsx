@@ -28,10 +28,7 @@ export function LayananSuratView() {
   }, []);
 
   useEffect(() => {
-    if (query.trim().length < 2) {
-      setResults([]);
-      return;
-    }
+    if (query.trim().length < 2) return;
     const t = setTimeout(async () => {
       const res = await fetch(`/api/penduduk?q=${encodeURIComponent(query)}&pageSize=8`);
       const json = await res.json();
@@ -75,7 +72,10 @@ export function LayananSuratView() {
         <h2 className="text-base font-bold text-slate-900">1. Pilih Penduduk</h2>
         <input
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value.trim().length < 2) setResults([]);
+          }}
           placeholder="Cari Nama atau NIK..."
           className="mt-3 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />

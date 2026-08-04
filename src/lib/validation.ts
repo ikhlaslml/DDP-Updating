@@ -51,7 +51,9 @@ function coreZodType(name: string, def: KolomDef): z.ZodTypeAny {
     case "boolean":
       return z.coerce.boolean();
     case "date":
-      return z.coerce.date({ error: "Tanggal tidak valid" });
+      return z.coerce
+        .date({ error: "Tanggal tidak valid" })
+        .refine((date) => date.getTime() <= Date.now(), "Tanggal tidak boleh berada di masa depan");
     case "string":
     default:
       return z.string().trim();

@@ -225,11 +225,14 @@
       "pg_tipe": "character varying",
       "enum": [
         "Kepala Keluarga",
+        "Suami",
         "Istri",
         "Anak",
         "Menantu",
         "Cucu",
         "Orang Tua",
+        "Kakek/Nenek",
+        "Mertua",
         "Famili Lain",
         "Lainnya"
       ],
@@ -476,6 +479,11 @@
       "label": "Partisipasi Sekolah",
       "tipe": "string",
       "pg_tipe": "character varying",
+      "enum": [
+        "Tidak/Belum Pernah Sekolah",
+        "Masih Bersekolah",
+        "Tidak Bersekolah Lagi"
+      ],
       "perlu_konfirmasi": false
     },
     "ijazah": {

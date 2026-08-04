@@ -5,6 +5,8 @@ import { KELOMPOK_ORDER, KELOMPOK_LABEL, kolomByKelompok } from "@/lib/indikator
 import { formatCell } from "@/lib/format";
 import { DeleteButtonRedirect } from "@/components/penduduk/DeleteButtonRedirect";
 import { getAuthContext } from "@/lib/tenant";
+import { fieldLabel } from "@/lib/field-labels";
+import { Pencil } from "lucide-react";
 
 const GROUPED = kolomByKelompok();
 
@@ -32,9 +34,11 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
         <div className="flex items-center gap-3">
           <Link
             href={`/penduduk/${id}/edit`}
-            className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100"
+            title="Ubah data"
+            aria-label={`Ubah data ${String(data.nama ?? "penduduk")}`}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100"
           >
-            Ubah
+            <Pencil className="h-4 w-4" />
           </Link>
           <DeleteButtonRedirect id={id} nama={String(data.nama ?? "")} />
         </div>
@@ -49,7 +53,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
             <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
               {GROUPED[kelompok].map(([name, def]) => (
                 <div key={name}>
-                  <dt className="text-xs text-slate-500">{def.label}</dt>
+                  <dt className="text-xs text-slate-500">{fieldLabel(name, def)}</dt>
                   <dd className="text-sm text-slate-800 font-medium">{formatCell(data[name], def)}</dd>
                 </div>
               ))}

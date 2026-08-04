@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { Eye, Pencil } from "lucide-react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,6 +16,8 @@ import { formatCell } from "@/lib/format";
 import { ColumnToggle } from "./ColumnToggle";
 import { DeleteButton } from "./DeleteButton";
 import { useCanWrite } from "@/components/providers/AuthInfo";
+import { AddDataMenu } from "./AddDataMenu";
+import { fieldLabel } from "@/lib/field-labels";
 
 type Row = Record<string, unknown> & { id: string };
 type Facets = { dusun: string[]; rw: number[]; rt: number[] };
@@ -98,7 +101,7 @@ export function PendudukTable() {
     const cols: ColumnDef<Row, unknown>[] = [...visible].map((name) =>
       columnHelper.accessor((row) => row[name], {
         id: name,
-        header: mapping.kolom[name]?.label ?? name,
+        header: fieldLabel(name, mapping.kolom[name]),
         cell: (info) => formatCell(info.getValue(), mapping.kolom[name]),
         enableSorting: true,
       })
@@ -108,14 +111,24 @@ export function PendudukTable() {
         id: "_actions",
         header: "Aksi",
         cell: ({ row }) => (
-          <div className="flex items-center gap-3 whitespace-nowrap">
-            <Link href={`/penduduk/${row.original.id}`} className="text-sm font-medium text-indigo-600 hover:underline">
-              Lihat
+          <div className="flex items-center gap-1 whitespace-nowrap">
+            <Link
+              href={`/penduduk/${row.original.id}`}
+              title="Lihat detail"
+              aria-label={`Lihat detail ${String(row.original.nama ?? "penduduk")}`}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50"
+            >
+              <Eye className="h-4 w-4" />
             </Link>
             {canWrite && (
               <>
-                <Link href={`/penduduk/${row.original.id}/edit`} className="text-sm font-medium text-amber-600 hover:underline">
-                  Ubah
+                <Link
+                  href={`/penduduk/${row.original.id}/edit`}
+                  title="Ubah data"
+                  aria-label={`Ubah data ${String(row.original.nama ?? "penduduk")}`}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-amber-600 hover:bg-amber-50"
+                >
+                  <Pencil className="h-4 w-4" />
                 </Link>
                 <DeleteButton id={row.original.id} nama={String(row.original.nama ?? "")} onDeleted={fetchData} />
               </>
@@ -127,6 +140,8 @@ export function PendudukTable() {
     return cols;
   }, [visible, fetchData, canWrite]);
 
+  // TanStack Table intentionally exposes non-memoizable callbacks.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: rows,
     columns,
@@ -180,7 +195,7 @@ export function PendudukTable() {
           <option value="true">Miskin (BPS)</option>
           <option value="false">Tidak Miskin</option>
         </select>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex flex-wrap items-center gap-2 max-sm:ml-0 max-sm:w-full">
           <ColumnToggle visible={visible} onChange={setVisible} />
           <a
             href={`/api/penduduk/export?${new URLSearchParams({
@@ -196,14 +211,7 @@ export function PendudukTable() {
           >
             Ekspor
           </a>
-          {canWrite && (
-            <Link
-              href="/penduduk/baru"
-              className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-            >
-              + Tambah Data
-            </Link>
-          )}
+          {canWrite ? <AddDataMenu /> : null}
         </div>
       </div>
 

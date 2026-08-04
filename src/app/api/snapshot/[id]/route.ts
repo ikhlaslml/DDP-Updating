@@ -41,7 +41,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const data = rows.map((r) => JSON.parse(r.data) as Record<string, unknown>);
 
   return NextResponse.json({
-    snapshot: { kode: snap.kode, label: snap.label, createdAt: snap.createdAt, jumlah: snap.jumlah },
+    snapshot: {
+      kode: snap.kode,
+      label: snap.label,
+      createdAt: snap.createdAt,
+      jumlah: snap.jumlah,
+      jumlahBangunan: snap.jumlahBangunan,
+      changeCount: snap.changeCount,
+      changeSummary: snap.changeSummary,
+      changeActors: snap.changeActors ? JSON.parse(snap.changeActors) : [],
+      createdByName: snap.createdByName,
+      createdByEmail: snap.createdByEmail,
+    },
     data,
     pagination: { page, pageSize, total, totalPages: Math.max(1, Math.ceil(total / pageSize)) },
   });

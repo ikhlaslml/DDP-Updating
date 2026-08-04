@@ -211,8 +211,20 @@ async function seedPenduduk(desaId: string, slug: string, deskel: string, kodeWi
 
   // Freeze baseline as snapshot T0 for this desa.
   const baseline = await prisma.penduduk.findMany({ where: { desaId } });
+  const initialBuildingCount = new Set(
+    baseline.flatMap((row) => (row.kode_bangunan === null ? [] : [row.kode_bangunan]))
+  ).size;
   const t0 = await prisma.snapshot.create({
-    data: { desaId, kode: "T0", urutan: 0, label: "Baseline Awal", jumlah: baseline.length },
+    data: {
+      desaId,
+      kode: "T0",
+      urutan: 0,
+      label: "Baseline Awal",
+      jumlah: baseline.length,
+      jumlahBangunan: initialBuildingCount,
+      changeSummary: "Baseline awal hasil sensus Data Desa Presisi",
+      createdByName: "Sistem Data Desa Presisi",
+    },
   });
   for (let i = 0; i < baseline.length; i += 50) {
     const batch = baseline.slice(i, i + 50);
@@ -288,13 +300,23 @@ async function main() {
 
   console.log("Clearing existing data...");
   await prisma.stagingChange.deleteMany();
+  await prisma.snapshotBangunan.deleteMany();
   await prisma.snapshotPenduduk.deleteMany();
   await prisma.snapshot.deleteMany();
   await prisma.suratTerbit.deleteMany();
+  await prisma.bangunan.deleteMany();
   await prisma.penduduk.deleteMany();
 
-  const desaSetu = await prisma.desa.upsert({ where: { slug: "desa-setu" }, update: { nama: "Desa Setu" }, create: { slug: "desa-setu", nama: "Desa Setu" } });
-  const desaCibubur = await prisma.desa.upsert({ where: { slug: "desa-cibubur" }, update: { nama: "Desa Cibubur" }, create: { slug: "desa-cibubur", nama: "Desa Cibubur" } });
+  const desaSetu = await prisma.desa.upsert({
+    where: { slug: "desa-setu" },
+    update: { nama: "Desa Setu", kodeWilayah: "3373010001", centerLat: -7.565, centerLng: 110.82 },
+    create: { slug: "desa-setu", nama: "Desa Setu", kodeWilayah: "3373010001", centerLat: -7.565, centerLng: 110.82 },
+  });
+  const desaCibubur = await prisma.desa.upsert({
+    where: { slug: "desa-cibubur" },
+    update: { nama: "Desa Cibubur", kodeWilayah: "3271020002", centerLat: -6.36, centerLng: 106.89 },
+    create: { slug: "desa-cibubur", nama: "Desa Cibubur", kodeWilayah: "3271020002", centerLat: -6.36, centerLng: 106.89 },
+  });
 
   // Users (operator can edit; pemerintah_desa is read-only + approval).
   await upsertUser(process.env.SEED_ADMIN_EMAIL || "admin@ddp.local", "Admin Setu", adminPassword, desaSetu.id, "operator");

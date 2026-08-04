@@ -22,9 +22,9 @@ lines.push(`generator client {`);
 lines.push(`  provider = "prisma-client-js"`);
 lines.push(`}`);
 lines.push(``);
-// Local dev defaults to SQLite (zero setup). For production (Vercel + Postgres),
-// run: DB_PROVIDER=postgresql node scripts/build-prisma-schema.js  (see README.md).
-const DB_PROVIDER = process.env.DB_PROVIDER || "sqlite";
+// PostgreSQL is the checked-in production/default schema. SQLite remains an
+// explicit zero-setup option for local QA (DB_PROVIDER=sqlite).
+const DB_PROVIDER = process.env.DB_PROVIDER || "postgresql";
 lines.push(`datasource db {`);
 lines.push(`  provider  = "${DB_PROVIDER}"`);
 lines.push(`  url       = env("DATABASE_URL")`);
@@ -40,6 +40,10 @@ lines.push(`model Desa {`);
 lines.push(`  id        String   @id @default(cuid())`);
 lines.push(`  slug      String   @unique // subdomain, e.g. "desa-setu"`);
 lines.push(`  nama      String`);
+lines.push(`  kodeWilayah String? // official village code used by spatial layers`);
+lines.push(`  droneTilePrefix String? // maps-xyz bucket prefix, e.g. 32.01.02.2004`);
+lines.push(`  centerLat Float?`);
+lines.push(`  centerLng Float?`);
 lines.push(`  createdAt DateTime @default(now())`);
 lines.push(`  updatedAt DateTime @updatedAt`);
 lines.push(`}`);
@@ -83,6 +87,34 @@ lines.push(`  @@index([rw, rt])`);
 lines.push(`}`);
 lines.push(``);
 
+// --- Spatial building registry ---------------------------------------------
+lines.push(`// Digitized physical building. Occupants keep kode_bangunan in Penduduk.`);
+lines.push(`model Bangunan {`);
+lines.push(`  id            String   @id @default(cuid())`);
+lines.push(`  desaId        String?`);
+lines.push(`  kode          Int`);
+lines.push(`  jenis         String   // \"BERPENGHUNI\" | \"TIDAK_BERPENGHUNI\"`);
+lines.push(`  kategori      String?`);
+lines.push(`  keterangan    String?`);
+lines.push(`  fotoUrl       String?`);
+lines.push(`  polygon       String   // GeoJSON polygon coordinates`);
+lines.push(`  centroidLat   Float`);
+lines.push(`  centroidLng   Float`);
+lines.push(`  dusun         String?`);
+lines.push(`  rw            Int?`);
+lines.push(`  rt            Int?`);
+lines.push(`  alamat        String?`);
+lines.push(`  createdBy     String?`);
+lines.push(`  createdByName String?`);
+lines.push(`  createdAt     DateTime @default(now())`);
+lines.push(`  updatedAt     DateTime @updatedAt`);
+lines.push(``);
+lines.push(`  @@unique([desaId, kode])`);
+lines.push(`  @@index([desaId])`);
+lines.push(`  @@index([desaId, jenis])`);
+lines.push(`}`);
+lines.push(``);
+
 // --- Updating workflow (T0/T1 snapshots + staging) --------------------------
 // data/payload blobs are stored as JSON strings for SQLite portability; switch
 // to Json when moving to Postgres.
@@ -95,12 +127,33 @@ lines.push(`  urutan    Int      // 0, 1, 2, ...`);
 lines.push(`  label     String?`);
 lines.push(`  catatan   String?`);
 lines.push(`  jumlah    Int      @default(0)`);
+lines.push(`  jumlahBangunan Int @default(0)`);
+lines.push(`  changeCount Int    @default(0)`);
+lines.push(`  changeSummary String?`);
+lines.push(`  changeActors String? // JSON proposer audit summary`);
+lines.push(`  createdBy String?`);
+lines.push(`  createdByName String?`);
+lines.push(`  createdByEmail String?`);
 lines.push(`  createdAt DateTime @default(now())`);
 lines.push(`  rows      SnapshotPenduduk[]`);
+lines.push(`  buildingRows SnapshotBangunan[]`);
 lines.push(``);
 lines.push(`  @@unique([desaId, kode])`);
 lines.push(`  @@unique([desaId, urutan])`);
 lines.push(`  @@index([desaId])`);
+lines.push(`}`);
+lines.push(``);
+lines.push(`// Frozen copy of one digitized building inside a snapshot.`);
+lines.push(`model SnapshotBangunan {`);
+lines.push(`  id         String   @id @default(cuid())`);
+lines.push(`  snapshotId String`);
+lines.push(`  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)`);
+lines.push(`  kode       Int`);
+lines.push(`  jenis      String`);
+lines.push(`  data       String`);
+lines.push(``);
+lines.push(`  @@index([snapshotId])`);
+lines.push(`  @@index([kode])`);
 lines.push(`}`);
 lines.push(``);
 lines.push(`// Frozen copy of one Penduduk row inside a snapshot.`);
@@ -122,6 +175,8 @@ lines.push(`// Pending change against the live baseline (Data Perubahan Sementar
 lines.push(`model StagingChange {`);
 lines.push(`  id         String   @id @default(cuid())`);
 lines.push(`  desaId     String?`);
+lines.push(`  entityType String   @default(\"PENDUDUK\") // \"PENDUDUK\" | \"BANGUNAN\"`);
+lines.push(`  groupId    String?  // one building + its occupants`);
 lines.push(`  aksi       String   // "CREATE" | "UPDATE" | "DELETE"`);
 lines.push(`  pendudukId String?  // target for UPDATE/DELETE`);
 lines.push(`  nik        String?`);
@@ -130,10 +185,13 @@ lines.push(`  ringkasan  String?`);
 lines.push(`  data       String?  // proposed field values as JSON (CREATE/UPDATE)`);
 lines.push(`  status     String   @default("PENDING")`);
 lines.push(`  createdBy  String?`);
+lines.push(`  createdByName String?`);
+lines.push(`  createdByEmail String?`);
 lines.push(`  createdAt  DateTime @default(now())`);
 lines.push(``);
 lines.push(`  @@index([status])`);
 lines.push(`  @@index([desaId])`);
+lines.push(`  @@index([desaId, groupId])`);
 lines.push(`}`);
 lines.push(``);
 

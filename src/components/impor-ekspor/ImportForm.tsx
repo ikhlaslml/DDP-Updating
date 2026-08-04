@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { fieldLabel } from "@/lib/field-labels";
 
 type ImportReport = {
   totalRows: number;
@@ -80,7 +81,7 @@ export function ImportForm() {
         <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           <p className="font-medium">{error.error}</p>
           {error.missingRequiredColumns && error.missingRequiredColumns.length > 0 && (
-            <p className="mt-1">Kolom wajib yang hilang: {error.missingRequiredColumns.join(", ")}</p>
+            <p className="mt-1">Kolom wajib yang hilang: {error.missingRequiredColumns.map((field) => fieldLabel(field)).join(", ")}</p>
           )}
           {error.unknownColumns && error.unknownColumns.length > 0 && (
             <p className="mt-1">Kolom tidak dikenali (diabaikan): {error.unknownColumns.join(", ")}</p>
@@ -91,10 +92,11 @@ export function ImportForm() {
       {report && (
         <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
           <p className="text-sm text-slate-700">
-            Total baris: <strong>{report.totalRows}</strong> — Berhasil:{" "}
+            Total baris: <strong>{report.totalRows}</strong> — Masuk Perubahan Sementara:{" "}
             <strong className="text-emerald-600">{report.successCount}</strong> — Gagal:{" "}
             <strong className="text-red-600">{report.failCount}</strong>
           </p>
+          {report.successCount > 0 ? <p className="mt-1 text-xs font-medium text-indigo-600">Periksa hasil impor di Data Kependudukan, lalu gunakan Gabungkan Perubahan setelah datanya benar.</p> : null}
           {report.unknownColumns.length > 0 && (
             <p className="text-xs text-amber-600 mt-1">
               Kolom tidak dikenali (diabaikan): {report.unknownColumns.join(", ")}
@@ -116,7 +118,7 @@ export function ImportForm() {
                       <td className="px-2 py-1">
                         {Object.entries(re.errors).map(([field, msg]) => (
                           <div key={field}>
-                            <span className="font-medium">{field}</span>: {msg}
+                            <span className="font-medium">{fieldLabel(field)}</span>: {msg}
                           </div>
                         ))}
                       </td>

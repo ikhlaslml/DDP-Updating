@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { kolomByKelompok, KELOMPOK_ORDER, KELOMPOK_LABEL } from "@/lib/indikator";
+import { fieldLabel } from "@/lib/field-labels";
 
 const GROUPED = kolomByKelompok();
 
@@ -76,7 +77,7 @@ export function ColumnToggle({
                         onChange={() => toggle(name)}
                         className="rounded border-slate-300"
                       />
-                      {def.label}
+                      {fieldLabel(name, def)}
                     </label>
                   ))}
                 </div>

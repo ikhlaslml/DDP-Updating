@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
 export function DeleteButtonRedirect({ id, nama }: { id: string; nama: string }) {
   const router = useRouter();
@@ -43,10 +44,12 @@ export function DeleteButtonRedirect({ id, nama }: { id: string; nama: string })
   return (
     <button
       type="button"
+      title="Hapus data"
+      aria-label={`Hapus data ${nama}`}
       onClick={() => setConfirming(true)}
-      className="rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
     >
-      Hapus
+      <Trash2 className="h-4 w-4" />
     </button>
   );
 }
