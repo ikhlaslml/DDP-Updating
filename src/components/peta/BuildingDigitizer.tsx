@@ -67,8 +67,12 @@ function Recenter({ center }: { center: [number, number] }) {
 function DrawingBehavior({ drawing }: { drawing: boolean }) {
   const map = useMap();
   useEffect(() => {
+    const container = map.getContainer();
+    container.classList.toggle("leaflet-crosshair", drawing);
     if (drawing) map.doubleClickZoom.disable();
     else map.doubleClickZoom.enable();
+
+    return () => container.classList.remove("leaflet-crosshair");
   }, [drawing, map]);
   return null;
 }
