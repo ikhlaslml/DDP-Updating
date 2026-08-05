@@ -120,6 +120,8 @@ export function BuildingDigitizer({
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
+            aria-pressed={drawing}
+            aria-label="Aktifkan mode digitasi bangunan"
             onClick={() => setDrawing(true)}
             className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-indigo-700 shadow-sm ring-1 ring-indigo-200"
           >
@@ -162,7 +164,7 @@ export function BuildingDigitizer({
           maxZoom={23}
           scrollWheelZoom
           doubleClickZoom={false}
-          className={drawing ? "cursor-crosshair" : ""}
+          className={drawing ? "leaflet-crosshair" : undefined}
           style={{ height: "100%", minHeight: 420, width: "100%" }}
         >
           <MapLayers droneTilePrefix={droneTilePrefix} />

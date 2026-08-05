@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
           });
           if (!head) throw new Error("Kepala keluarga tidak ditemukan");
           if (!data.status_dalam_keluarga || data.status_dalam_keluarga === "Kepala Keluarga") {
-            throw new Error("Pilih hubungan anggota dengan kepala keluarga");
+            throw new Error("Pilih status anggota dalam keluarga");
           }
           const inherited = Object.fromEntries(
             [...HOUSEHOLD_INHERITED_FIELDS, "kode_bangunan", "kode_deskel", "deskel", "dusun", "rw", "rt", "lat", "lng", "alamat"]

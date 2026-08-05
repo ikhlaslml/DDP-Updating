@@ -172,8 +172,8 @@ export async function POST(req: NextRequest) {
           const member = memberInputs[index];
           const status = member.status_dalam_keluarga;
           if (!status || status === "Kepala Keluarga") {
-            const error = new Error(`Hubungan anggota ${index + 1} belum valid`) as Error & { fields?: Record<string, string> };
-            error.fields = { [`members.${index}.status_dalam_keluarga`]: "Pilih hubungan anggota keluarga" };
+            const error = new Error(`Status anggota ${index + 1} dalam keluarga belum valid`) as Error & { fields?: Record<string, string> };
+            error.fields = { [`members.${index}.status_dalam_keluarga`]: "Pilih status anggota dalam keluarga" };
             throw error;
           }
           const inherited = Object.fromEntries(
