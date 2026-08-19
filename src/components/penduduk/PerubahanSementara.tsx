@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { Building2, Clock3, Eye, Merge, UserRound, X } from "lucide-react";
+import { Activity, Building2, Clock3, Eye, Merge, UserRound, X } from "lucide-react";
 import { formatCell } from "@/lib/format";
 import { mapping } from "@/lib/indikator";
 import { fieldLabel } from "@/lib/field-labels";
@@ -10,9 +10,10 @@ import { useCanWrite } from "@/components/providers/AuthInfo";
 
 type StagingRow = {
   id: string;
-  entityType: "PENDUDUK" | "BANGUNAN";
+  entityType: "PENDUDUK" | "BANGUNAN" | "PERISTIWA";
+  eventType: string | null;
   groupId: string | null;
-  aksi: "CREATE" | "UPDATE" | "DELETE";
+  aksi: "CREATE" | "UPDATE" | "DELETE" | "EVENT";
   ringkasan: string | null;
   createdAt: string;
   createdByName: string;
@@ -33,7 +34,8 @@ type StagingRow = {
 
 type DetailRow = {
   id: string;
-  entityType: "PENDUDUK" | "BANGUNAN";
+  entityType: "PENDUDUK" | "BANGUNAN" | "PERISTIWA";
+  eventType: string | null;
   aksi: StagingRow["aksi"];
   ringkasan: string | null;
   createdAt: string;
@@ -87,6 +89,7 @@ const STATUS_BADGE: Record<StagingRow["aksi"], { label: string; cls: string }> =
   CREATE: { label: "BARU", cls: "bg-emerald-100 text-emerald-700" },
   UPDATE: { label: "DIUBAH", cls: "bg-amber-100 text-amber-700" },
   DELETE: { label: "DIHAPUS", cls: "bg-red-100 text-red-700" },
+  EVENT: { label: "PERISTIWA", cls: "bg-sky-100 text-sky-700" },
 };
 
 export function PerubahanSementara() {
@@ -182,9 +185,10 @@ export function PerubahanSementara() {
               {rows.map((row) => {
                 const badge = STATUS_BADGE[row.aksi];
                 const isBuilding = row.entityType === "BANGUNAN";
+                const isEvent = row.entityType === "PERISTIWA";
                 return (
                   <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                    <td className="px-3 py-3"><span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${isBuilding ? "bg-indigo-50 text-indigo-700" : "bg-slate-100 text-slate-700"}`}>{isBuilding ? <Building2 className="h-3.5 w-3.5" /> : <UserRound className="h-3.5 w-3.5" />}{isBuilding ? "Bangunan" : "Penduduk"}</span></td>
+                    <td className="px-3 py-3"><span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${isBuilding ? "bg-indigo-50 text-indigo-700" : isEvent ? "bg-sky-50 text-sky-700" : "bg-slate-100 text-slate-700"}`}>{isBuilding ? <Building2 className="h-3.5 w-3.5" /> : isEvent ? <Activity className="h-3.5 w-3.5" /> : <UserRound className="h-3.5 w-3.5" />}{isBuilding ? "Bangunan" : isEvent ? row.eventType?.replaceAll("_", " ") : "Penduduk"}</span></td>
                     <td className="px-3 py-3 whitespace-nowrap text-slate-700">{isBuilding ? `#${row.row.kodeBangunan ?? "-"}` : <><span className="block">No. KK {row.row.nkk ?? "-"}</span><span className="text-xs text-slate-400">NIK {row.row.nik ?? "-"}</span></>}</td>
                     <td className="px-3 py-3 whitespace-nowrap font-medium text-slate-800">{isBuilding ? row.row.kategoriBangunan ?? (row.row.jenisBangunan === "BERPENGHUNI" ? "Berpenghuni" : "Tidak berpenghuni") : row.row.nama ?? "-"}{!isBuilding && row.row.jk ? <span className="ml-2 text-xs font-normal text-slate-400">{row.row.jk === "L" ? "Laki-laki" : "Perempuan"} • {formatCell(row.row.tgl_lahir, mapping.kolom.tgl_lahir)}</span> : null}</td>
                     <td className="max-w-xs px-3 py-3 text-slate-600">{row.row.alamat || row.row.dusun || "-"}</td>

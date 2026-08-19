@@ -20,12 +20,14 @@ export async function GET() {
   const targetMap = new Map(targets.map((t) => [t.id, t as Record<string, unknown>]));
 
   const data = changes.map((c) => {
-    const proposed = c.data ? (JSON.parse(c.data) as Record<string, unknown>) : {};
+    const rawData = c.entityType === "PERISTIWA" ? c.eventData : c.data;
+    const proposed = rawData ? (JSON.parse(rawData) as Record<string, unknown>) : {};
     const base = c.pendudukId ? targetMap.get(c.pendudukId) ?? {} : {};
     const merged = { ...base, ...proposed };
     return {
       id: c.id,
       entityType: c.entityType,
+      eventType: c.eventType,
       groupId: c.groupId,
       aksi: c.aksi,
       pendudukId: c.pendudukId,
@@ -101,6 +103,8 @@ export async function POST(req: NextRequest) {
     if (!pendudukId) return NextResponse.json({ error: "pendudukId wajib" }, { status: 400 });
     const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
     if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
+    const pendingEvent = await prisma.stagingChange.findFirst({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING", entityType: "PERISTIWA" } });
+    if (pendingEvent) return NextResponse.json({ error: "Penduduk memiliki peristiwa demografi yang masih menunggu penggabungan" }, { status: 409 });
 
     const parsed = pendudukUpdateSchema.safeParse(body.data);
     if (!parsed.success) {
@@ -134,6 +138,8 @@ export async function POST(req: NextRequest) {
     if (!pendudukId) return NextResponse.json({ error: "pendudukId wajib" }, { status: 400 });
     const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
     if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
+    const pendingEvent = await prisma.stagingChange.findFirst({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING", entityType: "PERISTIWA" } });
+    if (pendingEvent) return NextResponse.json({ error: "Penduduk memiliki peristiwa demografi yang masih menunggu penggabungan" }, { status: 409 });
 
     const created = await prisma.$transaction(async (tx) => {
       await tx.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });

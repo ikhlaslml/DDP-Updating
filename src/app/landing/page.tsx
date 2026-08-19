@@ -42,7 +42,7 @@ export default function LandingPage() {
             </a>
           </div>
           <p className="mt-4 text-xs text-slate-400">
-            Contoh tenant: desa-setu.desapresisi.id &middot; desa-cibubur.desapresisi.id
+            Contoh tenant: desa-setu.desapresisi.id &middot; desa-gunung-putri.desapresisi.id
           </p>
         </section>
 

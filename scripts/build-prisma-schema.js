@@ -78,12 +78,75 @@ for (const [col, def] of Object.entries(mapping.kolom)) {
   lines.push(`  ${padded}${prismaType}${extra}`);
 }
 
+lines.push(`  statusAktif                 Boolean  @default(true)`);
+lines.push(`  inactiveReason              String?`);
+lines.push(`  inactiveAt                  DateTime?`);
+
 lines.push(``);
 lines.push(`  @@index([desaId])`);
 lines.push(`  @@index([nik])`);
 lines.push(`  @@index([nkk])`);
 lines.push(`  @@index([dusun])`);
 lines.push(`  @@index([rw, rt])`);
+lines.push(`  @@index([desaId, statusAktif])`);
+lines.push(`}`);
+lines.push(``);
+
+lines.push(`// Archived resident removed from the active baseline because of death.`);
+lines.push(`model Kematian {`);
+lines.push(`  id             String   @id @default(cuid())`);
+lines.push(`  desaId         String?`);
+lines.push(`  pendudukIdAsal String?`);
+lines.push(`  nik            String?`);
+lines.push(`  nkk            String?`);
+lines.push(`  nama           String?`);
+lines.push(`  tanggal        DateTime`);
+lines.push(`  penyebab       String?`);
+lines.push(`  punyaAkta      String?`);
+lines.push(`  nomorAkta      String?`);
+lines.push(`  dataPenduduk   String`);
+lines.push(`  createdBy      String?`);
+lines.push(`  createdByName  String?`);
+lines.push(`  createdByEmail String?`);
+lines.push(`  createdAt      DateTime @default(now())`);
+lines.push(``);
+lines.push(`  @@index([desaId, tanggal])`);
+lines.push(`  @@index([nik])`);
+lines.push(`  @@index([nkk])`);
+lines.push(`}`);
+lines.push(``);
+
+lines.push(`// Auditable fertility, mortality, and migration event.`);
+lines.push(`model PeristiwaKependudukan {`);
+lines.push(`  id             String   @id @default(cuid())`);
+lines.push(`  desaId         String?`);
+lines.push(`  jenis          String   // KELAHIRAN | MIGRASI_MASUK | KEMATIAN | MIGRASI_KELUAR`);
+lines.push(`  tanggal        DateTime`);
+lines.push(`  pendudukId     String?`);
+lines.push(`  nik            String?`);
+lines.push(`  nkk            String?`);
+lines.push(`  nama           String?`);
+lines.push(`  data           String?`);
+lines.push(`  createdBy      String?`);
+lines.push(`  createdByName  String?`);
+lines.push(`  createdByEmail String?`);
+lines.push(`  createdAt      DateTime @default(now())`);
+lines.push(``);
+lines.push(`  @@index([desaId, jenis, tanggal])`);
+lines.push(`  @@index([pendudukId])`);
+lines.push(`}`);
+lines.push(``);
+
+lines.push(`// Last successful update per resident field, used for due reminders.`);
+lines.push(`model FieldUpdate {`);
+lines.push(`  id         String   @id @default(cuid())`);
+lines.push(`  desaId     String?`);
+lines.push(`  pendudukId String`);
+lines.push(`  field      String`);
+lines.push(`  updatedAt  DateTime @default(now())`);
+lines.push(``);
+lines.push(`  @@unique([pendudukId, field])`);
+lines.push(`  @@index([desaId, field, updatedAt])`);
 lines.push(`}`);
 lines.push(``);
 
@@ -178,6 +241,8 @@ lines.push(`  desaId     String?`);
 lines.push(`  entityType String   @default(\"PENDUDUK\") // \"PENDUDUK\" | \"BANGUNAN\"`);
 lines.push(`  groupId    String?  // one building + its occupants`);
 lines.push(`  aksi       String   // "CREATE" | "UPDATE" | "DELETE"`);
+lines.push(`  eventType  String?  // demographic event attached to this staged change`);
+lines.push(`  eventData  String?  // JSON details such as event date, origin, destination, and documents`);
 lines.push(`  pendudukId String?  // target for UPDATE/DELETE`);
 lines.push(`  nik        String?`);
 lines.push(`  nama       String?`);

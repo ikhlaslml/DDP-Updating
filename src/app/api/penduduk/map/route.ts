@@ -9,7 +9,7 @@ export async function GET() {
     prisma.penduduk.findMany({
       // Count every resident. Coordinates are validated separately below so a
       // member without coordinates does not disappear from household totals.
-      where: { desaId: ctx.desaId },
+      where: { desaId: ctx.desaId, statusAktif: true },
       select: {
         id: true,
         kode_bangunan: true,

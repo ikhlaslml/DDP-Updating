@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { mapping, type KolomDef } from "./indikator";
+import { allParameterOptions, parameterAcceptsMultiple } from "./parameter-metadata";
 
 const NIK_NKK_RE = /^\d{16}$/;
 // Indonesia's rough bounding box.
@@ -32,8 +33,19 @@ function coreZodType(name: string, def: KolomDef): z.ZodTypeAny {
       return v !== "" && !Number.isNaN(n) && n >= min && n <= max;
     }, `Di luar rentang ${axis} Indonesia`);
   }
-  if (def.enum) {
-    return z.enum(def.enum as [string, ...string[]]);
+  const configuredOptions = [...new Set([...(def.enum ?? []), ...allParameterOptions(name)])];
+  if (configuredOptions.length) {
+    return z.string().refine(
+      (value) => {
+        const submitted = parameterAcceptsMultiple(name)
+          ? value.split(";").map((item) => item.trim()).filter(Boolean)
+          : [value];
+        return submitted.every((item) => configuredOptions.some(
+          (option) => option.toLocaleLowerCase("id-ID") === item.toLocaleLowerCase("id-ID")
+        ));
+      },
+      `Pilih salah satu nilai yang tersedia`
+    );
   }
   switch (def.tipe) {
     case "int":

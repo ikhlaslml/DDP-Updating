@@ -1,0 +1,3664 @@
+{
+  "_meta": {
+    "sources": [
+      "Parameter_DDP_Estimasi_Waktu_Updating (1).xlsx",
+      "jawabantertutup.csv",
+      "merge_pertanyaan.csv",
+      "questions(logic_jawaban).csv"
+    ],
+    "tooltipPolicy": "QUESTION_LOGIC_ONLY",
+    "unmappedFrequency": [
+      "abs_id",
+      "subjek",
+      "datamasuk",
+      "enumerator",
+      "lat",
+      "lng",
+      "usia",
+      "usia_dec",
+      "lama_tinggal",
+      "sampah_buang",
+      "tanah_nama",
+      "tanah_nomor",
+      "nomor_objek_pajak",
+      "kandung",
+      "kulkas",
+      "hp_merk",
+      "hp_provider",
+      "rp_cicilan",
+      "kerja_ket",
+      "nel_kategori",
+      "nel_alat_bantu",
+      "nel_ikan_tangkap_lain",
+      "nel_budidaya_ikan",
+      "nel_budidaya_pakan",
+      "nel_budidaya_rucah",
+      "nel_budidaya_rumputlaut",
+      "nel_budidaya_alat",
+      "nel_asuransi_rp",
+      "nel_kredit",
+      "nel_pembiayaan_budidaya",
+      "tki_tujuan",
+      "penyakit_jumlah",
+      "perokok",
+      "lahan_luasnon",
+      "lahan_luas_dikelola",
+      "lahan_luas_tidakdikelola",
+      "lahangarap_luas",
+      "lahansewa_luas",
+      "ppkb",
+      "ppkt",
+      "skor_kls",
+      "miskin_uufm",
+      "pkb",
+      "miskin_wb",
+      "miskin_bps",
+      "miskin_ekstrem",
+      "miskin_bpsd",
+      "bencana_kesfungsional",
+      "bencana_lap_usaha",
+      "bencana_lapusaha_nama",
+      "bencana_lapusaha_alamat",
+      "bencana_lapusaha_izin",
+      "bencana_lapusaha_omzet",
+      "bencana_lapusaha_tk",
+      "bencana_kerja_pasca",
+      "bencana_kerjapasca_lokasi",
+      "bencana_kerjapasca_penghasilan",
+      "bencana_kerjapasca_harapan",
+      "bencana_pemulihan_pasca",
+      "bencana_rumah_kondisi",
+      "bencana_rumah_bagianrusak",
+      "bencana_ketenum_bangunan",
+      "rp_sph",
+      "rp_belanja",
+      "kon_ketan",
+      "kon_oyong",
+      "kon_kelor"
+    ]
+  },
+  "fields": {
+    "abs_id": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.471,
+      "variants": {}
+    },
+    "subjek": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.381,
+      "variants": {}
+    },
+    "datamasuk": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.571,
+      "variants": {}
+    },
+    "enumerator": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.552,
+      "variants": {}
+    },
+    "kode_bangunan": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Kode Bangunan",
+      "frequencyConfidence": 1.0,
+      "variants": {}
+    },
+    "kode_deskel": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Kode Desa",
+      "frequencyConfidence": 1.0,
+      "variants": {}
+    },
+    "deskel": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Desa/Kelurahan",
+      "frequencyConfidence": 1.0,
+      "variants": {}
+    },
+    "dusun": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Dusun/Kampung/ Dukuh",
+      "frequencyConfidence": 1.0,
+      "variants": {}
+    },
+    "rw": {
+      "frequency": "ANNUAL",
+      "frequencySource": "RW",
+      "frequencyConfidence": 1.0,
+      "variants": {}
+    },
+    "rt": {
+      "frequency": "ANNUAL",
+      "frequencySource": "RT",
+      "frequencyConfidence": 1.0,
+      "variants": {}
+    },
+    "lat": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.444,
+      "variants": {}
+    },
+    "lng": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.364,
+      "variants": {}
+    },
+    "responden": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Nama Responden",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Responden adalah orang yang diwawancarai atau orang memberikan informasi dalam pendataan. Syarat menjadi responden adalah kepala rumah tangga, istri, dan anak (diatas 18 tahun). Isi Nama Responden sesuai dengan nama di KTP."
+        }
+      }
+    },
+    "nkk": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Nomor KK",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Nomor Kartu Keluarga adalah serangkaian angka yang terdiri dari kode provinsi, kota/kabupaten, dan kecamatan. (1) Isi Nomor KK sebanyak 16 digit. (2) Kasus 1 : KK lama, kurang satu angka. Jika kurang tambahkan angka \"0\" dari depan. Misalnya 0+123456789012345. Jadinya (0123456789012345) (3) Kasus 2 : KK hilang. Nomor KK dapat diisi dengan NIK KTP. (4) Kasus 3 : Rumah Tangga baru atau keluarga baru nikah yang belum memiliki KK. Isi dengan NIK sang Suami. Jika, suami tidak memiliki NIK, Isi dengan NIK Istri. (5) Kasus 4 : Tidak Memiliki KK dan NIK. Nomor KK diisi dengan identitas lain yang terdiri dari 16 angka seperti SIM, Nomor BPJS, NPWP, dan lain-lain. Jika kurang dari 16 angka, maka tambahkan angka “0” didepan deret angka tersebut. (6) Kasus 5 : Jika ada anggota keluarga lupa tanggal lahir namun ingat tahun maka, tulis 1 Juli. (7) Kasus 6: Jika ada anggota keluarga lupa tanggal namun ingat bulan dan tahun, tulis tanggal 15"
+        }
+      }
+    },
+    "nama": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Nama Responden",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Kepala keluarga adalah orang bertanggungjawab terhadap keluarga dan secara de jure tercantum dalam kartu keluarga. Isi Nama kepala keluarga sesuai dengan nama di KTP."
+        },
+        "MEMBER": {}
+      }
+    },
+    "nik": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "NIK Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Nomor Kartu Kepala Keluarga adalah serangkaian angka yang terdiri dari kode provinsi, kode kota/kabupaten, kode kecamatan, kode tanggal lahir, dan nomor urut. (1) Isi Nomor NIK sebanyak 16 digit. (2) Kasus 1 : NIK lama, kurang satu angka. Jika kurang tambahkan angka \"0\" dari depan. Misalnya 0+123456789012345. Jadinya (0123456789012345) (3) Kasus 2 : KTP hilang. Nomor NIK Dapat dilihat dalam KK keluarga. Isi NIK berdasarkan NIK yang ada dalam KK. (4) Kasus 3 : Tidak Memiliki KK dan NIK. Nomor KK diisi dengan identitas lain yang terdiri dari 16 angka seperti nomor HP, KIA, SIM, Nomor BPJS, NPWP, dan lain-lain. Jika kurang dari 16 angka, maka tambahkan angka “0” di depan deret angka tersebut"
+        },
+        "MEMBER": {}
+      }
+    },
+    "alamat": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Alamat Rumah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Alamat bangunan atau rumah sesuai dengan letak responden diwawancara. Jika sama dengan KTP, tuliskan sesuai alamat di KTP. Isi dengan nama Jalan, Blok, dan Nomor rumah."
+        }
+      }
+    },
+    "status_dalam_keluarga": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Status dalam Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "kepala keluarga"
+          ],
+          "inputType": "select",
+          "help": "Status Dalam Keluarga adalah kedudukan atau posisi individu dalam rumah tangga. Misalnya, Kepala keluarga, Anak, Istri, Kakek, dan Famili lain. 1) Rumah tangga adalah sekelompok orang yang mendiami sebagian atau seluruh bangunan fisik dan biasanya tinggal serta makan dari satu dapur. 2) Kepala keluarga adalah orang bertanggungjawab terhadap keluarga dan secara de jure tercantum dalam kartu keluarga. Pertanyaan ini secara otomatis terisi di kolom pertanyaan kepala keluarga."
+        },
+        "MEMBER": {
+          "options": [
+            "suami",
+            "istri",
+            "anak",
+            "menantu",
+            "cucu",
+            "orang tua",
+            "mertua",
+            "family lain",
+            "art"
+          ]
+        }
+      }
+    },
+    "status_kawin": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Status perkawinan kepala dan anggota keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "belum kawin",
+            "kawin",
+            "cerai hidup",
+            "cerai mati"
+          ],
+          "inputType": "select",
+          "help": "Status Perkawinan Kepala Keluarga adalah status ikatan antara perempuan dan laki-laki yang disatukan dalam pernikahan sesuai ketentuan hukum dan/atau Agama: 1. Belum Kawin adalah Status dari mereka yang pada saat pencacahan belum terikat dalam perkawinan. 2. Kawin adalah Status dari mereka yang pada saat pencacahan terikat dalam perkawinan, baik tinggal bersama maupun terpisah. Termasuk di dalamnya mereka yang kawin sah secara hukum (hukum adat, agama, negara, dsb) maupun mereka yang hidup bersama dan oleh masyarakat sekelilingnya dianggap sebagai suami istri. 3. Cerai Hidup adalah Status dari mereka yang telah hidup berpisah dengan suami atau istrinya karena bercerai dan belum kawin lagi. 4. Cerai Mati adalah Status untuk mereka yang telah hidup berpisah dengan suami atau istrinya karena meninggal dunia dan belum kawin lagi."
+        },
+        "MEMBER": {}
+      }
+    },
+    "punya_ktp": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan KTP / KIA kepala dan anggota keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "punya",
+            "tidak punya"
+          ],
+          "inputType": "select",
+          "help": "Kepemilikan bukti tanda penduduk berupa fisik yang dibuktikan dengan Kartu Penduduk yang dikeluarkan oleh Kementerian Dalam Negeri. Jika terdapat anggota keluarga yang umurnya di bawah 17 tahun dan belum menikah maka perlu dibuktikan dengan kepunyaan Kartu Identitas Anak (KIA). Kasus KTP Hilang: Tidak memiliki KTP."
+        },
+        "MEMBER": {
+          "options": [
+            "punya",
+            "tidak punya"
+          ]
+        }
+      }
+    },
+    "punya_aktalahir": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan Akta Lahir Kepala Keluarga dan Anggota Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "punya",
+            "tidak punya"
+          ],
+          "inputType": "select",
+          "help": "Akta Kelahiran adalah Bukti Sah mengenai Status dan Peristiwa Kelahiran seseorang yang dikeluarkan Dinas Kependudukan dan Catatan Sipil dibuktikan dengan adanya dokumen fisik akta kelahiran yang ada. Kasus Akta hilang: tidak punya akta."
+        },
+        "MEMBER": {
+          "options": [
+            "punya",
+            "tidak punya"
+          ]
+        }
+      }
+    },
+    "nama_kepala_rumah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Nama Kepala Rumah Tangga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Kepala Rumah Tangga adalah orang bertanggungjawab terhadap keluarga dan mengambil keputusan secara de facto. Kepala Rumah bisa berbeda dengan Kepala Keluarga. Kepala Keluarga ini ditentukan secara sosiologis dalam rumah tangga."
+        }
+      }
+    },
+    "nama_tulang_punggung": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Nama Tulang Punggung Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Tulang Punggung Keluarga adalah orang yang memenuhi atau membiayai kebutuhan keluarga. Nama Tulang Punggung Keluarga diisi Sesuai dengan KTP."
+        }
+      }
+    },
+    "no_hp": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Nomor HP Responden",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Nomor kontak responden yang memberikan keterangan terkait informasi keluarga yang aktif atau dapat dihubungi untuk verifikasi dan konfirmasi data."
+        }
+      }
+    },
+    "jml_keluarga": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepala dan Anggota Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Total keluarga dalam kartu keluarga dan atau tinggal dalam satu rumah. Pilihan jawaban terbuka (Diisi dengan jumlah anggota keluarga termasuk Kepala Keluarga)"
+        }
+      }
+    },
+    "tgl_lahir": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tanggal Lahir Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "date",
+          "help": "Tanggal lahir (Hari/Bulan/Tahun). Kasus 1 : Kalau lupa tanggal lahir dibuat tanggal 1 Juli dengan tahun dikira-kira; Kasus 2 : Kalau ingat bulan namun tidak ingat tanggal ditulis tanggal 15; Jawaban pertanyaan responden tertutup (diisi sesuai tanggal lahir KTP)."
+        },
+        "MEMBER": {}
+      }
+    },
+    "jk": {
+      "frequency": "IMMUTABLE",
+      "frequencySource": "Jenis Kelamin",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "laki-laki",
+            "perempuan"
+          ],
+          "inputType": "select",
+          "help": "Jenis kelamin adalah perbedaan biologis antara perempuan dan Laki-laki. Pilihan Jawaban tertutup (diisi sesuai jenis kelamin kepala keluarga)"
+        },
+        "MEMBER": {
+          "options": [
+            "laki-laki",
+            "perempuan"
+          ]
+        }
+      }
+    },
+    "thn_datang": {
+      "frequency": "IMMUTABLE",
+      "frequencySource": "Tahun Datang ke Desa",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "year",
+          "help": "Tahun datang adalah tahun di mana kepala keluarga datang tinggal dan menetap di desa tersebut. Ketika Kepala keluarga adalah penduduk asli maka yang diisi adalah tahun lahir."
+        }
+      }
+    },
+    "dinamika": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Dinamika Kehidupan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "hidup"
+          ],
+          "inputType": "select",
+          "help": "Dinamika Kehidupan adalah riwayat hidup seseorang. Fungsi pertanyaan ini untuk proses pembaharuan data kependudukan."
+        }
+      }
+    },
+    "agama": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Agama",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "islam",
+            "kristen",
+            "katolik",
+            "hindu",
+            "budha",
+            "konghucu",
+            "penghayat kepercayaan"
+          ],
+          "inputType": "select",
+          "help": "Agama adalah keyakinan atau kepercayaan yang dianut oleh seseorang."
+        },
+        "MEMBER": {
+          "options": [
+            "islam",
+            "kristen",
+            "katolik",
+            "hindu",
+            "budha",
+            "khonghucu",
+            "penghayat kepercayaan"
+          ]
+        }
+      }
+    },
+    "suku": {
+      "frequency": "IMMUTABLE",
+      "frequencySource": "Etnis/Suku Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Etnis adalah penggolongan manusia berdasarkan kepercayaan, nilai, kebiasaan, adat istiadat, norma, bahasa, sejarah, geografis, dan hubungan kekerabatan. Penulisan suku hanya perlu ditulis sukunya saja : contoh suku mandar jadi mandar."
+        },
+        "MEMBER": {}
+      }
+    },
+    "bhs_keluarga": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Bahasa dalam Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "bahasa indonesia",
+            "bahasa internasional",
+            "bahasa daerah"
+          ],
+          "inputType": "select",
+          "help": "Bahasa dalam keluarga sehari-hari adalah bahasa yang digunakan dalam berkomunikasi dalam kehidupan rumah tangga."
+        }
+      }
+    },
+    "bhs_daerah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Bahasa Daerah yang dipakai",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Bahasa daerah yang dipakai adalah bahasa daerah yang digunakan dalam berkomunikasi dalam rumah tangga. Penulisan Bahasa daerah hanya perlu ditulis bahasanya saja : contoh bahasa mandar jadi mandar.",
+          "condition": {
+            "field": "bhs_keluarga",
+            "values": [
+              "Bahasa Daerah"
+            ]
+          }
+        }
+      }
+    },
+    "tgl_kawin": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tanggal perkawinan kepala keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "usia": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.4,
+      "variants": {}
+    },
+    "usia_dec": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.421,
+      "variants": {}
+    },
+    "lama_tinggal": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.645,
+      "variants": {}
+    },
+    "punya_kk": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Kepemilikan Kartu Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "menetap": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tinggal Menetap",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "iya",
+            "tidak"
+          ],
+          "inputType": "select",
+          "help": "Tinggal Menetap adalah anggota keluarga yang bermukim, berdomisili, tinggal lebih dari enam bulan atau berencana tinggal menetap dalam satu wilayah."
+        }
+      }
+    },
+    "dead_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Anggota Keluarga yang Meninggal",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "akta_nikah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan akta nikah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "akta_cerai": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan akta perceraian",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "partisipasi_sekolah": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Partisipasi Sekolah kepala dan anggota keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak sekolah",
+            "sedang sekolah",
+            "putus sekolah"
+          ],
+          "inputType": "select",
+          "help": "Partisipasi Sekolah adalah keterlibatan warga dalam pendidikan. Partisipasi Sekolah dibagi tiga yakni: 1. Tidak Sekolah adalah seseorang yang tidak sedang sekolah dan atau tidak pernah sekolah. 2. Sedang Sekolah adalah seseorang yang sedang sekolah dari berbagai tingkatan pendidikan 3. Putus Sekolah adalah seseorang yang tidak melanjutkan atau berhenti secara sengaja di masa pendidikannya."
+        },
+        "MEMBER": {
+          "options": [
+            "tidak sekolah",
+            "sedang bersekolah",
+            "putus sekolah"
+          ]
+        }
+      }
+    },
+    "ijazah": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Pendidikan/Ijazah Terakhir kepala keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak memiliki ijazah",
+            "sd/sederajat",
+            "smp/sederajat",
+            "sma/sederajat",
+            "d1/d2/d3",
+            "d4/s1",
+            "s2",
+            "s3"
+          ],
+          "inputType": "search_select",
+          "help": "Pendidikan/Ijazah Terakhir adalah bukti kepemilikan ijazah terakhir yang dimiliki."
+        },
+        "MEMBER": {
+          "options": [
+            "tidak memiliki ijazah",
+            "sd/sederajat",
+            "smp/sederajat",
+            "sma/sederajat",
+            "d1/d2/d3",
+            "d4/s1",
+            "s2",
+            "s3"
+          ]
+        }
+      }
+    },
+    "rp_pendidikan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Pengeluaran Pendidikan Kepala dan Anggota Keluarga yang sedang bersekolah (SPP dan Uang Saku/Bulan)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah Seluruh biaya pendidikan terdiri dari Biaya SPP, biaya operasional transportasi, biaya Jajan, biaya kosan, biaya Buku, biaya Laptop, dan biaya praktikum sekolah, dan biaya lain-lain yang dikeluarkan dalam keluarga."
+        }
+      }
+    },
+    "bantuan_pendidikan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Bantuan Pendidikan kepala dan anggota keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "ada bantuan pendidikan",
+            "tidak ada bantuan pendidikan"
+          ],
+          "inputType": "select",
+          "help": "Bantuan Pendidikan adalah bantuan yang diberikan dari pihak Pemerintah/Perusahaan/Lembaga sosial/ Lembaga lainnya berupa biaya SPP dan atau biaya operasional lainnya seperti uang saku/tempat tinggal untuk anggota keluarga yang sedang bersekolah."
+        },
+        "MEMBER": {
+          "options": [
+            "ada bantuan pendidikan",
+            "tidak ada bantuan pendidikan"
+          ]
+        }
+      }
+    },
+    "pendidikan_anggota": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jumlah kepala dan anggota Keluarga yang sedang sekolah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "keterampilan": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Keterampilan Yang Dimiliki Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "seni",
+            "olahraga",
+            "film/fotografi/videografi/desain grafis",
+            "kuliner",
+            "tata rias",
+            "tata busana",
+            "it/programmer",
+            "administrasi/perkantoran",
+            "sastra",
+            "otomotif",
+            "elektronik",
+            "bangunan/pertukangan",
+            "public speaking",
+            "mengemudi",
+            "wirausaha"
+          ],
+          "inputType": "multiselect",
+          "help": "keterampilan yang dimiliki kepala keluarga"
+        },
+        "MEMBER": {
+          "options": [
+            "seni",
+            "olahraga",
+            "film/fotografi/videografi/desain grafis",
+            "kuliner",
+            "tata rias",
+            "tata busana",
+            "it/programmer",
+            "administrasi/perkantoran",
+            "sastra",
+            "otomotif",
+            "elektronik",
+            "bangunan/pertukangan",
+            "public speaking",
+            "mengemudi",
+            "wirausaha"
+          ]
+        }
+      }
+    },
+    "pelatihan": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Keikutsertaan Dalam Pelatihan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "mengikuti pelatihan",
+            "tidak mengikuti pelatihan"
+          ],
+          "inputType": "select",
+          "help": "keikutsertaan dalam pelatihan"
+        },
+        "MEMBER": {
+          "options": [
+            "mengikuti pelatihan",
+            "tidak mengikuti pelatihan"
+          ]
+        }
+      }
+    },
+    "pelatihan_ket": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jenis Pelatihan Yang Diikuti Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jenis pelatihan yang diikuti kepala keluarga",
+          "condition": {
+            "field": "pelatihan",
+            "values": [
+              "Ya"
+            ]
+          }
+        },
+        "MEMBER": {}
+      }
+    },
+    "refreshing": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Frekuensi Liburan Keluarga (1 tahun terakhir)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak pernah",
+            "1x",
+            "2x",
+            "3x",
+            "lebih dari 3x"
+          ],
+          "inputType": "select",
+          "help": "Frekuensi Refreshing adalah aktivitas keluarga menghabiskan waktu untuk liburan."
+        }
+      }
+    },
+    "pekarangan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Kepemilikan pekarangan Rumah yang dapat ditanami",
+      "frequencyConfidence": 0.933,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "ada"
+          ],
+          "inputType": "select",
+          "help": "Pekarangan adalah sebagai area ruang terbuka atau sebidang tanah yang mengelilingi sebuah rumah yang sebagian besar jenisnya berpagar dan biasanya ditanami tanaman lebat, hias, dan berbagai tanaman tahunan untuk penggunaan sehari-hari maupun komersial. Pekarangan Rumah yang dapat ditanami tanaman adalah pemanfaatan tanah pekarangan untuk membudidayakan tanaman tertentu."
+        }
+      }
+    },
+    "pekarangan_luas": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Luas Pekarangan (meter persegi)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Luas Pekarangan adalah luas lahan pekarangan yang ditanami dalam satuan meter. 1 ha = 10.000 meter persegi.",
+          "condition": {
+            "field": "pekarangan",
+            "values": [
+              "Ya"
+            ]
+          }
+        }
+      }
+    },
+    "pekarangan_air": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Sumber Air Pekarangan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "mata air",
+            "sumur bor",
+            "tadah hujan",
+            "pam"
+          ],
+          "inputType": "multiselect",
+          "help": "Sumber Air Pekarangan adalah air yang digunakan untuk pemeliharaan tanaman di pekarangan.",
+          "condition": {
+            "field": "pekarangan",
+            "values": [
+              "Ya"
+            ]
+          }
+        }
+      }
+    },
+    "pekarangan_tinggi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Tinggi Dominan Tanaman Pekarangan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak ada tanaman",
+            "tinggi 0-1 meter",
+            "tinggi 1-2 meter",
+            "tinggi 2-5 meter",
+            "tinggi 5-10 meter",
+            "tinggi lebih dari 10 meter"
+          ],
+          "inputType": "select",
+          "help": "Tinggi tanaman Dominan (rata-rata) adalah tinggi tanaman yang dibudidayakan di pekarangan.",
+          "condition": {
+            "field": "pekarangan",
+            "values": [
+              "Ya"
+            ]
+          }
+        }
+      }
+    },
+    "pekarangan_jenis": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Tanaman Pekarangan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "buah",
+            "sayur",
+            "pati",
+            "pakan ternak",
+            "bumbu",
+            "obat",
+            "hias",
+            "industri",
+            "penaung"
+          ],
+          "inputType": "multiselect",
+          "help": "Jenis tanaman adalah Kategori tanaman yang pernah dan sementara dibudidayakan di pekarangan rumah tangga.",
+          "condition": {
+            "field": "pekarangan",
+            "values": [
+              "Ya"
+            ]
+          }
+        }
+      }
+    },
+    "pekarangan_komoditas": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Tanaman di Pekarangan Dua Tahun Terakhir",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Riwayat Komoditas Pekarangan adalah nama tanaman yang dibudidayakan selama dua tahun terakhir di pekarangan.",
+          "condition": {
+            "field": "pekarangan",
+            "values": [
+              "Ya"
+            ]
+          }
+        }
+      }
+    },
+    "sampah_buang": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.898,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "sungai",
+            "jurang",
+            "bakar",
+            "kubur",
+            "tempat pembuangan sampah"
+          ],
+          "inputType": "select",
+          "help": "Tempat Membuang Sampah adalah fasilitas atau tempat yang digunakan oleh rumah tangga untuk membuang sampah."
+        }
+      }
+    },
+    "sampah_pilah": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Pemilihan sampah organik dan anorganik",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "sampah_olah": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Pengolahan sampah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rumah_pln": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Daya PLN",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak pakai pln",
+            "450 va",
+            "900 va",
+            "1300 va",
+            "2200 va",
+            ">2200 va"
+          ]
+        }
+      }
+    },
+    "rp_listrik": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Biaya Listrik Per bulan (Rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "wifi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Akses terhadap internet Wi-Fi",
+      "frequencyConfidence": 0.982,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "airbersih": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Air Bersih Utama",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "mata air",
+            "sumur",
+            "pam",
+            "pam dan sumur",
+            "pam dan mata air",
+            "mata air dan sumur",
+            "tadah hujan",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "airminum": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Sumber Air Minum Utama",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "air hujan",
+            "air sungai/danau/waduk",
+            "mata air tak terlindungi",
+            "mata air terlindungi",
+            "sumur tak terlindungi",
+            "sumur terlindungi",
+            "sumur bor/pompa",
+            "ledeng eceran",
+            "ledeng meteran",
+            "air isi ulang",
+            "air kemasan bermerek"
+          ]
+        }
+      }
+    },
+    "bahanbakar_masak": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Bahan Bakar Masak Utama",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak memasak di rumah",
+            "kayu bakar",
+            "arang",
+            "briket",
+            "minyak tanah",
+            "gas kota/biogas",
+            "gas 3 kg",
+            "gas lebih dari 3 kg"
+          ]
+        }
+      }
+    },
+    "rumah_solar": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan Solar Panel",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "par_organisasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Keterlibatan Organisasi Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "lsm/ngo",
+            "kelompok tani",
+            "kelompok nelayan/budidaya",
+            "kelompok buruh",
+            "ormas/ormas keagamaan",
+            "koperasi/bumdes",
+            "kelompok pengajian",
+            "partai politik",
+            "karang taruna",
+            "kelompok olahraga/hobi",
+            "kegiatan gotong royong",
+            "siskamling",
+            "musdes/musdus",
+            "kelompok seni/budaya"
+          ],
+          "inputType": "multiselect",
+          "help": "Keterlibatan Organisasi adalah keterlibatan atau keaktifan kepala rumah tangga dalam mengikuti organisasi dan kegiatan pemerintah desa."
+        },
+        "MEMBER": {
+          "options": [
+            "lsm/ngo",
+            "kelompok tani",
+            "kelompok nelayan/budidaya",
+            "kelompok buruh",
+            "ormas/ormas keagamaan",
+            "koperasi/bumdes",
+            "kelompok pengajian",
+            "partai politik",
+            "karang taruna",
+            "kelompok olahraga",
+            "kegiatan gotong royong",
+            "siskamling",
+            "musdes/musdus"
+          ]
+        }
+      }
+    },
+    "organisasi_nama": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Nama Organisasi Yang Diikuti Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Nama organisasi yang diikuti oleh kepala keluarga.",
+          "condition": {
+            "field": "par_organisasi",
+            "values": [
+              "PKK",
+              "Karang Taruna",
+              "Koperasi/Bumdes",
+              "Kelompok Tani",
+              "Kelompok Nelayan/Budidaya Ikan",
+              "LSM/NGO",
+              "Kelompok Buruh",
+              "Ormas/Ormas Keagamaan",
+              "Kelompok Partai Politik",
+              "Kelompok Olahraga",
+              "Kelompok Seni",
+              "Organisasi Kemahasiswaan",
+              "Organisasi Kepemudaan (selain karang taruna)"
+            ]
+          }
+        },
+        "MEMBER": {}
+      }
+    },
+    "par_masyarakat": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Partisipasi Kegiatan Masyarakat Yang Diikuti Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "par_pemilu": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Partisipasi Pemilu/Pilkada/Pilkades Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "par_kebijakan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Partisipasi Dalam Perencanaan Kebijakan Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "bansos": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Keikutsertaan Program Bantuan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "bpnt",
+            "bantuan beras",
+            "kks",
+            "uppks",
+            "pnm mekaar",
+            "kur",
+            "kuota internet",
+            "subsidi energi (gas,listrik,bahan bakar)",
+            "bantuan usaha mikro",
+            "blt dana desa"
+          ],
+          "inputType": "multiselect",
+          "help": "Program bantuan yang diterima dari pihak pemerintah baik dari pemerintah pusat maupun desa."
+        }
+      }
+    },
+    "rp_zakat": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumlah Zakat Yang Dikeluarkan Selama Setahun Terakhir (Rp)",
+      "frequencyConfidence": 0.957,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jumlah zakat yang dikeluarkan selama satu tahun terakhir (rp)",
+          "condition": {
+            "field": "agama",
+            "values": [
+              "Islam"
+            ]
+          }
+        }
+      }
+    },
+    "wakaf": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Waqaf Yang Pernah Diberikan Oleh Keluarga (Barang/Infrastruktur)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "multiselect",
+          "help": "waqaf yang pernah diberikan oleh keluarga (barang/infrastruktur)",
+          "condition": {
+            "field": "agama",
+            "values": [
+              "Islam"
+            ]
+          }
+        }
+      }
+    },
+    "rp_persepuluh": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumlah Persepuluh Yang Dikeluarkan Selama Satu Tahun Terakhir (Rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jumlah persepuluh yang dikeluarkan selama satu tahun terakhir (rp)",
+          "condition": {
+            "field": "agama",
+            "values": [
+              "Katolik",
+              "Protestan"
+            ]
+          }
+        }
+      }
+    },
+    "rp_dharma": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumlah Dharma Dana Yang Dikeluarkan Selama Satu Tahun Terakhir (Rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jumlah dharma dana yang dikeluarkan selama satu tahun terakhir (rp)",
+          "condition": {
+            "field": "agama",
+            "values": [
+              "Hindu"
+            ]
+          }
+        }
+      }
+    },
+    "rp_paramita": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumlah Dana Paramita Yang Dikeluarkan Selama Satu Tahun Terakhir (rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jumlah dana paramita yang dikeluarkan selama satu tahun terakhir (rp)",
+          "condition": {
+            "field": "agama",
+            "values": [
+              "Buddha"
+            ]
+          }
+        }
+      }
+    },
+    "rp_sumbangan": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumlah Sumbangan Sosial Infak dan Sedekah Dalam Satu Tahun Terakhir (Rp)",
+      "frequencyConfidence": 0.986,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jumlah sumbangan sosial infaq dan sedekah dalam satu tahun terakhir (rp)"
+        }
+      }
+    },
+    "disabilitas": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Disabilitas Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "fisik",
+            "mental",
+            "intelektual",
+            "sensorik"
+          ],
+          "inputType": "multiselect",
+          "help": "1. Fisik adalah terganggunya fungsi gerak, antara lain amputasi, lumpuh layu atau kaku, paraplegi, celebral palsy (CP), akibat stroke, akibat kusta, dan orang kecil. 2. Intelektual adalah gangguan fungsi kognitif karena tingkat kecerdasan di bawah rata-rata contohnya downsyndrome, disleksia, retardasi mental. 3. Mental merupakan individu yang mengalami gangguan fungsi pikir, emosi, dan perilaku akibat bawaan atau penyakit sehingga menyebabkan keterbatasan dalam melaksanakan kegiatan, contohnya ODGJ, Bipolar, Depresi, Autis. 4. Disabilitas sensorik wicara (tidak bisa berbicara) 5. Disabilitas sensorik rungu (tidak bisa mendengar ) 6. Disabilitas sensorik netra (tidak bisa melihat)"
+        },
+        "MEMBER": {
+          "options": [
+            "fisik",
+            "mental",
+            "intelektual",
+            "sensorik"
+          ]
+        }
+      }
+    },
+    "korban_kejahatan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Pernah Menjadi Korban Kejahatan Di Desa",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "pernah",
+            "tidak pernah"
+          ],
+          "inputType": "select",
+          "help": "Pernah Menjadi Korban Kejahatan di Desa adalah kepala dan anggota keluarga yang pernah mengalami perampokan, penjambretan, kekerasan, dan intimidasi di lingkup desa yang ditinggali dalam satu tahun terakhir."
+        },
+        "MEMBER": {
+          "options": [
+            "pernah",
+            "tidak pernah"
+          ]
+        }
+      }
+    },
+    "hukum_bantuan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Apakah Kepala Keluarga Pernah Mendapatkan Bantuan Hukum",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "hukum_jenis": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Bentuk Bantuan Hukum Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "tanah_nama": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.571,
+      "variants": {}
+    },
+    "tanah_nomor": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.526,
+      "variants": {}
+    },
+    "nomor_objek_pajak": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.827,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "tanah_bukti": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Bukti Kepemilikan Tanah Bangunan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "pbb_punya": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Memiliki Pajak Bumi dan Bangunan (pbb)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "pbb_tahunbayar": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Tahun Terakhir Bayar Pajak Bumi dan Bangunan (pbb)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kesediaan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "kesediaan sebagai responden",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "medsos": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Penggunaan Media Sosial",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "media_informasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Media Informasi",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "internet",
+            "televisi",
+            "radio",
+            "koran"
+          ],
+          "inputType": "multiselect",
+          "help": "Media informasi alah alat untuk mengumpulkan, menyusun, menerima informasi sehingga menjadi bahan yang bermanfaat bagi penerima informasi."
+        }
+      }
+    },
+    "kandung": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "aset_ekonomi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Aset-aset ekonomi yang dimiliki",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "rumah/kontrakan/vila (tidak ditinggali)",
+            "restoran/rumah makan",
+            "ruko/toko/warung",
+            "emas/logam mulia"
+          ],
+          "inputType": "multiselect",
+          "help": "Aset-aset ekonomi yang dimiliki adalah manfaat ekonomi masa datang yang cukup pasti yang diperoleh atau dikuasai/ dikendalikan oleh suatu entitas sebagai akibat transaksi atau kejadian masa lalu."
+        }
+      }
+    },
+    "pinjaman": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Pinjaman",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "pinjaman online",
+            "tetangga/kerabat/keluarga",
+            "rentenir",
+            "bank/pegadaian/koperasi",
+            "tidak pernah pinjam"
+          ],
+          "inputType": "select",
+          "help": "Sumber pinjaman adalah sumber dana yang diperoleh dari pihak kedua untuk mendukung keluarga."
+        }
+      }
+    },
+    "kb": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Program KB",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "iya",
+            "tidak"
+          ],
+          "inputType": "select",
+          "help": "Program Keluarga Berencana (KB) adalah program pemerintah Indonesia yang bertujuan mengatur jumlah dan jarak kelahiran anak untuk mewujudkan keluarga yang berkualitas, kecil, bahagia, dan sejahtera"
+        }
+      }
+    },
+    "kulkas": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "sepeda_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Sepeda",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah Sepeda adalah jumlah sepeda yang dimiliki dan digunakan dalam keluarga"
+        }
+      }
+    },
+    "motor_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Sepeda Motor",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah sepeda motor yang dimiliki dan digunakan dalam keluarga baik yang memiliki surat resmi maupun tidak."
+        }
+      }
+    },
+    "motor_merk": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Merk Sepeda Motor",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "honda",
+            "yamaha",
+            "suzuki",
+            "kawasaki",
+            "tvs motor",
+            "harley",
+            "lainnya"
+          ],
+          "inputType": "multiselect",
+          "help": "Merek sepeda motor yang dimiliki dan digunakan dalam keluarga.",
+          "condition": {
+            "field": "motor_jml",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10"
+            ]
+          }
+        }
+      }
+    },
+    "mobil_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Mobil",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Diisi sesuai dengan jumlah mobil yang dimiliki keluarga."
+        }
+      }
+    },
+    "mobil_merk": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Merk Mobil",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "toyota",
+            "honda",
+            "daihatsu",
+            "suzuki",
+            "mitsubishi",
+            "kia",
+            "nissan",
+            "mazda",
+            "isuzu",
+            "bmw",
+            "mercedez-benz",
+            "lainnya"
+          ],
+          "inputType": "multiselect",
+          "help": "Merek mobil yang dimiliki dan digunakan dalam keluarga.",
+          "condition": {
+            "field": "mobil_jml",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10"
+            ]
+          }
+        }
+      }
+    },
+    "perahu_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Perahu",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah perahu yang dimiliki dan digunakan dalam keluarga."
+        }
+      }
+    },
+    "perahu_motor_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Perahu Motor",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah perahu motor yang dimiliki dan digunakan dalam keluarga."
+        }
+      }
+    },
+    "kapal_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Kapal",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah kapal yang dimiliki dan digunakan dalam keluarga."
+        }
+      }
+    },
+    "motorlistrik_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Motor Listrik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "mobillistrik_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kepemilikan Mobil Listrik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kendaraan_jml": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kendaraan Bermotor Dalam Rumah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rp_kendaraan": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Biaya Operasional Kendaraan Pertahun (Rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Biaya operasional Kendaraan (motor, mobil, perahu, dan kapal milik pribadi) adalah jumlah Biaya yang dikeluarkan untuk Perawatan Rutin (Ganti Oli, Pergantian Suku Cadang), Biaya Bahan Bakar, Pajak selama setahun terakhir."
+        }
+      }
+    },
+    "hp_punya": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan hp kepala dan anggota keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "memiliki ponsel",
+            "tidak memiliki ponsel"
+          ],
+          "inputType": "select",
+          "help": "Kepemilikan handphone kepala keluarga."
+        },
+        "MEMBER": {
+          "options": [
+            "memiliki ponsel",
+            "tidak memiliki ponsel"
+          ]
+        }
+      }
+    },
+    "hp_jumlah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah hp yang dimiliki kepala dan anggota keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah hp yang dimiliki kepala keluarga",
+          "condition": {
+            "field": "hp_punya",
+            "values": [
+              "Ya"
+            ]
+          }
+        },
+        "MEMBER": {}
+      }
+    },
+    "hp_merk": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.667,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "samsung",
+            "xiaomi",
+            "oppo",
+            "vivo",
+            "iphone",
+            "asus",
+            "lenovo",
+            "huawei",
+            "lainnya"
+          ],
+          "inputType": "multiselect",
+          "help": "Merk HP kepala keluarga.",
+          "condition": {
+            "field": "hp_punya",
+            "values": [
+              "Ya"
+            ]
+          }
+        },
+        "MEMBER": {
+          "options": [
+            "samsung",
+            "xiaomi",
+            "oppo",
+            "vivo",
+            "iphone",
+            "asus",
+            "lenovo",
+            "huawei",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "hp_provider": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.619,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "telkomsel",
+            "tri",
+            "indosat ooredoo",
+            "xl axiata",
+            "smartfren",
+            "axis",
+            "lainnya"
+          ],
+          "inputType": "multiselect",
+          "help": "Merk provider kepala keluarga.",
+          "condition": {
+            "field": "hp_punya",
+            "values": [
+              "Ya"
+            ]
+          }
+        },
+        "MEMBER": {
+          "options": [
+            "telkomsel",
+            "tri",
+            "indosat ooredoo",
+            "xl axiata",
+            "smartfren",
+            "axis",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "rp_komunikasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Biaya Komunikasi perbulan (rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "Jumlah semua pengeluaran terkait komunikasi. Termasuk Biaya Pulsa, Kuota, Langganan WIFI, Biaya telepon rumah, dan Biaya Langganan Koran."
+        }
+      }
+    },
+    "elektronik_rumah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan Elektronik Rumahan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rp_transportasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Biaya Transportasi Umum Per bulan (Rp)",
+      "frequencyConfidence": 0.986,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rp_cicilan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.806,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kerja_profesi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Profesi Pekerjaan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "belum/tidak bekerja",
+            "asisten rumah tangga",
+            "arsitek",
+            "buruh pabrik",
+            "bidan",
+            "dosen",
+            "dokter",
+            "apoteker",
+            "guru/pendidik",
+            "pekerja serabutan",
+            "koki",
+            "montir",
+            "nelayan/petambak",
+            "petani/peternak",
+            "pedagang",
+            "pengemudi/ojek",
+            "pekerja/karyawan swasta",
+            "pegawai lembaga negara",
+            "perawat",
+            "pilot",
+            "pramugari/pramugara",
+            "pemadam kebakaran",
+            "programmer/it",
+            "taksi/ojol",
+            "polisi",
+            "security",
+            "tni",
+            "wartawan",
+            "pelaut",
+            "pengacara",
+            "notaris",
+            "designer/fotografer/videografer",
+            "penjahit",
+            "pengrajin",
+            "seniman"
+          ],
+          "inputType": "search_select",
+          "help": "profesi pekerjaan kepala keluarga"
+        },
+        "MEMBER": {
+          "options": [
+            "belum/tidak bekerja",
+            "asisten rumah tangga",
+            "arsitek",
+            "buruh pabrik",
+            "bidan",
+            "dosen",
+            "dokter",
+            "apoteker",
+            "guru/pendidik",
+            "pekerja serabutan",
+            "koki",
+            "montir",
+            "nelayan/petambak",
+            "petani/peternak",
+            "pedagang",
+            "driver/pengemudi",
+            "pekerja/karyawan swasta",
+            "pegawai lembaga negara",
+            "perawat",
+            "pilot",
+            "pramugari/pramugara",
+            "pemadam kebakaran",
+            "programmer/it",
+            "taxi/ojek/ojol",
+            "polisi",
+            "security",
+            "tni",
+            "wartawan",
+            "pelaut",
+            "pengacara",
+            "notaris",
+            "designer/fotografer/videografer",
+            "penjahit",
+            "pengrajin",
+            "seniman"
+          ]
+        }
+      }
+    },
+    "kerja_status": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Status Pekerjaan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak bekerja",
+            "pelajar/mahasiswa",
+            "mengurus rumah tangga",
+            "pensiun",
+            "berusaha sendiri",
+            "pegawai negeri sipil (pns)",
+            "pegawai pemerintah dengan perjanjian kerja (pppk)",
+            "pegawai pemerintah dengan kontrak pekerjaan dan waktu tertentu",
+            "pegawai lembaga negara tanpa perjanjian kerja/honorer",
+            "pegawai tetap lembaga swasta/bumn/bums",
+            "outsourcing di swasta/bumn/bums",
+            "pekerja harian lepas"
+          ],
+          "inputType": "search_select",
+          "help": "status pekerjaan"
+        },
+        "MEMBER": {
+          "options": [
+            "tidak bekerja",
+            "pelajar/mahasiswa",
+            "mengurus rumah tangga",
+            "pensiun",
+            "berusaha sendiri",
+            "pegawai negeri sipil (pns)",
+            "pegawai pemerintah dengan perjanjian kerja (pppk)",
+            "pegawai pemerintah dengan kontrak pekerjaan dan waktu tertentu",
+            "pegawai lembaga negara tanpa perjanjian kerja/honorer",
+            "pegawai tetap lembaga swasta/bumn/bums",
+            "outsourcing di swasta/bumn/bums",
+            "pekerja harian lepas"
+          ]
+        }
+      }
+    },
+    "kerja_ket": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.87,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "keterangan pekerjaan utama"
+        },
+        "MEMBER": {}
+      }
+    },
+    "kerja_lokusaha": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Lokasi usaha",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "di desa",
+            "di luar desa"
+          ],
+          "inputType": "select",
+          "help": "lokasi usaha",
+          "condition": {
+            "field": "kerja_status",
+            "values": [
+              "berusaha sendiri"
+            ]
+          }
+        },
+        "MEMBER": {
+          "options": [
+            "di desa",
+            "di luar desa"
+          ]
+        }
+      }
+    },
+    "kerja_sampingan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Pekerjaan Sampingan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "berdagang",
+            "buruh harian lepas",
+            "usaha tani",
+            "buruh tani",
+            "buruh industri",
+            "jasa",
+            "supir/ojek",
+            "lainnya"
+          ],
+          "inputType": "search_select",
+          "help": "pekerjaan sampingan kepala keluarga",
+          "condition": {
+            "field": "kerja_status",
+            "values": [
+              "anggota polri",
+              "anggota tni",
+              "asn pns",
+              "asn pppk",
+              "berusaha sendiri",
+              "karyawan outsourching",
+              "karyawan swasta/bumn kontrak",
+              "karyawan swasta/bumn tetap",
+              "mengurus rumah tangga",
+              "pegawai lembaga negara kontrak",
+              "pejabat lembaga negara",
+              "pejabat struktural lembaga negara",
+              "pelajar/mahasiswa",
+              "pensiunan"
+            ]
+          }
+        },
+        "MEMBER": {
+          "options": [
+            "berdagang",
+            "buruh harian lepas",
+            "usaha tani",
+            "buruh tani",
+            "buruh industri",
+            "jasa",
+            "supir/ojek",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "kerja_sampingan_ket": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Keterangan Pekerjaan Sampingan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "keterangan pekerjaan sampingan",
+          "condition": {
+            "field": "kerja_sampingan",
+            "values": [
+              "Berdagang",
+              "Buruh Harian Lepas",
+              "Usaha Tani",
+              "Buruh Tani",
+              "Buruh Indsutri",
+              "Buruh Bangunan",
+              "Jasa",
+              "Supir/Ojek",
+              "Lainnya"
+            ]
+          }
+        },
+        "MEMBER": {}
+      }
+    },
+    "kerja_skalausaha": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Skala Usaha",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "nel_kategori": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.519,
+      "variants": {}
+    },
+    "nel_jenis": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Nelayan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "nelayan tangkap",
+            "nelayan budidaya pesisir"
+          ],
+          "inputType": "select",
+          "help": "jenis nelayan",
+          "condition": {
+            "field": "kerja_profesi",
+            "values": [
+              "nelayan",
+              "petambak"
+            ]
+          }
+        },
+        "MEMBER": {}
+      }
+    },
+    "nel_jenis_budidaya": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Budidaya Yang dijalankan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "nel_alat_tangkap": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Alat Tangkap Yang Digunakan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_alat_bantu": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.478,
+      "variants": {}
+    },
+    "nel_ikan_tangkap": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Tangkapan Utama",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_ikan_tangkap_lain": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.596,
+      "variants": {}
+    },
+    "nel_ikan_kecil_perlakuan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Kebiasaan Terhadap Anak Ikan/Benih Ikan Yang Tertangkap",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_buang_sampah": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Tempat Pembuangan Sampah Aktivitas Nelayan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_budidaya_ikan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.638,
+      "variants": {}
+    },
+    "nel_budidaya_pakan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.625,
+      "variants": {}
+    },
+    "nel_budidaya_rucah": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.542,
+      "variants": {}
+    },
+    "nel_budidaya_rumputlaut": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.491,
+      "variants": {}
+    },
+    "nel_budidaya_alat": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.596,
+      "variants": {}
+    },
+    "nel_pelatihan_jenis": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jenis Pelatihan Yang Pernah Diikuti",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_asuransi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Mengikuti Program Asuransi Nelayan/Pembudidaya Ikan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_asuransi_rp": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.444,
+      "variants": {}
+    },
+    "nel_kredit": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.48,
+      "variants": {}
+    },
+    "nel_pembiayaan_budidaya": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.642,
+      "variants": {}
+    },
+    "nel_kepemilikan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Status Nelayan Berdasarkan Kepemilikan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_waktu": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Status Nelayan Berdasarkan Waktu",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "nel_ukurankapal": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Status Nelayan Berdasarkan Ukuran Kapal",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_penangkapan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Area Operasi Penangkapan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_pelatihan": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Pernah Mengikuti Pelatihan Tentang Perikanan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_budidaya_jenis": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Budidaya Yang dijalankan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "MEMBER": {}
+      }
+    },
+    "nel_biota_jenis": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jenis Biota Yang Dibudidayakan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_budidaya_sarana": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sarana Budidaya Yang Digunakan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_sumber_air": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Air Yang Digunakan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_bibit": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Bibit/Benih",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_produksi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Jumlah Produksi Dalam Satu Siklus Panen",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_hasil_jual": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Kemana Hasil Panen Dijual",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "nel_pernah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Apakah Pernah Mengikuti Pelatihan Budidaya",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "bpjs_kes": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "JKN-KIS/BPJS",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "penerima bantuan iuran",
+            "peserta mandiri",
+            "puik negara",
+            "puik swasta"
+          ],
+          "inputType": "select",
+          "help": "-JKN (Jaminan Kesehatan Nasional): Merupakan program pemerintah yang memberikan jaminan kesehatan menyeluruh dan kepastian akses terhadap pelayanan kesehatan bagi seluruh masyarakat Indonesia. -KIS (Kartu Indonesia Sehat): Adalah kartu yang diterbitkan oleh BPJS Kesehatan kepada peserta JKN untuk mendapatkan pelayanan kesehatan. -BPJS Kesehatan: Adalah badan penyelenggara program Jaminan Kesehatan Nasional (JKN)."
+        },
+        "MEMBER": {
+          "options": [
+            "penerima bantuan iuran",
+            "peserta mandiri",
+            "puik negara",
+            "puik swasta"
+          ]
+        }
+      }
+    },
+    "bpjs_tk": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "BPJS Ketenagakerjaan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "jaminan kecelakaan kerja",
+            "jaminan kematian",
+            "jaminan hari tua",
+            "jaminan pensiun"
+          ],
+          "inputType": "multiselect",
+          "help": "bpjs ketenagakerjaan",
+          "condition": {
+            "field": "kerja_profesi",
+            "values": [
+              "admin media sosial",
+              "akuntan",
+              "apoteker",
+              "arsitek",
+              "atlet/olahragawan",
+              "bidan",
+              "broker/pialang saham",
+              "buruh bangunan",
+              "buruh industri",
+              "buruh tani",
+              "cleaning service/kebersihan/office boy/laundry",
+              "content creator",
+              "customer service/resepsionis/teller",
+              "debt collector/penagih hutang",
+              "desainer grafis",
+              "desainer/perancang busana",
+              "dokter",
+              "dosen",
+              "driver/pengemudi",
+              "event organizer (eo)",
+              "fotografer/videografer",
+              "guru/pendidik",
+              "hakim",
+              "jaksa",
+              "kasir",
+              "koki/barista/bartender",
+              "konsultan",
+              "kontraktor (pemborong)",
+              "kurir",
+              "makelar",
+              "manajer/supervisor",
+              "mandor/pengawas lapang",
+              "masinis",
+              "montir/mekanik/teknisi",
+              "nahkoda",
+              "nelayan",
+              "notaris",
+              "operator alat berat",
+              "paraji/dukun beranak",
+              "paranormal",
+              "pejabat lembaga negara (asn)",
+              "pejabat lembaga negara (non asn)",
+              "pekerja serabutan",
+              "pelatih/instruktur/pawang",
+              "pelaut",
+              "pelayan/penjaga toko",
+              "pemadam kebakaran/sar",
+              "pembantu/asisten rumah tangga",
+              "pemuka agama/adat",
+              "penata rambut/tukang cukur",
+              "penata rias",
+              "peneliti",
+              "penerjemah/tour guide",
+              "pengacara/paralegal",
+              "pengasuh anak/baby sitter",
+              "pengrajin",
+              "penjahit",
+              "penjahit/tukang sol",
+              "penulis",
+              "perangkat desa",
+              "perawat",
+              "petambak",
+              "petani/pekebun",
+              "peternak",
+              "pilot",
+              "polisi",
+              "polisi hutan",
+              "pramugara/pramugari",
+              "programmer/it",
+              "psikolog/psikiater",
+              "public relation/marketing",
+              "satpol pp",
+              "security/satpam/penjaga keamanan",
+              "sekretaris",
+              "seniman",
+              "tabib",
+              "taksi/ojek/ojol",
+              "tenaga administrasi (tata usaha)",
+              "tni",
+              "tukang pijat/refleksi",
+              "ustadz/mubaligh",
+              "wartawan/jurnalis/penyiar",
+              "wiraswasta kecil",
+              "wiraswasta menengah",
+              "wiraswasta mikro"
+            ]
+          }
+        },
+        "MEMBER": {
+          "options": [
+            "jaminan kecelakaan kerja",
+            "jaminan kematian",
+            "jaminan hari tua",
+            "jaminan pensiun"
+          ]
+        }
+      }
+    },
+    "menabung": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tempat Menabung",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "selain bank",
+            "bank bni",
+            "bank mandiri",
+            "bank bri",
+            "bank bca",
+            "bank bsi",
+            "bank daerah",
+            "bank lainnya"
+          ],
+          "inputType": "multiselect",
+          "help": "tempat menabung"
+        }
+      }
+    },
+    "rp_tabungan": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah tabungan keluarga perbulan (rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "jumlah tabungan keluarga perbulan (rp)"
+        }
+      }
+    },
+    "tki": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Adakah Anggota Keluarga Yang Bekerja Di luar Negeri",
+      "frequencyConfidence": 0.985,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak ada",
+            "ada"
+          ],
+          "inputType": "select",
+          "help": "adakah anggota keluarga yang menjadi tki"
+        }
+      }
+    },
+    "tki_tujuan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.809,
+      "variants": {
+        "HEAD": {
+          "inputType": "text",
+          "help": "negara tujuan kerja anggota keluarga tki",
+          "condition": {
+            "field": "tki",
+            "values": [
+              "Ya"
+            ]
+          }
+        }
+      }
+    },
+    "penyakit_jumlah": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.571,
+      "variants": {}
+    },
+    "penyakit_jenis": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jenis Penyakit Berat Kepala Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "asam urat",
+            "diabetes",
+            "hipertensi",
+            "jantung",
+            "ginjal",
+            "lambung",
+            "paru-paru",
+            "asma",
+            "stroke",
+            "kanker",
+            "hepatitis",
+            "hiv-aids",
+            "lainnya"
+          ]
+        },
+        "MEMBER": {
+          "options": [
+            "asam urat",
+            "diabetes",
+            "hipertensi",
+            "jantung",
+            "ginjal",
+            "lambung",
+            "paru-paru",
+            "asma",
+            "stroke",
+            "kanker",
+            "hepatitis",
+            "hiv-aids"
+          ]
+        }
+      }
+    },
+    "anak_asi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "ASI Eklusif",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "MEMBER": {
+          "options": [
+            "iya",
+            "tidak"
+          ]
+        }
+      }
+    },
+    "anak_periksa": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Memeriksakan Bayi ke Fasilitas Kesehatan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "MEMBER": {
+          "options": [
+            "selalu",
+            "sewaktu-waktu",
+            "tidak pernah"
+          ]
+        }
+      }
+    },
+    "anak_mpasi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jenis Makanan Pendamping ASI Yang Diberikan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "MEMBER": {}
+      }
+    },
+    "anak_tb": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tinggi Badan Saat Ini (cm)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "MEMBER": {}
+      }
+    },
+    "anak_bb": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Berat Badan Saat Ini (Kg)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "MEMBER": {}
+      }
+    },
+    "perokok": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "lahan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Lahan Yang Dimiliki Atau Dikelola Keluarga",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "iya",
+            "tidak"
+          ]
+        }
+      }
+    },
+    "lahan_guna": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Pemanfaatan Lahan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "lahan non pertanian",
+            "lahan pertanian"
+          ]
+        }
+      }
+    },
+    "lahan_luasnon": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.774,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahan_status": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Status Lahan Pertanian",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "lahan pertanian milik",
+            "lahan pertanian garap",
+            "lahan pertanian sewa"
+          ]
+        }
+      }
+    },
+    "lahan_luas_dikelola": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.782,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahan_luas_tidakdikelola": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.667,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahanmilik_irigasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Air Irigasi Lahan Milik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "mata air",
+            "sumur bor",
+            "tadah hujan"
+          ]
+        }
+      }
+    },
+    "lahanmilik_bukti": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Bukti Kepemilikan Lahan Milik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "kuitansi",
+            "sertifikat",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "lahanmilik_komoditas": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Riwayat Komoditas Lahan Milik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahanmilik_lokasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Lokasi Lahan Milik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "dalam desa",
+            "luar desa"
+          ]
+        }
+      }
+    },
+    "lahangarap_luas": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.755,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahangarap_irigasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Air Irigasi Lahan Garap",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "mata air",
+            "sumur bor",
+            "tadah hujan"
+          ]
+        }
+      }
+    },
+    "lahangarap_komoditas": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Riwayat Komoditas Lahan Garap",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahangarap_lokasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Lokasi Lahan Garap",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "dalam desa",
+            "luar desa"
+          ]
+        }
+      }
+    },
+    "lahansewa_luas": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.745,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahansewa_irigasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Sumber Air Irigasi Lahan Sewa",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "mata air",
+            "sumur bor",
+            "tadah hujan"
+          ]
+        }
+      }
+    },
+    "lahansewa_komoditas": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Riwayat Komoditas Lahan Sewa",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "lahansewa_lokasi": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Lokasi Lahan Sewa",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "dalam desa",
+            "luar desa"
+          ]
+        }
+      }
+    },
+    "ppkb": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.429,
+      "variants": {}
+    },
+    "ppkt": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.333,
+      "variants": {}
+    },
+    "skor_kls": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.526,
+      "variants": {}
+    },
+    "miskin_uufm": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.462,
+      "variants": {}
+    },
+    "pkb": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.462,
+      "variants": {}
+    },
+    "miskin_wb": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.444,
+      "variants": {}
+    },
+    "miskin_bps": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.545,
+      "variants": {}
+    },
+    "miskin_ekstrem": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.455,
+      "variants": {}
+    },
+    "miskin_bpsd": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.522,
+      "variants": {}
+    },
+    "asuransi_kes": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Asuransi Kesehatan Selain BPJS",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {},
+        "MEMBER": {}
+      }
+    },
+    "bencana_kesfungsional": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "bencana_lap_usaha": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.643,
+      "variants": {}
+    },
+    "bencana_lapusaha_nama": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.526,
+      "variants": {}
+    },
+    "bencana_lapusaha_alamat": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "bencana_lapusaha_izin": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.526,
+      "variants": {}
+    },
+    "bencana_lapusaha_omzet": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.485,
+      "variants": {}
+    },
+    "bencana_lapusaha_tk": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.533,
+      "variants": {}
+    },
+    "bencana_kerja_pasca": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.564,
+      "variants": {}
+    },
+    "bencana_kerjapasca_lokasi": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.491,
+      "variants": {}
+    },
+    "bencana_kerjapasca_penghasilan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "bencana_kerjapasca_harapan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.522,
+      "variants": {}
+    },
+    "bencana_pemulihan_pasca": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.541,
+      "variants": {}
+    },
+    "bencana_rumah_kondisi": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.511,
+      "variants": {}
+    },
+    "bencana_rumah_bagianrusak": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.531,
+      "variants": {}
+    },
+    "bencana_ketenum_bangunan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.651,
+      "variants": {}
+    },
+    "baju_frek": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Frekuensi Beli Baju Per tahun Keluarga",
+      "frequencyConfidence": 0.987,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rp_sph": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.838,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "makan_frek": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Frekuensi Makan Per hari",
+      "frequencyConfidence": 0.979,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "> 3x makan",
+            "3x makan",
+            "2x makan",
+            "1x makan"
+          ]
+        }
+      }
+    },
+    "makan_menu": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Menu Makan Per hari",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tidak lengkap",
+            "semi lengkap",
+            "lengkap"
+          ]
+        }
+      }
+    },
+    "tempat_belanja": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Tempat Membeli Kebutuhan Bahan Pokok Utama",
+      "frequencyConfidence": 0.923,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "pasar",
+            "swalayan",
+            "toko klontong",
+            "toko online"
+          ]
+        }
+      }
+    },
+    "rp_belanja": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.5,
+      "variants": {}
+    },
+    "rp_pangan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Biaya Belanja Bulanan Pangan (Rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rp_non_pangan": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Biaya Belanja Bulanan Non Pangan (Rp)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_beras": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Beras (Liter) Per bulan",
+      "frequencyConfidence": 0.976,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_biskuit": {
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Biskuit (Gram) per bulan",
+      "frequencyConfidence": 0.977,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_jagung": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jagung (Kg) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kentang": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kentang (Kg) per bulan",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_mie": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Mie (Bungkus) per bulan",
+      "frequencyConfidence": 0.976,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_roti": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Roti Tawar (Bungkus) per bulan",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_singkong": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Singkong (Kg) per bulan",
+      "frequencyConfidence": 0.976,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_sukun": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Sukun (Kg) per bulan",
+      "frequencyConfidence": 0.971,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_ketan": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.897,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_sapi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Daging Sapi (Kg) per bulan",
+      "frequencyConfidence": 0.979,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_ayam": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Daging Ayam (Kg) per bulan",
+      "frequencyConfidence": 0.979,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_babi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Daging Babi (Kg) per bulan",
+      "frequencyConfidence": 0.979,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_ikan_segar": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Ikan Segar (Kg) per bulan",
+      "frequencyConfidence": 0.978,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_ikan_asin": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Ikan Kering/Asin (Kg)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_telur": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Telur Ayam (Kg) per bulan",
+      "frequencyConfidence": 0.978,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kacang_hijau": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kacang Hijau (Kg) per bulan",
+      "frequencyConfidence": 0.98,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kacang_merah": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kacang merah (Kg) per bulan",
+      "frequencyConfidence": 0.98,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kacang_kedelai": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kacang Kedelai (Kg) per bulan",
+      "frequencyConfidence": 0.981,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kacang_mede": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kacang Mede (Kg) per bulan",
+      "frequencyConfidence": 0.979,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_tahu": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tahu (bungkus) per bulan",
+      "frequencyConfidence": 0.977,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_tempe": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Tempe (bungkus) per bulan",
+      "frequencyConfidence": 0.978,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_bayam": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Bayam (ikat) per bulan",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kangkung": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kangkung (Ikat) per bulan",
+      "frequencyConfidence": 0.978,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_sawi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Sawi (Ikat) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_terong": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Terong (Kg) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_oyong": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.81,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_daun_singkong": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Daun Singkong (Ikat) per bulan",
+      "frequencyConfidence": 0.982,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_daun_ubi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Daun Ubi (Ikat) per bulan",
+      "frequencyConfidence": 0.978,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_jeruk": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jeruk (Kg) per bulan",
+      "frequencyConfidence": 0.971,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_mangga": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Mangga (Kg) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_pepaya": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Pepaya (Kg) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_pisang": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Pisang (Kg) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_alpukat": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Alpukat (Kg) per bulan",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_semangka": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Semangka (Kg) per bulan",
+      "frequencyConfidence": 0.976,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_melon": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Melon (Kg) per bulan",
+      "frequencyConfidence": 0.971,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_cabai": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Cabai (Kg) per bulan",
+      "frequencyConfidence": 0.971,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_bamer": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Bawang Merah (Kg) per bulan",
+      "frequencyConfidence": 0.98,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_baput": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Bawang Putih (Kg) per bulan",
+      "frequencyConfidence": 0.98,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_migor": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Minyak Goreng (Liter) per/Bulan",
+      "frequencyConfidence": 0.982,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_gas": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Gas (Kg) per bulan",
+      "frequencyConfidence": 0.968,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_garam": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Garam (Gram) per bulan",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_gula": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Gula (Kg) per bulan",
+      "frequencyConfidence": 0.97,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_susu": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Susu (Gelas) per bulan",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_teh": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Teh (Gelas) per bulan",
+      "frequencyConfidence": 0.973,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kopi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kopi (Gelas) per bulan",
+      "frequencyConfidence": 0.974,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_rokok": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Rokok (Bungkus) per bulan",
+      "frequencyConfidence": 0.978,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "kon_kelor": {
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0.809,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rumah_lantai": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jenis Lantai Terluas",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "tanah",
+            "kayu/papan kualitas rendah",
+            "bambu",
+            "semen/bata merah",
+            "kayu/papan kualitas tinggi",
+            "ubin/tegel/teraso",
+            "parket/vinil/permadani",
+            "keramik",
+            "marmer/granit"
+          ]
+        }
+      }
+    },
+    "rumah_dinding": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jenis Dinding Terluas",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "bilik",
+            "bambu",
+            "kayu",
+            "tembok tanpa plesteran",
+            "tembok plesteran"
+          ]
+        }
+      }
+    },
+    "rumah_atap": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jenis Atap terluas",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "jerami/ijuk/daun",
+            "bambu",
+            "sirap",
+            "seng",
+            "asbes",
+            "genteng tanah liat",
+            "genteng metal",
+            "genteng keramik",
+            "beton/genteng beton",
+            "rumbia",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "rumah_jamban": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Kepemilikan Jamban",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "ada",
+            "tidak ada"
+          ]
+        }
+      }
+    },
+    "rumah_kamar": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumah Kamar Tidur",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rumah_milik": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Status Kepemilikan Rumah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "menumpang",
+            "kontrak/sewa",
+            "dinas",
+            "milik sendiri",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "rumah_tingkat": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Jumlah Tingkat Rumah",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "rumah_luas": {
+      "frequency": "ANNUAL",
+      "frequencySource": "Luas Bangunan Rumah (Meter Persegi)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Kepemilikan Ternak",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {
+          "options": [
+            "sapi",
+            "kerbau",
+            "domba",
+            "kambing",
+            "ayam",
+            "itik",
+            "kuda",
+            "babi",
+            "ikan",
+            "lainnya"
+          ]
+        }
+      }
+    },
+    "ternak_sapi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Sapi",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_kerbau": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kerbau",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_domba": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Domba",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_kambing": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kambing",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_ayam": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Ayam",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_itik": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Itik",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_kuda": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Kuda",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_babi": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Babi",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    },
+    "ternak_ikan": {
+      "frequency": "INCIDENTAL",
+      "frequencySource": "Jumlah Ikan (Kg)",
+      "frequencyConfidence": 1.0,
+      "variants": {
+        "HEAD": {}
+      }
+    }
+  },
+  "events": {
+    "deathCount": {
+      "label": "Jumlah Anggota Keluarga yang Meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    },
+    "deathName": {
+      "label": "Nama anggota keluarga yang meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    },
+    "deathNik": {
+      "label": "NIK Anggota keluarga yang meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    },
+    "deathBirthDate": {
+      "label": "Tanggal Lahir anggota keluarga yang meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    },
+    "deathDate": {
+      "label": "Tanggal kematian anggota keluarga yang meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    },
+    "deathCause": {
+      "label": "Penyebab Kematian anggota keluarga yang meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    },
+    "deathCertificate": {
+      "label": "Kepemilikan Akta Kematian anggota keluarga yang meninggal",
+      "frequency": "INCIDENTAL",
+      "options": []
+    }
+  },
+  "building": {
+    "kode": {
+      "frequency": "ANNUAL"
+    },
+    "jenis": {
+      "frequency": "ANNUAL"
+    },
+    "kategori": {
+      "frequency": "ANNUAL"
+    },
+    "keterangan": {
+      "frequency": "ANNUAL"
+    },
+    "fotoUrl": {
+      "frequency": "ANNUAL"
+    },
+    "dusun": {
+      "frequency": "ANNUAL"
+    },
+    "rw": {
+      "frequency": "ANNUAL"
+    },
+    "rt": {
+      "frequency": "ANNUAL"
+    }
+  }
+}

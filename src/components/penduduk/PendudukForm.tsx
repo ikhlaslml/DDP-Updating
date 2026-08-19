@@ -8,6 +8,7 @@ import { inputValueFromRecord } from "@/lib/format";
 import { buildPayload } from "@/lib/payload";
 import { REQUIRED_FIELDS } from "@/lib/validation";
 import { FieldInput } from "./FieldInput";
+import { FREQUENCY_LABELS, parameterFrequency, type UpdateFrequency } from "@/lib/parameter-metadata";
 
 const GROUPED = kolomByKelompok();
 
@@ -21,7 +22,9 @@ export function PendudukForm({
   initial?: Record<string, unknown>;
 }) {
   const router = useRouter();
+  const formRole = initial?.status_dalam_keluarga === "Kepala Keluarga" ? "HEAD" : mode === "create" ? "HEAD" : "MEMBER";
   const [currentStep, setCurrentStep] = useState(0);
+  const [frequencyFilter, setFrequencyFilter] = useState<"ALL" | UpdateFrequency>("ALL");
   const [submitting, setSubmitting] = useState(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -94,9 +97,23 @@ export function PendudukForm({
 
   const kelompokKey = KELOMPOK_ORDER[currentStep];
   const fields = GROUPED[kelompokKey];
+  const visibleFields = fields.filter(([name]) => frequencyFilter === "ALL" || parameterFrequency(name) === frequencyFilter);
 
   return (
     <div>
+      {mode === "edit" ? (
+        <div className="mb-5 rounded-2xl border border-violet-100 bg-violet-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-violet-700">Filter jadwal updating</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(["ALL", "INCIDENTAL", "SIX_MONTHS", "ANNUAL", "IMMUTABLE"] as const).map((frequency) => (
+              <button key={frequency} type="button" onClick={() => setFrequencyFilter(frequency)} className={clsx("rounded-full border px-3 py-1.5 text-xs font-semibold", frequencyFilter === frequency ? "border-violet-600 bg-violet-600 text-white" : "border-violet-200 bg-white text-violet-700")}>
+                {frequency === "ALL" ? "Semua parameter" : FREQUENCY_LABELS[frequency]}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-violet-700">Filter membantu fokus pemeriksaan dan tidak melarang pembaruan sebelum jatuh tempo.</p>
+        </div>
+      ) : null}
       <div className="flex flex-wrap gap-2 mb-6">
         {KELOMPOK_ORDER.map((k, idx) => (
           <button
@@ -130,7 +147,7 @@ export function PendudukForm({
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] p-5">
-        {fields.map(([name, def]) => (
+        {visibleFields.map(([name, def]) => (
           <FieldInput
             key={name}
             name={name}
@@ -139,8 +156,10 @@ export function PendudukForm({
             onChange={(v) => setField(name, v)}
             error={errors[name]}
             required={REQUIRED_FIELDS.has(name)}
+            role={formRole}
           />
         ))}
+        {visibleFields.length === 0 ? <p className="col-span-full py-8 text-center text-sm text-slate-400">Tidak ada parameter dengan jadwal ini pada kelompok terpilih.</p> : null}
       </div>
 
       <div className="flex items-center justify-between mt-6">

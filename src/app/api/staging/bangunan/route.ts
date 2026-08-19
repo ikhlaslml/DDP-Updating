@@ -131,6 +131,10 @@ export async function POST(req: NextRequest) {
         const memberInputs = submitted.data.members;
         const nkk = typeof headInput.nkk === "string" ? headInput.nkk : "";
         const headName = typeof headInput.nama === "string" ? headInput.nama : "";
+        const respondentIndex = submitted.data.respondentIndex;
+        const respondentInput = respondentIndex === 0 ? headInput : memberInputs[respondentIndex - 1];
+        const respondentName = typeof respondentInput?.nama === "string" ? respondentInput.nama : "";
+        if (!respondentName) throw new Error("Pilih responden wawancara yang sudah diisi namanya");
         const totalFamily = memberInputs.length + 1;
         const shared = {
           kode_bangunan: code,
@@ -147,6 +151,8 @@ export async function POST(req: NextRequest) {
           jml_keluarga: totalFamily,
           datamasuk: new Date(),
           enumerator: ctx.userName,
+          responden: respondentName,
+          kesediaan: "Ya",
         };
 
         const headParsed = pendudukCreateSchema.safeParse(
@@ -156,7 +162,6 @@ export async function POST(req: NextRequest) {
               ...shared,
               subjek: "Keluarga",
               status_dalam_keluarga: "Kepala Keluarga",
-              responden: headInput.responden === "Tidak" ? "Tidak" : "Ya",
             },
             0
           )
@@ -193,7 +198,6 @@ export async function POST(req: NextRequest) {
                 ...shared,
                 subjek: "Individu",
                 status_dalam_keluarga: status,
-                responden: member.responden === "Ya" ? "Ya" : "Tidak",
               },
               index + 1
             )
@@ -208,15 +212,6 @@ export async function POST(req: NextRequest) {
           residents.push(parsed.data);
         }
 
-        const respondentIndexes = residents.flatMap((resident, index) =>
-          resident.responden === "Ya" ? [index] : []
-        );
-        if (respondentIndexes.length !== 1) {
-          const error = new Error("Pilih tepat satu responden wawancara") as Error & { fields?: Record<string, string> };
-          error.fields = { responden: "Responden dapat berupa kepala, istri, atau anak berusia minimal 18 tahun" };
-          throw error;
-        }
-        const respondentIndex = respondentIndexes[0];
         if (respondentIndex > 0) {
           const respondentAge = residents[respondentIndex].usia;
           if (typeof respondentAge !== "number" || respondentAge < 18) {
@@ -282,10 +277,14 @@ export async function POST(req: NextRequest) {
             nik: String(resident.nik),
             nama: typeof resident.nama === "string" ? resident.nama : null,
             ringkasan:
-              index === 0
+              submitted.data.eventType === "MIGRASI_MASUK"
+                ? `Migrasi masuk ${index === 0 ? "kepala" : "anggota"} keluarga pada bangunan baru #${code}`
+                : index === 0
                 ? `Kepala keluarga baru pada bangunan #${code}`
                 : `Anggota keluarga baru pada bangunan #${code}`,
             data: JSON.stringify(resident),
+            eventType: submitted.data.eventType,
+            eventData: submitted.data.eventData ? JSON.stringify(submitted.data.eventData) : null,
             createdBy: ctx.userId,
             createdByName: ctx.userName,
             createdByEmail: ctx.userEmail,

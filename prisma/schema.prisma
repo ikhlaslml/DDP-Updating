@@ -329,12 +329,71 @@ model Penduduk {
   ternak_kuda                 Int?
   ternak_babi                 Int?
   ternak_ikan                 Int?
+  statusAktif                 Boolean  @default(true)
+  inactiveReason              String?
+  inactiveAt                  DateTime?
 
   @@index([desaId])
   @@index([nik])
   @@index([nkk])
   @@index([dusun])
   @@index([rw, rt])
+  @@index([desaId, statusAktif])
+}
+
+// Archived resident removed from the active baseline because of death.
+model Kematian {
+  id             String   @id @default(cuid())
+  desaId         String?
+  pendudukIdAsal String?
+  nik            String?
+  nkk            String?
+  nama           String?
+  tanggal        DateTime
+  penyebab       String?
+  punyaAkta      String?
+  nomorAkta      String?
+  dataPenduduk   String
+  createdBy      String?
+  createdByName  String?
+  createdByEmail String?
+  createdAt      DateTime @default(now())
+
+  @@index([desaId, tanggal])
+  @@index([nik])
+  @@index([nkk])
+}
+
+// Auditable fertility, mortality, and migration event.
+model PeristiwaKependudukan {
+  id             String   @id @default(cuid())
+  desaId         String?
+  jenis          String   // KELAHIRAN | MIGRASI_MASUK | KEMATIAN | MIGRASI_KELUAR
+  tanggal        DateTime
+  pendudukId     String?
+  nik            String?
+  nkk            String?
+  nama           String?
+  data           String?
+  createdBy      String?
+  createdByName  String?
+  createdByEmail String?
+  createdAt      DateTime @default(now())
+
+  @@index([desaId, jenis, tanggal])
+  @@index([pendudukId])
+}
+
+// Last successful update per resident field, used for due reminders.
+model FieldUpdate {
+  id         String   @id @default(cuid())
+  desaId     String?
+  pendudukId String
+  field      String
+  updatedAt  DateTime @default(now())
+
+  @@unique([pendudukId, field])
+  @@index([desaId, field, updatedAt])
 }
 
 // Digitized physical building. Occupants keep kode_bangunan in Penduduk.
@@ -423,6 +482,8 @@ model StagingChange {
   entityType String   @default("PENDUDUK") // "PENDUDUK" | "BANGUNAN"
   groupId    String?  // one building + its occupants
   aksi       String   // "CREATE" | "UPDATE" | "DELETE"
+  eventType  String?  // demographic event attached to this staged change
+  eventData  String?  // JSON details such as event date, origin, destination, and documents
   pendudukId String?  // target for UPDATE/DELETE
   nik        String?
   nama       String?

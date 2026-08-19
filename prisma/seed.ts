@@ -17,13 +17,6 @@ const mappingPath = path.join(__dirname, "..", "config", "indikator-mapping.json
 const mapping: { kolom: Record<string, ColDef> } = JSON.parse(fs.readFileSync(mappingPath, "utf8"));
 
 const DUSUN = ["Dusun Krajan", "Dusun Sumber", "Dusun Karangasem", "Dusun Wonorejo", "Dusun Tegalsari"];
-const BASE_COORD: Record<string, [number, number]> = {
-  "Dusun Krajan": [-7.6012, 110.2012],
-  "Dusun Sumber": [-7.6105, 110.2151],
-  "Dusun Karangasem": [-7.5931, 110.2244],
-  "Dusun Wonorejo": [-7.6187, 110.1988],
-  "Dusun Tegalsari": [-7.5978, 110.2333],
-};
 const AGAMA = ["Islam", "Kristen", "Katolik", "Hindu", "Buddha", "Khonghucu"];
 const AGAMA_WEIGHTS = [0.82, 0.08, 0.06, 0.02, 0.015, 0.005];
 const SUKU = ["Jawa", "Sunda", "Batak", "Madura", "Bugis", "Betawi", "Minang"];
@@ -114,12 +107,14 @@ const HANDLED = new Set([
 
 const columns = Object.entries(mapping.kolom) as [string, ColDef][];
 
-async function seedPenduduk(desaId: string, slug: string, deskel: string, kodeWil6: string, kodeDeskel: string, target: number) {
+async function seedPenduduk(desaId: string, slug: string, deskel: string, kodeWil6: string, kodeDeskel: string, centerLat: number, centerLng: number, target: number) {
   const records: Record<string, unknown>[] = [];
   while (records.length < target) {
     familyCounter++;
     const dusun = faker.helpers.arrayElement(DUSUN);
-    const [baseLat, baseLng] = BASE_COORD[dusun];
+    const dusunIndex = DUSUN.indexOf(dusun);
+    const baseLat = centerLat + (dusunIndex - 2) * 0.0025;
+    const baseLng = centerLng + (dusunIndex - 2) * 0.0025;
     const rw = randInt(1, 4);
     const rt = randInt(1, 6);
     const kodeBangunan = 100000 + familyCounter;
@@ -167,7 +162,8 @@ async function seedPenduduk(desaId: string, slug: string, deskel: string, kodeWi
         rt,
         lat: lat.toFixed(6),
         lng: lng.toFixed(6),
-        responden: isKepala ? "Ya" : "Tidak",
+        responden: kepalaNama,
+        kesediaan: "Ya",
         nkk,
         nama,
         nik,
@@ -275,8 +271,9 @@ async function seedDesaSettings(desaId: string, nama: string, kop2: string, alam
       disclaimer: "Surat ini diterbitkan dan ditandatangani secara digital dan sah tanpa memerlukan tanda tangan basah atau stempel.",
     },
   });
-  await prisma.suratTemplate.deleteMany({ where: { desaId } });
-  for (const t of TEMPLATES) await prisma.suratTemplate.create({ data: { ...t, desaId } });
+  if ((await prisma.suratTemplate.count({ where: { desaId } })) === 0) {
+    for (const t of TEMPLATES) await prisma.suratTemplate.create({ data: { ...t, desaId } });
+  }
 }
 
 async function upsertUser(email: string, name: string, password: string, desaId: string, role: string) {
@@ -290,49 +287,76 @@ async function upsertUser(email: string, name: string, password: string, desaId:
 
 async function main() {
   const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Admin12345!";
+  const force = Boolean(process.env.SEED_FORCE);
 
-  // Idempotent: on redeploys (data already exists) skip the destructive reseed so
-  // production data persists. Set SEED_FORCE=1 to force a full reseed.
-  if ((await prisma.desa.count()) > 0 && !process.env.SEED_FORCE) {
-    console.log("Data desa sudah ada — seed dilewati (set SEED_FORCE=1 untuk paksa reseed).");
-    return;
+  if (force) {
+    console.log("Clearing existing data...");
+    await prisma.fieldUpdate.deleteMany();
+    await prisma.kematian.deleteMany();
+    await prisma.peristiwaKependudukan.deleteMany();
+    await prisma.stagingChange.deleteMany();
+    await prisma.snapshotBangunan.deleteMany();
+    await prisma.snapshotPenduduk.deleteMany();
+    await prisma.snapshot.deleteMany();
+    await prisma.suratTerbit.deleteMany();
+    await prisma.bangunan.deleteMany();
+    await prisma.penduduk.deleteMany();
   }
-
-  console.log("Clearing existing data...");
-  await prisma.stagingChange.deleteMany();
-  await prisma.snapshotBangunan.deleteMany();
-  await prisma.snapshotPenduduk.deleteMany();
-  await prisma.snapshot.deleteMany();
-  await prisma.suratTerbit.deleteMany();
-  await prisma.bangunan.deleteMany();
-  await prisma.penduduk.deleteMany();
 
   const desaSetu = await prisma.desa.upsert({
     where: { slug: "desa-setu" },
-    update: { nama: "Desa Setu", kodeWilayah: "3373010001", centerLat: -7.565, centerLng: 110.82 },
-    create: { slug: "desa-setu", nama: "Desa Setu", kodeWilayah: "3373010001", centerLat: -7.565, centerLng: 110.82 },
+    update: { nama: "Desa Setu", kodeWilayah: "32.01.05.2007", droneTilePrefix: "32.01.05.2007", centerLat: -6.557, centerLng: 106.866 },
+    create: { slug: "desa-setu", nama: "Desa Setu", kodeWilayah: "32.01.05.2007", droneTilePrefix: "32.01.05.2007", centerLat: -6.557, centerLng: 106.866 },
   });
-  const desaCibubur = await prisma.desa.upsert({
-    where: { slug: "desa-cibubur" },
-    update: { nama: "Desa Cibubur", kodeWilayah: "3271020002", centerLat: -6.36, centerLng: 106.89 },
-    create: { slug: "desa-cibubur", nama: "Desa Cibubur", kodeWilayah: "3271020002", centerLat: -6.36, centerLng: 106.89 },
+  const existingGunungPutri = await prisma.desa.findUnique({ where: { slug: "desa-gunung-putri" } });
+  const existingCibubur = await prisma.desa.findUnique({ where: { slug: "desa-cibubur" } });
+  const desaGunungPutri = existingGunungPutri
+    ? await prisma.desa.update({ where: { id: existingGunungPutri.id }, data: { nama: "Desa Gunung Putri", kodeWilayah: "32.01.02.2004", droneTilePrefix: "32.01.02.2004", centerLat: -6.414, centerLng: 106.945 } })
+    : existingCibubur
+      ? await prisma.desa.update({ where: { id: existingCibubur.id }, data: { slug: "desa-gunung-putri", nama: "Desa Gunung Putri", kodeWilayah: "32.01.02.2004", droneTilePrefix: "32.01.02.2004", centerLat: -6.414, centerLng: 106.945 } })
+      : await prisma.desa.create({ data: { slug: "desa-gunung-putri", nama: "Desa Gunung Putri", kodeWilayah: "32.01.02.2004", droneTilePrefix: "32.01.02.2004", centerLat: -6.414, centerLng: 106.945 } });
+  const desaCitaringgul = await prisma.desa.upsert({
+    where: { slug: "desa-citaringgul" },
+    update: { nama: "Desa Citaringgul", kodeWilayah: "32.01.05.2007", droneTilePrefix: "32.01.05.2007", centerLat: -6.567152, centerLng: 106.856188 },
+    create: { slug: "desa-citaringgul", nama: "Desa Citaringgul", kodeWilayah: "32.01.05.2007", droneTilePrefix: "32.01.05.2007", centerLat: -6.567152, centerLng: 106.856188 },
+  });
+  const desaBabakanSadeng = await prisma.desa.upsert({
+    where: { slug: "desa-babakan-sadeng" },
+    update: { nama: "Desa Babakan Sadeng", kodeWilayah: "32.01.39.2002", droneTilePrefix: "32.01.39.2002", centerLat: -6.5736, centerLng: 106.5788 },
+    create: { slug: "desa-babakan-sadeng", nama: "Desa Babakan Sadeng", kodeWilayah: "32.01.39.2002", droneTilePrefix: "32.01.39.2002", centerLat: -6.5736, centerLng: 106.5788 },
   });
 
   // Users (operator can edit; pemerintah_desa is read-only + approval).
   await upsertUser(process.env.SEED_ADMIN_EMAIL || "admin@ddp.local", "Admin Setu", adminPassword, desaSetu.id, "operator");
   await upsertUser("operator.setu@desapresisi.local", "Operator Setu", "operator123", desaSetu.id, "operator");
   await upsertUser("pemdes.setu@desapresisi.local", "Pemerintah Desa Setu", "pemdes123", desaSetu.id, "pemerintah_desa");
-  await upsertUser("operator.cibubur@desapresisi.local", "Operator Cibubur", "operator123", desaCibubur.id, "operator");
-  await upsertUser("pemdes.cibubur@desapresisi.local", "Pemerintah Desa Cibubur", "pemdes123", desaCibubur.id, "pemerintah_desa");
+  await prisma.user.deleteMany({ where: { email: { in: ["operator.cibubur@desapresisi.local", "pemdes.cibubur@desapresisi.local"] } } });
+  await upsertUser("operator.gunungputri@desapresisi.local", "Operator Gunung Putri", "operator123", desaGunungPutri.id, "operator");
+  await upsertUser("pemdes.gunungputri@desapresisi.local", "Pemerintah Desa Gunung Putri", "pemdes123", desaGunungPutri.id, "pemerintah_desa");
+  await upsertUser("operator.citaringgul@desapresisi.local", "Operator Citaringgul", "operator123", desaCitaringgul.id, "operator");
+  await upsertUser("pemdes.citaringgul@desapresisi.local", "Pemerintah Desa Citaringgul", "pemdes123", desaCitaringgul.id, "pemerintah_desa");
+  await upsertUser("operator.babakansadeng@desapresisi.local", "Operator Babakan Sadeng", "operator123", desaBabakanSadeng.id, "operator");
+  await upsertUser("pemdes.babakansadeng@desapresisi.local", "Pemerintah Desa Babakan Sadeng", "pemdes123", desaBabakanSadeng.id, "pemerintah_desa");
 
-  await seedDesaSettings(desaSetu.id, "Desa Setu", "KECAMATAN CIBINONG", "Jl. Raya Setu No. 1, Bogor, Jawa Barat 16911");
-  await seedDesaSettings(desaCibubur.id, "Desa Cibubur", "KECAMATAN CILEUNGSI", "Jl. Raya Cibubur No. 5, Bogor, Jawa Barat 16968");
+  await seedDesaSettings(desaSetu.id, "Desa Setu", "KECAMATAN BABAKAN MADANG", "Kabupaten Bogor, Jawa Barat");
+  await seedDesaSettings(desaGunungPutri.id, "Desa Gunung Putri", "KECAMATAN GUNUNG PUTRI", "Kabupaten Bogor, Jawa Barat 16961");
+  await seedDesaSettings(desaCitaringgul.id, "Desa Citaringgul", "KECAMATAN BABAKAN MADANG", "Kabupaten Bogor, Jawa Barat 16810");
+  await seedDesaSettings(desaBabakanSadeng.id, "Desa Babakan Sadeng", "KECAMATAN LEUWISADENG", "Kabupaten Bogor, Jawa Barat 16641");
 
   console.log("Seeding penduduk per desa...");
-  await seedPenduduk(desaSetu.id, "desa-setu", "Desa Setu", "337301", "3373010001", 220);
-  await seedPenduduk(desaCibubur.id, "desa-cibubur", "Desa Cibubur", "327102", "3271020002", 120);
+  const demoVillages = [
+    [desaSetu, "320105", -6.557, 106.866],
+    [desaGunungPutri, "320102", -6.414, 106.945],
+    [desaCitaringgul, "320105", -6.567152, 106.856188],
+    [desaBabakanSadeng, "320139", -6.5736, 106.5788],
+  ] as const;
+  for (const [desa, nikPrefix, centerLat, centerLng] of demoVillages) {
+    if ((await prisma.penduduk.count({ where: { desaId: desa.id } })) === 0) {
+      await seedPenduduk(desa.id, desa.slug, desa.nama, nikPrefix, desa.kodeWilayah ?? "", centerLat, centerLng, 120);
+    }
+  }
 
-  console.log("Done. 2 desa seeded with users, settings, templates, data, and T0 snapshots.");
+  console.log("Done. 4 demo villages ensured with users, settings, templates, data, and T0 snapshots.");
 }
 
 main()

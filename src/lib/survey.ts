@@ -1,4 +1,5 @@
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
+import { parameterCondition, type ParameterRole } from "@/lib/parameter-metadata";
 
 export type SurveyRole = "HEAD" | "MEMBER";
 
@@ -17,6 +18,7 @@ export const SYSTEM_FIELDS = new Set([
   "lng",
   "alamat",
   "responden",
+  "kesediaan",
   "nama_kepala_rumah",
   "jml_keluarga",
   "usia",
@@ -223,7 +225,6 @@ export function blankSurveyRecord(role: SurveyRole): Record<string, string> {
   for (const name of surveyColumns(role)) record[name] = "";
   record.subjek = role === "HEAD" ? "Keluarga" : "Individu";
   record.status_dalam_keluarga = role === "HEAD" ? "Kepala Keluarga" : "";
-  record.responden = role === "HEAD" ? "Ya" : "Tidak";
   return record;
 }
 
@@ -232,7 +233,14 @@ function isYes(value: string | undefined) {
   return normalized === "ya" || normalized === "true";
 }
 
-export function isConditionalFieldVisible(name: string, values: Record<string, string>) {
+export function isConditionalFieldVisible(name: string, values: Record<string, string>, role?: ParameterRole) {
+  const condition = parameterCondition(name, role);
+  if (condition) {
+    const current = (values[condition.field] ?? "").toLocaleLowerCase("id-ID");
+    const selected = current.split(";").map((value) => value.trim()).filter(Boolean);
+    const expected = condition.values.map((value) => String(value).toLocaleLowerCase("id-ID"));
+    if (!expected.some((value) => selected.includes(value) || current === value)) return false;
+  }
   if (name === "bantuan_pendidikan") return values.partisipasi_sekolah === "Masih Bersekolah";
   if (name === "pelatihan_ket") return isYes(values.pelatihan);
   if (name === "tki_tujuan") return isYes(values.tki);

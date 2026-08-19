@@ -25,7 +25,7 @@ async function snapshotWithClient(
   const nextUrutan = (max._max.urutan ?? -1) + 1;
   const kode = `T${nextUrutan}`;
   const [baseline, buildings] = await Promise.all([
-    db.penduduk.findMany({ where: { desaId } }),
+    db.penduduk.findMany({ where: { desaId, statusAktif: true } }),
     db.bangunan.findMany({
       where: { desaId },
       // Photos may be inline data URLs in the current deployment. Keep one
@@ -119,6 +119,7 @@ function summarizeChanges(changes: { entityType: string; aksi: string }[]) {
     "PENDUDUK:CREATE": "penduduk baru",
     "PENDUDUK:UPDATE": "data diperbarui",
     "PENDUDUK:DELETE": "data dihapus",
+    "PERISTIWA:EVENT": "peristiwa kependudukan",
   };
   const counts = new Map<string, number>();
   for (const change of changes) {
@@ -128,6 +129,39 @@ function summarizeChanges(changes: { entityType: string; aksi: string }[]) {
   return [...counts.entries()]
     .map(([key, count]) => `${count} ${labels[key] ?? "perubahan"}`)
     .join(", ");
+}
+
+function parseEventData(value: string | null) {
+  if (!value) return {} as Record<string, unknown>;
+  try {
+    return JSON.parse(value) as Record<string, unknown>;
+  } catch {
+    return {} as Record<string, unknown>;
+  }
+}
+
+function eventDate(details: Record<string, unknown>) {
+  const date = details.tanggal ? new Date(String(details.tanggal)) : new Date();
+  if (Number.isNaN(date.getTime())) throw new Error("Tanggal peristiwa tidak valid");
+  if (date.getTime() > Date.now()) throw new Error("Tanggal peristiwa tidak boleh di masa depan");
+  return date;
+}
+
+async function recordFieldUpdates(
+  tx: Prisma.TransactionClient,
+  desaId: string,
+  pendudukId: string,
+  data: Record<string, unknown>,
+  updatedAt = new Date()
+) {
+  const fields = Object.entries(data).filter(([, value]) => value !== null && value !== undefined && value !== "");
+  for (const [field] of fields) {
+    await tx.fieldUpdate.upsert({
+      where: { pendudukId_field: { pendudukId, field } },
+      update: { updatedAt, desaId },
+      create: { desaId, pendudukId, field, updatedAt },
+    });
+  }
 }
 
 function summarizeActors(
@@ -193,10 +227,142 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
           continue;
         }
 
+        if (change.entityType === "PERISTIWA") {
+          const details = parseEventData(change.eventData);
+          const tanggal = eventDate(details);
+          const targetIds = Array.isArray(details.pendudukIds)
+            ? details.pendudukIds.map(String)
+            : change.pendudukId
+              ? [change.pendudukId]
+              : [];
+          if (!change.eventType || targetIds.length === 0) {
+            throw new Error(`Peristiwa ${change.id} tidak lengkap`);
+          }
+          const targets = await tx.penduduk.findMany({
+            where: { id: { in: targetIds }, desaId, statusAktif: true },
+          });
+          if (targets.length !== targetIds.length) throw new Error("Penduduk pada peristiwa tidak ditemukan atau sudah nonaktif");
+
+          const replacementId = typeof details.replacementId === "string" ? details.replacementId : null;
+          const replacement = replacementId
+            ? await tx.penduduk.findFirst({ where: { id: replacementId, desaId, statusAktif: true } })
+            : null;
+
+          for (const target of targets) {
+            if (target.nkk) affectedNkk.add(target.nkk);
+            if (target.status_dalam_keluarga === "Kepala Keluarga") {
+              const remaining = await tx.penduduk.count({
+                where: { desaId, nkk: target.nkk, statusAktif: true, id: { notIn: targetIds } },
+              });
+              if (remaining > 0 && (!replacement || replacement.nkk !== target.nkk || targetIds.includes(replacement.id))) {
+                throw new Error(`Pilih kepala keluarga pengganti untuk keluarga ${target.nkk}`);
+              }
+            }
+
+            if (change.eventType === "KEMATIAN") {
+              await tx.kematian.create({
+                data: {
+                  desaId,
+                  pendudukIdAsal: target.id,
+                  nik: target.nik,
+                  nkk: target.nkk,
+                  nama: target.nama,
+                  tanggal,
+                  penyebab: typeof details.penyebab === "string" ? details.penyebab : null,
+                  punyaAkta: typeof details.punyaAkta === "string" ? details.punyaAkta : null,
+                  nomorAkta: typeof details.nomorAkta === "string" ? details.nomorAkta : null,
+                  dataPenduduk: JSON.stringify(target),
+                  createdBy: change.createdBy ?? actor.userId,
+                  createdByName: change.createdByName ?? actor.userName,
+                  createdByEmail: change.createdByEmail ?? actor.userEmail,
+                },
+              });
+              await tx.peristiwaKependudukan.create({
+                data: {
+                  desaId,
+                  jenis: "KEMATIAN",
+                  tanggal,
+                  pendudukId: target.id,
+                  nik: target.nik,
+                  nkk: target.nkk,
+                  nama: target.nama,
+                  data: JSON.stringify(details),
+                  createdBy: change.createdBy ?? actor.userId,
+                  createdByName: change.createdByName ?? actor.userName,
+                  createdByEmail: change.createdByEmail ?? actor.userEmail,
+                },
+              });
+              await tx.fieldUpdate.deleteMany({ where: { pendudukId: target.id } });
+              await tx.penduduk.delete({ where: { id: target.id } });
+              if (target.nkk) {
+                await tx.penduduk.updateMany({
+                  where: { desaId, nkk: target.nkk, statusAktif: true },
+                  data: { dead_jml: (target.dead_jml ?? 0) + 1 },
+                });
+              }
+            } else if (change.eventType === "MIGRASI_KELUAR") {
+              await tx.penduduk.update({
+                where: { id: target.id },
+                data: { statusAktif: false, inactiveReason: "MIGRASI_KELUAR", inactiveAt: tanggal },
+              });
+              await tx.peristiwaKependudukan.create({
+                data: {
+                  desaId,
+                  jenis: "MIGRASI_KELUAR",
+                  tanggal,
+                  pendudukId: target.id,
+                  nik: target.nik,
+                  nkk: target.nkk,
+                  nama: target.nama,
+                  data: JSON.stringify(details),
+                  createdBy: change.createdBy ?? actor.userId,
+                  createdByName: change.createdByName ?? actor.userName,
+                  createdByEmail: change.createdByEmail ?? actor.userEmail,
+                },
+              });
+            } else {
+              throw new Error(`Jenis peristiwa ${change.eventType} tidak dikenali`);
+            }
+          }
+
+          if (replacement) {
+            await tx.penduduk.update({
+              where: { id: replacement.id },
+              data: { status_dalam_keluarga: "Kepala Keluarga" },
+            });
+            if (replacement.nkk) {
+              await tx.penduduk.updateMany({
+                where: { desaId, nkk: replacement.nkk, statusAktif: true },
+                data: { nama_kepala_rumah: replacement.nama },
+              });
+            }
+          }
+          continue;
+        }
+
         if (change.aksi === "CREATE" && change.data) {
           const parsed = pendudukCreateSchema.parse(JSON.parse(change.data));
-          await tx.penduduk.create({ data: { ...parsed, desaId } as never });
+          const created = await tx.penduduk.create({ data: { ...parsed, desaId } as never });
+          await recordFieldUpdates(tx, desaId, created.id, parsed as Record<string, unknown>);
           if (typeof parsed.nkk === "string" && parsed.nkk) affectedNkk.add(parsed.nkk);
+          if (change.eventType === "KELAHIRAN" || change.eventType === "MIGRASI_MASUK") {
+            const details = parseEventData(change.eventData);
+            await tx.peristiwaKependudukan.create({
+              data: {
+                desaId,
+                jenis: change.eventType,
+                tanggal: eventDate(details),
+                pendudukId: created.id,
+                nik: created.nik,
+                nkk: created.nkk,
+                nama: created.nama,
+                data: JSON.stringify(details),
+                createdBy: change.createdBy ?? actor.userId,
+                createdByName: change.createdByName ?? actor.userName,
+                createdByEmail: change.createdByEmail ?? actor.userEmail,
+              },
+            });
+          }
         } else if (change.aksi === "UPDATE" && change.pendudukId && change.data) {
           const parsed = pendudukUpdateSchema.parse(JSON.parse(change.data));
           const current = await tx.penduduk.findFirstOrThrow({
@@ -205,10 +371,34 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
           });
           await tx.penduduk.updateMany({
             where: { id: change.pendudukId, desaId },
-            data: parsed as never,
+            data: {
+              ...parsed,
+              ...(change.eventType === "MIGRASI_MASUK"
+                ? { statusAktif: true, inactiveReason: null, inactiveAt: null }
+                : {}),
+            } as never,
           });
+          await recordFieldUpdates(tx, desaId, change.pendudukId, parsed as Record<string, unknown>);
           if (current.nkk) affectedNkk.add(current.nkk);
           if (typeof parsed.nkk === "string" && parsed.nkk) affectedNkk.add(parsed.nkk);
+          if (change.eventType === "MIGRASI_MASUK") {
+            const details = parseEventData(change.eventData);
+            await tx.peristiwaKependudukan.create({
+              data: {
+                desaId,
+                jenis: "MIGRASI_MASUK",
+                tanggal: eventDate(details),
+                pendudukId: change.pendudukId,
+                nik: typeof parsed.nik === "string" ? parsed.nik : change.nik,
+                nkk: typeof parsed.nkk === "string" ? parsed.nkk : current.nkk,
+                nama: typeof parsed.nama === "string" ? parsed.nama : change.nama,
+                data: JSON.stringify(details),
+                createdBy: change.createdBy ?? actor.userId,
+                createdByName: change.createdByName ?? actor.userName,
+                createdByEmail: change.createdByEmail ?? actor.userEmail,
+              },
+            });
+          }
         } else if (change.aksi === "DELETE" && change.pendudukId) {
           const current = await tx.penduduk.findFirstOrThrow({
             where: { id: change.pendudukId, desaId },
@@ -224,15 +414,15 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
       // jml_keluarga is denormalized in the production ajaib schema. Keep it
       // consistent on every row after adding or removing a family member.
       for (const nkk of affectedNkk) {
-        const count = await tx.penduduk.count({ where: { desaId, nkk } });
+        const count = await tx.penduduk.count({ where: { desaId, nkk, statusAktif: true } });
         if (count === 0) continue;
         const headCount = await tx.penduduk.count({
-          where: { desaId, nkk, status_dalam_keluarga: "Kepala Keluarga" },
+          where: { desaId, nkk, statusAktif: true, status_dalam_keluarga: "Kepala Keluarga" },
         });
         if (headCount !== 1) {
           throw new Error(`Keluarga ${nkk} harus memiliki tepat satu kepala keluarga`);
         }
-        await tx.penduduk.updateMany({ where: { desaId, nkk }, data: { jml_keluarga: count } });
+        await tx.penduduk.updateMany({ where: { desaId, nkk, statusAktif: true }, data: { jml_keluarga: count } });
       }
 
       const summary = summarizeChanges(pending);

@@ -2,9 +2,37 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Building2, ChevronDown, UserPlus, UsersRound } from "lucide-react";
+import { Baby, Building2, ChevronDown, HeartPulse, LogIn, LogOut, UserPlus, UsersRound } from "lucide-react";
 
 const OPTIONS = [
+  {
+    href: "/penduduk/kelahiran",
+    title: "Kelahiran",
+    description: "Catat bayi lahir pada keluarga yang sudah terdata.",
+    icon: Baby,
+    color: "bg-pink-50 text-pink-600",
+  },
+  {
+    href: "/penduduk/migrasi-masuk",
+    title: "Migrasi Masuk",
+    description: "Anggota, keluarga, atau bangunan baru dari luar desa.",
+    icon: LogIn,
+    color: "bg-sky-50 text-sky-600",
+  },
+  {
+    href: "/penduduk/kematian",
+    title: "Kematian",
+    description: "Pindahkan penduduk ke tabel arsip kematian.",
+    icon: HeartPulse,
+    color: "bg-rose-50 text-rose-600",
+  },
+  {
+    href: "/penduduk/migrasi-keluar",
+    title: "Migrasi Keluar",
+    description: "Nonaktifkan individu atau seluruh keluarga yang pindah.",
+    icon: LogOut,
+    color: "bg-amber-50 text-amber-600",
+  },
   {
     href: "/penduduk/tambah-bangunan",
     title: "Tambah Bangunan",

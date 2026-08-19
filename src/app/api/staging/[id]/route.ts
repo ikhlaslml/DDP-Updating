@@ -38,11 +38,12 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     groupId: selected.groupId,
     data: changes
       .map((change) => {
-        const proposed = parseData(change.data);
+        const proposed = parseData(change.entityType === "PERISTIWA" ? change.eventData : change.data);
         const baseline = change.pendudukId ? targetMap.get(change.pendudukId) ?? {} : {};
         return {
           id: change.id,
           entityType: change.entityType,
+          eventType: change.eventType,
           aksi: change.aksi,
           ringkasan: change.ringkasan,
           createdAt: change.createdAt,

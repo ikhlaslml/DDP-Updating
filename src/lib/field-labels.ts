@@ -13,7 +13,7 @@ const OVERRIDES: Record<string, string> = {
   rt: "Rukun Tetangga (RT)",
   lat: "Koordinat Lintang",
   lng: "Koordinat Bujur",
-  responden: "Kesediaan sebagai Responden",
+  responden: "Nama Responden",
   nkk: "Nomor Kartu Keluarga (No. KK)",
   nama: "Nama Lengkap",
   nik: "Nomor Induk Kependudukan (NIK)",

@@ -19,9 +19,13 @@ statistik, dan peta sebaran.
   `ajaib` (integer/numeric/character varying). Sumber kebenaran: `config/indikator-mapping.json`
   (di-generate dari `scripts/columns-raw.txt`). Referensi tipe Postgres per kolom:
   `config/penduduk-datatype.reference.csv`.
-- **Updating T0/T1** — perubahan (tambah/ubah/hapus) masuk ke `StagingChange`
+- **Updating T0/T1** — perubahan profil, kelahiran, migrasi masuk, kematian, dan
+  migrasi keluar masuk ke `StagingChange`
   ("Data Perubahan Sementara"). Klik **Gabungkan** menerapkannya ke baseline lalu
-  membekukan `Snapshot` baru (`T1`, `T2`, …) yang immutable. Lihat via **Riwayat Data**.
+  membekukan `Snapshot` baru (`T1`, `T2`, …) yang immutable. Kematian dipindahkan
+  ke arsip khusus, sedangkan migrasi keluar mempertahankan penduduk sebagai data nonaktif.
+- **Jadwal parameter** — metadata 286 kolom menggabungkan periode insidentil, 6 bulanan,
+  tahunan, dan tidak berubah. Pengingat tidak mengunci pembaruan sebelum jatuh tempo.
 - **Pembaruan spasial bangunan** — operator menggambar polygon atap pada peta
   OpenStreetMap/Esri/citra drone DDP; centroid dihitung server. Bangunan berpenghuni,
   kepala keluarga, dan seluruh anggotanya masuk staging sebagai satu grup atomik.
@@ -46,7 +50,7 @@ cp .env.example .env
 # isi DATABASE_URL dan DATABASE_URL_UNPOOLED dengan connection string Postgres
 # ganti AUTH_SECRET:  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npx prisma migrate deploy   # terapkan migrasi ke database
-npm run db:seed             # isi 2 desa + user + data (idempoten)
+npm run db:seed             # pastikan 4 desa demo + user + data tersedia
 npm run dev                 # http://localhost:3000
 ```
 
@@ -64,8 +68,12 @@ npm run dev                 # http://localhost:3000
 | `admin@ddp.local` | `Admin12345!` | Desa Setu | operator |
 | `operator.setu@desapresisi.local` | `operator123` | Desa Setu | operator |
 | `pemdes.setu@desapresisi.local` | `pemdes123` | Desa Setu | pemerintah_desa (lihat) |
-| `operator.cibubur@desapresisi.local` | `operator123` | Desa Cibubur | operator |
-| `pemdes.cibubur@desapresisi.local` | `pemdes123` | Desa Cibubur | pemerintah_desa (lihat) |
+| `operator.gunungputri@desapresisi.local` | `operator123` | Desa Gunung Putri | operator |
+| `pemdes.gunungputri@desapresisi.local` | `pemdes123` | Desa Gunung Putri | pemerintah_desa (lihat) |
+| `operator.citaringgul@desapresisi.local` | `operator123` | Desa Citaringgul | operator |
+| `pemdes.citaringgul@desapresisi.local` | `pemdes123` | Desa Citaringgul | pemerintah_desa (lihat) |
+| `operator.babakansadeng@desapresisi.local` | `operator123` | Desa Babakan Sadeng | operator |
+| `pemdes.babakansadeng@desapresisi.local` | `pemdes123` | Desa Babakan Sadeng | pemerintah_desa (lihat) |
 
 Login operator vs pemerintah_desa untuk melihat perbedaan hak akses (tombol
 tambah/ubah/hapus/gabungkan/terbitkan hilang untuk pemerintah_desa).
@@ -77,7 +85,9 @@ Tambahkan ke `C:\Windows\System32\drivers\etc\hosts` (butuh admin):
 ```
 127.0.0.1  desapresisi.local
 127.0.0.1  desa-setu.desapresisi.local
-127.0.0.1  desa-cibubur.desapresisi.local
+127.0.0.1  desa-gunung-putri.desapresisi.local
+127.0.0.1  desa-citaringgul.desapresisi.local
+127.0.0.1  desa-babakan-sadeng.desapresisi.local
 ```
 
 - `http://desapresisi.local:3000` → landing page (domain utama).
@@ -107,7 +117,7 @@ salin *connection string* (`postgresql://...?sslmode=require`).
 | `AUTH_SECRET` | 32-byte hex acak (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
 | `AUTH_TRUST_HOST` | `true` |
 
-**4. Deploy.** Deploy pertama otomatis migrasi + seed (2 desa, user, data). Buka URL
+**4. Deploy.** Deploy pertama otomatis migrasi + seed (4 desa, user, data). Buka URL
 `*.vercel.app`, login dengan akun demo di atas.
 
 **5. (Opsional) Custom domain & subdomain** — tambah `desapresisi.id` + wildcard
@@ -117,7 +127,7 @@ salin *connection string* (`postgresql://...?sslmode=require`).
 
 - `config/indikator-mapping.json` — pemetaan 286 kolom ke 6 kelompok indikator + tipe.
 - `scripts/build-indikator-mapping.js` / `build-prisma-schema.js` — generator schema.
-- `prisma/seed.ts` — seed 2 desa (users, pengaturan, template, data, snapshot T0).
+- `prisma/seed.ts` — seed 4 desa (users, pengaturan, template, data, snapshot T0).
 - `src/lib/tenant.ts` — helper scope tenant + RBAC.
 - `src/lib/updating.ts` — snapshot & merge (T0/T1).
 - `src/proxy.ts` — routing subdomain + proteksi auth.

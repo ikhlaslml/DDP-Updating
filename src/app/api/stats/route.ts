@@ -35,7 +35,7 @@ export async function GET() {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
   const all = await prisma.penduduk.findMany({
-    where: { desaId: ctx.desaId },
+    where: { desaId: ctx.desaId, statusAktif: true },
     select: {
       nkk: true,
       dusun: true,

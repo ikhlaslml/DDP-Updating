@@ -48,13 +48,10 @@ const STEPS = [
 ];
 
 function payload(values: Record<string, string>, role: SurveyRole) {
-  return {
-    ...buildPayload(
+  return buildPayload(
     values,
     surveyColumns(role).map((name) => [name, mapping.kolom[name]] as [string, typeof mapping.kolom[string]])
-    ),
-    responden: values.responden || "Tidak",
-  };
+  );
 }
 
 function isAdult(dateValue: string | undefined) {
@@ -67,7 +64,7 @@ function isAdult(dateValue: string | undefined) {
   return age >= 18;
 }
 
-export function BuildingAdditionWizard() {
+export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MASUK" }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [points, setPoints] = useState<SpatialPoint[]>([]);
@@ -87,9 +84,11 @@ export function BuildingAdditionWizard() {
   const [head, setHead] = useState(() => blankSurveyRecord("HEAD"));
   const [members, setMembers] = useState<Record<string, string>[]>([]);
   const [selectedPerson, setSelectedPerson] = useState(0);
+  const [respondentIndex, setRespondentIndex] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [eventDetails, setEventDetails] = useState({ tanggal: "", asal: "", nomorDokumen: "", keterangan: "" });
 
   useEffect(() => {
     fetch("/api/bangunan")
@@ -118,10 +117,7 @@ export function BuildingAdditionWizard() {
 
   function setMemberCount(nextCount: number) {
     const count = Math.max(0, Math.min(30, nextCount));
-    const respondentIndex = head.responden === "Ya"
-      ? 0
-      : members.findIndex((member) => member.responden === "Ya") + 1;
-    if (respondentIndex > count) setHead((current) => ({ ...current, responden: "Ya" }));
+    if (respondentIndex > count) setRespondentIndex(0);
     setMembers((current) => {
       if (current.length === count) return current;
       if (current.length > count) return current.slice(0, count);
@@ -134,11 +130,7 @@ export function BuildingAdditionWizard() {
   }
 
   function setRespondent(personIndex: number) {
-    setHead((current) => ({ ...current, responden: personIndex === 0 ? "Ya" : "Tidak" }));
-    setMembers((current) => current.map((member, index) => ({
-      ...member,
-      responden: index + 1 === personIndex ? "Ya" : "Tidak",
-    })));
+    setRespondentIndex(personIndex);
   }
 
   function validateCurrentStep() {
@@ -207,6 +199,10 @@ export function BuildingAdditionWizard() {
   }
 
   async function submit() {
+    if (eventType === "MIGRASI_MASUK" && (!eventDetails.tanggal || !eventDetails.asal.trim())) {
+      setGeneralError("Tanggal masuk dan daerah asal wajib diisi untuk migrasi masuk.");
+      return;
+    }
     setSubmitting(true);
     setGeneralError(null);
     setErrors({});
@@ -223,6 +219,9 @@ export function BuildingAdditionWizard() {
           },
           head: occupied ? payload(head, "HEAD") : null,
           members: occupied ? members.map((member) => payload(member, "MEMBER")) : [],
+          respondentIndex,
+          eventType,
+          eventData: eventType ? eventDetails : undefined,
         }),
       });
       const json = await response.json();
@@ -253,6 +252,17 @@ export function BuildingAdditionWizard() {
 
   return (
     <div className="space-y-6">
+      {eventType === "MIGRASI_MASUK" ? (
+        <section className="rounded-2xl border border-sky-100 bg-sky-50 p-5">
+          <h2 className="font-bold text-sky-950">Migrasi Masuk Keluarga ke Bangunan Baru</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <label className="text-sm font-medium text-slate-700">Tanggal Masuk *<input type="date" max={new Date().toISOString().slice(0, 10)} value={eventDetails.tanggal} onChange={(event) => setEventDetails((current) => ({ ...current, tanggal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+            <label className="text-sm font-medium text-slate-700">Daerah Asal *<input value={eventDetails.asal} onChange={(event) => setEventDetails((current) => ({ ...current, asal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+            <label className="text-sm font-medium text-slate-700">Nomor Dokumen<input value={eventDetails.nomorDokumen} onChange={(event) => setEventDetails((current) => ({ ...current, nomorDokumen: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+            <label className="text-sm font-medium text-slate-700">Keterangan<input value={eventDetails.keterangan} onChange={(event) => setEventDetails((current) => ({ ...current, keterangan: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+          </div>
+        </section>
+      ) : null}
       <div className="grid gap-3 sm:grid-cols-4">
         {STEPS.map((item, index) => {
           const Icon = item.icon;
@@ -365,7 +375,7 @@ export function BuildingAdditionWizard() {
             <div><h2 className="text-xl font-bold text-slate-900">Penghuni Bangunan</h2><p className="mt-1 text-sm text-slate-500">Satu kepala keluarga dan seluruh orang yang tinggal/ditanggung dalam rumah ini.</p></div>
             <div className="flex flex-wrap items-end gap-3">
               <label className="text-xs font-semibold text-slate-600">Responden Wawancara
-                <select value={Math.max(0, allPeople.findIndex((person) => person.responden === "Ya"))} onChange={(event) => setRespondent(Number(event.target.value))} className="mt-1 block min-w-48 rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                <select value={respondentIndex} onChange={(event) => setRespondent(Number(event.target.value))} className="mt-1 block min-w-48 rounded-xl border border-slate-300 px-3 py-2 text-sm">
                   <option value={0}>Kepala Keluarga</option>
                   {members.map((member, index) => <option key={index} value={index + 1} disabled={Boolean(member.tgl_lahir) && !isAdult(member.tgl_lahir)}>Anggota {index + 1}{member.nama ? ` — ${member.nama}` : ""}</option>)}
                 </select>

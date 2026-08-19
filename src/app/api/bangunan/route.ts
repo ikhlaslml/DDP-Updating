@@ -30,7 +30,7 @@ export async function GET() {
       },
     }),
     prisma.penduduk.findMany({
-      where: { desaId: ctx.desaId, status_dalam_keluarga: "Kepala Keluarga", kode_bangunan: { not: null } },
+      where: { desaId: ctx.desaId, statusAktif: true, status_dalam_keluarga: "Kepala Keluarga", kode_bangunan: { not: null } },
       select: {
         kode_bangunan: true,
         kode_deskel: true,

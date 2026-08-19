@@ -41,6 +41,9 @@ export const buildingSubmissionSchema = z
     }),
     head: personPayloadSchema.nullable().optional(),
     members: z.array(personPayloadSchema).max(30).default([]),
+    respondentIndex: z.coerce.number().int().min(0).default(0),
+    eventType: z.literal("MIGRASI_MASUK").optional(),
+    eventData: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((value, ctx) => {
     if (value.building.jenis === "BERPENGHUNI" && !value.head) {
@@ -54,6 +57,9 @@ export const buildingSubmissionSchema = z
     }
     if (value.building.jenis === "TIDAK_BERPENGHUNI" && !value.building.fotoUrl?.startsWith("data:image/")) {
       ctx.addIssue({ code: "custom", path: ["building", "fotoUrl"], message: "Foto bangunan wajib diunggah" });
+    }
+    if (value.eventType === "MIGRASI_MASUK" && (!value.eventData?.tanggal || !String(value.eventData.asal ?? "").trim())) {
+      ctx.addIssue({ code: "custom", path: ["eventData"], message: "Tanggal masuk dan daerah asal wajib diisi" });
     }
   });
 

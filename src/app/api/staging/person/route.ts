@@ -11,6 +11,8 @@ const submissionSchema = z
     role: z.enum(["HEAD", "MEMBER"]),
     buildingCode: z.coerce.number().int().positive().optional(),
     familyNkk: z.string().regex(/^\d{16}$/).optional(),
+    eventType: z.enum(["KELAHIRAN", "MIGRASI_MASUK"]).optional(),
+    eventData: z.record(z.string(), z.unknown()).optional(),
     data: z.record(z.string(), z.unknown()),
   })
   .superRefine((value, ctx) => {
@@ -19,6 +21,15 @@ const submissionSchema = z
     }
     if (value.role === "MEMBER" && !value.familyNkk) {
       ctx.addIssue({ code: "custom", path: ["familyNkk"], message: "Pilih kepala keluarga" });
+    }
+    if (value.eventType === "KELAHIRAN" && value.role !== "MEMBER") {
+      ctx.addIssue({ code: "custom", path: ["eventType"], message: "Kelahiran harus ditambahkan sebagai anggota keluarga" });
+    }
+    if (value.eventType && !value.eventData?.tanggal) {
+      ctx.addIssue({ code: "custom", path: ["eventData", "tanggal"], message: "Tanggal peristiwa wajib diisi" });
+    }
+    if (value.eventType === "MIGRASI_MASUK" && !String(value.eventData?.asal ?? "").trim()) {
+      ctx.addIssue({ code: "custom", path: ["eventData", "asal"], message: "Daerah asal wajib diisi" });
     }
   });
 
@@ -70,7 +81,7 @@ export async function POST(req: NextRequest) {
           const code = body.data.buildingCode as number;
           const [building, legacy] = await Promise.all([
             tx.bangunan.findFirst({ where: { desaId: ctx.desaId, kode: code } }),
-            tx.penduduk.findFirst({ where: { desaId: ctx.desaId, kode_bangunan: code } }),
+            tx.penduduk.findFirst({ where: { desaId: ctx.desaId, kode_bangunan: code, statusAktif: true } }),
           ]);
           if (!building && !legacy) throw new Error("Bangunan tidak ditemukan pada desa ini");
           if (building?.jenis === "TIDAK_BERPENGHUNI") {
@@ -88,13 +99,14 @@ export async function POST(req: NextRequest) {
             alamat: building?.alamat ?? legacy?.alamat,
             status_dalam_keluarga: "Kepala Keluarga",
             subjek: "Keluarga",
-            responden: "Ya",
+            responden: data.nama,
+            kesediaan: "Ya",
             jml_keluarga: 1,
           };
           nkk = typeof data.nkk === "string" ? data.nkk : "";
           authoritative.nkk = nkk;
           authoritative.nama_kepala_rumah = data.nama;
-          const existing = await tx.penduduk.count({ where: { desaId: ctx.desaId, nkk } });
+          const existing = await tx.penduduk.count({ where: { desaId: ctx.desaId, nkk, statusAktif: true } });
           if (existing > 0) throw new Error("Nomor KK sudah disensus. Gunakan menu Tambah Anggota Keluarga.");
           const pending = await tx.stagingChange.findMany({
             where: { desaId: ctx.desaId, entityType: "PENDUDUK", aksi: "CREATE", status: "PENDING" },
@@ -109,22 +121,21 @@ export async function POST(req: NextRequest) {
         } else {
           nkk = body.data.familyNkk as string;
           const head = await tx.penduduk.findFirst({
-            where: { desaId: ctx.desaId, nkk, status_dalam_keluarga: "Kepala Keluarga" },
+            where: { desaId: ctx.desaId, nkk, statusAktif: true, status_dalam_keluarga: "Kepala Keluarga" },
           });
           if (!head) throw new Error("Kepala keluarga tidak ditemukan");
           if (!data.status_dalam_keluarga || data.status_dalam_keluarga === "Kepala Keluarga") {
             throw new Error("Pilih status anggota dalam keluarga");
           }
           const inherited = Object.fromEntries(
-            [...HOUSEHOLD_INHERITED_FIELDS, "kode_bangunan", "kode_deskel", "deskel", "dusun", "rw", "rt", "lat", "lng", "alamat"]
+            [...HOUSEHOLD_INHERITED_FIELDS, "responden", "kesediaan", "kode_bangunan", "kode_deskel", "deskel", "dusun", "rw", "rt", "lat", "lng", "alamat"]
               .flatMap((field) => head[field as keyof typeof head] !== undefined ? [[field, head[field as keyof typeof head]]] : [])
           );
-          const baselineCount = await tx.penduduk.count({ where: { desaId: ctx.desaId, nkk } });
+          const baselineCount = await tx.penduduk.count({ where: { desaId: ctx.desaId, nkk, statusAktif: true } });
           authoritative = {
             ...inherited,
             nkk,
             subjek: "Individu",
-            responden: "Tidak",
             jml_keluarga: baselineCount + 1,
           };
           ringkasan = `Anggota baru keluarga ${head.nama ?? nkk}`;
@@ -150,18 +161,29 @@ export async function POST(req: NextRequest) {
             where: { entityType: "PENDUDUK", status: "PENDING", nik },
           }),
         ]);
-        if (baselineDupe || pendingDupe) throw new Error("NIK sudah terdaftar di baseline/perubahan sementara");
+        if (pendingDupe) throw new Error("NIK sudah terdaftar di perubahan sementara");
+        const reactivation = body.data.eventType === "MIGRASI_MASUK"
+          && baselineDupe?.desaId === ctx.desaId
+          && baselineDupe.statusAktif === false;
+        if (baselineDupe && !reactivation) throw new Error("NIK sudah terdaftar sebagai penduduk aktif atau berada di desa lain");
 
         const created = await tx.stagingChange.create({
           data: {
             desaId: ctx.desaId,
             entityType: "PENDUDUK",
             groupId: randomUUID(),
-            aksi: "CREATE",
+            aksi: reactivation ? "UPDATE" : "CREATE",
+            pendudukId: reactivation ? baselineDupe.id : null,
             nik,
             nama,
-            ringkasan,
+            ringkasan: body.data.eventType === "KELAHIRAN"
+              ? `Kelahiran anggota keluarga ${nkk}`
+              : body.data.eventType === "MIGRASI_MASUK"
+                ? `Migrasi masuk: ${ringkasan}`
+                : ringkasan,
             data: JSON.stringify(parsed.data),
+            eventType: body.data.eventType,
+            eventData: body.data.eventData ? JSON.stringify(body.data.eventData) : null,
             createdBy: ctx.userId,
             createdByName: ctx.userName,
             createdByEmail: ctx.userEmail,

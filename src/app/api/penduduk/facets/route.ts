@@ -7,7 +7,7 @@ export async function GET() {
   if (!ctx) return UNAUTHORIZED;
 
   const rows = await prisma.penduduk.findMany({
-    where: { desaId: ctx.desaId },
+    where: { desaId: ctx.desaId, statusAktif: true },
     select: { dusun: true, rw: true, rt: true },
     distinct: ["dusun", "rw", "rt"],
   });

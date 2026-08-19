@@ -31,7 +31,7 @@ export function SurveyEditor({
     // Do not retain answers from a branch that is no longer applicable (for
     // example phone details after changing ownership to "Tidak").
     for (const field of Object.keys(next)) {
-      if (!isConditionalFieldVisible(field, next)) next[field] = "";
+      if (!isConditionalFieldVisible(field, next, role)) next[field] = "";
     }
     onChange(next);
   }
@@ -49,7 +49,7 @@ export function SurveyEditor({
 
       <div className="flex flex-wrap gap-2 pb-1">
         {groups.map((group, index) => {
-          const fields = grouped[group].filter((name) => isConditionalFieldVisible(name, value));
+          const fields = grouped[group].filter((name) => isConditionalFieldVisible(name, value, role));
           const filled = fields.filter((name) => value[name] !== undefined && value[name] !== "").length;
           const hasError = fields.some((name) => errors[name]);
           return (
@@ -76,7 +76,7 @@ export function SurveyEditor({
 
       <div className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:grid-cols-2 xl:grid-cols-3">
         {(grouped[activeGroup] ?? [])
-          .filter((name) => isConditionalFieldVisible(name, value))
+          .filter((name) => isConditionalFieldVisible(name, value, role))
           .map((name) => {
             const def = role === "MEMBER" && name === "status_dalam_keluarga"
               ? { ...mapping.kolom[name], enum: mapping.kolom[name].enum?.filter((option) => option !== "Kepala Keluarga") }
@@ -91,6 +91,7 @@ export function SurveyEditor({
               onChange={(next) => setField(name, next)}
               error={errors[name]}
               required={REQUIRED_FIELDS.has(name)}
+              role={role}
             />
             );
           })}

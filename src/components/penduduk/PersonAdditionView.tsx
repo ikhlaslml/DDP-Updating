@@ -37,9 +37,19 @@ function toPayload(value: Record<string, string>, role: SurveyRole) {
   );
 }
 
-export function PersonAdditionView({ role }: { role: SurveyRole }) {
+export function PersonAdditionView({
+  role,
+  eventType,
+}: {
+  role: SurveyRole;
+  eventType?: "KELAHIRAN" | "MIGRASI_MASUK";
+}) {
   const router = useRouter();
-  const [record, setRecord] = useState(() => blankSurveyRecord(role));
+  const [record, setRecord] = useState<Record<string, string>>(() => ({
+    ...blankSurveyRecord(role),
+    ...(eventType === "KELAHIRAN" ? { status_dalam_keluarga: "anak", dinamika: "hidup", menetap: "Ya" } : {}),
+  }));
+  const [eventDetails, setEventDetails] = useState({ tanggal: "", asal: "", tempatLahir: "", nomorDokumen: "", keterangan: "" });
   const [buildings, setBuildings] = useState<BuildingOption[]>([]);
   const [families, setFamilies] = useState<FamilyOption[]>([]);
   const [buildingCode, setBuildingCode] = useState("");
@@ -83,6 +93,10 @@ export function PersonAdditionView({ role }: { role: SurveyRole }) {
   const selectedFamily = families.find((family) => family.nkk === familyNkk);
 
   async function submit() {
+    if (eventType === "MIGRASI_MASUK" && (!eventDetails.tanggal || !eventDetails.asal.trim())) {
+      setGeneralError("Tanggal masuk dan daerah asal wajib diisi.");
+      return;
+    }
     setSubmitting(true);
     setGeneralError(null);
     setErrors({});
@@ -94,6 +108,11 @@ export function PersonAdditionView({ role }: { role: SurveyRole }) {
           role,
           buildingCode: isHead ? Number(buildingCode) : undefined,
           familyNkk: isHead ? undefined : familyNkk,
+          eventType,
+          eventData: eventType ? {
+            ...eventDetails,
+            tanggal: eventType === "KELAHIRAN" ? record.tgl_lahir : eventDetails.tanggal,
+          } : undefined,
           data: toPayload(record, role),
         }),
       });
@@ -103,7 +122,7 @@ export function PersonAdditionView({ role }: { role: SurveyRole }) {
         setErrors(json.fields ?? {});
         return;
       }
-      router.push(`/penduduk?staged=${isHead ? "keluarga" : "anggota"}`);
+      router.push(`/penduduk?staged=${eventType?.toLocaleLowerCase("id-ID") ?? (isHead ? "keluarga" : "anggota")}`);
       router.refresh();
     } catch {
       setGeneralError("Jaringan bermasalah. Coba simpan kembali.");
@@ -165,6 +184,19 @@ export function PersonAdditionView({ role }: { role: SurveyRole }) {
 
       {sourceSelected ? (
         <>
+          {eventType ? (
+            <section className="rounded-2xl border border-sky-100 bg-sky-50 p-5">
+              <h2 className="font-bold text-sky-950">Data Peristiwa {eventType === "KELAHIRAN" ? "Kelahiran" : "Migrasi Masuk"}</h2>
+              <p className="mt-1 text-sm text-sky-800">Peristiwa dicatat terpisah dari profil penduduk dan ikut masuk ke riwayat snapshot.</p>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {eventType === "MIGRASI_MASUK" ? <label className="text-sm font-medium text-slate-700">Tanggal Masuk *<input type="date" max={new Date().toISOString().slice(0, 10)} required value={eventDetails.tanggal} onChange={(event) => setEventDetails((current) => ({ ...current, tanggal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label> : null}
+                {eventType === "MIGRASI_MASUK" ? <label className="text-sm font-medium text-slate-700">Daerah Asal *<input required value={eventDetails.asal} onChange={(event) => setEventDetails((current) => ({ ...current, asal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label> : null}
+                {eventType === "KELAHIRAN" ? <label className="text-sm font-medium text-slate-700">Tempat Lahir<input value={eventDetails.tempatLahir} onChange={(event) => setEventDetails((current) => ({ ...current, tempatLahir: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label> : null}
+                <label className="text-sm font-medium text-slate-700">Nomor Dokumen Pendukung<input value={eventDetails.nomorDokumen} onChange={(event) => setEventDetails((current) => ({ ...current, nomorDokumen: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+                <label className="text-sm font-medium text-slate-700 sm:col-span-2">Keterangan<input value={eventDetails.keterangan} onChange={(event) => setEventDetails((current) => ({ ...current, keterangan: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+              </div>
+            </section>
+          ) : null}
           <SurveyEditor role={role} value={record} onChange={setRecord} errors={errors} idPrefix={isHead ? "new-head" : "new-member"} />
           <div className="flex justify-end border-t border-slate-200 pt-5">
             <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : "Simpan ke Perubahan Sementara"}</button>

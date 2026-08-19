@@ -10,7 +10,7 @@ export function buildPendudukWhere(sp: URLSearchParams, desaId?: string): Prisma
   const miskinBps = sp.get("miskin_bps");
   const miskinEkstrem = sp.get("miskin_ekstrem");
 
-  const where: Prisma.PendudukWhereInput = {};
+  const where: Prisma.PendudukWhereInput = { statusAktif: true };
   if (desaId) where.desaId = desaId;
   if (q) {
     where.OR = [

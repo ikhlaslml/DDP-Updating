@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
   const heads = await prisma.penduduk.findMany({
     where: {
       desaId: ctx.desaId,
+      statusAktif: true,
       status_dalam_keluarga: "Kepala Keluarga",
       nkk: { not: null },
       ...(q
