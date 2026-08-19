@@ -51,9 +51,9 @@ export function FieldInput({
   if (inputType === "multiselect" && options.length) {
     const selected = new Set(value.split(";").map((item) => item.trim()).filter(Boolean));
     input = (
-      <div id={id} className="grid max-h-48 gap-2 overflow-y-auto rounded-lg border border-slate-300 bg-slate-50 p-3 sm:grid-cols-2">
+      <div id={id} className="grid max-h-64 grid-cols-1 gap-2 overflow-y-auto overflow-x-hidden rounded-lg border border-slate-300 bg-slate-50 p-3">
         {options.map((option) => (
-          <label key={option} className="flex items-start gap-2 text-sm text-slate-700">
+          <label key={option} className="flex min-w-0 items-start gap-2 rounded-lg px-1 py-1.5 text-sm text-slate-700 hover:bg-white">
             <input
               type="checkbox"
               checked={selected.has(option)}
@@ -63,9 +63,9 @@ export function FieldInput({
                 else next.delete(option);
                 onChange([...next].join("; "));
               }}
-              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-indigo-600"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-indigo-600"
             />
-            <span>{enumOptionLabel(name, option)}</span>
+            <span className="min-w-0 break-words leading-relaxed [overflow-wrap:anywhere]">{enumOptionLabel(name, option)}</span>
           </label>
         ))}
       </div>
