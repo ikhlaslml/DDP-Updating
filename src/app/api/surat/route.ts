@@ -26,6 +26,10 @@ export async function POST(req: NextRequest) {
 
   const template = await prisma.suratTemplate.findFirst({ where: { id: body.templateId, desaId: ctx.desaId } });
   if (!template) return NextResponse.json({ error: "Template tidak ditemukan" }, { status: 404 });
+  const event = body.peristiwaId
+    ? await prisma.peristiwaKependudukan.findFirst({ where: { id: body.peristiwaId, desaId: ctx.desaId } })
+    : null;
+  if (body.peristiwaId && !event) return NextResponse.json({ error: "Referensi peristiwa tidak ditemukan" }, { status: 404 });
 
   const now = new Date();
   const year = now.getFullYear();
@@ -43,6 +47,8 @@ export async function POST(req: NextRequest) {
       namaWarga: body.namaWarga ?? null,
       nik: body.nik ?? null,
       keperluan: body.keperluan ?? null,
+      peristiwaId: event?.id ?? null,
+      jenisPeristiwa: event?.jenis ?? null,
     },
   });
 

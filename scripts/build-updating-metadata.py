@@ -48,6 +48,15 @@ merge_rows = read_csv("merge_pertanyaan.csv")
 answer_rows = read_csv("jawabantertutup.csv")
 question_rows = read_csv("questions(logic_jawaban).csv")
 
+datatype_workbook = load_workbook(DOWNLOADS / "ajaib_datatype.xlsx", data_only=True)
+datatype_sheet = datatype_workbook["ajaib_datatype"]
+datatype_status = {}
+for table, column, _data_type, status in datatype_sheet.iter_rows(min_row=2, values_only=True):
+    if str(table or "").strip().casefold() == "ajaib" and column:
+        datatype_status[str(column).strip()] = str(status or "").strip().casefold() or None
+
+NON_EDITABLE_DATATYPE_STATUSES = {"old", "changed", "temporer", "perhitungan sistem"}
+
 workbook = load_workbook(DOWNLOADS / "Parameter_DDP_Estimasi_Waktu_Updating (1).xlsx", data_only=True)
 sheet = workbook["Semua Parameter"]
 excel_rows = []
@@ -63,6 +72,8 @@ for row in sheet.iter_rows(min_row=4, values_only=True):
 
 answers = defaultdict(list)
 for row in answer_rows:
+    if row["status"].strip() != "0":
+        continue
     value = row["value"].strip()
     if value and value not in answers[row["pertanyaan_id"]]:
         answers[row["pertanyaan_id"]].append(value)
@@ -135,9 +146,10 @@ for field in mapping:
         role = role_name(row["subjek"].strip())
         question = questions_by_id.get(row["id"])
         variant = variants.setdefault(role, {})
+        variant["active"] = bool(variant.get("active")) or row["status"].strip() == "0"
         if answers[row["id"]]:
             variant["options"] = answers[row["id"]]
-        if question:
+        if question and question["status"].strip() == "0":
             variant["inputType"] = question["question_type"].strip() or None
             description = " ".join(question["description"].split())
             if description:
@@ -156,10 +168,14 @@ for field in mapping:
                         "field": source_field,
                         "values": values if isinstance(values, list) else [values],
                     }
+    status = datatype_status.get(field)
+    datatype_editable = status not in NON_EDITABLE_DATATYPE_STATUSES
     fields[field] = {
         "frequency": frequency,
         "frequencySource": source_label,
         "frequencyConfidence": confidence,
+        "datatypeStatus": status,
+        "editable": datatype_editable and any(bool(variant.get("active")) for variant in variants.values()),
         "variants": variants,
     }
 
@@ -190,6 +206,7 @@ output = {
             "jawabantertutup.csv",
             "merge_pertanyaan.csv",
             "questions(logic_jawaban).csv",
+            "ajaib_datatype.xlsx",
         ],
         "tooltipPolicy": "QUESTION_LOGIC_ONLY",
         "unmappedFrequency": unmapped_frequency,

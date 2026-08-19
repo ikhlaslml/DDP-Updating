@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import clsx from "clsx";
-import { CheckCircle2, Info } from "lucide-react";
+import { CheckCircle2, ClipboardCheck } from "lucide-react";
 import { FieldInput } from "@/components/penduduk/FieldInput";
 import { KELOMPOK_LABEL, KELOMPOK_ORDER, mapping } from "@/lib/indikator";
 import { REQUIRED_FIELDS } from "@/lib/validation";
@@ -39,7 +39,7 @@ export function SurveyEditor({
   return (
     <div className="space-y-5">
       <div className="flex items-start gap-3 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm text-sky-900">
-        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        <ClipboardCheck className="mt-0.5 h-4 w-4 shrink-0" />
         <p>
           {role === "HEAD"
             ? "Sesuai DO Data Desa Presisi, kepala keluarga mengisi data dirinya sekaligus kondisi rumah tangga. Pertanyaan operasional dan koordinat diisi otomatis oleh sistem."

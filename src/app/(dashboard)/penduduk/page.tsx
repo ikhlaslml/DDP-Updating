@@ -1,6 +1,7 @@
 import { PendudukTable } from "@/components/penduduk/PendudukTable";
 import { PerubahanSementara } from "@/components/penduduk/PerubahanSementara";
 import { UpdatingReminder } from "@/components/penduduk/UpdatingReminder";
+import { DemographicHistory } from "@/components/penduduk/DemographicHistory";
 
 export default function DataKependudukanPage() {
   return (
@@ -20,6 +21,8 @@ export default function DataKependudukanPage() {
         <h2 className="mb-4 text-lg font-bold text-slate-900">Data Baseline</h2>
         <PendudukTable />
       </section>
+
+      <DemographicHistory mode="EVENT" />
     </div>
   );
 }

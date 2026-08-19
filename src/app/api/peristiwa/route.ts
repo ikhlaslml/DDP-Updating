@@ -30,6 +30,22 @@ const eventSchema = z.object({
 export async function GET(req: NextRequest) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
+  const id = req.nextUrl.searchParams.get("id");
+  if (id) {
+    const event = await prisma.peristiwaKependudukan.findFirst({ where: { id, desaId: ctx.desaId } });
+    if (!event) return NextResponse.json({ error: "Peristiwa tidak ditemukan" }, { status: 404 });
+    const resident = event.pendudukId
+      ? await prisma.penduduk.findFirst({ where: { id: event.pendudukId, desaId: ctx.desaId } })
+      : null;
+    const death = !resident && event.pendudukId
+      ? await prisma.kematian.findFirst({ where: { pendudukIdAsal: event.pendudukId, desaId: ctx.desaId } })
+      : null;
+    let archivedResident: Record<string, unknown> | null = null;
+    if (death?.dataPenduduk) {
+      try { archivedResident = JSON.parse(death.dataPenduduk) as Record<string, unknown>; } catch { archivedResident = null; }
+    }
+    return NextResponse.json({ data: { event, resident: resident ?? archivedResident ?? { id: event.pendudukId, nama: event.nama, nik: event.nik } } });
+  }
   const view = req.nextUrl.searchParams.get("view");
   if (view === "history") {
     const [deaths, events] = await Promise.all([

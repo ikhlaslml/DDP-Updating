@@ -4,6 +4,7 @@ export type UpdateFrequency = "INCIDENTAL" | "SIX_MONTHS" | "ANNUAL" | "IMMUTABL
 export type ParameterRole = "HEAD" | "MEMBER" | "ALL";
 
 type Variant = {
+  active?: boolean;
   options?: string[];
   inputType?: string | null;
   help?: string;
@@ -14,6 +15,8 @@ type FieldMetadata = {
   frequency: UpdateFrequency | null;
   frequencySource: string | null;
   frequencyConfidence: number;
+  datatypeStatus?: string | null;
+  editable?: boolean;
   variants: Partial<Record<ParameterRole, Variant>>;
 };
 
@@ -36,6 +39,14 @@ export function parameterMetadata(field: string) {
 export function parameterVariant(field: string, role?: ParameterRole) {
   const variants = metadata.fields[field]?.variants ?? {};
   return (role ? variants[role] : undefined) ?? variants.ALL ?? variants.HEAD ?? variants.MEMBER;
+}
+
+export function parameterIsEditable(field: string, role?: ParameterRole) {
+  const fieldMetadata = metadata.fields[field];
+  if (!fieldMetadata?.editable) return false;
+  const variants = fieldMetadata.variants ?? {};
+  if (!role) return Object.values(variants).some((variant) => variant?.active);
+  return Boolean(variants[role]?.active || variants.ALL?.active);
 }
 
 export function parameterOptions(field: string, role?: ParameterRole) {

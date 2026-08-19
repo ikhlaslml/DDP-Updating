@@ -4,9 +4,8 @@ import { useState } from "react";
 import { Info } from "lucide-react";
 import type { KolomDef } from "@/lib/indikator";
 import { enumOptionLabel, fieldLabel } from "@/lib/field-labels";
+import { InfoPopup } from "@/components/ui/InfoPopup";
 import {
-  FREQUENCY_LABELS,
-  parameterFrequency,
   parameterHelp,
   parameterInputType,
   parameterOptions,
@@ -38,7 +37,7 @@ export function FieldInput({
   const options = metadataOptions.length ? metadataOptions : def.enum ?? [];
   const inputType = parameterInputType(name, role);
   const help = parameterHelp(name, role);
-  const frequency = parameterFrequency(name);
+  const label = fieldLabel(name, def);
   const today = new Date();
   const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60_000)
     .toISOString()
@@ -137,12 +136,11 @@ export function FieldInput({
     <div>
       <label htmlFor={id} className="block text-xs font-medium text-slate-600 mb-1">
         <span className="inline-flex flex-wrap items-center gap-1.5">
-          <span>{fieldLabel(name, def)}</span>
-          {frequency ? <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">{FREQUENCY_LABELS[frequency]}</span> : null}
+          <span>{label}</span>
           {help ? (
             <button
               type="button"
-              aria-label={`Petunjuk pengisian ${fieldLabel(name, def)}`}
+              aria-label={`Petunjuk pengisian ${label}`}
               aria-expanded={showHelp}
               onClick={() => setShowHelp((current) => !current)}
               className="inline-flex h-5 w-5 items-center justify-center rounded-full text-indigo-600 hover:bg-indigo-50"
@@ -153,9 +151,9 @@ export function FieldInput({
         </span>
         {required && <span className="text-red-500"> *</span>}
       </label>
-      {showHelp && help ? <div role="note" className="mb-2 rounded-lg border border-indigo-100 bg-indigo-50 px-3 py-2 text-xs leading-relaxed text-indigo-900">{help}</div> : null}
       {input}
       {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+      {showHelp && help ? <InfoPopup title={label} content={help} onClose={() => setShowHelp(false)} /> : null}
     </div>
   );
 }

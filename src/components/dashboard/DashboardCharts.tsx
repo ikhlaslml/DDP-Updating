@@ -16,10 +16,10 @@ import {
   PieChart,
   Pie,
 } from "recharts";
-import { Users, Home as HomeIcon, MapPinned, Gauge } from "lucide-react";
+import { Baby, HeartPulse, Home as HomeIcon, LogIn, LogOut, MapPinned, Users } from "lucide-react";
 import { StatCard } from "./StatCard";
 import { CircularProgress } from "./CircularProgress";
-import { SERIES, STATUS, CHART_INK } from "@/lib/chart-colors";
+import { SERIES, CHART_INK } from "@/lib/chart-colors";
 
 type Stats = {
   totalPenduduk: number;
@@ -29,11 +29,13 @@ type Stats = {
   pendidikan: { label: string; value: number }[];
   pekerjaan: { label: string; value: number }[];
   agama: { label: string; value: number }[];
-  kemiskinan: {
-    miskinBps: number;
-    miskinEkstrem: number;
-    tidakMiskin: number;
-    rataSkorKls: number | null;
+  demografi: {
+    kelahiran: number;
+    kematian: number;
+    migrasiMasuk: number;
+    migrasiKeluar: number;
+    migrasiNeto: number;
+    bulanan: { label: string; KELAHIRAN: number; KEMATIAN: number; MIGRASI_MASUK: number; MIGRASI_KELUAR: number }[];
   };
   cakupan: {
     ktp: number;
@@ -89,42 +91,37 @@ export function DashboardCharts() {
   if (!stats) return <p className="text-sm text-slate-400">Memuat statistik...</p>;
 
   const pyramidData = stats.piramidaPenduduk.map((d) => ({ ...d, L: -d.L }));
-  const miskinPct = stats.totalPenduduk
-    ? Math.round((stats.kemiskinan.miskinBps / stats.totalPenduduk) * 1000) / 10
-    : 0;
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard label="Total Penduduk" value={stats.totalPenduduk.toLocaleString("id-ID")} icon={Users} />
         <StatCard label="Total KK" value={stats.totalKk.toLocaleString("id-ID")} icon={HomeIcon} />
-        <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
-        <StatCard
-          label="Rata-rata Skor Kesejahteraan"
-          value={stats.kemiskinan.rataSkorKls?.toLocaleString("id-ID") ?? "-"}
-          hint="skor_kls, skala 0-100"
-          icon={Gauge}
-        />
+        <StatCard label="Kelahiran 12 Bulan" value={stats.demografi.kelahiran.toLocaleString("id-ID")} icon={Baby} />
+        <StatCard label="Kematian 12 Bulan" value={stats.demografi.kematian.toLocaleString("id-ID")} icon={HeartPulse} />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <StatCard
-          label="Miskin (BPS)"
-          value={`${stats.kemiskinan.miskinBps.toLocaleString("id-ID")} (${miskinPct}%)`}
-          dotColor={STATUS.critical}
-        />
-        <StatCard
-          label="Miskin Ekstrem"
-          value={stats.kemiskinan.miskinEkstrem.toLocaleString("id-ID")}
-          dotColor={STATUS.serious}
-        />
-        <StatCard
-          label="Tidak Miskin"
-          value={stats.kemiskinan.tidakMiskin.toLocaleString("id-ID")}
-          dotColor={STATUS.good}
-        />
-        <StatCard label="Jumlah Data Ditampilkan" value={stats.totalPenduduk.toLocaleString("id-ID")} />
+        <StatCard label="Migrasi Masuk" value={stats.demografi.migrasiMasuk.toLocaleString("id-ID")} icon={LogIn} />
+        <StatCard label="Migrasi Keluar" value={stats.demografi.migrasiKeluar.toLocaleString("id-ID")} icon={LogOut} />
+        <StatCard label="Migrasi Neto" value={(stats.demografi.migrasiNeto > 0 ? "+" : "") + stats.demografi.migrasiNeto.toLocaleString("id-ID")} />
+        <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
       </div>
+
+      <ChartCard title="Kelahiran, Kematian & Mobilitas Penduduk — 12 Bulan Terakhir" action={{ href: "/penduduk", label: "Kelola Data" }}>
+        <ResponsiveContainer width="100%" height={320}>
+          <BarChart data={stats.demografi.bulanan} margin={{ left: 4, right: 8 }}>
+            <CartesianGrid stroke={CHART_INK.grid} vertical={false} />
+            <XAxis dataKey="label" tick={{ fill: CHART_INK.muted, fontSize: 11 }} axisLine={{ stroke: CHART_INK.axis }} />
+            <YAxis allowDecimals={false} tick={{ fill: CHART_INK.muted, fontSize: 11 }} axisLine={{ stroke: CHART_INK.axis }} />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="KELAHIRAN" name="Kelahiran" fill={SERIES.magenta} radius={[3, 3, 0, 0]} />
+            <Bar dataKey="KEMATIAN" name="Kematian" fill={SERIES.orange} radius={[3, 3, 0, 0]} />
+            <Bar dataKey="MIGRASI_MASUK" name="Migrasi Masuk" fill={SERIES.aqua} radius={[3, 3, 0, 0]} />
+            <Bar dataKey="MIGRASI_KELUAR" name="Migrasi Keluar" fill={SERIES.blue} radius={[3, 3, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartCard>
 
       <ChartCard title="Cakupan Kepemilikan Dokumen & Jaminan Sosial">
         <div className="flex flex-wrap items-center justify-around gap-6 py-2">
@@ -155,23 +152,27 @@ export function DashboardCharts() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Status Kemiskinan (BPS)" action={{ href: "/penduduk", label: "Lihat Data" }}>
+        <ChartCard title="Ringkasan Mobilitas 12 Bulan" action={{ href: "/penduduk/migrasi-masuk", label: "Lihat Riwayat" }}>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart
               data={[
-                { label: "Tidak Miskin", value: stats.kemiskinan.tidakMiskin, key: "tidak" },
-                { label: "Miskin", value: stats.kemiskinan.miskinBps, key: "miskin" },
+                { label: "Migrasi Masuk", value: stats.demografi.migrasiMasuk },
+                { label: "Migrasi Keluar", value: stats.demografi.migrasiKeluar },
+                { label: "Kelahiran", value: stats.demografi.kelahiran },
+                { label: "Kematian", value: stats.demografi.kematian },
               ]}
               layout="vertical"
               margin={{ left: 24 }}
             >
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
               <XAxis type="number" tick={{ fill: CHART_INK.muted, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
-              <YAxis type="category" dataKey="label" width={100} tick={{ fill: CHART_INK.secondary, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
+              <YAxis type="category" dataKey="label" width={110} tick={{ fill: CHART_INK.secondary, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
               <Tooltip />
-              <Bar dataKey="value" name="Penduduk" radius={[0, 4, 4, 0]} barSize={24}>
-                <Cell fill={STATUS.good} />
-                <Cell fill={STATUS.critical} />
+              <Bar dataKey="value" name="Peristiwa" radius={[0, 4, 4, 0]} barSize={24}>
+                <Cell fill={SERIES.aqua} />
+                <Cell fill={SERIES.blue} />
+                <Cell fill={SERIES.magenta} />
+                <Cell fill={SERIES.orange} />
                 <LabelList dataKey="value" position="right" fill={CHART_INK.secondary} fontSize={12} />
               </Bar>
             </BarChart>

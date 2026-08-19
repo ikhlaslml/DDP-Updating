@@ -8,7 +8,7 @@ import { inputValueFromRecord } from "@/lib/format";
 import { buildPayload } from "@/lib/payload";
 import { REQUIRED_FIELDS } from "@/lib/validation";
 import { FieldInput } from "./FieldInput";
-import { FREQUENCY_LABELS, parameterFrequency, type UpdateFrequency } from "@/lib/parameter-metadata";
+import { FREQUENCY_LABELS, parameterFrequency, parameterIsEditable, type UpdateFrequency } from "@/lib/parameter-metadata";
 
 const GROUPED = kolomByKelompok();
 
@@ -95,34 +95,52 @@ export function PendudukForm({
     }
   }
 
-  const kelompokKey = KELOMPOK_ORDER[currentStep];
-  const fields = GROUPED[kelompokKey];
-  const visibleFields = fields.filter(([name]) => frequencyFilter === "ALL" || parameterFrequency(name) === frequencyFilter);
+  const roleLabel = formRole === "HEAD" ? "Kepala Keluarga" : "Anggota Keluarga";
+  const availableFrequencies = ["INCIDENTAL", "SIX_MONTHS", "ANNUAL"] as const;
+  const isFieldAvailable = (name: string) => parameterIsEditable(name, formRole)
+    && (mode === "create" || parameterFrequency(name) !== "IMMUTABLE")
+    && (frequencyFilter === "ALL" || parameterFrequency(name) === frequencyFilter);
+  const activeGroups = KELOMPOK_ORDER.filter((group) => GROUPED[group].some(([name]) => isFieldAvailable(name)));
+  const safeStep = Math.min(currentStep, Math.max(activeGroups.length - 1, 0));
+  const kelompokKey = activeGroups[safeStep];
+  const fields = kelompokKey ? GROUPED[kelompokKey] : [];
+  const visibleFields = fields.filter(([name]) => isFieldAvailable(name));
+  const frequencyCounts = Object.fromEntries(availableFrequencies.map((frequency) => [
+    frequency,
+    ALL_COLUMNS.filter((name) => parameterIsEditable(name, formRole) && parameterFrequency(name) === frequency).length,
+  ])) as Record<UpdateFrequency, number>;
 
   return (
     <div>
       {mode === "edit" ? (
         <div className="mb-5 rounded-2xl border border-violet-100 bg-violet-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-violet-700">Filter jadwal updating</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {(["ALL", "INCIDENTAL", "SIX_MONTHS", "ANNUAL", "IMMUTABLE"] as const).map((frequency) => (
-              <button key={frequency} type="button" onClick={() => setFrequencyFilter(frequency)} className={clsx("rounded-full border px-3 py-1.5 text-xs font-semibold", frequencyFilter === frequency ? "border-violet-600 bg-violet-600 text-white" : "border-violet-200 bg-white text-violet-700")}>
-                {frequency === "ALL" ? "Semua parameter" : FREQUENCY_LABELS[frequency]}
-              </button>
-            ))}
+          <label htmlFor="update-focus" className="text-xs font-semibold uppercase tracking-wide text-violet-700">Fokus Pembaruan</label>
+          <div className="relative mt-2 max-w-xl">
+            <select
+              id="update-focus"
+              value={frequencyFilter}
+              onChange={(event) => { setFrequencyFilter(event.target.value as "ALL" | UpdateFrequency); setCurrentStep(0); }}
+              className="w-full appearance-none rounded-xl border border-violet-200 bg-white px-4 py-3 pr-10 text-sm font-semibold text-slate-800 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
+            >
+              <option value="ALL">Semua parameter aktif · {roleLabel}</option>
+              {availableFrequencies.map((frequency) => (
+                <option key={frequency} value={frequency}>{FREQUENCY_LABELS[frequency]} · {roleLabel} · {frequencyCounts[frequency]} pertanyaan</option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-violet-500">⌄</span>
           </div>
-          <p className="mt-2 text-xs text-violet-700">Filter membantu fokus pemeriksaan dan tidak melarang pembaruan sebelum jatuh tempo.</p>
+          <p className="mt-2 text-xs leading-relaxed text-violet-700">Daftar mengikuti subjek dan jadwal parameter. Pertanyaan nonaktif, perhitungan sistem, data lama, data temporer, serta parameter yang tidak berubah tidak ditampilkan.</p>
         </div>
       ) : null}
       <div className="flex flex-wrap gap-2 mb-6">
-        {KELOMPOK_ORDER.map((k, idx) => (
+        {activeGroups.map((k, idx) => (
           <button
             key={k}
             type="button"
             onClick={() => setCurrentStep(idx)}
             className={clsx(
               "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-              idx === currentStep
+              idx === safeStep
                 ? "border-indigo-600 bg-indigo-600 text-white"
                 : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"
             )}
@@ -165,17 +183,17 @@ export function PendudukForm({
       <div className="flex items-center justify-between mt-6">
         <button
           type="button"
-          disabled={currentStep === 0}
+          disabled={safeStep === 0}
           onClick={() => setCurrentStep((s) => Math.max(0, s - 1))}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 disabled:opacity-40"
         >
           Sebelumnya
         </button>
         <div className="flex items-center gap-2">
-          {currentStep < KELOMPOK_ORDER.length - 1 ? (
+          {safeStep < activeGroups.length - 1 ? (
             <button
               type="button"
-              onClick={() => setCurrentStep((s) => Math.min(KELOMPOK_ORDER.length - 1, s + 1))}
+              onClick={() => setCurrentStep((s) => Math.min(activeGroups.length - 1, s + 1))}
               className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700"
             >
               Berikutnya

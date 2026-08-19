@@ -538,8 +538,11 @@ model SuratTerbit {
   namaWarga    String?
   nik          String?
   keperluan    String?
+  peristiwaId  String?
+  jenisPeristiwa String?
   createdAt    DateTime @default(now())
 
   @@index([createdAt])
   @@index([desaId])
+  @@index([desaId, peristiwaId])
 }

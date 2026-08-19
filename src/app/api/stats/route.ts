@@ -34,7 +34,9 @@ function topN(counts: Record<string, number>, n: number) {
 export async function GET() {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
-  const all = await prisma.penduduk.findMany({
+  const now = new Date();
+  const startMonth = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+  const [all, demographicEvents] = await Promise.all([prisma.penduduk.findMany({
     where: { desaId: ctx.desaId, statusAktif: true },
     select: {
       nkk: true,
@@ -44,15 +46,15 @@ export async function GET() {
       ijazah: true,
       kerja_profesi: true,
       agama: true,
-      miskin_bps: true,
-      miskin_ekstrem: true,
-      skor_kls: true,
       status_dalam_keluarga: true,
       punya_ktp: true,
       punya_aktalahir: true,
       bpjs_kes: true,
     },
-  });
+  }), prisma.peristiwaKependudukan.findMany({
+    where: { desaId: ctx.desaId, tanggal: { gte: startMonth } },
+    select: { jenis: true, tanggal: true },
+  })]);
 
   const totalPenduduk = all.length;
   const totalKk = new Set(all.map((r) => r.nkk).filter(Boolean)).size;
@@ -62,10 +64,6 @@ export async function GET() {
   const ijazahCount: Record<string, number> = {};
   const profesiCount: Record<string, number> = {};
   const agamaCount: Record<string, number> = {};
-  let miskinBpsCount = 0;
-  let miskinEkstremCount = 0;
-  let skorSum = 0;
-  let skorN = 0;
   let ktpCount = 0;
   let aktaLahirCount = 0;
   let bpjsKesCount = 0;
@@ -81,19 +79,34 @@ export async function GET() {
     if (r.ijazah) ijazahCount[r.ijazah] = (ijazahCount[r.ijazah] || 0) + 1;
     if (r.kerja_profesi) profesiCount[r.kerja_profesi] = (profesiCount[r.kerja_profesi] || 0) + 1;
     if (r.agama) agamaCount[r.agama] = (agamaCount[r.agama] || 0) + 1;
-    // Yes/no fields are "Ya"/"Tidak" strings in the `ajaib` schema.
-    if (r.miskin_bps === "Ya") miskinBpsCount += 1;
-    if (r.miskin_ekstrem === "Ya") miskinEkstremCount += 1;
-    if (typeof r.skor_kls === "number") {
-      skorSum += r.skor_kls;
-      skorN += 1;
-    }
     if (r.punya_ktp === "Ya") ktpCount += 1;
     if (r.punya_aktalahir === "Ya") aktaLahirCount += 1;
     if (r.bpjs_kes === "Ya") bpjsKesCount += 1;
   }
 
   const pct = (n: number) => (totalPenduduk ? Math.round((n / totalPenduduk) * 100) : 0);
+  const eventTypes = ["KELAHIRAN", "KEMATIAN", "MIGRASI_MASUK", "MIGRASI_KELUAR"] as const;
+  const eventCounts = Object.fromEntries(eventTypes.map((type) => [type, 0])) as Record<(typeof eventTypes)[number], number>;
+  const monthRows = Array.from({ length: 12 }, (_, index) => {
+    const date = new Date(startMonth.getFullYear(), startMonth.getMonth() + index, 1);
+    return {
+      key: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`,
+      label: date.toLocaleDateString("id-ID", { month: "short", year: "2-digit" }),
+      KELAHIRAN: 0,
+      KEMATIAN: 0,
+      MIGRASI_MASUK: 0,
+      MIGRASI_KELUAR: 0,
+    };
+  });
+  const monthByKey = new Map(monthRows.map((row) => [row.key, row]));
+  for (const event of demographicEvents) {
+    if (!eventTypes.includes(event.jenis as (typeof eventTypes)[number])) continue;
+    const type = event.jenis as (typeof eventTypes)[number];
+    eventCounts[type] += 1;
+    const key = `${event.tanggal.getFullYear()}-${String(event.tanggal.getMonth() + 1).padStart(2, "0")}`;
+    const month = monthByKey.get(key);
+    if (month) month[type] += 1;
+  }
 
   return NextResponse.json({
     totalPenduduk,
@@ -107,11 +120,13 @@ export async function GET() {
     pendidikan: topN(ijazahCount, 10),
     pekerjaan: topN(profesiCount, 10),
     agama: topN(agamaCount, 10),
-    kemiskinan: {
-      miskinBps: miskinBpsCount,
-      miskinEkstrem: miskinEkstremCount,
-      tidakMiskin: totalPenduduk - miskinBpsCount,
-      rataSkorKls: skorN ? Math.round((skorSum / skorN) * 10) / 10 : null,
+    demografi: {
+      kelahiran: eventCounts.KELAHIRAN,
+      kematian: eventCounts.KEMATIAN,
+      migrasiMasuk: eventCounts.MIGRASI_MASUK,
+      migrasiKeluar: eventCounts.MIGRASI_KELUAR,
+      migrasiNeto: eventCounts.MIGRASI_MASUK - eventCounts.MIGRASI_KELUAR,
+      bulanan: monthRows,
     },
     cakupan: {
       ktp: pct(ktpCount),

@@ -1,5 +1,5 @@
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
-import { parameterCondition, type ParameterRole } from "@/lib/parameter-metadata";
+import { parameterCondition, parameterIsEditable, type ParameterRole } from "@/lib/parameter-metadata";
 
 export type SurveyRole = "HEAD" | "MEMBER";
 
@@ -207,8 +207,8 @@ const MEMBER_FIELDS = new Set([
 ]);
 
 export function surveyColumns(role: SurveyRole) {
-  if (role === "MEMBER") return ALL_COLUMNS.filter((name) => MEMBER_FIELDS.has(name));
-  return ALL_COLUMNS.filter((name) => !SYSTEM_FIELDS.has(name));
+  if (role === "MEMBER") return ALL_COLUMNS.filter((name) => MEMBER_FIELDS.has(name) && parameterIsEditable(name, role));
+  return ALL_COLUMNS.filter((name) => !SYSTEM_FIELDS.has(name) && parameterIsEditable(name, role));
 }
 
 export function surveyColumnsByGroup(role: SurveyRole) {

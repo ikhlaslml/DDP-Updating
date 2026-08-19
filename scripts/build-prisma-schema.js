@@ -299,10 +299,13 @@ lines.push(`  pendudukId   String?`);
 lines.push(`  namaWarga    String?`);
 lines.push(`  nik          String?`);
 lines.push(`  keperluan    String?`);
+lines.push(`  peristiwaId  String?`);
+lines.push(`  jenisPeristiwa String?`);
 lines.push(`  createdAt    DateTime @default(now())`);
 lines.push(``);
 lines.push(`  @@index([createdAt])`);
 lines.push(`  @@index([desaId])`);
+lines.push(`  @@index([desaId, peristiwaId])`);
 lines.push(`}`);
 lines.push(``);
 

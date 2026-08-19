@@ -6,8 +6,9 @@ import { useCanWrite } from "@/components/providers/AuthInfo";
 
 type Template = { id: string; nama: string; kode: string; kategori: string; isi: string };
 type Row = Warga & { id: string };
+type SourceEvent = { id: string; jenis: string; tanggal: string; nama: string | null; nik: string | null };
 
-export function LayananSuratView() {
+export function LayananSuratView({ eventId }: { eventId?: string }) {
   const canWrite = useCanWrite();
   const [settings, setSettings] = useState<SuratSettings>({});
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -18,6 +19,7 @@ export function LayananSuratView() {
   const [keperluan, setKeperluan] = useState("");
   const [issuing, setIssuing] = useState(false);
   const [nomor, setNomor] = useState<string | null>(null);
+  const [sourceEvent, setSourceEvent] = useState<SourceEvent | null>(null);
 
   useEffect(() => {
     fetch("/api/pengaturan").then((r) => r.json()).then((j) => setSettings(j.data ?? {})).catch(() => {});
@@ -26,6 +28,23 @@ export function LayananSuratView() {
       if (j.data?.[0]) setTemplateId(j.data[0].id);
     }).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!eventId || templates.length === 0) return;
+    fetch(`/api/peristiwa?id=${encodeURIComponent(eventId)}`)
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.data?.event || !json.data?.resident) return;
+        setSourceEvent(json.data.event);
+        setSelected(json.data.resident as Row);
+        setQuery(json.data.event.nama ?? json.data.event.nik ?? "");
+        setKeperluan(`Administrasi ${String(json.data.event.jenis).replaceAll("_", " ").toLocaleLowerCase("id-ID")}`);
+        const keyword = json.data.event.jenis === "KELAHIRAN" ? "kelahiran" : json.data.event.jenis === "KEMATIAN" ? "kematian" : json.data.event.jenis === "MIGRASI_KELUAR" ? "pindah" : "domisili";
+        const matching = templates.find((item) => item.nama.toLocaleLowerCase("id-ID").includes(keyword));
+        if (matching) setTemplateId(matching.id);
+      })
+      .catch(() => {});
+  }, [eventId, templates]);
 
   useEffect(() => {
     if (query.trim().length < 2) return;
@@ -58,6 +77,7 @@ export function LayananSuratView() {
         namaWarga: selected.nama,
         nik: selected.nik,
         keperluan,
+        peristiwaId: sourceEvent?.id,
       }),
     });
     const json = await res.json();
@@ -70,6 +90,7 @@ export function LayananSuratView() {
       {/* Step 1 */}
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <h2 className="text-base font-bold text-slate-900">1. Pilih Penduduk</h2>
+        {sourceEvent ? <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs leading-relaxed text-emerald-800"><strong>Terhubung ke peristiwa {sourceEvent.jenis.replaceAll("_", " ")}.</strong> Data warga dan jenis surat sudah diisi otomatis. Anda tetap dapat menyesuaikannya sebelum menerbitkan.</div> : null}
         <input
           value={query}
           onChange={(e) => {
@@ -84,7 +105,7 @@ export function LayananSuratView() {
             <li key={r.id}>
               <button
                 type="button"
-                onClick={() => { setSelected(r); setNomor(null); }}
+                onClick={() => { setSelected(r); setSourceEvent(null); setNomor(null); }}
                 className={`flex w-full items-center justify-between px-2 py-2 text-left text-sm hover:bg-slate-50 ${selected?.id === r.id ? "bg-indigo-50" : ""}`}
               >
                 <span className="font-medium text-slate-800">{r.nama}</span>
