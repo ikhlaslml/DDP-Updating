@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { CircleMarker, MapContainer, Polygon, Popup, useMap } from "react-leaflet";
 import { latLngBounds } from "leaflet";
@@ -52,6 +53,30 @@ function colorFor(household: Household, indicator: IndicatorKey): string {
   if (indicator === "miskin_bps") return household.miskinBps ? STATUS.critical : STATUS.good;
   if (indicator === "miskin_ekstrem") return household.miskinEkstrem ? STATUS.critical : STATUS.good;
   return SERIES.blue;
+}
+
+function MapBuildingPhoto({ code }: { code: number }) {
+  const [available, setAvailable] = useState(true);
+
+  if (!available) {
+    return (
+      <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
+        Foto belum tersedia. Buka detail bangunan untuk melihat keterangannya.
+      </p>
+    );
+  }
+
+  return (
+    <Image
+      src={`/api/bangunan/${code}/foto-ddp`}
+      alt={`Foto bangunan DDP nomor ${code}`}
+      width={280}
+      height={160}
+      unoptimized
+      onError={() => setAvailable(false)}
+      className="h-32 w-full rounded-lg border border-slate-200 object-cover"
+    />
+  );
 }
 
 function FitData({ points, fallbackCenter }: { points: [number, number][]; fallbackCenter: [number, number] }) {
@@ -161,6 +186,7 @@ export function MapView() {
                     {building.keterangan ? <p>{building.keterangan}</p> : null}
                     <p>{building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}</p>
                     {occupied ? <p>{building.jumlahPenghuni} penghuni terdata</p> : null}
+                    <MapBuildingPhoto code={building.kode} />
                     <Link href={`/bangunan/${building.kode}`} className="mt-2 inline-flex rounded-lg bg-indigo-600 px-3 py-2 font-semibold text-white">
                       Detail &amp; foto bangunan
                     </Link>
@@ -188,9 +214,12 @@ export function MapView() {
                       Lihat detail kepala keluarga
                     </Link>
                     {household.kodeBangunan !== null ? (
-                      <Link href={`/bangunan/${household.kodeBangunan}`} className="rounded-lg bg-indigo-600 px-3 py-2 text-center font-semibold text-white">
-                        Detail &amp; foto bangunan #{household.kodeBangunan}
-                      </Link>
+                      <>
+                        <MapBuildingPhoto code={household.kodeBangunan} />
+                        <Link href={`/bangunan/${household.kodeBangunan}`} className="rounded-lg bg-indigo-600 px-3 py-2 text-center font-semibold text-white">
+                          Detail &amp; foto bangunan #{household.kodeBangunan}
+                        </Link>
+                      </>
                     ) : (
                       <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Kode bangunan belum tersedia.</p>
                     )}
