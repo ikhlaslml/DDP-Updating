@@ -11,7 +11,7 @@ export default function ImporEksporPage() {
       <section className="rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-1">Impor Data</h2>
         <p className="text-xs text-slate-500 mb-4">
-          Header kolom harus sesuai skema DDP (269 kolom). Kolom wajib: nama, nik, nkk, jk, dusun, rw, rt,
+          Header kolom harus sesuai skema DDP (286 kolom). Kolom wajib: nama, nik, nkk, jk, dusun, rw, rt,
           tgl_lahir, status_dalam_keluarga. Unduh template untuk memastikan header sesuai.
         </p>
         <ImportForm />
@@ -20,7 +20,7 @@ export default function ImporEksporPage() {
       <section className="rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-1">Ekspor Data</h2>
         <p className="text-xs text-slate-500 mb-4">
-          Mengekspor seluruh data penduduk (269 kolom). Untuk mengekspor hasil filter tertentu, gunakan tombol
+          Mengekspor seluruh data penduduk (286 kolom). Untuk mengekspor hasil filter tertentu, gunakan tombol
           Ekspor pada halaman Pembaruan Data.
         </p>
         <div className="flex gap-3">

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import { prisma } from "@/lib/prisma";
 import { buildPendudukWhere } from "@/lib/query";
@@ -8,6 +7,7 @@ import { selectedResidentColumns } from "@/lib/census-source";
 import { toExportValue } from "@/lib/export-import";
 import { fieldLabel } from "@/lib/field-labels";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
+import { writeExcelRows } from "@/lib/excel-server";
 
 export async function GET(req: NextRequest) {
   const ctx = await getAuthContext();
@@ -51,10 +51,7 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
-  XLSX.utils.book_append_sheet(wb, ws, "Penduduk");
-  const buf: Buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
+  const buf = await writeExcelRows("Penduduk", [headers, ...data]);
 
   return new NextResponse(new Uint8Array(buf), {
     headers: {

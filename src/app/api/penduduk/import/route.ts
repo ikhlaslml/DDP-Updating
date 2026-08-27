@@ -1,23 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import { prisma } from "@/lib/prisma";
 import { ALL_COLUMNS, mapping } from "@/lib/indikator";
 import { REQUIRED_FIELDS, pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { fromImportValue } from "@/lib/export-import";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+import { readExcelTextRows } from "@/lib/excel-server";
 
 export const runtime = "nodejs";
 
-function toAoa(filename: string, buf: ArrayBuffer): unknown[][] {
+async function toAoa(filename: string, buf: ArrayBuffer): Promise<unknown[][]> {
   if (filename.toLowerCase().endsWith(".csv")) {
     const text = Buffer.from(buf).toString("utf-8");
     const parsed = Papa.parse<string[]>(text, { skipEmptyLines: true });
+    if (parsed.errors.length) throw new Error(`CSV tidak valid pada baris ${parsed.errors[0].row ?? "-"}`);
+    if (parsed.data.length > 10_001 || parsed.data.some((row) => row.length > 300)) {
+      throw new Error("Berkas melebihi batas 10.000 baris atau 300 kolom");
+    }
     return parsed.data as string[][];
   }
-  const wb = XLSX.read(buf, { type: "buffer" });
-  const sheet = wb.Sheets[wb.SheetNames[0]];
-  return XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false }) as unknown[][];
+  return readExcelTextRows(Buffer.from(buf), { maxRows: 10_001, maxColumns: 300 });
 }
 
 export async function POST(req: NextRequest) {
@@ -30,9 +32,20 @@ export async function POST(req: NextRequest) {
   if (!file || typeof file === "string") {
     return NextResponse.json({ error: "File tidak ditemukan" }, { status: 400 });
   }
+  if (!/\.(csv|xlsx)$/i.test(file.name)) {
+    return NextResponse.json({ error: "Format berkas harus CSV atau XLSX" }, { status: 415 });
+  }
+  if (!file.size || file.size > 10_000_000) {
+    return NextResponse.json({ error: "Ukuran berkas maksimal 10 MB" }, { status: 413 });
+  }
 
   const buf = await file.arrayBuffer();
-  const aoa = toAoa(file.name, buf);
+  let aoa: unknown[][];
+  try {
+    aoa = await toAoa(file.name, buf);
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Berkas tidak dapat dibaca" }, { status: 400 });
+  }
   if (aoa.length === 0) {
     return NextResponse.json({ error: "File kosong" }, { status: 400 });
   }
@@ -59,9 +72,9 @@ export async function POST(req: NextRequest) {
     .filter(({ h }) => ALL_COLUMNS.includes(h));
 
   const [baselineNiks, pendingNiks] = await Promise.all([
-    prisma.penduduk.findMany({ select: { nik: true } }),
+    prisma.penduduk.findMany({ where: { desaId: ctx.desaId }, select: { nik: true } }),
     prisma.stagingChange.findMany({
-      where: { entityType: "PENDUDUK", status: "PENDING", nik: { not: null } },
+      where: { desaId: ctx.desaId, entityType: "PENDUDUK", status: "PENDING", nik: { not: null } },
       select: { nik: true },
     }),
   ]);

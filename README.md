@@ -11,7 +11,7 @@ statistik, dan peta sebaran.
 - Prisma ORM — SQLite untuk lokal, PostgreSQL untuk produksi (Vercel)
 - Auth.js (NextAuth v5), Credentials + peran `operator` / `pemerintah_desa`
 - Recharts (grafik), react-leaflet/Leaflet (peta), TanStack Table (tabel)
-- xlsx + papaparse (impor/ekspor), zod (validasi)
+- ExcelJS + Papa Parse (impor/ekspor), PDFKit (dokumen), zod (validasi)
 
 ## Arsitektur singkat
 
@@ -38,19 +38,27 @@ statistik, dan peta sebaran.
 - **RBAC** — `operator` bisa input/ubah/gabungkan/terbitkan surat; `pemerintah_desa`
   read-only (dashboard + validasi). Diberlakukan di API dan disembunyikan di UI.
 - **Layanan Surat** — pilih penduduk → template (Domisili/SKTM/Usaha/SKCK) → terbitkan
-  (penomoran otomatis) + cetak. Kop/kepala desa/penutup diatur di **Pengaturan**.
+  dengan nomor atomik, riwayat/filter, cetak ulang, dan PDF. Kop, logo, kepala desa,
+  serta penutup diatur per tenant pada **Pengaturan**.
+- **Pendataan lapangan** — identitas/foto responden wajib sebelum aspek pendataan,
+  foto dikompresi di browser, draft bertahan saat refresh/offline, dan setiap kunjungan
+  disimpan append-only. Keluarga baru berhenti pada Aspek 1 dan diberi status belum lengkap.
+- **Harga komoditas** — 45 baris master mengikuti `Borang Harga.xlsx`, dapat disunting
+  inline, diimpor/diekspor, dan mempunyai riwayat harga per desa/periode.
+- **Filter aspek** — enam aspek DDP dapat dipilih bersamaan. NKK/NIK/nama selalu terkunci
+  di kiri dan ekspor Excel/CSV mengikuti kolom aktif.
 
 ## Instalasi & menjalankan (lokal, PostgreSQL)
 
 Proyek ini memakai PostgreSQL (Neon/Supabase) di lokal maupun produksi.
 
 ```bash
-npm install
+npm ci
 cp .env.example .env
 # isi DATABASE_URL dan DATABASE_URL_UNPOOLED dengan connection string Postgres
 # ganti AUTH_SECRET:  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npx prisma migrate deploy   # terapkan migrasi ke database
-npm run db:seed             # pastikan 4 desa demo + user + data tersedia
+npm run db:seed             # hanya untuk lingkungan demo/nonproduksi
 npm run dev                 # http://localhost:3000
 ```
 
@@ -95,12 +103,11 @@ Tambahkan ke `C:\Windows\System32\drivers\etc\hosts` (butuh admin):
 
 Tanpa hosts, `http://localhost:3000` tetap berjalan penuh sebagai aplikasi dashboard.
 
-## Deploy ke Vercel (gratis) — langkah demi langkah
+## Deploy ke Vercel — langkah demi langkah
 
-Schema sudah di-set ke **PostgreSQL** dan migration Postgres tersedia di
-`prisma/migrations`. Build command (`package.json`) menjalankan
-`prisma migrate deploy` (buat tabel) → `prisma db seed` (isi data, idempoten
-sehingga hanya sekali) → `next build`. Jadi cukup:
+Schema produksi menggunakan **PostgreSQL** dan migrasi tersedia di
+`prisma/migrations`. `vercel.json` menjalankan `npm run db:deploy` sebagai release gate,
+kemudian build aplikasi. Seed demo **tidak pernah** dijalankan otomatis.
 
 **1. Siapkan Postgres gratis** — [Neon](https://neon.tech) atau Vercel **Storage → Postgres**;
 salin *connection string* (`postgresql://...?sslmode=require`).
@@ -116,9 +123,15 @@ salin *connection string* (`postgresql://...?sslmode=require`).
 | `DB_PROVIDER` | `postgresql` |
 | `AUTH_SECRET` | 32-byte hex acak (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
 | `AUTH_TRUST_HOST` | `true` |
+| `BLOB_READ_WRITE_TOKEN` | token Vercel Blob private untuk foto responden dan logo |
+| `DDP_DATA_SOURCE` | `local` selama pilot; ubah ke `ruby` setelah kontrak API tersedia |
+| `DDP_CORE_API_BASE_URL` | `https://core.desapresisi.id` untuk foto bangunan |
 
-**4. Deploy.** Deploy pertama otomatis migrasi + seed (4 desa, user, data). Buka URL
-`*.vercel.app`, login dengan akun demo di atas.
+Jika `DDP_DATA_SOURCE=ruby`, tambahkan `DDP_API_BASE_URL`, `DDP_API_TOKEN`,
+`DDP_API_RESIDENTS_PATH`, dan `DDP_API_TIMEOUT_MS`. Token hanya dibaca route server.
+
+**4. Deploy.** Push ke branch produksi memicu migrasi idempoten lalu build. Data demo
+tidak ditambah atau diubah. Pastikan backup database tersedia sebelum release pertama.
 
 **5. (Opsional) Custom domain & subdomain** — tambah `desapresisi.id` + wildcard
 `*.desapresisi.id` di Vercel untuk subdomain per desa.
@@ -129,6 +142,8 @@ salin *connection string* (`postgresql://...?sslmode=require`).
 - `scripts/build-indikator-mapping.js` / `build-prisma-schema.js` — generator schema.
 - `prisma/seed.ts` — seed 4 desa (users, pengaturan, template, data, snapshot T0).
 - `src/lib/tenant.ts` — helper scope tenant + RBAC.
+- `src/lib/census-source.ts` — adapter baseline lokal atau API Ruby DDP.
+- `src/lib/media-storage.ts` — private Vercel Blob/fallback lokal untuk media tenant.
 - `src/lib/updating.ts` — snapshot & merge (T0/T1).
 - `src/proxy.ts` — routing subdomain + proteksi auth.
 
@@ -136,3 +151,7 @@ salin *connection string* (`postgresql://...?sslmode=require`).
 
 - Jangan commit `.env` (sudah di `.gitignore`). Ganti `AUTH_SECRET` & password default
   sebelum produksi. Akun demo di atas hanya untuk pengembangan/prototipe.
+- Jangan unggah CSV empat desa yang berisi PII ke Git atau percakapan. Impor data nyata
+  dilakukan langsung dari perangkat berwenang ke lingkungan pilot.
+- URL foto bangunan Core DDP bertanda tangan tidak disimpan; server mengambil URL baru,
+  memvalidasi tenant/kode wilayah, lalu mem-proxy byte gambar ke pengguna yang login.

@@ -144,11 +144,24 @@ export function HargaKomoditasView() {
     setError("");
     setMessage("");
     try {
-      const XLSX = await import("xlsx");
-      const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
-      const firstSheet = workbook.SheetNames[0];
+      if (!file.name.toLocaleLowerCase("en-US").endsWith(".xlsx")) throw new Error("Format borang harus XLSX.");
+      if (!file.size || file.size > 2_000_000) throw new Error("Ukuran borang maksimal 2 MB.");
+      const ExcelJS = (await import("exceljs")).default;
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(await file.arrayBuffer() as never);
+      const firstSheet = workbook.worksheets[0];
       if (!firstSheet) throw new Error("Berkas Excel tidak memiliki sheet.");
-      const matrix = XLSX.utils.sheet_to_json<unknown[]>(workbook.Sheets[firstSheet], { header: 1, defval: "" });
+      if (firstSheet.rowCount > 100 || firstSheet.columnCount > 10) throw new Error("Borang melebihi batas ukuran yang diizinkan.");
+      const matrix: unknown[][] = [];
+      for (let rowNumber = 1; rowNumber <= firstSheet.rowCount; rowNumber += 1) {
+        const cells: unknown[] = [];
+        for (let column = 1; column <= firstSheet.columnCount; column += 1) {
+          const cell = firstSheet.getRow(rowNumber).getCell(column);
+          const value = cell.value;
+          cells.push(value && typeof value === "object" && "result" in value ? value.result : typeof value === "object" ? cell.text : value ?? "");
+        }
+        matrix.push(cells);
+      }
       const headerIndex = matrix.findIndex((row) => row.some((cell) => String(cell).trim() !== ""));
       if (headerIndex < 0) throw new Error("Sheet Excel kosong.");
       const headers = matrix[headerIndex].slice(0, 4).map((cell) => String(cell).trim());
@@ -181,17 +194,23 @@ export function HargaKomoditasView() {
   }
 
   async function exportWorkbook() {
-    const XLSX = await import("xlsx");
-    const workbook = XLSX.utils.book_new();
-    const data = [
-      ["No", "Nama Pangan", "Satuan ", "Harga Per Satuan (Rp) "],
-      ...rows.map((row) => [row.urutan, row.nama, row.satuan, values[row.id] === "" ? null : Number(values[row.id])]),
-    ];
-    const sheet = XLSX.utils.aoa_to_sheet([]);
-    XLSX.utils.sheet_add_aoa(sheet, data, { origin: "A2" });
-    sheet["!cols"] = [{ wch: 6 }, { wch: 28 }, { wch: 14 }, { wch: 24 }];
-    XLSX.utils.book_append_sheet(workbook, sheet, "Sheet1");
-    XLSX.writeFile(workbook, `Borang-Harga-${periode}.xlsx`);
+    const ExcelJS = (await import("exceljs")).default;
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "DDP Updating";
+    const sheet = workbook.addWorksheet("Sheet1");
+    sheet.addRow([]);
+    sheet.addRow(["No", "Nama Pangan", "Satuan ", "Harga Per Satuan (Rp) "]);
+    rows.forEach((row) => sheet.addRow([row.urutan, row.nama, row.satuan, values[row.id] === "" ? null : Number(values[row.id])]));
+    sheet.columns = [{ width: 6 }, { width: 28 }, { width: 14 }, { width: 24 }];
+    sheet.getRow(2).font = { bold: true };
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([new Uint8Array(buffer as ArrayBuffer)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `Borang-Harga-${periode}.xlsx`;
+    anchor.click();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -206,7 +225,7 @@ export function HargaKomoditasView() {
             {canWrite ? (
               <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                 <FileSpreadsheet className="h-4 w-4" /> Impor Excel
-                <input type="file" accept=".xlsx,.xls" className="sr-only" onChange={(event) => {
+                <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(event) => {
                   const file = event.currentTarget.files?.[0];
                   if (file) void importWorkbook(file, event.currentTarget);
                 }} />

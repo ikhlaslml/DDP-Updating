@@ -56,7 +56,7 @@ export function ImportForm() {
         <input
           ref={fileRef}
           type="file"
-          accept=".csv,.xlsx,.xls"
+          accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           required
           className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
         />

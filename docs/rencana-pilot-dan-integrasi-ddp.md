@@ -30,7 +30,8 @@ Situs publik hanya boleh menerima agregat atau data yang telah dianonimkan. WebG
 1. Semua query dan mutasi mengambil `desaId` dari user database yang sedang login, bukan dari body atau query pengguna.
 2. Media responden berada di private object storage dan hanya dikirim lewat route yang memeriksa tenant.
 3. Data tenant baru menggunakan `desaId` wajib dan indeks gabungan tenant.
-4. Migrasi berjalan sebagai langkah release terpisah (`npm run db:deploy`), bukan saat build.
+4. Migrasi berjalan sebagai release gate eksplisit (`npm run db:deploy`) sebelum build
+   Vercel; perintah build aplikasi sendiri tidak melakukan migrasi.
 5. Seed demo tidak pernah dijalankan otomatis pada deployment produksi.
 6. CSV penduduk asli tidak dimasukkan ke Git, chat, log, atau build artifact.
 
