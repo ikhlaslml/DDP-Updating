@@ -56,6 +56,7 @@ export async function GET() {
     {
       id: string;
       nkk: string;
+      kodeBangunan: number | null;
       namaKepalaKeluarga: string;
       dusun: string | null;
       rw: number | null;
@@ -86,6 +87,7 @@ export async function GET() {
       households.set(key, {
         id: r.id,
         nkk: r.nkk,
+        kodeBangunan: r.kode_bangunan,
         namaKepalaKeluarga: r.nama_kepala_rumah || r.nama || "-",
         dusun: r.dusun,
         rw: r.rw,
@@ -99,10 +101,13 @@ export async function GET() {
       });
     } else {
       if (r.status_dalam_keluarga === "Kepala Keluarga") {
+        existing.id = r.id;
+        existing.kodeBangunan = r.kode_bangunan ?? existing.kodeBangunan;
         existing.namaKepalaKeluarga = r.nama || "-";
         existing.miskinBps = r.miskin_bps === "Ya";
         existing.miskinEkstrem = r.miskin_ekstrem === "Ya";
       }
+      if (existing.kodeBangunan === null && r.kode_bangunan !== null) existing.kodeBangunan = r.kode_bangunan;
     }
   }
 

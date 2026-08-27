@@ -6,7 +6,7 @@ import { formatCell } from "@/lib/format";
 import { DeleteButtonRedirect } from "@/components/penduduk/DeleteButtonRedirect";
 import { getAuthContext } from "@/lib/tenant";
 import { fieldLabel } from "@/lib/field-labels";
-import { Pencil } from "lucide-react";
+import { Building2, ImageIcon, Pencil } from "lucide-react";
 
 const GROUPED = kolomByKelompok();
 
@@ -30,7 +30,15 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
           <p className="text-sm text-slate-500">
             NIK {String(data.nik ?? "-")} &middot; NKK {String(data.nkk ?? "-")} &middot; {String(data.dusun ?? "-")}
           </p>
-          {typeof data.kode_bangunan === "number" ? <Link href={`/bangunan/${data.kode_bangunan}`} className="mt-2 inline-block text-sm font-medium text-indigo-600 hover:underline">Lihat bangunan dan identitas responden &rarr;</Link> : null}
+          {typeof data.kode_bangunan === "number" ? (
+            <Link href={`/bangunan/${data.kode_bangunan}`} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+              <Building2 className="h-4 w-4" />
+              <ImageIcon className="h-4 w-4" />
+              Buka Detail Bangunan &amp; Foto DDP
+            </Link>
+          ) : (
+            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">Warga ini belum memiliki kode bangunan sehingga foto bangunan belum dapat dicari.</p>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <Link

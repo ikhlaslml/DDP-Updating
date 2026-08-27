@@ -114,7 +114,16 @@ export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndi
       columnHelper.accessor((row) => row[name], {
         id: name,
         header: fieldLabel(name, mapping.kolom[name]),
-        cell: (info) => formatCell(info.getValue(), mapping.kolom[name]),
+        cell: (info) => name === "nama" ? (
+          <Link
+            href={`/penduduk/${info.row.original.id}`}
+            className="inline-flex items-center gap-1.5 font-semibold text-indigo-700 hover:underline"
+            title={`Buka detail ${String(info.row.original.nama ?? "penduduk")}`}
+          >
+            {formatCell(info.getValue(), mapping.kolom[name])}
+            <Eye className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          </Link>
+        ) : formatCell(info.getValue(), mapping.kolom[name]),
         enableSorting: true,
       })
     );
@@ -123,14 +132,15 @@ export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndi
         id: "_actions",
         header: "Aksi",
         cell: ({ row }) => (
-          <div className="flex items-center gap-1 whitespace-nowrap">
+          <div className="flex items-center justify-end gap-1 whitespace-nowrap">
             <Link
               href={`/penduduk/${row.original.id}`}
               title="Lihat detail"
               aria-label={`Lihat detail ${String(row.original.nama ?? "penduduk")}`}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50"
+              className="inline-flex h-9 items-center justify-center gap-1 rounded-lg px-2 text-xs font-semibold text-indigo-700 hover:bg-indigo-50"
             >
               <Eye className="h-4 w-4" />
+              Detail
             </Link>
             {canWrite && (
               <>
@@ -249,6 +259,11 @@ export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndi
 
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
+      <p className="text-xs text-slate-500">
+        Klik <strong>nama warga</strong> atau tombol <strong>Detail</strong> di sisi kanan tabel untuk membuka
+        seluruh data warga, keluarga, serta tautan foto bangunannya.
+      </p>
+
       <div className="overscroll-x-contain overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <table className="w-max min-w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-200">
@@ -256,12 +271,13 @@ export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndi
               <tr key={hg.id}>
                 {hg.headers.map((header) => {
                   const sticky = STICKY_CORE[header.column.id];
+                  const actions = header.column.id === "_actions";
                   return (
                     <th
                       key={header.id}
                       onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
-                      style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : undefined}
-                      className={`px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "sticky z-20 bg-slate-50 shadow-[1px_0_0_#e2e8f0]" : ""}`}
+                      style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
+                      className={`px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "sticky z-20 bg-slate-50 shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "sticky z-30 bg-slate-50 text-right shadow-[-1px_0_0_#e2e8f0] max-sm:hidden" : ""}`}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getIsSorted() === "asc" && " ▲"}
@@ -290,11 +306,12 @@ export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndi
                 <tr key={row.id} className="group border-b border-slate-100 last:border-0 hover:bg-slate-50">
                   {row.getVisibleCells().map((cell) => {
                     const sticky = STICKY_CORE[cell.column.id];
+                    const actions = cell.column.id === "_actions";
                     return (
                       <td
                         key={cell.id}
-                        style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : undefined}
-                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${sticky ? "sticky z-10 overflow-hidden text-ellipsis bg-white shadow-[1px_0_0_#e2e8f0] group-hover:bg-slate-50" : ""}`}
+                        style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
+                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${sticky ? "sticky z-10 overflow-hidden text-ellipsis bg-white shadow-[1px_0_0_#e2e8f0] group-hover:bg-slate-50" : ""} ${actions ? "sticky z-20 bg-white shadow-[-1px_0_0_#e2e8f0] group-hover:bg-slate-50 max-sm:hidden" : ""}`}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>

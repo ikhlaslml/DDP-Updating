@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { CircleMarker, MapContainer, Polygon, Popup, useMap } from "react-leaflet";
 import { latLngBounds } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -10,6 +11,7 @@ import { STATUS, SERIES } from "@/lib/chart-colors";
 type Household = {
   id: string;
   nkk: string;
+  kodeBangunan: number | null;
   namaKepalaKeluarga: string;
   dusun: string | null;
   rw: number | null;
@@ -128,6 +130,12 @@ export function MapView() {
         </span>
       </div>
 
+      <div className="mb-3 rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs leading-relaxed text-indigo-800">
+        Klik titik keluarga atau polygon bangunan. Popup menyediakan tombol menuju <strong>Detail Warga</strong>
+        dan <strong>Detail Bangunan &amp; Foto DDP</strong> bila kode bangunannya tersedia.
+        {!loading && buildings.length === 0 ? " Polygon bangunan belum tersedia pada data saat ini; gunakan titik keluarga untuk membuka detail." : ""}
+      </div>
+
       <div className="min-h-[420px] overflow-hidden rounded-xl border border-slate-200 sm:h-[560px]">
         <MapContainer center={center} zoom={14} maxZoom={23} scrollWheelZoom style={{ height: "100%", minHeight: 420, width: "100%" }}>
           <MapLayers droneTilePrefix={droneTilePrefix} />
@@ -153,7 +161,9 @@ export function MapView() {
                     {building.keterangan ? <p>{building.keterangan}</p> : null}
                     <p>{building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}</p>
                     {occupied ? <p>{building.jumlahPenghuni} penghuni terdata</p> : null}
-                    <a href={`/bangunan/${building.kode}`} className="font-semibold text-indigo-600">Lihat detail bangunan</a>
+                    <Link href={`/bangunan/${building.kode}`} className="mt-2 inline-flex rounded-lg bg-indigo-600 px-3 py-2 font-semibold text-white">
+                      Detail &amp; foto bangunan
+                    </Link>
                   </div>
                 </Popup>
               </Polygon>
@@ -173,6 +183,18 @@ export function MapView() {
                   <p>{household.alamat || `${household.dusun}, RW ${household.rw}/RT ${household.rt}`}</p>
                   <p>{household.jumlahAnggota} anggota keluarga</p>
                   <p>Status kemiskinan BPS: {household.miskinBps ? "Miskin" : "Tidak miskin"}</p>
+                  <div className="mt-3 flex flex-col gap-2">
+                    <Link href={`/penduduk/${household.id}`} className="rounded-lg border border-indigo-200 px-3 py-2 text-center font-semibold text-indigo-700">
+                      Lihat detail kepala keluarga
+                    </Link>
+                    {household.kodeBangunan !== null ? (
+                      <Link href={`/bangunan/${household.kodeBangunan}`} className="rounded-lg bg-indigo-600 px-3 py-2 text-center font-semibold text-white">
+                        Detail &amp; foto bangunan #{household.kodeBangunan}
+                      </Link>
+                    ) : (
+                      <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Kode bangunan belum tersedia.</p>
+                    )}
+                  </div>
                 </div>
               </Popup>
             </CircleMarker>
