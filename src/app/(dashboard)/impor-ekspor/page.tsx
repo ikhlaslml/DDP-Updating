@@ -12,7 +12,9 @@ export default function ImporEksporPage() {
         <h2 className="text-sm font-semibold text-slate-800 mb-1">Impor Data</h2>
         <p className="text-xs text-slate-500 mb-4">
           Header kolom harus sesuai skema DDP (286 kolom). Kolom wajib: nama, nik, nkk, jk, dusun, rw, rt,
-          tgl_lahir, status_dalam_keluarga. Unduh template untuk memastikan header sesuai.
+          tgl_lahir, status_dalam_keluarga, serta kode_deskel atau deskel. Impor pada halaman ini hanya menerima
+          baris milik desa akun yang sedang login. CSV gabungan empat desa diproses melalui alat impor awal yang
+          memisahkan tenant berdasarkan kode wilayah; data desa lain tidak akan dicampurkan.
         </p>
         <ImportForm />
       </section>

@@ -56,6 +56,13 @@ Prisma tidak menjalankan file rollback tersebut secara otomatis.
   `DDP_API_RESIDENTS_PATH`, dan `DDP_API_TIMEOUT_MS`.
 - Tidak ada variabel publik baru dan token tidak pernah dikirim ke bundle browser.
 
+## CSV gabungan empat desa
+
+Impor baseline dari satu CSV gabungan disiapkan melalui `npm run db:import:multidesa`.
+Baris dipisahkan berdasarkan `kode_deskel`/`deskel`, dry-run menjadi default, target
+yang sudah berisi data ditolak, dan apply atomik membuat snapshot `T0` per desa. Panduan
+lengkap berada di `docs/impor-csv-empat-desa.md`. CSV privat tidak boleh masuk Git/chat.
+
 ## Pengujian manual
 
 ### 1. Identitas responden

@@ -15,6 +15,8 @@ type ImportErrorResponse = {
   error: string;
   missingRequiredColumns?: string[];
   unknownColumns?: string[];
+  villageMismatchCount?: number;
+  detectedVillageCount?: number;
 };
 
 export function ImportForm() {
@@ -86,6 +88,9 @@ export function ImportForm() {
           {error.unknownColumns && error.unknownColumns.length > 0 && (
             <p className="mt-1">Kolom tidak dikenali (diabaikan): {error.unknownColumns.join(", ")}</p>
           )}
+          {error.villageMismatchCount ? (
+            <p className="mt-1">Ditemukan {error.villageMismatchCount} baris di luar desa akun dari {error.detectedVillageCount ?? "beberapa"} desa/kelurahan.</p>
+          ) : null}
         </div>
       )}
 

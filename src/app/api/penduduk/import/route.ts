@@ -6,6 +6,7 @@ import { REQUIRED_FIELDS, pendudukCreateSchema, flattenZodError } from "@/lib/va
 import { fromImportValue } from "@/lib/export-import";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 import { readExcelTextRows } from "@/lib/excel-server";
+import { normalizeVillageCode, normalizeVillageName, villageIdentityMatches } from "@/lib/village-identity";
 
 export const runtime = "nodejs";
 
@@ -70,6 +71,40 @@ export async function POST(req: NextRequest) {
   const knownIndexes = headerRow
     .map((h, idx) => ({ h, idx }))
     .filter(({ h }) => ALL_COLUMNS.includes(h));
+
+  const kodeDeskelIndex = headerRow.indexOf("kode_deskel");
+  const deskelIndex = headerRow.indexOf("deskel");
+  if (kodeDeskelIndex === -1 && deskelIndex === -1) {
+    return NextResponse.json(
+      { error: "File wajib memiliki kolom kode_deskel atau deskel agar data tidak masuk ke desa yang salah." },
+      { status: 400 }
+    );
+  }
+
+  const currentVillage = await prisma.desa.findUnique({
+    where: { id: ctx.desaId },
+    select: { nama: true, kodeWilayah: true },
+  });
+  if (!currentVillage) return NextResponse.json({ error: "Desa akun tidak ditemukan" }, { status: 400 });
+
+  const detectedVillages = new Set<string>();
+  let villageMismatchCount = 0;
+  for (const row of dataRows) {
+    const kodeDeskel = kodeDeskelIndex >= 0 ? String(row[kodeDeskelIndex] ?? "").trim() : "";
+    const deskel = deskelIndex >= 0 ? String(row[deskelIndex] ?? "").trim() : "";
+    detectedVillages.add(normalizeVillageCode(kodeDeskel) || normalizeVillageName(deskel) || "tanpa-identitas");
+    if (!villageIdentityMatches({ kodeDeskel, deskel }, currentVillage)) villageMismatchCount += 1;
+  }
+  if (villageMismatchCount > 0) {
+    return NextResponse.json(
+      {
+        error: "File memuat data desa lain. Impor melalui halaman ini hanya boleh untuk desa akun yang sedang login. Gunakan alat impor awal empat desa untuk CSV gabungan.",
+        villageMismatchCount,
+        detectedVillageCount: detectedVillages.size,
+      },
+      { status: 400 }
+    );
+  }
 
   const [baselineNiks, pendingNiks] = await Promise.all([
     prisma.penduduk.findMany({ where: { desaId: ctx.desaId }, select: { nik: true } }),

@@ -55,3 +55,8 @@ next-env.d.ts
 # local-only private media fallback (production uses private object storage)
 /.data/
 /node_modules.incomplete-*/
+
+# berkas sensus privat untuk impor satu kali
+/.private-import/
+/private-import/
+*.private.csv
