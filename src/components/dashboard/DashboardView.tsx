@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import clsx from "clsx";
 import { Map as MapIcon, LayoutDashboard } from "lucide-react";
 import { DashboardCharts } from "./DashboardCharts";
-import { SuratKeluarCard } from "./SuratKeluarCard";
 
 const MapView = dynamic(() => import("@/components/peta/MapView").then((m) => m.MapView), {
   ssr: false,
@@ -34,14 +33,7 @@ function MapPanel() {
 
 function DashboardPanel() {
   return (
-    <div className="space-y-8">
-      <DashboardCharts />
-      <div>
-        <h2 className="mb-1 text-lg font-bold text-slate-900">Layanan Desa</h2>
-        <p className="mb-4 text-sm text-slate-500">Ringkasan layanan administrasi untuk warga.</p>
-        <SuratKeluarCard />
-      </div>
-    </div>
+    <DashboardCharts />
   );
 }
 

@@ -604,9 +604,29 @@ model SuratTerbit {
   keperluan    String?
   peristiwaId  String?
   jenisPeristiwa String?
+  tahunNomor    Int?
+  urutanNomor   Int?
+  isiSnapshot   String?
+  pengaturanSnapshot String?
+  wargaSnapshot String?
+  issuedBy      String?
+  issuedByName  String?
+  issuedByEmail String?
   createdAt    DateTime @default(now())
 
   @@index([createdAt])
   @@index([desaId])
   @@index([desaId, peristiwaId])
+  @@unique([desaId, tahunNomor, urutanNomor])
+}
+
+// Atomic yearly sequence per tenant for letter numbering.
+model NomorSuratCounter {
+  id          String   @id @default(cuid())
+  desaId      String
+  tahun       Int
+  nomorTerakhir Int    @default(0)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([desaId, tahun])
 }

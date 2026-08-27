@@ -3,13 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { SuratPreview, type SuratSettings, type Warga } from "@/components/surat/SuratPreview";
 import { useCanWrite } from "@/components/providers/AuthInfo";
+import { SuratHistory } from "@/components/surat/SuratHistory";
+import { FileClock, FilePlus2 } from "lucide-react";
 
 type Template = { id: string; nama: string; kode: string; kategori: string; isi: string };
 type Row = Warga & { id: string };
 type SourceEvent = { id: string; jenis: string; tanggal: string; nama: string | null; nik: string | null };
 
-export function LayananSuratView({ eventId }: { eventId?: string }) {
+export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventId?: string; initialTab?: "terbitkan" | "riwayat" }) {
   const canWrite = useCanWrite();
+  const [tab, setTab] = useState<"terbitkan" | "riwayat">(eventId ? "terbitkan" : initialTab);
   const [settings, setSettings] = useState<SuratSettings>({});
   const [templates, setTemplates] = useState<Template[]>([]);
   const [query, setQuery] = useState("");
@@ -65,6 +68,14 @@ export function LayananSuratView({ eventId }: { eventId?: string }) {
       .replace(/\{\{keperluan\}\}/g, keperluan || "________");
   }, [template, settings.kopBaris3, keperluan]);
 
+  function changeTab(next: "terbitkan" | "riwayat") {
+    setTab(next);
+    const url = new URL(window.location.href);
+    if (next === "riwayat") url.searchParams.set("tab", "riwayat");
+    else url.searchParams.delete("tab");
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  }
+
   async function issue() {
     if (!selected || !template) return;
     setIssuing(true);
@@ -86,7 +97,13 @@ export function LayananSuratView({ eventId }: { eventId?: string }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div className="space-y-5">
+      <div className="inline-flex w-full gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1 sm:w-auto">
+        <button type="button" onClick={() => changeTab("terbitkan")} className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold sm:flex-none ${tab === "terbitkan" ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500"}`}><FilePlus2 className="h-4 w-4" /> Terbitkan Surat</button>
+        <button type="button" onClick={() => changeTab("riwayat")} className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold sm:flex-none ${tab === "riwayat" ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500"}`}><FileClock className="h-4 w-4" /> Riwayat Surat</button>
+      </div>
+      {tab === "terbitkan" ? (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* Step 1 */}
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <h2 className="text-base font-bold text-slate-900">1. Pilih Penduduk</h2>
@@ -195,6 +212,8 @@ export function LayananSuratView({ eventId }: { eventId?: string }) {
           </div>
         </div>
       )}
+        </div>
+      ) : <SuratHistory templates={templates} />}
     </div>
   );
 }
