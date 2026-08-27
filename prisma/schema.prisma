@@ -575,7 +575,12 @@ model PengaturanDesa {
   kopBaris4  String?  // alamat lengkap
   penutup    String?
   disclaimer String?
+  logoUrl    String?
+  logoMediaAssetId String?
+  logoUpdatedAt DateTime?
   updatedAt  DateTime @updatedAt
+
+  @@index([desaId, logoMediaAssetId])
 }
 
 // Reusable letter template.

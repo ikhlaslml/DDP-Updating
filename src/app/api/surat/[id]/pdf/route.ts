@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
-  const document = await getIssuedLetterDocument((await params).id, ctx.desaId);
+  const document = await getIssuedLetterDocument((await params).id, ctx.desaId, { includeLogo: true });
   if (!document) return NextResponse.json({ error: "Surat tidak ditemukan" }, { status: 404 });
   const pdf = await renderLetterPdf(document);
   const inline = req.nextUrl.searchParams.get("mode") === "inline";

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { readPrivateMedia } from "@/lib/media-storage";
 import type { SuratSettings, Warga } from "@/components/surat/SuratPreview";
 
 function parseObject<T>(value: string | null): Partial<T> {
@@ -12,7 +13,11 @@ function parseObject<T>(value: string | null): Partial<T> {
   }
 }
 
-export async function getIssuedLetterDocument(id: string, desaId: string) {
+export async function getIssuedLetterDocument(
+  id: string,
+  desaId: string,
+  options: { includeLogo?: boolean } = {}
+) {
   const letter = await prisma.suratTerbit.findFirst({ where: { id, desaId } });
   if (!letter) return null;
   const [currentSettings, currentResident, currentTemplate] = await Promise.all([
@@ -29,11 +34,25 @@ export async function getIssuedLetterDocument(id: string, desaId: string) {
   const body = letter.isiSnapshot ?? currentTemplate?.isi
     ?.replace(/\{\{nama_desa\}\}/g, settings.kopBaris3 || "Desa")
     .replace(/\{\{keperluan\}\}/g, letter.keperluan || "________") ?? "";
+  let logo: { bytes: Buffer; mimeType: string } | undefined;
+  if (options.includeLogo && settings.logoMediaAssetId) {
+    const asset = await prisma.mediaAsset.findFirst({
+      where: { id: settings.logoMediaAssetId, desaId, purpose: "LOGO_DESA" },
+    });
+    if (asset) {
+      try {
+        logo = { bytes: await readPrivateMedia(asset), mimeType: asset.mimeType };
+      } catch {
+        // Surat tetap dapat dibuat dengan penampung logo ketika storage sementara gagal.
+      }
+    }
+  }
   return {
     letter,
     settings: settings as SuratSettings,
     warga: warga as Warga,
     body,
+    logo,
     templateNama: letter.templateNama ?? currentTemplate?.nama ?? "Surat Keterangan",
   };
 }

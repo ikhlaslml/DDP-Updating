@@ -1,6 +1,7 @@
 import "server-only";
 
 import PDFDocument from "pdfkit";
+import SVGtoPDF from "svg-to-pdfkit";
 import type { getIssuedLetterDocument } from "@/lib/letter-document";
 
 type LetterDocument = NonNullable<Awaited<ReturnType<typeof getIssuedLetterDocument>>>;
@@ -20,11 +21,46 @@ export async function renderLetterPdf(document: LetterDocument) {
   });
 
   const settings = document.settings;
-  pdf.font("Helvetica-Bold").fontSize(13).text(settings.kopBaris1 || "PEMERINTAH KABUPATEN", { align: "center" });
-  pdf.text(settings.kopBaris2 || "KECAMATAN", { align: "center" });
-  pdf.fontSize(17).text(settings.kopBaris3 || "DESA", { align: "center" });
-  pdf.font("Helvetica").fontSize(8).text(settings.kopBaris4 || "Alamat desa", { align: "center" });
-  const lineY = pdf.y + 6;
+  const logoX = 58;
+  const logoY = 48;
+  const logoSize = 70;
+  const drawLogoPlaceholder = () => {
+    pdf.save().lineWidth(0.5).strokeColor("#94a3b8").dash(3, { space: 2 });
+    pdf.roundedRect(logoX, logoY, logoSize, logoSize, 4).stroke();
+    pdf.undash().fillColor("#94a3b8").font("Helvetica").fontSize(7)
+      .text("LOGO\nDESA", logoX, logoY + 27, { width: logoSize, align: "center" });
+    pdf.restore();
+  };
+  if (document.logo) {
+    try {
+      if (document.logo.mimeType === "image/svg+xml") {
+        SVGtoPDF(pdf, document.logo.bytes.toString("utf8"), logoX, logoY, {
+          width: logoSize,
+          height: logoSize,
+          preserveAspectRatio: "xMidYMid meet",
+        });
+      } else {
+        pdf.image(document.logo.bytes, logoX, logoY, {
+          fit: [logoSize, logoSize],
+          align: "center",
+          valign: "center",
+        });
+      }
+    } catch {
+      drawLogoPlaceholder();
+    }
+  } else {
+    drawLogoPlaceholder();
+  }
+
+  const headerX = 142;
+  const headerWidth = 395;
+  pdf.fillColor("#000000").font("Helvetica-Bold").fontSize(13)
+    .text(settings.kopBaris1 || "PEMERINTAH KABUPATEN", headerX, 48, { width: headerWidth, align: "center" });
+  pdf.text(settings.kopBaris2 || "KECAMATAN", headerX, 65, { width: headerWidth, align: "center" });
+  pdf.fontSize(17).text(settings.kopBaris3 || "DESA", headerX, 82, { width: headerWidth, align: "center" });
+  pdf.font("Helvetica").fontSize(8).text(settings.kopBaris4 || "Alamat desa", headerX, 105, { width: headerWidth, align: "center" });
+  const lineY = 126;
   pdf.moveTo(58, lineY).lineTo(537, lineY).lineWidth(2).stroke();
   pdf.moveTo(58, lineY + 3).lineTo(537, lineY + 3).lineWidth(0.5).stroke();
   pdf.y = lineY + 18;

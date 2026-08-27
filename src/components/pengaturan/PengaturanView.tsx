@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { ImageUp, Landmark, Trash2 } from "lucide-react";
 import { SuratPreview, type SuratSettings } from "@/components/surat/SuratPreview";
 import { useCanWrite } from "@/components/providers/AuthInfo";
+import { uploadMedia } from "@/lib/client-media";
 
 type Template = { id: string; nama: string; kode: string; kategori: string; isi: string };
 
@@ -34,6 +37,8 @@ export function PengaturanView() {
   const [previewId, setPreviewId] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [logoBusy, setLogoBusy] = useState(false);
+  const [logoError, setLogoError] = useState("");
 
   useEffect(() => {
     fetch("/api/pengaturan").then((r) => r.json()).then((j) => setSettings(j.data ?? {})).catch(() => {});
@@ -74,9 +79,100 @@ export function PengaturanView() {
     }
   }
 
+  async function replaceLogo(file: File, input: HTMLInputElement) {
+    setLogoError("");
+    if (!["image/png", "image/jpeg", "image/svg+xml"].includes(file.type)) {
+      setLogoError("Logo harus berformat PNG, JPG, atau SVG.");
+      input.value = "";
+      return;
+    }
+    if (file.size > 2_000_000) {
+      setLogoError("Ukuran logo maksimal 2 MB.");
+      input.value = "";
+      return;
+    }
+    setLogoBusy(true);
+    try {
+      const media = await uploadMedia(file, "LOGO_DESA");
+      const response = await fetch("/api/pengaturan/logo", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assetId: media.id }),
+      });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(json.error ?? "Logo gagal disimpan.");
+      setSettings(json.data ?? {});
+    } catch (error) {
+      setLogoError(error instanceof Error ? error.message : "Logo gagal disimpan.");
+    } finally {
+      setLogoBusy(false);
+      input.value = "";
+    }
+  }
+
+  async function removeLogo() {
+    setLogoBusy(true);
+    setLogoError("");
+    try {
+      const response = await fetch("/api/pengaturan/logo", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assetId: null }),
+      });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(json.error ?? "Logo gagal dihapus.");
+      setSettings(json.data ?? {});
+    } catch (error) {
+      setLogoError(error instanceof Error ? error.message : "Logo gagal dihapus.");
+    } finally {
+      setLogoBusy(false);
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="space-y-6">
+        <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+          <h2 className="text-lg font-bold text-slate-900">Identitas Desa</h2>
+          <p className="mt-1 text-sm text-slate-500">Logo ini digunakan otomatis pada pratinjau, hasil cetak, dan PDF surat yang diterbitkan berikutnya.</p>
+          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+              {settings.logoUrl ? (
+                <Image src={settings.logoUrl} alt="Logo desa saat ini" width={112} height={112} unoptimized className="h-full w-full object-contain p-2" />
+              ) : (
+                <div className="text-center text-xs text-slate-400"><Landmark className="mx-auto mb-1 h-9 w-9" />Belum ada logo</div>
+              )}
+            </div>
+            <div className="min-w-0 space-y-2">
+              <p className="text-xs leading-relaxed text-slate-500">PNG, JPG, atau SVG aman. Maksimal 2 MB. Gunakan gambar tegak atau persegi agar kop tetap proporsional.</p>
+              {settings.logoUpdatedAt ? <p className="text-xs text-slate-500">Diperbarui {new Date(settings.logoUpdatedAt).toLocaleString("id-ID")}</p> : null}
+              {canWrite ? (
+                <div className="flex flex-wrap gap-2">
+                  <label className={`inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700 ${logoBusy ? "pointer-events-none opacity-60" : ""}`}>
+                    <ImageUp className="h-4 w-4" /> {logoBusy ? "Memproses..." : settings.logoUrl ? "Ganti Logo" : "Unggah Logo"}
+                    <input
+                      type="file"
+                      accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml"
+                      className="sr-only"
+                      disabled={logoBusy}
+                      onChange={(event) => {
+                        const file = event.currentTarget.files?.[0];
+                        if (file) void replaceLogo(file, event.currentTarget);
+                      }}
+                    />
+                  </label>
+                  {settings.logoUrl ? (
+                    <button type="button" disabled={logoBusy} onClick={removeLogo} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-rose-200 px-3 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60">
+                      <Trash2 className="h-4 w-4" /> Hapus
+                    </button>
+                  ) : null}
+                </div>
+              ) : <p className="text-xs text-slate-400">Mode lihat. Penggantian logo hanya untuk operator.</p>}
+              {logoError ? <p role="alert" className="text-sm text-rose-600">{logoError}</p> : null}
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
           <h2 className="text-lg font-bold text-slate-900">Pengaturan Umum &amp; Kop Surat</h2>
           <div className="mt-4 space-y-4">
