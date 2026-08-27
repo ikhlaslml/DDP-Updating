@@ -5,6 +5,7 @@ import { Building2, History, MapPin, UserRoundCheck, UsersRound } from "lucide-r
 import { prisma } from "@/lib/prisma";
 import { getAuthContext, isOperator } from "@/lib/tenant";
 import { RespondentVisitForm } from "@/components/penduduk/RespondentVisitForm";
+import { DdpBuildingPhoto } from "@/components/penduduk/DdpBuildingPhoto";
 
 function parseJson(value: string | null) {
   try { return JSON.parse(value ?? "{}") as Record<string, unknown>; } catch { return {}; }
@@ -87,6 +88,8 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
         <div><span className="text-xs font-semibold uppercase text-slate-400">Lokasi</span><p className="mt-1 flex items-start gap-2 font-semibold text-slate-900"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" /> {String((buildingData as { alamat?: unknown }).alamat ?? (buildingData as { dusun?: unknown }).dusun ?? "-")}</p></div>
         <div><span className="text-xs font-semibold uppercase text-slate-400">Keluarga</span><p className="mt-1 flex items-center gap-2 font-semibold text-slate-900"><UsersRound className="h-4 w-4 text-indigo-500" /> {families.size} keluarga terdata</p></div>
       </section>
+
+      <DdpBuildingPhoto code={code} />
 
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="flex items-center gap-2"><UserRoundCheck className="h-5 w-5 text-indigo-600" /><h2 className="text-lg font-bold text-slate-900">Identitas Responden Terakhir</h2></div>

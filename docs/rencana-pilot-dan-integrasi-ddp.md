@@ -50,3 +50,7 @@ Tidak perlu mengunggah CSV berisi PII ke percakapan. Untuk pemetaan awal cukup b
 - audit actor, waktu server, SLA, rate limit, dan kebijakan data pribadi.
 
 Ekstraksi ke repository backend terpisah baru layak dilakukan jika DDP Updating memiliki beberapa klien, membutuhkan worker/job independen, atau kontrak keamanan organisasi mengharuskannya.
+
+## Integrasi foto bangunan Core DDP
+
+Endpoint read-only `GET /api/v1/foto-bangunan?kode=...&kode_deskel=...` telah diverifikasi mengembalikan array metadata dan URL Google Cloud Storage bertanda tangan. DDP Updating tidak menyimpan URL `foto` karena URL tersebut kedaluwarsa. Route server mengambil `kode_deskel` dari tenant login, memastikan kode bangunan benar-benar milik tenant, meminta URL terbaru ke Core DDP, lalu mem-proxy byte gambar ke pengguna yang terautentikasi. Endpoint ini tidak dipakai untuk foto responden.
