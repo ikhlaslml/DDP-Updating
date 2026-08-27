@@ -30,32 +30,32 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
 
   return (
     <header className="sticky top-0 z-20 h-16 shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur">
-      <div className="flex h-full items-center gap-3 px-4 sm:px-6">
+      <div className="flex h-full min-w-0 items-center gap-2 px-3 sm:gap-3 sm:px-6">
         <button
           type="button"
           onClick={onToggleSidebar}
           aria-label="Buka/tutup menu"
-          className="rounded-lg p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 hover:text-slate-800"
         >
           <Menu className="h-5 w-5" />
         </button>
-        <form onSubmit={handleSearch} className="flex-1 max-w-md">
+        <form onSubmit={handleSearch} className="min-w-0 max-w-md flex-1">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari nama, NIK, NKK..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+              className="min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
         </form>
 
-        <div className="ml-auto relative" ref={menuRef}>
+        <div className="relative ml-auto shrink-0" ref={menuRef}>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
-            className="flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-slate-50"
+            className="flex min-h-11 items-center gap-2 rounded-xl px-1.5 py-1.5 hover:bg-slate-50 sm:px-2"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">
               {initial}
@@ -76,7 +76,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
               <button
                 type="button"
                 onClick={() => signOut({ callbackUrl: "/login" })}
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-red-600"
+                className="flex min-h-11 w-full items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-red-600"
               >
                 <LogOut className="h-4 w-4" />
                 Logout

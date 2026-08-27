@@ -136,7 +136,7 @@ export function PengaturanView() {
           <h2 className="text-lg font-bold text-slate-900">Identitas Desa</h2>
           <p className="mt-1 text-sm text-slate-500">Logo ini digunakan otomatis pada pratinjau, hasil cetak, dan PDF surat yang diterbitkan berikutnya.</p>
           <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <div className="mx-auto flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 sm:mx-0">
               {settings.logoUrl ? (
                 <Image src={settings.logoUrl} alt="Logo desa saat ini" width={112} height={112} unoptimized className="h-full w-full object-contain p-2" />
               ) : (
@@ -147,8 +147,8 @@ export function PengaturanView() {
               <p className="text-xs leading-relaxed text-slate-500">PNG, JPG, atau SVG aman. Maksimal 2 MB. Gunakan gambar tegak atau persegi agar kop tetap proporsional.</p>
               {settings.logoUpdatedAt ? <p className="text-xs text-slate-500">Diperbarui {new Date(settings.logoUpdatedAt).toLocaleString("id-ID")}</p> : null}
               {canWrite ? (
-                <div className="flex flex-wrap gap-2">
-                  <label className={`inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700 ${logoBusy ? "pointer-events-none opacity-60" : ""}`}>
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                  <label className={`inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700 sm:w-auto ${logoBusy ? "pointer-events-none opacity-60" : ""}`}>
                     <ImageUp className="h-4 w-4" /> {logoBusy ? "Memproses..." : settings.logoUrl ? "Ganti Logo" : "Unggah Logo"}
                     <input
                       type="file"
@@ -162,7 +162,7 @@ export function PengaturanView() {
                     />
                   </label>
                   {settings.logoUrl ? (
-                    <button type="button" disabled={logoBusy} onClick={removeLogo} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-rose-200 px-3 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60">
+                    <button type="button" disabled={logoBusy} onClick={removeLogo} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60 sm:w-auto">
                       <Trash2 className="h-4 w-4" /> Hapus
                     </button>
                   ) : null}
@@ -174,7 +174,8 @@ export function PengaturanView() {
         </section>
 
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-          <h2 className="text-lg font-bold text-slate-900">Pengaturan Umum &amp; Kop Surat</h2>
+          <h2 className="text-lg font-bold text-slate-900">Kop Surat &amp; Penandatangan</h2>
+          <p className="mt-1 text-sm text-slate-500">Informasi ini digunakan otomatis pada setiap surat yang diterbitkan desa.</p>
           <div className="mt-4 space-y-4">
             {FIELDS.map((f) => (
               <div key={f.key}>
@@ -195,7 +196,7 @@ export function PengaturanView() {
                 )}
               </div>
             ))}
-            <div className="flex items-center justify-end gap-3">
+            <div className="flex flex-col items-stretch justify-end gap-3 sm:flex-row sm:items-center">
               {saved && <span className="text-sm font-medium text-emerald-600">Tersimpan.</span>}
               {!canWrite && <span className="text-xs text-slate-400">Mode lihat (pemerintah desa).</span>}
               {canWrite && (
@@ -203,9 +204,9 @@ export function PengaturanView() {
                   type="button"
                   disabled={saving}
                   onClick={save}
-                  className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+                  className="min-h-11 w-full rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 sm:w-auto"
                 >
-                  {saving ? "Menyimpan..." : "Simpan Pengaturan"}
+                  {saving ? "Menyimpan..." : "Simpan Identitas Surat"}
                 </button>
               )}
             </div>
@@ -216,15 +217,15 @@ export function PengaturanView() {
           <h2 className="text-lg font-bold text-slate-900">Manajemen Template Surat</h2>
           <ul className="mt-4 divide-y divide-slate-100">
             {templates.map((t) => (
-              <li key={t.id} className="flex items-center justify-between py-3">
-                <div>
+              <li key={t.id} className="flex flex-col items-stretch gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-slate-800">{t.nama}</p>
                   <p className="text-xs text-slate-500">Kode: {t.kode} / Kategori: {t.kategori}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setPreviewId(t.id)}
-                  className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                  className="min-h-10 w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 sm:w-auto"
                 >
                   Pratinjau
                 </button>

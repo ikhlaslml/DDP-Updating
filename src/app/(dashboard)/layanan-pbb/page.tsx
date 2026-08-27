@@ -2,7 +2,7 @@ import { Landmark } from "lucide-react";
 
 export default function LayananPbbPage() {
   return (
-    <div className="mx-auto max-w-3xl rounded-2xl border border-slate-100 bg-white p-10 text-center shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+    <div className="mx-auto max-w-3xl rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-10">
       <h1 className="text-xl font-bold text-slate-900">Layanan Pajak Bumi dan Bangunan (PBB)</h1>
       <p className="mt-2 text-sm font-medium text-slate-500">Fitur ini sedang dalam pengembangan.</p>
       <p className="mt-3 text-sm text-slate-500">

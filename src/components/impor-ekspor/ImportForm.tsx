@@ -54,18 +54,18 @@ export function ImportForm() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex flex-wrap items-center gap-3">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:items-center">
         <input
           ref={fileRef}
           type="file"
           accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           required
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="min-h-11 w-full min-w-0 rounded-lg border border-slate-300 px-3 py-2 text-sm sm:w-auto"
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60 sm:w-auto"
         >
           {loading ? "Mengimpor..." : "Impor Data"}
         </button>
@@ -73,7 +73,7 @@ export function ImportForm() {
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
           href="/api/penduduk/export?template=1&format=csv"
-          className="text-sm text-indigo-600 hover:underline"
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 sm:w-auto sm:border-transparent sm:px-0"
         >
           Unduh template CSV
         </a>

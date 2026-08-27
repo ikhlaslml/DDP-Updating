@@ -56,13 +56,13 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
+    <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-5">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="min-w-0 text-sm font-semibold text-slate-800">{title}</h3>
         {action && (
           <Link
             href={action.href}
-            className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
+            className="inline-flex min-h-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
           >
             {action.label}
           </Link>
@@ -93,21 +93,21 @@ export function DashboardCharts() {
   const pyramidData = stats.piramidaPenduduk.map((d) => ({ ...d, L: -d.L }));
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <StatCard label="Total Penduduk" value={stats.totalPenduduk.toLocaleString("id-ID")} icon={Users} />
         <StatCard label="Total KK" value={stats.totalKk.toLocaleString("id-ID")} icon={HomeIcon} />
         <StatCard label="Kelahiran 12 Bulan" value={stats.demografi.kelahiran.toLocaleString("id-ID")} icon={Baby} />
         <StatCard label="Kematian 12 Bulan" value={stats.demografi.kematian.toLocaleString("id-ID")} icon={HeartPulse} />
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <StatCard label="Migrasi Masuk" value={stats.demografi.migrasiMasuk.toLocaleString("id-ID")} icon={LogIn} />
         <StatCard label="Migrasi Keluar" value={stats.demografi.migrasiKeluar.toLocaleString("id-ID")} icon={LogOut} />
         <StatCard label="Migrasi Neto" value={(stats.demografi.migrasiNeto > 0 ? "+" : "") + stats.demografi.migrasiNeto.toLocaleString("id-ID")} />
         <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
       </div>
 
-      <ChartCard title="Kelahiran, Kematian & Mobilitas Penduduk — 12 Bulan Terakhir" action={{ href: "/penduduk", label: "Kelola Data" }}>
+      <ChartCard title="Kelahiran, Kematian & Mobilitas Penduduk - 12 Bulan Terakhir" action={{ href: "/penduduk", label: "Kelola Data" }}>
         <ResponsiveContainer width="100%" height={320}>
           <BarChart data={stats.demografi.bulanan} margin={{ left: 4, right: 8 }}>
             <CartesianGrid stroke={CHART_INK.grid} vertical={false} />

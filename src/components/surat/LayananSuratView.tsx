@@ -109,7 +109,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
       {tab === "terbitkan" ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* Step 1 */}
-      <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-5">
         <h2 className="text-base font-bold text-slate-900">1. Pilih Penduduk</h2>
         {sourceEvent ? <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs leading-relaxed text-emerald-800"><strong>Terhubung ke peristiwa {sourceEvent.jenis.replaceAll("_", " ")}.</strong> Data warga dan jenis surat sudah diisi otomatis. Anda tetap dapat menyesuaikannya sebelum menerbitkan.</div> : null}
         <input
@@ -119,7 +119,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
             if (e.target.value.trim().length < 2) setResults([]);
           }}
           placeholder="Cari Nama atau NIK..."
-          className="mt-3 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="mt-3 min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <ul className="mt-3 max-h-72 divide-y divide-slate-100 overflow-y-auto">
           {results.map((r) => (
@@ -127,10 +127,10 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
               <button
                 type="button"
                 onClick={() => { setSelected(r); setSourceEvent(null); setNomor(null); setSuratId(null); }}
-                className={`flex w-full items-center justify-between px-2 py-2 text-left text-sm hover:bg-slate-50 ${selected?.id === r.id ? "bg-indigo-50" : ""}`}
+                className={`flex min-h-12 w-full flex-col items-start gap-1 px-2 py-2 text-left text-sm hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between ${selected?.id === r.id ? "bg-indigo-50" : ""}`}
               >
                 <span className="font-medium text-slate-800">{r.nama}</span>
-                <span className="text-xs text-slate-500">{r.nik}</span>
+                <span className="break-all text-xs text-slate-500">{r.nik}</span>
               </button>
             </li>
           ))}
@@ -141,23 +141,23 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
       </section>
 
       {/* Step 2 */}
-      <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-5">
         <h2 className="text-base font-bold text-slate-900">2. Buat Surat</h2>
         {!selected ? (
-          <div className="mt-4 rounded-xl border border-dashed border-slate-300 px-4 py-16 text-center text-sm text-slate-400">
+          <div className="mt-4 rounded-xl border border-dashed border-slate-300 px-4 py-10 text-center text-sm text-slate-400 sm:py-16">
             Silakan cari dan pilih penduduk dari kolom di sebelah kiri untuk memulai.
           </div>
         ) : (
           <div className="mt-4 space-y-3">
-            <p className="text-sm text-slate-600">
-              Warga terpilih: <strong>{selected.nama}</strong> ({selected.nik})
+            <p className="break-words text-sm text-slate-600">
+              Warga terpilih: <strong>{selected.nama}</strong> <span className="break-all">({selected.nik})</span>
             </p>
             <div>
               <label className="block text-xs font-medium text-slate-600">Jenis Surat</label>
               <select
                 value={templateId}
                 onChange={(e) => { setTemplateId(e.target.value); setNomor(null); setSuratId(null); }}
-                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               >
                 {templates.map((t) => (
                   <option key={t.id} value={t.id}>{t.nama}</option>
@@ -170,16 +170,16 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
                 value={keperluan}
                 onChange={(e) => { setKeperluan(e.target.value); setNomor(null); setSuratId(null); }}
                 placeholder="mis. melamar pekerjaan"
-                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
               {canWrite ? (
                 <button
                   type="button"
                   disabled={issuing}
                   onClick={issue}
-                  className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+                  className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 sm:w-auto"
                 >
                   {issuing ? "Menerbitkan..." : nomor ? "Terbitkan Ulang" : "Terbitkan Surat"}
                 </button>
@@ -191,13 +191,13 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
                   <button
                     type="button"
                     onClick={() => window.open(`/api/surat/${suratId}/pdf?mode=inline`, "_blank", "noopener,noreferrer")}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:w-auto"
                   >
                     <Printer className="h-4 w-4" /> Cetak PDF
                   </button>
                   <a
                     href={`/api/surat/${suratId}/pdf`}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 px-4 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-emerald-300 px-4 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-50 sm:w-auto"
                   >
                     <Download className="h-4 w-4" /> Unduh PDF
                   </a>
@@ -212,7 +212,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
       {/* Printable preview */}
       {selected && template && nomor && (
         <div className="lg:col-span-2">
-          <div className="surat-print overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div className="surat-print overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50 p-2 sm:p-4">
             <SuratPreview
               settings={settings}
               templateNama={template.nama}

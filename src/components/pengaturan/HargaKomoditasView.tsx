@@ -221,9 +221,9 @@ export function HargaKomoditasView() {
             <h2 className="text-lg font-bold text-slate-900">Harga Komoditas Desa</h2>
             <p className="mt-1 max-w-3xl text-sm text-slate-500">Master 45 komoditas dan satuan mengikuti Borang Harga.xlsx. Harga disimpan per desa dan periode agar riwayat tidak saling menimpa.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             {canWrite ? (
-              <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+              <label className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto">
                 <FileSpreadsheet className="h-4 w-4" /> Impor Excel
                 <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(event) => {
                   const file = event.currentTarget.files?.[0];
@@ -231,7 +231,7 @@ export function HargaKomoditasView() {
                 }} />
               </label>
             ) : null}
-            <button type="button" disabled={!rows.length} onClick={() => void exportWorkbook()} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50">
+            <button type="button" disabled={!rows.length} onClick={() => void exportWorkbook()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 sm:w-auto">
               <Download className="h-4 w-4" /> Ekspor Excel
             </button>
           </div>
@@ -291,7 +291,7 @@ export function HargaKomoditasView() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div><h3 className="flex items-center gap-2 font-bold text-slate-900"><History className="h-4 w-4" /> Riwayat Antarperiode</h3><p className="mt-1 text-sm text-slate-500">Perubahan harga tersimpan sebagai record periode terpisah.</p></div>
           <label className="text-xs font-medium text-slate-600">Komoditas
-            <select value={historyCommodityId} onChange={(event) => setHistoryCommodityId(event.target.value)} className="mt-1 block min-h-10 min-w-56 rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            <select value={historyCommodityId} onChange={(event) => setHistoryCommodityId(event.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm sm:min-w-56">
               {rows.map((row) => <option key={row.id} value={row.id}>{row.nama} ({row.satuan})</option>)}
             </select>
           </label>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CircleMarker, MapContainer, Polygon, Popup, useMap } from "react-leaflet";
 import { latLngBounds } from "leaflet";
+import { Building2, ImageOff, Info, MapPin, UsersRound } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import { MapLayers } from "@/components/peta/MapLayers";
 import { STATUS, SERIES } from "@/lib/chart-colors";
@@ -60,9 +61,10 @@ function MapBuildingPhoto({ code }: { code: number }) {
 
   if (!available) {
     return (
-      <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
-        Foto belum tersedia. Buka detail bangunan untuk melihat keterangannya.
-      </p>
+      <div className="flex items-start gap-2 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-800">
+        <ImageOff className="mt-0.5 h-4 w-4 shrink-0" />
+        <p>Foto belum tersedia. Buka detail bangunan untuk melihat keterangannya.</p>
+      </div>
     );
   }
 
@@ -74,7 +76,7 @@ function MapBuildingPhoto({ code }: { code: number }) {
       height={160}
       unoptimized
       onError={() => setAvailable(false)}
-      className="h-32 w-full rounded-lg border border-slate-200 object-cover"
+      className="h-28 w-full rounded-xl border border-slate-200 object-cover"
     />
   );
 }
@@ -134,12 +136,12 @@ export function MapView() {
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <label className="text-sm font-medium text-slate-700" htmlFor="map-indicator">Warnai berdasarkan:</label>
+        <label className="w-full text-sm font-medium text-slate-700 sm:w-auto" htmlFor="map-indicator">Warnai berdasarkan:</label>
         <select
           id="map-indicator"
           value={indicator}
           onChange={(event) => setIndicator(event.target.value as IndicatorKey)}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm sm:w-auto"
         >
           {INDICATOR_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
@@ -150,15 +152,17 @@ export function MapView() {
           </div>
         ) : null}
         {loading ? <span className="text-sm text-slate-400">Memuat peta...</span> : null}
-        <span className="ml-auto text-sm text-slate-400">
-          {buildings.length ? `${buildings.length} polygon bangunan • ` : ""}{households.length} keluarga
+        <span className="w-full text-sm text-slate-400 sm:ml-auto sm:w-auto">
+          {buildings.length ? `${buildings.length} poligon bangunan - ` : ""}{households.length} keluarga
         </span>
       </div>
 
-      <div className="mb-3 rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs leading-relaxed text-indigo-800">
-        Klik titik keluarga atau polygon bangunan. Popup menyediakan tombol menuju <strong>Detail Warga</strong>
-        dan <strong>Detail Bangunan &amp; Foto DDP</strong> bila kode bangunannya tersedia.
-        {!loading && buildings.length === 0 ? " Polygon bangunan belum tersedia pada data saat ini; gunakan titik keluarga untuk membuka detail." : ""}
+      <div className="mb-3 flex items-start gap-3 rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs leading-relaxed text-indigo-900">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-indigo-600" />
+        <div>
+          <p><strong>Petunjuk peta:</strong> ketuk titik keluarga atau poligon bangunan untuk melihat ringkasan, foto, dan tombol menuju detail.</p>
+          {!loading && buildings.length === 0 ? <p className="mt-1 text-indigo-700">Poligon bangunan belum tersedia pada data saat ini; gunakan titik keluarga.</p> : null}
+        </div>
       </div>
 
       <div className="min-h-[420px] overflow-hidden rounded-xl border border-slate-200 sm:h-[560px]">
@@ -179,16 +183,18 @@ export function MapView() {
                   fillOpacity: 0.22,
                 }}
               >
-                <Popup>
-                  <div className="text-sm">
-                    <p className="font-semibold">Bangunan #{building.kode}</p>
-                    <p>{occupied ? "Berpenghuni" : building.kategori ?? "Tidak berpenghuni"}</p>
-                    {building.keterangan ? <p>{building.keterangan}</p> : null}
-                    <p>{building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}</p>
-                    {occupied ? <p>{building.jumlahPenghuni} penghuni terdata</p> : null}
+                <Popup className="ddp-map-popup" minWidth={280} maxWidth={340}>
+                  <div className="max-h-[70vh] space-y-3 overflow-y-auto p-4 pr-10 text-sm text-slate-700">
+                    <div className="border-b border-slate-100 pb-3">
+                      <p className="flex items-center gap-2 text-base font-bold text-slate-950"><Building2 className="h-5 w-5 text-indigo-600" /> Bangunan #{building.kode}</p>
+                      <span className={`mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${occupied ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{occupied ? "Berpenghuni" : building.kategori ?? "Tidak berpenghuni"}</span>
+                    </div>
+                    <p className="flex items-start gap-2 leading-relaxed"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" /> {building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}</p>
+                    {building.keterangan ? <p className="rounded-xl bg-slate-50 px-3 py-2 text-xs leading-relaxed">{building.keterangan}</p> : null}
+                    {occupied ? <p className="flex items-center gap-2 text-xs font-medium text-slate-600"><UsersRound className="h-4 w-4 text-indigo-500" /> {building.jumlahPenghuni} penghuni terdata</p> : null}
                     <MapBuildingPhoto code={building.kode} />
-                    <Link href={`/bangunan/${building.kode}`} className="mt-2 inline-flex rounded-lg bg-indigo-600 px-3 py-2 font-semibold text-white">
-                      Detail &amp; foto bangunan
+                    <Link href={`/bangunan/${building.kode}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-indigo-600 px-3 py-2 text-center font-semibold !text-white shadow-sm hover:bg-indigo-700">
+                      Buka detail bangunan
                     </Link>
                   </div>
                 </Popup>
@@ -202,26 +208,30 @@ export function MapView() {
               radius={7}
               pathOptions={{ color: "#fff", weight: 1, fillColor: colorFor(household, indicator), fillOpacity: 0.9 }}
             >
-              <Popup>
-                <div className="text-sm">
-                  <p className="font-semibold">{household.namaKepalaKeluarga}</p>
-                  <p>No. KK: {household.nkk}</p>
-                  <p>{household.alamat || `${household.dusun}, RW ${household.rw}/RT ${household.rt}`}</p>
-                  <p>{household.jumlahAnggota} anggota keluarga</p>
-                  <p>Status kemiskinan BPS: {household.miskinBps ? "Miskin" : "Tidak miskin"}</p>
-                  <div className="mt-3 flex flex-col gap-2">
-                    <Link href={`/penduduk/${household.id}`} className="rounded-lg border border-indigo-200 px-3 py-2 text-center font-semibold text-indigo-700">
-                      Lihat detail kepala keluarga
+              <Popup className="ddp-map-popup" minWidth={280} maxWidth={340}>
+                <div className="max-h-[70vh] space-y-3 overflow-y-auto p-4 pr-10 text-sm text-slate-700">
+                  <div className="border-b border-slate-100 pb-3">
+                    <p className="break-words text-base font-bold text-slate-950">{household.namaKepalaKeluarga}</p>
+                    <p className="mt-1 break-all text-xs text-slate-500">No. KK {household.nkk}</p>
+                  </div>
+                  <p className="flex items-start gap-2 leading-relaxed"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" /> {household.alamat || `${household.dusun}, RW ${household.rw}/RT ${household.rt}`}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="rounded-xl bg-slate-50 p-3"><p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Anggota</p><p className="mt-1 font-bold text-slate-800">{household.jumlahAnggota} orang</p></div>
+                    <div className="rounded-xl bg-slate-50 p-3"><p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Kemiskinan BPS</p><p className={`mt-1 font-bold ${household.miskinBps ? "text-rose-700" : "text-emerald-700"}`}>{household.miskinBps ? "Miskin" : "Tidak miskin"}</p></div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Link href={`/penduduk/${household.id}`} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-indigo-200 bg-white px-3 py-2 text-center font-semibold !text-indigo-700 hover:bg-indigo-50">
+                      Buka detail warga
                     </Link>
                     {household.kodeBangunan !== null ? (
                       <>
                         <MapBuildingPhoto code={household.kodeBangunan} />
-                        <Link href={`/bangunan/${household.kodeBangunan}`} className="rounded-lg bg-indigo-600 px-3 py-2 text-center font-semibold text-white">
-                          Detail &amp; foto bangunan #{household.kodeBangunan}
+                        <Link href={`/bangunan/${household.kodeBangunan}`} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-indigo-600 px-3 py-2 text-center font-semibold !text-white shadow-sm hover:bg-indigo-700">
+                          Buka bangunan #{household.kodeBangunan}
                         </Link>
                       </>
                     ) : (
-                      <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Kode bangunan belum tersedia.</p>
+                      <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-800">Kode bangunan belum tersedia.</p>
                     )}
                   </div>
                 </div>

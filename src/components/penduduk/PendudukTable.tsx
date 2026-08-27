@@ -216,7 +216,7 @@ export function PendudukTable({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama, NIK, NKK, alamat..."
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="min-h-10 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:w-64"
         />
         <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua Dusun</option>
@@ -266,11 +266,39 @@ export function PendudukTable({
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
       <p className="text-xs text-slate-500">
-        Klik <strong>nama warga</strong> atau tombol <strong>Detail</strong> di sisi kanan tabel untuk membuka
-        seluruh data warga, keluarga, serta tautan foto bangunannya.
+        <span className="md:hidden">Ketuk tombol <strong>Detail</strong> pada kartu warga untuk membuka data keluarga dan bangunan.</span>
+        <span className="hidden md:inline">Klik <strong>nama warga</strong> atau tombol <strong>Detail</strong> di sisi kanan tabel untuk membuka seluruh data warga, keluarga, serta tautan foto bangunannya.</span>
       </p>
 
-      <div className="overscroll-x-contain overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <div className="grid gap-3 md:hidden">
+        {loading ? (
+          <div className="rounded-2xl border border-slate-100 bg-white px-4 py-8 text-center text-sm text-slate-400">Memuat data...</div>
+        ) : rows.length === 0 ? (
+          <div className="rounded-2xl border border-slate-100 bg-white px-4 py-8 text-center text-sm text-slate-400">Tidak ada data.</div>
+        ) : rows.map((row) => (
+          <article key={row.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="break-words font-bold text-slate-900">{formatCell(row.nama, mapping.kolom.nama)}</h3>
+                <p className="mt-1 break-all text-xs text-slate-500">NIK {formatCell(row.nik, mapping.kolom.nik)}</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">{formatCell(row.jk, mapping.kolom.jk)}</span>
+            </div>
+            <dl className="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-3 text-xs">
+              <div className="col-span-2 min-w-0"><dt className="font-semibold uppercase tracking-wide text-slate-400">Nomor KK</dt><dd className="mt-1 break-all font-medium text-slate-700">{formatCell(row.nkk, mapping.kolom.nkk)}</dd></div>
+              <div><dt className="font-semibold uppercase tracking-wide text-slate-400">Dusun</dt><dd className="mt-1 break-words font-medium text-slate-700">{formatCell(row.dusun, mapping.kolom.dusun)}</dd></div>
+              <div><dt className="font-semibold uppercase tracking-wide text-slate-400">RW / RT</dt><dd className="mt-1 font-medium text-slate-700">{formatCell(row.rw, mapping.kolom.rw)} / {formatCell(row.rt, mapping.kolom.rt)}</dd></div>
+            </dl>
+            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+              <Link href={`/penduduk/${row.id}`} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white"><Eye className="h-4 w-4" /> Detail</Link>
+              {canWrite ? <Link href={`/penduduk/${row.id}/edit`} aria-label={`Ubah data ${String(row.nama ?? "penduduk")}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-amber-200 px-3 py-2 text-sm font-semibold text-amber-700"><Pencil className="h-4 w-4" /> Ubah</Link> : null}
+              {canWrite ? <DeleteButton id={row.id} nama={String(row.nama ?? "")} onDeleted={fetchData} /> : null}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overscroll-x-contain overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] md:block">
         <table className="w-max min-w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-200">
             {table.getHeaderGroups().map((hg) => (
@@ -334,14 +362,14 @@ export function PendudukTable({
         <span>
           Total {total} data — halaman {pageIndex + 1} dari {totalPages}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
           <select
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value));
               setPageIndex(0);
             }}
-            className="rounded-lg border border-slate-300 px-2 py-1"
+            className="col-span-2 min-h-10 w-full rounded-lg border border-slate-300 bg-white px-2 py-1 sm:col-span-1 sm:w-auto"
           >
             {[10, 25, 50, 100].map((n) => (
               <option key={n} value={n}>{n} / halaman</option>
@@ -351,7 +379,7 @@ export function PendudukTable({
             type="button"
             disabled={pageIndex === 0}
             onClick={() => setPageIndex((p) => Math.max(0, p - 1))}
-            className="rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
+            className="min-h-10 rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
           >
             Sebelumnya
           </button>
@@ -359,7 +387,7 @@ export function PendudukTable({
             type="button"
             disabled={pageIndex + 1 >= totalPages}
             onClick={() => setPageIndex((p) => p + 1)}
-            className="rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
+            className="min-h-10 rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
           >
             Berikutnya
           </button>

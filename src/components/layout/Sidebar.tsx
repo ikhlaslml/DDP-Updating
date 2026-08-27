@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import type { LucideIcon } from "lucide-react";
 import { X } from "lucide-react";
-import { NAV } from "./nav";
+import { NAV_SECTIONS } from "./nav";
 import { useAuthInfo } from "@/components/providers/AuthInfo";
 
 function NavLink({
@@ -26,7 +26,7 @@ function NavLink({
       href={href}
       onClick={onClick}
       className={clsx(
-        "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+        "flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
         active ? "bg-indigo-50 text-indigo-600" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
       )}
     >
@@ -56,7 +56,7 @@ export function Sidebar({
         desktopOpen ? "lg:translate-x-0" : "lg:-translate-x-full"
       )}
     >
-      <div className="flex items-center gap-2.5 px-6 h-16 shrink-0">
+      <div className="flex h-16 shrink-0 items-center gap-2.5 px-5 sm:px-6">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold text-sm">
           D
         </div>
@@ -65,24 +65,30 @@ export function Sidebar({
           type="button"
           onClick={onNavigate}
           aria-label="Tutup menu"
-          className="ml-auto rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-slate-700 lg:hidden"
+          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-700 lg:hidden"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 py-4">
-        <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Menu</p>
-        <div className="space-y-1">
-          {NAV.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              label={item.label}
-              icon={item.icon}
-              active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)}
-              onClick={onNavigate}
-            />
+      <nav className="flex-1 overflow-y-auto px-4 py-3" aria-label="Navigasi utama">
+        <div className="space-y-4">
+          {NAV_SECTIONS.map((section) => (
+            <section key={section.label} aria-labelledby={`nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`}>
+              <p id={`nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`} className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">{section.label}</p>
+              <div className="space-y-1">
+                {section.items.map((item) => (
+                  <NavLink
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)}
+                    onClick={onNavigate}
+                  />
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </nav>

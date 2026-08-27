@@ -47,16 +47,16 @@ export function RespondentVisitForm({ code }: { code: number }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="w-full basis-full space-y-4">
       <RespondentIdentityFields
         value={value}
         onChange={(next) => { setValue(next); setUploaded(null); }}
         draftKey={draftKey}
       />
       {error ? <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</p> : null}
-      <div className="flex flex-wrap justify-end gap-2">
-        <button type="button" disabled={saving} onClick={() => setOpen(false)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"><X className="h-4 w-4" /> Tutup</button>
-        <button type="button" disabled={saving || !value.nama.trim() || !value.photo} onClick={save} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"><Check className="h-4 w-4" /> {saving ? "Menyimpan..." : "Simpan Kunjungan"}</button>
+      <div className="flex flex-col justify-end gap-2 sm:flex-row">
+        <button type="button" disabled={saving} onClick={() => setOpen(false)} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 sm:w-auto"><X className="h-4 w-4" /> Tutup</button>
+        <button type="button" disabled={saving || !value.nama.trim() || !value.photo} onClick={save} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-40 sm:w-auto"><Check className="h-4 w-4" /> {saving ? "Menyimpan..." : "Simpan Kunjungan"}</button>
       </div>
     </div>
   );

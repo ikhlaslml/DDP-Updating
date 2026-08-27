@@ -114,7 +114,7 @@ export function RiwayatView() {
           ) : null}
           {snapshotMeta?.changeSummary ? <p className="mt-1 text-xs font-medium text-indigo-600">{snapshotMeta.changeSummary}</p> : null}
         </div>
-        <div className="flex items-end gap-3">
+        <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-end">
           <label className="text-xs font-medium text-slate-500">
             Pilih Periode Data
             <select
@@ -123,7 +123,7 @@ export function RiwayatView() {
                 setSelected(e.target.value);
                 setPage(1);
               }}
-              className="mt-1 block rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700"
+              className="mt-1 block min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"
             >
               {periods.map((p) => (
                 <option key={p.kode} value={p.kode}>
@@ -136,7 +136,7 @@ export function RiwayatView() {
           {selected && (
             <a
               href={`/api/snapshot/${selected}/export`}
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:w-auto"
             >
               Export Excel
             </a>
@@ -187,16 +187,16 @@ export function RiwayatView() {
         </table>
       </div>
 
-      <div className="mt-3 flex items-center justify-between text-sm text-slate-600">
+      <div className="mt-4 flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
         <span>Total {total} — halaman {page} dari {totalPages}</span>
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
           <select
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value));
               setPage(1);
             }}
-            className="rounded-lg border border-slate-300 px-2 py-1"
+            className="col-span-2 min-h-10 w-full rounded-lg border border-slate-300 bg-white px-2 py-1 sm:col-span-1 sm:w-auto"
           >
             {[10, 25, 50].map((n) => (
               <option key={n} value={n}>{n} / halaman</option>
@@ -206,7 +206,7 @@ export function RiwayatView() {
             type="button"
             disabled={page <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
+            className="min-h-10 rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
           >
             Sebelumnya
           </button>
@@ -214,7 +214,7 @@ export function RiwayatView() {
             type="button"
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
-            className="rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
+            className="min-h-10 rounded-lg border border-slate-300 px-3 py-1 disabled:opacity-40"
           >
             Berikutnya
           </button>

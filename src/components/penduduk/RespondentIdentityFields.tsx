@@ -71,8 +71,8 @@ export function RespondentIdentityFields({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 md:grid-cols-[1fr_220px]">
-        <label className="text-sm font-semibold text-slate-700">
+      <div className="mt-5 grid gap-5 md:grid-cols-[minmax(0,1fr)_220px]">
+        <label className="min-w-0 text-sm font-semibold text-slate-700">
           Nama Responden *
           <input
             value={value.nama}
@@ -92,16 +92,16 @@ export function RespondentIdentityFields({
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(event) => selectPhoto(event.target.files?.[0])} />
         <input ref={galleryRef} type="file" accept="image/*" className="hidden" onChange={(event) => selectPhoto(event.target.files?.[0])} />
-        <button type="button" disabled={processing} onClick={() => cameraRef.current?.click()} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">
+        <button type="button" disabled={processing} onClick={() => cameraRef.current?.click()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 sm:w-auto">
           {processing ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />} Ambil dari Kamera
         </button>
-        <button type="button" disabled={processing} onClick={() => galleryRef.current?.click()} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-50">
+        <button type="button" disabled={processing} onClick={() => galleryRef.current?.click()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-50 sm:w-auto">
           <ImagePlus className="h-4 w-4" /> Pilih dari Galeri
         </button>
-        {value.photo ? <span className="self-center text-xs font-medium text-emerald-700">Foto terkompresi: {Math.ceil(value.photo.size / 1024)} KB</span> : null}
+        {value.photo ? <span className="self-center text-center text-xs font-medium text-emerald-700 sm:text-left">Foto terkompresi: {Math.ceil(value.photo.size / 1024)} KB</span> : null}
       </div>
       {error ? <p role="alert" className="mt-3 text-sm font-medium text-red-600">{error}</p> : null}
     </section>
