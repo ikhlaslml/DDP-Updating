@@ -20,6 +20,17 @@ body {
 
 /* Print: only the letter sheet is visible. */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    background: #fff !important;
+  }
   body * {
     visibility: hidden !important;
   }
@@ -38,7 +49,12 @@ body {
     background: #fff;
   }
   .surat-print .surat-sheet {
-    max-width: 100%;
+    width: 190mm;
+    max-width: 190mm;
+    min-height: 0;
+    margin: 0 auto;
+    padding: 8mm 10mm !important;
     box-shadow: none;
+    break-inside: avoid;
   }
 }

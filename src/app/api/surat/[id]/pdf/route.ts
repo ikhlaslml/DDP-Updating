@@ -8,18 +8,31 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
-  const document = await getIssuedLetterDocument((await params).id, ctx.desaId, { includeLogo: true });
-  if (!document) return NextResponse.json({ error: "Surat tidak ditemukan" }, { status: 404 });
-  const pdf = await renderLetterPdf(document);
-  const inline = req.nextUrl.searchParams.get("mode") === "inline";
-  const filename = `surat-${document.letter.nomor.replace(/[^a-zA-Z0-9.-]+/g, "-")}.pdf`;
-  return new NextResponse(new Uint8Array(pdf), {
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Length": String(pdf.byteLength),
-      "Content-Disposition": `${inline ? "inline" : "attachment"}; filename="${filename}"`,
-      "Cache-Control": "private, no-store",
-      "X-Content-Type-Options": "nosniff",
-    },
-  });
+  const id = (await params).id;
+  try {
+    const document = await getIssuedLetterDocument(id, ctx.desaId, { includeLogo: true });
+    if (!document) return NextResponse.json({ error: "Surat tidak ditemukan" }, { status: 404 });
+    const pdf = await renderLetterPdf(document);
+    const inline = req.nextUrl.searchParams.get("mode") === "inline";
+    const filename = `surat-${document.letter.nomor.replace(/[^a-zA-Z0-9.-]+/g, "-")}.pdf`;
+    return new NextResponse(new Uint8Array(pdf), {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Length": String(pdf.byteLength),
+        "Content-Disposition": `${inline ? "inline" : "attachment"}; filename="${filename}"`,
+        "Cache-Control": "private, no-store",
+        "X-Content-Type-Options": "nosniff",
+      },
+    });
+  } catch (error) {
+    console.error("Gagal membuat PDF surat", {
+      letterId: id,
+      desaId: ctx.desaId,
+      error: error instanceof Error ? error.message : "Unknown PDF error",
+    });
+    return NextResponse.json(
+      { error: "PDF surat gagal dibuat. Silakan coba kembali atau hubungi administrator." },
+      { status: 500 }
+    );
+  }
 }

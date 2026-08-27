@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { SuratPreview, type SuratSettings, type Warga } from "@/components/surat/SuratPreview";
 import { useCanWrite } from "@/components/providers/AuthInfo";
 import { SuratHistory } from "@/components/surat/SuratHistory";
-import { FileClock, FilePlus2 } from "lucide-react";
+import { Download, FileClock, FilePlus2, Printer } from "lucide-react";
 
 type Template = { id: string; nama: string; kode: string; kategori: string; isi: string };
 type Row = Warga & { id: string };
@@ -22,6 +22,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
   const [keperluan, setKeperluan] = useState("");
   const [issuing, setIssuing] = useState(false);
   const [nomor, setNomor] = useState<string | null>(null);
+  const [suratId, setSuratId] = useState<string | null>(null);
   const [sourceEvent, setSourceEvent] = useState<SourceEvent | null>(null);
 
   useEffect(() => {
@@ -93,7 +94,10 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
     });
     const json = await res.json();
     setIssuing(false);
-    if (res.ok) setNomor(json.data.nomor);
+    if (res.ok) {
+      setNomor(json.data.nomor);
+      setSuratId(json.data.id);
+    }
   }
 
   return (
@@ -122,7 +126,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
             <li key={r.id}>
               <button
                 type="button"
-                onClick={() => { setSelected(r); setSourceEvent(null); setNomor(null); }}
+                onClick={() => { setSelected(r); setSourceEvent(null); setNomor(null); setSuratId(null); }}
                 className={`flex w-full items-center justify-between px-2 py-2 text-left text-sm hover:bg-slate-50 ${selected?.id === r.id ? "bg-indigo-50" : ""}`}
               >
                 <span className="font-medium text-slate-800">{r.nama}</span>
@@ -152,7 +156,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
               <label className="block text-xs font-medium text-slate-600">Jenis Surat</label>
               <select
                 value={templateId}
-                onChange={(e) => { setTemplateId(e.target.value); setNomor(null); }}
+                onChange={(e) => { setTemplateId(e.target.value); setNomor(null); setSuratId(null); }}
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               >
                 {templates.map((t) => (
@@ -164,7 +168,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
               <label className="block text-xs font-medium text-slate-600">Keperluan</label>
               <input
                 value={keperluan}
-                onChange={(e) => { setKeperluan(e.target.value); setNomor(null); }}
+                onChange={(e) => { setKeperluan(e.target.value); setNomor(null); setSuratId(null); }}
                 placeholder="mis. melamar pekerjaan"
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
@@ -182,15 +186,23 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
               ) : (
                 <span className="text-xs text-slate-400">Penerbitan surat hanya untuk operator.</span>
               )}
-              {nomor && (
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  Cetak
-                </button>
-              )}
+              {nomor && suratId ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => window.open(`/api/surat/${suratId}/pdf?mode=inline`, "_blank", "noopener,noreferrer")}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    <Printer className="h-4 w-4" /> Cetak PDF
+                  </button>
+                  <a
+                    href={`/api/surat/${suratId}/pdf`}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 px-4 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
+                  >
+                    <Download className="h-4 w-4" /> Unduh PDF
+                  </a>
+                </>
+              ) : null}
             </div>
             {nomor && <p className="text-sm font-medium text-emerald-600">Surat diterbitkan. Nomor: {nomor}</p>}
           </div>
