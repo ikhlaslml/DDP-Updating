@@ -153,6 +153,7 @@ export function MapView() {
                     {building.keterangan ? <p>{building.keterangan}</p> : null}
                     <p>{building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}</p>
                     {occupied ? <p>{building.jumlahPenghuni} penghuni terdata</p> : null}
+                    <a href={`/bangunan/${building.kode}`} className="font-semibold text-indigo-600">Lihat detail bangunan</a>
                   </div>
                 </Popup>
               </Polygon>

@@ -422,6 +422,49 @@ model Bangunan {
   @@index([desaId, jenis])
 }
 
+// Metadata for files stored outside PostgreSQL (private Blob/local development storage).
+model MediaAsset {
+  id              String   @id @default(cuid())
+  desaId          String
+  provider        String
+  storageKey      String
+  storageUrl      String
+  mimeType        String
+  sizeBytes       Int
+  purpose         String
+  originalName    String?
+  uploadedBy      String
+  uploadedByName  String?
+  createdAt       DateTime @default(now())
+
+  @@unique([desaId, storageKey])
+  @@index([desaId, purpose, createdAt])
+}
+
+// Append-only respondent identity per occupied-building visit and period.
+model SesiPendataanBangunan {
+  id                String   @id @default(cuid())
+  desaId            String
+  bangunanId        String?
+  kodeBangunan      Int
+  stagingGroupId    String?
+  periode           String
+  namaResponden     String
+  fotoRespondenUrl  String
+  mediaAssetId      String
+  enumeratorId      String
+  enumeratorName    String
+  enumeratorEmail   String?
+  diisiPada         DateTime @default(now())
+  supersedesId      String?
+  createdAt         DateTime @default(now())
+
+  @@index([desaId, kodeBangunan, diisiPada])
+  @@index([desaId, periode])
+  @@index([mediaAssetId])
+  @@index([stagingGroupId])
+}
+
 // Immutable point-in-time baseline (periode T0, T1, ...).
 model Snapshot {
   id        String   @id @default(cuid())

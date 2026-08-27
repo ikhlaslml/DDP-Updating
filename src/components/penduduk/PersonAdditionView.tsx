@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, Check, Search, UserPlus, UsersRound } from "lucide-react";
+import { Building2, Check, ChevronRight, Search, UserPlus, UsersRound } from "lucide-react";
 import { SurveyEditor } from "@/components/penduduk/SurveyEditor";
+import { RespondentIdentityFields, type RespondentIdentityValue } from "@/components/penduduk/RespondentIdentityFields";
 import { buildPayload } from "@/lib/payload";
+import { uploadMedia, type UploadedMedia } from "@/lib/client-media";
+import { clearRespondentDraft } from "@/lib/respondent-draft";
 import { mapping } from "@/lib/indikator";
 import { blankSurveyRecord, surveyColumns, type SurveyRole } from "@/lib/survey";
 
@@ -58,6 +61,9 @@ export function PersonAdditionView({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [respondent, setRespondent] = useState<RespondentIdentityValue>({ nama: "", photo: null });
+  const [respondentAccepted, setRespondentAccepted] = useState(false);
+  const [uploadedRespondent, setUploadedRespondent] = useState<UploadedMedia | null>(null);
   const isHead = role === "HEAD";
 
   useEffect(() => {
@@ -101,6 +107,16 @@ export function PersonAdditionView({
     setGeneralError(null);
     setErrors({});
     try {
+      let respondentPayload: { nama: string; mediaAssetId: string; fotoUrl: string } | undefined;
+      if (isHead) {
+        if (!respondent.nama.trim() || !respondent.photo) {
+          setGeneralError("Nama dan foto responden wajib diisi sebelum melanjutkan.");
+          return;
+        }
+        const media = uploadedRespondent ?? await uploadMedia(respondent.photo, "RESPONDEN");
+        if (!uploadedRespondent) setUploadedRespondent(media);
+        respondentPayload = { nama: respondent.nama.trim(), mediaAssetId: media.id, fotoUrl: media.url };
+      }
       const response = await fetch("/api/staging/person", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -109,6 +125,7 @@ export function PersonAdditionView({
           buildingCode: isHead ? Number(buildingCode) : undefined,
           familyNkk: isHead ? undefined : familyNkk,
           eventType,
+          respondent: respondentPayload,
           eventData: eventType ? {
             ...eventDetails,
             tanggal: eventType === "KELAHIRAN" ? record.tgl_lahir : eventDetails.tanggal,
@@ -122,6 +139,7 @@ export function PersonAdditionView({
         setErrors(json.fields ?? {});
         return;
       }
+      if (isHead) await clearRespondentDraft(`new-family-${buildingCode}`).catch(() => {});
       router.push(`/penduduk?staged=${eventType?.toLocaleLowerCase("id-ID") ?? (isHead ? "keluarga" : "anggota")}`);
       router.refresh();
     } catch {
@@ -132,6 +150,7 @@ export function PersonAdditionView({
   }
 
   const sourceSelected = isHead ? Boolean(buildingCode) : Boolean(familyNkk);
+  const respondentComplete = Boolean(respondent.nama.trim() && respondent.photo);
   const HeaderIcon = isHead ? UsersRound : UserPlus;
 
   return (
@@ -182,7 +201,33 @@ export function PersonAdditionView({
 
       {generalError ? <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{generalError}</div> : null}
 
-      {sourceSelected ? (
+      {sourceSelected && isHead ? (
+        <>
+          <RespondentIdentityFields
+            value={respondent}
+            onChange={(next) => {
+              setRespondent(next);
+              setUploadedRespondent(null);
+              setRespondentAccepted(false);
+            }}
+            draftKey={`new-family-${buildingCode}`}
+          />
+          {!respondentAccepted ? (
+            <div className="flex justify-end">
+              <button
+                type="button"
+                disabled={!respondentComplete}
+                onClick={() => setRespondentAccepted(true)}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Lanjut ke Aspek 1 <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          ) : null}
+        </>
+      ) : null}
+
+      {sourceSelected && (!isHead || respondentAccepted) ? (
         <>
           {eventType ? (
             <section className="rounded-2xl border border-sky-100 bg-sky-50 p-5">

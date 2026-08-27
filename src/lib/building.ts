@@ -41,13 +41,20 @@ export const buildingSubmissionSchema = z
     }),
     head: personPayloadSchema.nullable().optional(),
     members: z.array(personPayloadSchema).max(30).default([]),
-    respondentIndex: z.coerce.number().int().min(0).default(0),
+    respondent: z.object({
+      nama: z.string().trim().min(2, "Nama responden wajib diisi").max(150),
+      mediaAssetId: z.string().trim().min(1, "Foto responden wajib diunggah"),
+      fotoUrl: z.string().trim().startsWith("/api/media/"),
+    }).nullable().optional(),
     eventType: z.literal("MIGRASI_MASUK").optional(),
     eventData: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((value, ctx) => {
     if (value.building.jenis === "BERPENGHUNI" && !value.head) {
       ctx.addIssue({ code: "custom", path: ["head"], message: "Data kepala keluarga wajib diisi" });
+    }
+    if (value.building.jenis === "BERPENGHUNI" && !value.respondent) {
+      ctx.addIssue({ code: "custom", path: ["respondent"], message: "Nama dan foto responden wajib diisi" });
     }
     if (value.building.jenis === "TIDAK_BERPENGHUNI" && !value.building.kategori) {
       ctx.addIssue({ code: "custom", path: ["building", "kategori"], message: "Kategori bangunan wajib dipilih" });

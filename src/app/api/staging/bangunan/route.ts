@@ -131,10 +131,14 @@ export async function POST(req: NextRequest) {
         const memberInputs = submitted.data.members;
         const nkk = typeof headInput.nkk === "string" ? headInput.nkk : "";
         const headName = typeof headInput.nama === "string" ? headInput.nama : "";
-        const respondentIndex = submitted.data.respondentIndex;
-        const respondentInput = respondentIndex === 0 ? headInput : memberInputs[respondentIndex - 1];
-        const respondentName = typeof respondentInput?.nama === "string" ? respondentInput.nama : "";
-        if (!respondentName) throw new Error("Pilih responden wawancara yang sudah diisi namanya");
+        const respondent = submitted.data.respondent;
+        if (!respondent) throw new Error("Nama dan foto responden wajib diisi");
+        const respondentMedia = await tx.mediaAsset.findFirst({
+          where: { id: respondent.mediaAssetId, desaId: ctx.desaId, purpose: "RESPONDEN" },
+        });
+        if (!respondentMedia || respondent.fotoUrl !== `/api/media/${respondentMedia.id}`) {
+          throw new Error("Foto responden tidak valid untuk desa ini");
+        }
         const totalFamily = memberInputs.length + 1;
         const shared = {
           kode_bangunan: code,
@@ -151,7 +155,7 @@ export async function POST(req: NextRequest) {
           jml_keluarga: totalFamily,
           datamasuk: new Date(),
           enumerator: ctx.userName,
-          responden: respondentName,
+          responden: respondent.nama,
           kesediaan: "Ya",
         };
 
@@ -210,15 +214,6 @@ export async function POST(req: NextRequest) {
             throw error;
           }
           residents.push(parsed.data);
-        }
-
-        if (respondentIndex > 0) {
-          const respondentAge = residents[respondentIndex].usia;
-          if (typeof respondentAge !== "number" || respondentAge < 18) {
-            const error = new Error("Responden anggota keluarga harus berusia minimal 18 tahun") as Error & { fields?: Record<string, string> };
-            error.fields = { [`members.${respondentIndex - 1}.tgl_lahir`]: "Belum memenuhi usia responden" };
-            throw error;
-          }
         }
 
         const niks = residents.map((resident) => String(resident.nik));
@@ -289,6 +284,34 @@ export async function POST(req: NextRequest) {
             createdByName: ctx.userName,
             createdByEmail: ctx.userEmail,
           })),
+        });
+
+        const [latestSession, latestSnapshot] = await Promise.all([
+          tx.sesiPendataanBangunan.findFirst({
+            where: { desaId: ctx.desaId, kodeBangunan: code },
+            orderBy: { diisiPada: "desc" },
+            select: { id: true },
+          }),
+          tx.snapshot.findFirst({
+            where: { desaId: ctx.desaId },
+            orderBy: { urutan: "desc" },
+            select: { kode: true },
+          }),
+        ]);
+        await tx.sesiPendataanBangunan.create({
+          data: {
+            desaId: ctx.desaId,
+            kodeBangunan: code,
+            stagingGroupId: groupId,
+            periode: latestSnapshot?.kode ?? "T0",
+            namaResponden: respondent.nama,
+            fotoRespondenUrl: respondent.fotoUrl,
+            mediaAssetId: respondentMedia.id,
+            enumeratorId: ctx.userId,
+            enumeratorName: ctx.userName,
+            enumeratorEmail: ctx.userEmail || null,
+            supersedesId: latestSession?.id ?? null,
+          },
         });
 
         return { groupId, code, occupantCount: residents.length };

@@ -13,11 +13,19 @@ const submissionSchema = z
     familyNkk: z.string().regex(/^\d{16}$/).optional(),
     eventType: z.enum(["KELAHIRAN", "MIGRASI_MASUK"]).optional(),
     eventData: z.record(z.string(), z.unknown()).optional(),
+    respondent: z.object({
+      nama: z.string().trim().min(2).max(150),
+      mediaAssetId: z.string().trim().min(1),
+      fotoUrl: z.string().trim().startsWith("/api/media/"),
+    }).optional(),
     data: z.record(z.string(), z.unknown()),
   })
   .superRefine((value, ctx) => {
     if (value.role === "HEAD" && !value.buildingCode) {
       ctx.addIssue({ code: "custom", path: ["buildingCode"], message: "Pilih bangunan yang akan dihuni" });
+    }
+    if (value.role === "HEAD" && !value.respondent) {
+      ctx.addIssue({ code: "custom", path: ["respondent"], message: "Nama dan foto responden wajib diisi" });
     }
     if (value.role === "MEMBER" && !value.familyNkk) {
       ctx.addIssue({ code: "custom", path: ["familyNkk"], message: "Pilih kepala keluarga" });
@@ -76,6 +84,8 @@ export async function POST(req: NextRequest) {
         let authoritative: Record<string, unknown> = {};
         let nkk = "";
         let ringkasan = "";
+        let selectedBuildingCode: number | null = null;
+        let respondentMediaId: string | null = null;
 
         if (role === "HEAD") {
           const code = body.data.buildingCode as number;
@@ -87,6 +97,16 @@ export async function POST(req: NextRequest) {
           if (building?.jenis === "TIDAK_BERPENGHUNI") {
             throw new Error("Bangunan ini tercatat tidak berpenghuni. Ubah status bangunan terlebih dahulu.");
           }
+          const respondent = body.data.respondent;
+          if (!respondent) throw new Error("Nama dan foto responden wajib diisi");
+          const respondentMedia = await tx.mediaAsset.findFirst({
+            where: { id: respondent.mediaAssetId, desaId: ctx.desaId, purpose: "RESPONDEN" },
+          });
+          if (!respondentMedia || respondent.fotoUrl !== `/api/media/${respondentMedia.id}`) {
+            throw new Error("Foto responden tidak valid untuk desa ini");
+          }
+          selectedBuildingCode = code;
+          respondentMediaId = respondentMedia.id;
           authoritative = {
             kode_bangunan: code,
             kode_deskel: desa.kodeWilayah ?? legacy?.kode_deskel ?? undefined,
@@ -99,7 +119,7 @@ export async function POST(req: NextRequest) {
             alamat: building?.alamat ?? legacy?.alamat,
             status_dalam_keluarga: "Kepala Keluarga",
             subjek: "Keluarga",
-            responden: data.nama,
+            responden: respondent.nama,
             kesediaan: "Ya",
             jml_keluarga: 1,
           };
@@ -167,11 +187,12 @@ export async function POST(req: NextRequest) {
           && baselineDupe.statusAktif === false;
         if (baselineDupe && !reactivation) throw new Error("NIK sudah terdaftar sebagai penduduk aktif atau berada di desa lain");
 
+        const groupId = randomUUID();
         const created = await tx.stagingChange.create({
           data: {
             desaId: ctx.desaId,
             entityType: "PENDUDUK",
-            groupId: randomUUID(),
+            groupId,
             aksi: reactivation ? "UPDATE" : "CREATE",
             pendudukId: reactivation ? baselineDupe.id : null,
             nik,
@@ -189,7 +210,38 @@ export async function POST(req: NextRequest) {
             createdByEmail: ctx.userEmail,
           },
         });
-        return created;
+        if (role === "HEAD" && selectedBuildingCode !== null && respondentMediaId) {
+          const respondent = body.data.respondent as NonNullable<typeof body.data.respondent>;
+          const [latestSession, latestSnapshot] = await Promise.all([
+            tx.sesiPendataanBangunan.findFirst({
+              where: { desaId: ctx.desaId, kodeBangunan: selectedBuildingCode },
+              orderBy: { diisiPada: "desc" },
+              select: { id: true },
+            }),
+            tx.snapshot.findFirst({
+              where: { desaId: ctx.desaId },
+              orderBy: { urutan: "desc" },
+              select: { kode: true },
+            }),
+          ]);
+          await tx.sesiPendataanBangunan.create({
+            data: {
+              desaId: ctx.desaId,
+              bangunanId: null,
+              kodeBangunan: selectedBuildingCode,
+              stagingGroupId: groupId,
+              periode: latestSnapshot?.kode ?? "T0",
+              namaResponden: respondent.nama,
+              fotoRespondenUrl: respondent.fotoUrl,
+              mediaAssetId: respondentMediaId,
+              enumeratorId: ctx.userId,
+              enumeratorName: ctx.userName,
+              enumeratorEmail: ctx.userEmail || null,
+              supersedesId: latestSession?.id ?? null,
+            },
+          });
+        }
+        return { change: created, buildingCode: selectedBuildingCode };
       },
       { isolationLevel: "Serializable", timeout: 30_000 }
     );

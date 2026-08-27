@@ -13,11 +13,15 @@ import {
   Home,
   MapPinned,
   Store,
+  UserRoundCheck,
   Users,
 } from "lucide-react";
 import { SurveyEditor } from "@/components/penduduk/SurveyEditor";
+import { RespondentIdentityFields, type RespondentIdentityValue } from "@/components/penduduk/RespondentIdentityFields";
 import { NON_RESIDENTIAL_CATEGORIES, type SpatialPoint } from "@/lib/building";
+import { uploadMedia, type UploadedMedia } from "@/lib/client-media";
 import { buildPayload } from "@/lib/payload";
+import { clearRespondentDraft } from "@/lib/respondent-draft";
 import { mapping } from "@/lib/indikator";
 import { blankSurveyRecord, surveyColumns, type SurveyRole } from "@/lib/survey";
 
@@ -43,7 +47,8 @@ type BuildingForm = {
 const STEPS = [
   { title: "Digitasi", subtitle: "Gambar batas atap", icon: MapPinned },
   { title: "Bangunan", subtitle: "Jenis dan alamat", icon: Building2 },
-  { title: "Penghuni", subtitle: "Kepala dan anggota", icon: Users },
+  { title: "Responden", subtitle: "Nama dan foto", icon: UserRoundCheck },
+  { title: "Keluarga", subtitle: "Hanya Aspek 1", icon: Users },
   { title: "Tinjau", subtitle: "Masuk staging", icon: Check },
 ];
 
@@ -52,16 +57,6 @@ function payload(values: Record<string, string>, role: SurveyRole) {
     values,
     surveyColumns(role).map((name) => [name, mapping.kolom[name]] as [string, typeof mapping.kolom[string]])
   );
-}
-
-function isAdult(dateValue: string | undefined) {
-  if (!dateValue) return false;
-  const birth = new Date(dateValue);
-  if (Number.isNaN(birth.getTime())) return false;
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age -= 1;
-  return age >= 18;
 }
 
 export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MASUK" }) {
@@ -84,7 +79,8 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
   const [head, setHead] = useState(() => blankSurveyRecord("HEAD"));
   const [members, setMembers] = useState<Record<string, string>[]>([]);
   const [selectedPerson, setSelectedPerson] = useState(0);
-  const [respondentIndex, setRespondentIndex] = useState(0);
+  const [respondent, setRespondent] = useState<RespondentIdentityValue>({ nama: "", photo: null });
+  const [uploadedRespondent, setUploadedRespondent] = useState<UploadedMedia | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -117,7 +113,6 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
 
   function setMemberCount(nextCount: number) {
     const count = Math.max(0, Math.min(30, nextCount));
-    if (respondentIndex > count) setRespondentIndex(0);
     setMembers((current) => {
       if (current.length === count) return current;
       if (current.length > count) return current.slice(0, count);
@@ -127,10 +122,6 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       ];
     });
     setSelectedPerson((current) => Math.min(current, count));
-  }
-
-  function setRespondent(personIndex: number) {
-    setRespondentIndex(personIndex);
   }
 
   function validateCurrentStep() {
@@ -153,7 +144,11 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         return false;
       }
     }
-    if (step === 2 && occupied) {
+    if (step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo)) {
+      setGeneralError("Nama dan foto responden wajib diisi sebelum membuka Aspek 1.");
+      return false;
+    }
+    if (step === 3 && occupied) {
       const required = ["nama", "nik", "nkk", "jk", "tgl_lahir"];
       const missingHead = required.find((field) => !head[field]);
       if (missingHead) {
@@ -174,12 +169,12 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
 
   function next() {
     if (!validateCurrentStep()) return;
-    if (step === 1 && !occupied) setStep(3);
-    else setStep((current) => Math.min(3, current + 1));
+    if (step === 1 && !occupied) setStep(4);
+    else setStep((current) => Math.min(4, current + 1));
   }
 
   function back() {
-    if (step === 3 && !occupied) setStep(1);
+    if (step === 4 && !occupied) setStep(1);
     else setStep((current) => Math.max(0, current - 1));
   }
 
@@ -207,6 +202,16 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
     setGeneralError(null);
     setErrors({});
     try {
+      let respondentPayload: { nama: string; mediaAssetId: string; fotoUrl: string } | null = null;
+      if (occupied) {
+        if (!respondent.nama.trim() || !respondent.photo) {
+          setGeneralError("Nama dan foto responden wajib diisi.");
+          return;
+        }
+        const media = uploadedRespondent ?? await uploadMedia(respondent.photo, "RESPONDEN");
+        if (!uploadedRespondent) setUploadedRespondent(media);
+        respondentPayload = { nama: respondent.nama.trim(), mediaAssetId: media.id, fotoUrl: media.url };
+      }
       const response = await fetch("/api/staging/bangunan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -219,7 +224,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
           },
           head: occupied ? payload(head, "HEAD") : null,
           members: occupied ? members.map((member) => payload(member, "MEMBER")) : [],
-          respondentIndex,
+          respondent: respondentPayload,
           eventType,
           eventData: eventType ? eventDetails : undefined,
         }),
@@ -230,7 +235,8 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         setErrors(json.fields ?? {});
         return;
       }
-      router.push("/penduduk?staged=bangunan");
+      if (occupied) await clearRespondentDraft("new-building-respondent").catch(() => {});
+      router.push(`/bangunan/${json.data.code}`);
       router.refresh();
     } catch {
       setGeneralError("Jaringan bermasalah. Coba simpan kembali.");
@@ -263,10 +269,10 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
           </div>
         </section>
       ) : null}
-      <div className="grid gap-3 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {STEPS.map((item, index) => {
           const Icon = item.icon;
-          const disabled = !occupied && index === 2;
+          const disabled = !occupied && (index === 2 || index === 3);
           return (
             <div
               key={item.title}
@@ -274,7 +280,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
                 "flex items-center gap-3 rounded-xl border px-4 py-3",
                 step === index
                   ? "border-indigo-500 bg-indigo-50 text-indigo-800"
-                  : step > index || (step === 3 && disabled)
+                  : step > index || (step === 4 && disabled)
                     ? "border-emerald-100 bg-emerald-50 text-emerald-800"
                     : "border-slate-200 bg-white text-slate-500",
                 disabled && "opacity-50"
@@ -370,16 +376,21 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       ) : null}
 
       {step === 2 && occupied ? (
+        <RespondentIdentityFields
+          value={respondent}
+          onChange={(next) => {
+            setRespondent(next);
+            setUploadedRespondent(null);
+          }}
+          draftKey="new-building-respondent"
+        />
+      ) : null}
+
+      {step === 3 && occupied ? (
         <section className="space-y-5">
           <div className="flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <div><h2 className="text-xl font-bold text-slate-900">Penghuni Bangunan</h2><p className="mt-1 text-sm text-slate-500">Satu kepala keluarga dan seluruh orang yang tinggal/ditanggung dalam rumah ini.</p></div>
             <div className="flex flex-wrap items-end gap-3">
-              <label className="text-xs font-semibold text-slate-600">Responden Wawancara
-                <select value={respondentIndex} onChange={(event) => setRespondent(Number(event.target.value))} className="mt-1 block min-w-48 rounded-xl border border-slate-300 px-3 py-2 text-sm">
-                  <option value={0}>Kepala Keluarga</option>
-                  {members.map((member, index) => <option key={index} value={index + 1} disabled={Boolean(member.tgl_lahir) && !isAdult(member.tgl_lahir)}>Anggota {index + 1}{member.nama ? ` — ${member.nama}` : ""}</option>)}
-                </select>
-              </label>
               <label className="text-xs font-semibold text-slate-600">Jumlah anggota selain kepala
                 <input type="number" min="0" max="30" value={members.length} onChange={(event) => setMemberCount(Number(event.target.value))} className="mt-1 block w-32 rounded-xl border border-slate-300 px-3 py-2 text-sm" />
               </label>
@@ -406,7 +417,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         </section>
       ) : null}
 
-      {step === 3 ? (
+      {step === 4 ? (
         <section className="space-y-5 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
           <div><h2 className="text-xl font-bold text-slate-900">Tinjau Sebelum Masuk Perubahan Sementara</h2><p className="mt-1 text-sm text-slate-500">Belum mengubah baseline. Operator masih dapat membatalkan grup ini sebelum penggabungan.</p></div>
           <div className="grid gap-4 md:grid-cols-3">
@@ -420,8 +431,8 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
 
       <div className="flex items-center justify-between border-t border-slate-200 pt-5">
         <button type="button" disabled={step === 0 || submitting} onClick={back} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-40"><ChevronLeft className="h-4 w-4" /> Sebelumnya</button>
-        {step < 3 ? (
-          <button type="button" onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
+        {step < 4 ? (
+          <button type="button" disabled={step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo)} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
         ) : (
           <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : "Simpan ke Perubahan Sementara"}</button>
         )}

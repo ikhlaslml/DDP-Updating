@@ -30,6 +30,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
           <p className="text-sm text-slate-500">
             NIK {String(data.nik ?? "-")} &middot; NKK {String(data.nkk ?? "-")} &middot; {String(data.dusun ?? "-")}
           </p>
+          {typeof data.kode_bangunan === "number" ? <Link href={`/bangunan/${data.kode_bangunan}`} className="mt-2 inline-block text-sm font-medium text-indigo-600 hover:underline">Lihat bangunan dan identitas responden &rarr;</Link> : null}
         </div>
         <div className="flex items-center gap-3">
           <Link

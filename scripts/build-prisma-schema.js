@@ -178,6 +178,51 @@ lines.push(`  @@index([desaId, jenis])`);
 lines.push(`}`);
 lines.push(``);
 
+// --- Tenant-scoped media and respondent visit history ----------------------
+lines.push(`// Metadata for files stored outside PostgreSQL (private Blob/local development storage).`);
+lines.push(`model MediaAsset {`);
+lines.push(`  id              String   @id @default(cuid())`);
+lines.push(`  desaId          String`);
+lines.push(`  provider        String`);
+lines.push(`  storageKey      String`);
+lines.push(`  storageUrl      String`);
+lines.push(`  mimeType        String`);
+lines.push(`  sizeBytes       Int`);
+lines.push(`  purpose         String`);
+lines.push(`  originalName    String?`);
+lines.push(`  uploadedBy      String`);
+lines.push(`  uploadedByName  String?`);
+lines.push(`  createdAt       DateTime @default(now())`);
+lines.push(``);
+lines.push(`  @@unique([desaId, storageKey])`);
+lines.push(`  @@index([desaId, purpose, createdAt])`);
+lines.push(`}`);
+lines.push(``);
+lines.push(`// Append-only respondent identity per occupied-building visit and period.`);
+lines.push(`model SesiPendataanBangunan {`);
+lines.push(`  id                String   @id @default(cuid())`);
+lines.push(`  desaId            String`);
+lines.push(`  bangunanId        String?`);
+lines.push(`  kodeBangunan      Int`);
+lines.push(`  stagingGroupId    String?`);
+lines.push(`  periode           String`);
+lines.push(`  namaResponden     String`);
+lines.push(`  fotoRespondenUrl  String`);
+lines.push(`  mediaAssetId      String`);
+lines.push(`  enumeratorId      String`);
+lines.push(`  enumeratorName    String`);
+lines.push(`  enumeratorEmail   String?`);
+lines.push(`  diisiPada         DateTime @default(now())`);
+lines.push(`  supersedesId      String?`);
+lines.push(`  createdAt         DateTime @default(now())`);
+lines.push(``);
+lines.push(`  @@index([desaId, kodeBangunan, diisiPada])`);
+lines.push(`  @@index([desaId, periode])`);
+lines.push(`  @@index([mediaAssetId])`);
+lines.push(`  @@index([stagingGroupId])`);
+lines.push(`}`);
+lines.push(``);
+
 // --- Updating workflow (T0/T1 snapshots + staging) --------------------------
 // data/payload blobs are stored as JSON strings for SQLite portability; switch
 // to Json when moving to Postgres.

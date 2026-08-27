@@ -51,3 +51,7 @@ next-env.d.ts
 /tools/inspect/.env.inspect.local
 /playwright-report/
 /test-results/
+
+# local-only private media fallback (production uses private object storage)
+/.data/
+/node_modules.incomplete-*/
