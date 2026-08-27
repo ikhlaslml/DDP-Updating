@@ -2,21 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { ALL_COLUMNS } from "@/lib/indikator";
-import { buildPendudukWhere } from "@/lib/query";
+import { listCensusResidents, selectedResidentColumns } from "@/lib/census-source";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
-const COLUMN_SET = new Set(ALL_COLUMNS);
 const SORTABLE = new Set([...ALL_COLUMNS, "createdAt", "updatedAt"]);
-
-function parseSelect(columnsParam: string | null): Record<string, true> | undefined {
-  if (!columnsParam) return undefined;
-  const requested = columnsParam.split(",").map((c) => c.trim()).filter(Boolean);
-  const valid = requested.filter((c) => COLUMN_SET.has(c));
-  if (valid.length === 0) return undefined;
-  const select: Record<string, true> = { id: true };
-  for (const c of valid) select[c] = true;
-  return select;
-}
 
 export async function GET(req: NextRequest) {
   const ctx = await getAuthContext();
@@ -29,24 +18,29 @@ export async function GET(req: NextRequest) {
   const sortDir = sp.get("sortDir") === "asc" ? "asc" : "desc";
   const sortBy = SORTABLE.has(sortByParam) ? sortByParam : "createdAt";
 
-  const where = buildPendudukWhere(sp, ctx.desaId);
-  const select = parseSelect(sp.get("columns"));
-
-  const [total, data] = await Promise.all([
-    prisma.penduduk.count({ where }),
-    prisma.penduduk.findMany({
-      where,
-      select,
-      orderBy: { [sortBy]: sortDir },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    }),
-  ]);
-
-  return NextResponse.json({
-    data,
-    pagination: { page, pageSize, total, totalPages: Math.max(1, Math.ceil(total / pageSize)) },
-  });
+  const desa = await prisma.desa.findUnique({ where: { id: ctx.desaId }, select: { kodeWilayah: true } });
+  try {
+    const result = await listCensusResidents({
+      desaId: ctx.desaId,
+      kodeWilayah: desa?.kodeWilayah ?? null,
+      searchParams: sp,
+      page,
+      pageSize,
+      sortBy,
+      sortDir,
+      columns: selectedResidentColumns(sp.get("columns")),
+    });
+    return NextResponse.json({
+      data: result.data,
+      pagination: { page, pageSize, total: result.total, totalPages: Math.max(1, Math.ceil(result.total / pageSize)) },
+      source: result.source,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Sumber data sensus tidak dapat diakses" },
+      { status: process.env.DDP_DATA_SOURCE === "ruby" ? 502 : 500 }
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {
