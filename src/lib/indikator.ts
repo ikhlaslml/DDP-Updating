@@ -34,6 +34,9 @@ export const KELOMPOK_ORDER = [
   "sandang_pangan_papan",
 ] as const;
 
+export type KelompokIndikator = (typeof KELOMPOK_ORDER)[number];
+export const CORE_RESIDENT_COLUMNS = ["nkk", "nik", "nama"] as const;
+
 export const KELOMPOK_LABEL = mapping._meta.kelompok;
 
 export function kolomByKelompok(): Record<string, [string, KolomDef][]> {
@@ -43,6 +46,22 @@ export function kolomByKelompok(): Record<string, [string, KolomDef][]> {
     result[def.kelompok]?.push([name, def]);
   }
   return result;
+}
+
+export function parseKelompokParam(value: string | null | undefined): KelompokIndikator[] {
+  if (value === null || value === undefined) return ["identitas_keluarga"];
+  const requested = new Set(value.split(",").map((item) => item.trim()).filter(Boolean));
+  return KELOMPOK_ORDER.filter((item) => requested.has(item));
+}
+
+export function columnsForKelompok(groups: Iterable<KelompokIndikator>) {
+  const selected = new Set(groups);
+  const grouped = kolomByKelompok();
+  const columns = [
+    ...CORE_RESIDENT_COLUMNS,
+    ...KELOMPOK_ORDER.flatMap((group) => selected.has(group) ? grouped[group].map(([name]) => name) : []),
+  ];
+  return [...new Set(columns)];
 }
 
 export const ALL_COLUMNS = Object.keys(mapping.kolom);

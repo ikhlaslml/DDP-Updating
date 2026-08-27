@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
-import { ALL_COLUMNS } from "@/lib/indikator";
+import { ALL_COLUMNS, columnsForKelompok, parseKelompokParam } from "@/lib/indikator";
 import { listCensusResidents, selectedResidentColumns } from "@/lib/census-source";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
@@ -28,7 +28,9 @@ export async function GET(req: NextRequest) {
       pageSize,
       sortBy,
       sortDir,
-      columns: selectedResidentColumns(sp.get("columns")),
+      columns: sp.has("aspek")
+        ? columnsForKelompok(parseKelompokParam(sp.get("aspek")))
+        : selectedResidentColumns(sp.get("columns")),
     });
     return NextResponse.json({
       data: result.data,

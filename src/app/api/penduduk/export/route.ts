@@ -3,7 +3,8 @@ import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import { prisma } from "@/lib/prisma";
 import { buildPendudukWhere } from "@/lib/query";
-import { ALL_COLUMNS, mapping } from "@/lib/indikator";
+import { ALL_COLUMNS, columnsForKelompok, mapping, parseKelompokParam } from "@/lib/indikator";
+import { selectedResidentColumns } from "@/lib/census-source";
 import { toExportValue } from "@/lib/export-import";
 import { fieldLabel } from "@/lib/field-labels";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
@@ -16,10 +17,20 @@ export async function GET(req: NextRequest) {
   const where = buildPendudukWhere(sp, ctx.desaId);
 
   const isTemplate = sp.get("template") === "1";
-  const rows = isTemplate ? [] : await prisma.penduduk.findMany({ where, orderBy: { createdAt: "asc" } });
+  const requestedColumns = sp.has("aspek")
+    ? columnsForKelompok(parseKelompokParam(sp.get("aspek")))
+    : selectedResidentColumns(sp.get("columns"));
+  const activeColumns = isTemplate || requestedColumns.length === 0 && !sp.has("aspek")
+    ? ALL_COLUMNS
+    : requestedColumns;
+  const rows = isTemplate ? [] : await prisma.penduduk.findMany({
+    where,
+    select: Object.fromEntries(activeColumns.map((column) => [column, true])),
+    orderBy: { createdAt: "asc" },
+  });
   const data = rows.map((r) => {
     const record = r as unknown as Record<string, unknown>;
-    return ALL_COLUMNS.map((col) => toExportValue(record[col], mapping.kolom[col]));
+    return activeColumns.map((col) => toExportValue(record[col], mapping.kolom[col]));
   });
 
   const stamp = new Date().toISOString().slice(0, 10);
@@ -28,7 +39,7 @@ export async function GET(req: NextRequest) {
   // operator-friendly names rather than raw database identifiers.
   const headers = isTemplate
     ? ALL_COLUMNS
-    : ALL_COLUMNS.map((column) => fieldLabel(column, mapping.kolom[column]));
+    : activeColumns.map((column) => fieldLabel(column, mapping.kolom[column]));
 
   if (format === "csv") {
     const csv = Papa.unparse({ fields: headers, data });

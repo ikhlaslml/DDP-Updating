@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Eye, Pencil } from "lucide-react";
+import { Eye, FileSpreadsheet, FileText, Pencil } from "lucide-react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -11,9 +11,14 @@ import {
   type SortingState,
   type ColumnDef,
 } from "@tanstack/react-table";
-import { mapping, DEFAULT_VISIBLE_COLUMNS } from "@/lib/indikator";
+import {
+  columnsForKelompok,
+  KELOMPOK_ORDER,
+  mapping,
+  type KelompokIndikator,
+} from "@/lib/indikator";
 import { formatCell } from "@/lib/format";
-import { ColumnToggle } from "./ColumnToggle";
+import { AspectFilterPanel } from "./AspectFilterPanel";
 import { DeleteButton } from "./DeleteButton";
 import { useCanWrite } from "@/components/providers/AuthInfo";
 import { AddDataMenu } from "./AddDataMenu";
@@ -24,7 +29,13 @@ type Facets = { dusun: string[]; rw: number[]; rt: number[] };
 
 const columnHelper = createColumnHelper<Row>();
 
-export function PendudukTable() {
+const STICKY_CORE: Record<string, { left: number; width: number }> = {
+  nkk: { left: 0, width: 160 },
+  nik: { left: 160, width: 160 },
+  nama: { left: 320, width: 220 },
+};
+
+export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndikator[] }) {
   const canWrite = useCanWrite();
   const [rows, setRows] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
@@ -43,7 +54,8 @@ export function PendudukTable() {
   const [jk, setJk] = useState("");
   const [miskinBps, setMiskinBps] = useState("");
   const [facets, setFacets] = useState<Facets>({ dusun: [], rw: [], rt: [] });
-  const [visible, setVisible] = useState<Set<string>>(new Set(DEFAULT_VISIBLE_COLUMNS));
+  const [selectedAspects, setSelectedAspects] = useState<Set<KelompokIndikator>>(() => new Set(initialAspects));
+  const visible = useMemo(() => columnsForKelompok(selectedAspects), [selectedAspects]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 350);
@@ -73,7 +85,7 @@ export function PendudukTable() {
       params.set("sortBy", sorting[0].id);
       params.set("sortDir", sorting[0].desc ? "desc" : "asc");
     }
-    params.set("columns", [...visible].join(","));
+    params.set("aspek", KELOMPOK_ORDER.filter((group) => selectedAspects.has(group)).join(","));
 
     try {
       const res = await fetch(`/api/penduduk?${params.toString()}`);
@@ -87,7 +99,7 @@ export function PendudukTable() {
     } finally {
       setLoading(false);
     }
-  }, [pageIndex, pageSize, debouncedSearch, dusun, rw, rt, jk, miskinBps, sorting, visible]);
+  }, [pageIndex, pageSize, debouncedSearch, dusun, rw, rt, jk, miskinBps, sorting, selectedAspects]);
 
   useEffect(() => {
     fetchData();
@@ -98,7 +110,7 @@ export function PendudukTable() {
   }, [debouncedSearch, dusun, rw, rt, jk, miskinBps]);
 
   const columns = useMemo(() => {
-    const cols: ColumnDef<Row, unknown>[] = [...visible].map((name) =>
+    const cols: ColumnDef<Row, unknown>[] = visible.map((name) =>
       columnHelper.accessor((row) => row[name], {
         id: name,
         header: fieldLabel(name, mapping.kolom[name]),
@@ -140,6 +152,28 @@ export function PendudukTable() {
     return cols;
   }, [visible, fetchData, canWrite]);
 
+  const exportQuery = useMemo(() => {
+    const params = new URLSearchParams({
+      ...(debouncedSearch ? { q: debouncedSearch } : {}),
+      ...(dusun ? { dusun } : {}),
+      ...(rw ? { rw } : {}),
+      ...(rt ? { rt } : {}),
+      ...(jk ? { jk } : {}),
+      ...(miskinBps ? { miskin_bps: miskinBps } : {}),
+    });
+    params.set("aspek", KELOMPOK_ORDER.filter((group) => selectedAspects.has(group)).join(","));
+    return params.toString();
+  }, [debouncedSearch, dusun, rw, rt, jk, miskinBps, selectedAspects]);
+
+  function changeAspects(next: Set<KelompokIndikator>) {
+    const normalized = new Set(KELOMPOK_ORDER.filter((group) => next.has(group)));
+    setSelectedAspects(normalized);
+    setPageIndex(0);
+    const url = new URL(window.location.href);
+    url.searchParams.set("aspek", [...normalized].join(","));
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  }
+
   // TanStack Table intentionally exposes non-memoizable callbacks.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -159,8 +193,9 @@ export function PendudukTable() {
   });
 
   return (
-    <div>
-      <div className="flex flex-wrap items-center gap-2 mb-4">
+    <div className="space-y-4">
+      <AspectFilterPanel selected={selectedAspects} onChange={changeAspects} />
+      <div className="flex flex-wrap items-center gap-2">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -196,20 +231,17 @@ export function PendudukTable() {
           <option value="false">Tidak Miskin</option>
         </select>
         <div className="ml-auto flex flex-wrap items-center gap-2 max-sm:ml-0 max-sm:w-full">
-          <ColumnToggle visible={visible} onChange={setVisible} />
           <a
-            href={`/api/penduduk/export?${new URLSearchParams({
-              ...(debouncedSearch ? { q: debouncedSearch } : {}),
-              ...(dusun ? { dusun } : {}),
-              ...(rw ? { rw } : {}),
-              ...(rt ? { rt } : {}),
-              ...(jk ? { jk } : {}),
-              ...(miskinBps ? { miskin_bps: miskinBps } : {}),
-              format: "xlsx",
-            }).toString()}`}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            href={`/api/penduduk/export?${exportQuery}&format=xlsx`}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            Ekspor
+            <FileSpreadsheet className="h-4 w-4" /> Excel
+          </a>
+          <a
+            href={`/api/penduduk/export?${exportQuery}&format=csv`}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            <FileText className="h-4 w-4" /> CSV
           </a>
           {canWrite ? <AddDataMenu /> : null}
         </div>
@@ -217,22 +249,26 @@ export function PendudukTable() {
 
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
-      <div className="overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-        <table className="min-w-full text-sm">
+      <div className="overscroll-x-contain overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+        <table className="w-max min-w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-200">
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
-                {hg.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
-                    className="px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap cursor-pointer select-none"
-                  >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    {header.column.getIsSorted() === "asc" && " ▲"}
-                    {header.column.getIsSorted() === "desc" && " ▼"}
-                  </th>
-                ))}
+                {hg.headers.map((header) => {
+                  const sticky = STICKY_CORE[header.column.id];
+                  return (
+                    <th
+                      key={header.id}
+                      onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
+                      style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : undefined}
+                      className={`px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "sticky z-20 bg-slate-50 shadow-[1px_0_0_#e2e8f0]" : ""}`}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.column.getIsSorted() === "asc" && " ▲"}
+                      {header.column.getIsSorted() === "desc" && " ▼"}
+                    </th>
+                  );
+                })}
               </tr>
             ))}
           </thead>
@@ -251,12 +287,19 @@ export function PendudukTable() {
               </tr>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-3 py-2 whitespace-nowrap text-slate-700">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
+                <tr key={row.id} className="group border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                  {row.getVisibleCells().map((cell) => {
+                    const sticky = STICKY_CORE[cell.column.id];
+                    return (
+                      <td
+                        key={cell.id}
+                        style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : undefined}
+                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${sticky ? "sticky z-10 overflow-hidden text-ellipsis bg-white shadow-[1px_0_0_#e2e8f0] group-hover:bg-slate-50" : ""}`}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))
             )}
@@ -264,7 +307,7 @@ export function PendudukTable() {
         </table>
       </div>
 
-      <div className="flex items-center justify-between mt-3 text-sm text-slate-600">
+      <div className="flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
         <span>
           Total {total} data — halaman {pageIndex + 1} dari {totalPages}
         </span>
