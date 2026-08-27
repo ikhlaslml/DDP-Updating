@@ -14,15 +14,17 @@ export function SurveyEditor({
   onChange,
   errors = {},
   idPrefix,
+  allowedGroups,
 }: {
   role: SurveyRole;
   value: Record<string, string>;
   onChange: (next: Record<string, string>) => void;
   errors?: Record<string, string>;
   idPrefix: string;
+  allowedGroups?: readonly string[];
 }) {
   const grouped = useMemo(() => surveyColumnsByGroup(role), [role]);
-  const groups = KELOMPOK_ORDER.filter((group) => grouped[group]?.length);
+  const groups = KELOMPOK_ORDER.filter((group) => grouped[group]?.length && (!allowedGroups || allowedGroups.includes(group)));
   const [currentGroup, setCurrentGroup] = useState(groups[0]);
   const activeGroup = groups.includes(currentGroup) ? currentGroup : groups[0];
 
@@ -42,7 +44,9 @@ export function SurveyEditor({
         <ClipboardCheck className="mt-0.5 h-4 w-4 shrink-0" />
         <p>
           {role === "HEAD"
-            ? "Sesuai DO Data Desa Presisi, kepala keluarga mengisi data dirinya sekaligus kondisi rumah tangga. Pertanyaan operasional dan koordinat diisi otomatis oleh sistem."
+            ? allowedGroups?.length === 1
+              ? "Pada alur tambah keluarga baru hanya Aspek 1 — Identitas Keluarga yang diisi. Aspek 2–6 dilengkapi kemudian melalui Lanjutkan Pendataan."
+              : "Sesuai DO Data Desa Presisi, kepala keluarga mengisi data dirinya sekaligus kondisi rumah tangga. Pertanyaan operasional dan koordinat diisi otomatis oleh sistem."
             : "Anggota keluarga hanya mengisi pertanyaan individual. Nomor KK, bangunan, alamat, dan jawaban rumah tangga diwarisi otomatis dari kepala keluarga."}
         </p>
       </div>

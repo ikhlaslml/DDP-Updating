@@ -6,6 +6,7 @@ import { buildingSubmissionSchema, validateAndSerializePolygon } from "@/lib/bui
 import { HOUSEHOLD_INHERITED_FIELDS } from "@/lib/survey";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+import { registerIncompleteFamily } from "@/lib/family-progress";
 
 export const runtime = "nodejs";
 
@@ -284,6 +285,14 @@ export async function POST(req: NextRequest) {
             createdByName: ctx.userName,
             createdByEmail: ctx.userEmail,
           })),
+        });
+        await registerIncompleteFamily(tx, {
+          desaId: ctx.desaId,
+          nkk,
+          kodeBangunan: code,
+          stagingGroupId: groupId,
+          userId: ctx.userId,
+          userName: ctx.userName,
         });
 
         const [latestSession, latestSnapshot] = await Promise.all([

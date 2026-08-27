@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { pendudukUpdateSchema, flattenZodError } from "@/lib/validation";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+import { completeFamilyProgress } from "@/lib/family-progress";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const ctx = await getAuthContext();
@@ -44,7 +45,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const staged = await prisma.$transaction(async (tx) => {
     await tx.stagingChange.deleteMany({ where: { pendudukId: id, desaId: ctx.desaId, status: "PENDING" } });
-    return tx.stagingChange.create({
+    const change = await tx.stagingChange.create({
       data: {
         desaId: ctx.desaId,
         entityType: "PENDUDUK",
@@ -59,6 +60,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         createdByEmail: ctx.userEmail,
       },
     });
+    if (existing.status_dalam_keluarga === "Kepala Keluarga" && existing.nkk) {
+      await completeFamilyProgress(tx, {
+        desaId: ctx.desaId,
+        nkk: existing.nkk,
+        userId: ctx.userId,
+        userName: ctx.userName,
+      });
+    }
+    return change;
   });
   return NextResponse.json({ data: staged }, { status: 202 });
 }

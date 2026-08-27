@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { pendudukCreateSchema, pendudukUpdateSchema, flattenZodError } from "@/lib/validation";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+import { completeFamilyProgress } from "@/lib/family-progress";
 
 // GET: list all pending staged changes, enriched for the "Data Perubahan
 // Sementara" table.
@@ -114,7 +115,7 @@ export async function POST(req: NextRequest) {
     // erases the operator's previous proposal.
     const created = await prisma.$transaction(async (tx) => {
       await tx.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });
-      return tx.stagingChange.create({
+      const change = await tx.stagingChange.create({
         data: {
           desaId: ctx.desaId,
           entityType: "PENDUDUK",
@@ -129,6 +130,15 @@ export async function POST(req: NextRequest) {
           createdByEmail: ctx.userEmail,
         },
       });
+      if (existing.status_dalam_keluarga === "Kepala Keluarga" && existing.nkk) {
+        await completeFamilyProgress(tx, {
+          desaId: ctx.desaId,
+          nkk: existing.nkk,
+          userId: ctx.userId,
+          userName: ctx.userName,
+        });
+      }
+      return change;
     });
     return NextResponse.json({ data: created }, { status: 201 });
   }

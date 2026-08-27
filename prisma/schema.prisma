@@ -465,6 +465,27 @@ model SesiPendataanBangunan {
   @@index([stagingGroupId])
 }
 
+// Progress of the six-aspect household survey, separate from denormalized residents.
+model ProgresPendataanKeluarga {
+  id              String   @id @default(cuid())
+  desaId          String
+  nkk             String
+  kodeBangunan    Int?
+  periode         String
+  status          String   @default("BELUM_LENGKAP")
+  aspekTerakhir   Int      @default(1)
+  aspekSelesai    String   @default("[1]")
+  stagingGroupId  String?
+  updatedBy       String
+  updatedByName   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([desaId, nkk, periode])
+  @@index([desaId, kodeBangunan, status])
+  @@index([stagingGroupId])
+}
+
 // Immutable point-in-time baseline (periode T0, T1, ...).
 model Snapshot {
   id        String   @id @default(cuid())

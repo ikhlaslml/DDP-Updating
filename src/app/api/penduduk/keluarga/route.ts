@@ -26,6 +26,11 @@ export async function GET(req: NextRequest) {
     orderBy: { nama: "asc" },
     take: 100,
   });
+  const progress = heads.length ? await prisma.progresPendataanKeluarga.findMany({
+    where: { desaId: ctx.desaId, nkk: { in: heads.flatMap((head) => head.nkk ? [head.nkk] : []) } },
+    orderBy: { updatedAt: "desc" },
+  }) : [];
+  const progressByNkk = new Map(progress.map((row) => [row.nkk, row]));
 
   return NextResponse.json({
     data: heads.map((head) => ({
@@ -39,6 +44,8 @@ export async function GET(req: NextRequest) {
       rt: head.rt,
       alamat: head.alamat,
       jumlahAnggota: head.jml_keluarga,
+      statusPendataan: head.nkk ? progressByNkk.get(head.nkk)?.status ?? "LENGKAP" : "LENGKAP",
+      aspekTerakhir: head.nkk ? progressByNkk.get(head.nkk)?.aspekTerakhir ?? 6 : 6,
     })),
   });
 }

@@ -20,7 +20,7 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
   const code = Number((await params).kode);
   if (!Number.isSafeInteger(code) || code <= 0) notFound();
 
-  const [building, legacy, pendingRows, residents, pendingPeople, sessions] = await Promise.all([
+  const [building, legacy, pendingRows, residents, pendingPeople, sessions, progressRows] = await Promise.all([
     prisma.bangunan.findFirst({ where: { desaId: ctx.desaId, kode: code } }),
     prisma.penduduk.findFirst({ where: { desaId: ctx.desaId, kode_bangunan: code, statusAktif: true } }),
     prisma.stagingChange.findMany({ where: { desaId: ctx.desaId, entityType: "BANGUNAN", status: "PENDING" } }),
@@ -37,6 +37,10 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
       where: { desaId: ctx.desaId, kodeBangunan: code },
       orderBy: { diisiPada: "desc" },
     }),
+    prisma.progresPendataanKeluarga.findMany({
+      where: { desaId: ctx.desaId, kodeBangunan: code },
+      orderBy: { updatedAt: "desc" },
+    }),
   ]);
   const stagedBuilding = pendingRows.map((row) => ({ row, data: parseJson(row.data) })).find(({ data }) => Number(data.kode) === code);
   if (!building && !legacy && !stagedBuilding) notFound();
@@ -46,17 +50,21 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
     .filter((row) => Number(row.parsed.kode_bangunan) === code);
   const latest = sessions[0];
 
-  const families = new Map<string, { nkk: string; head: string; count: number; pending: boolean }>();
+  const progressByNkk = new Map(progressRows.map((row) => [row.nkk, row]));
+  const families = new Map<string, { nkk: string; head: string; headId: string | null; count: number; pending: boolean }>();
   for (const resident of residents) {
     const nkk = resident.nkk ?? "Tanpa NKK";
-    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", count: 0, pending: false };
+    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: false };
     current.count += 1;
-    if (resident.status_dalam_keluarga === "Kepala Keluarga") current.head = resident.nama ?? "Tanpa nama";
+    if (resident.status_dalam_keluarga === "Kepala Keluarga") {
+      current.head = resident.nama ?? "Tanpa nama";
+      current.headId = resident.id;
+    }
     families.set(nkk, current);
   }
   for (const row of stagedResidents) {
     const nkk = String(row.parsed.nkk ?? "Tanpa NKK");
-    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", count: 0, pending: true };
+    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: true };
     current.count += 1;
     current.pending = true;
     if (row.parsed.status_dalam_keluarga === "Kepala Keluarga") current.head = String(row.parsed.nama ?? "Tanpa nama");
@@ -93,7 +101,11 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900"><UsersRound className="h-5 w-5 text-indigo-600" /> Daftar Keluarga</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {[...families.values()].map((family) => <div key={family.nkk} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-2"><div><p className="font-bold text-slate-900">{family.head}</p><p className="text-sm text-slate-500">No. KK {family.nkk}</p></div>{family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu penggabungan</span> : null}</div><p className="mt-2 text-xs text-slate-500">{family.count} orang tercatat</p></div>)}
+          {[...families.values()].map((family) => {
+            const progress = progressByNkk.get(family.nkk);
+            const incomplete = progress?.status === "BELUM_LENGKAP";
+            return <div key={family.nkk} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-2"><div><p className="font-bold text-slate-900">{family.head}</p><p className="text-sm text-slate-500">No. KK {family.nkk}</p></div><div className="flex flex-col items-end gap-1">{family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu penggabungan</span> : null}<span className={`rounded-full px-2 py-1 text-xs font-semibold ${incomplete ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800"}`}>{incomplete ? `Belum lengkap · Aspek ${progress.aspekTerakhir}/6` : "Data lengkap"}</span></div></div><div className="mt-3 flex items-center justify-between gap-3"><p className="text-xs text-slate-500">{family.count} orang tercatat</p>{incomplete && family.headId ? <Link href={`/penduduk/${family.headId}/edit`} className="text-xs font-bold text-indigo-600 hover:underline">Lanjutkan Pendataan →</Link> : null}</div></div>;
+          })}
           {!families.size ? <p className="text-sm text-slate-500">Belum ada keluarga pada bangunan ini.</p> : null}
         </div>
       </section>

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { HOUSEHOLD_INHERITED_FIELDS } from "@/lib/survey";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+import { registerIncompleteFamily } from "@/lib/family-progress";
 
 const submissionSchema = z
   .object({
@@ -210,6 +211,16 @@ export async function POST(req: NextRequest) {
             createdByEmail: ctx.userEmail,
           },
         });
+        if (role === "HEAD" && selectedBuildingCode !== null) {
+          await registerIncompleteFamily(tx, {
+            desaId: ctx.desaId,
+            nkk,
+            kodeBangunan: selectedBuildingCode,
+            stagingGroupId: groupId,
+            userId: ctx.userId,
+            userName: ctx.userName,
+          });
+        }
         if (role === "HEAD" && selectedBuildingCode !== null && respondentMediaId) {
           const respondent = body.data.respondent as NonNullable<typeof body.data.respondent>;
           const [latestSession, latestSnapshot] = await Promise.all([

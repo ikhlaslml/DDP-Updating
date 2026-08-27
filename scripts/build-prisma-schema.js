@@ -222,6 +222,27 @@ lines.push(`  @@index([mediaAssetId])`);
 lines.push(`  @@index([stagingGroupId])`);
 lines.push(`}`);
 lines.push(``);
+lines.push(`// Progress of the six-aspect household survey, separate from denormalized residents.`);
+lines.push(`model ProgresPendataanKeluarga {`);
+lines.push(`  id              String   @id @default(cuid())`);
+lines.push(`  desaId          String`);
+lines.push(`  nkk             String`);
+lines.push(`  kodeBangunan    Int?`);
+lines.push(`  periode         String`);
+lines.push(`  status          String   @default("BELUM_LENGKAP")`);
+lines.push(`  aspekTerakhir   Int      @default(1)`);
+lines.push(`  aspekSelesai    String   @default("[1]")`);
+lines.push(`  stagingGroupId  String?`);
+lines.push(`  updatedBy       String`);
+lines.push(`  updatedByName   String?`);
+lines.push(`  createdAt       DateTime @default(now())`);
+lines.push(`  updatedAt       DateTime @updatedAt`);
+lines.push(``);
+lines.push(`  @@unique([desaId, nkk, periode])`);
+lines.push(`  @@index([desaId, kodeBangunan, status])`);
+lines.push(`  @@index([stagingGroupId])`);
+lines.push(`}`);
+lines.push(``);
 
 // --- Updating workflow (T0/T1 snapshots + staging) --------------------------
 // data/payload blobs are stored as JSON strings for SQLite portability; switch
