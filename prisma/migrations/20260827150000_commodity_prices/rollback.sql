@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS "HargaKomoditas";
+DROP TABLE IF EXISTS "Komoditas";

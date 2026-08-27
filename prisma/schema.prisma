@@ -583,6 +583,41 @@ model PengaturanDesa {
   @@index([desaId, logoMediaAssetId])
 }
 
+// Master catalog derived verbatim (trimmed) from Borang Harga.xlsx.
+model Komoditas {
+  id        String   @id
+  kode      String   @unique
+  kategori  String
+  nama      String
+  satuan    String
+  urutan    Int
+  aktif     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([kategori, urutan])
+}
+
+// Tenant-scoped commodity price history: one value per commodity and period.
+model HargaKomoditas {
+  id            String   @id @default(cuid())
+  desaId        String
+  komoditasId   String
+  periode       String
+  harga         Decimal @db.Decimal(18, 2)
+  sumberData    String
+  createdBy     String
+  createdByName String?
+  updatedBy     String
+  updatedByName String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([desaId, komoditasId, periode])
+  @@index([desaId, periode])
+  @@index([komoditasId])
+}
+
 // Reusable letter template.
 model SuratTemplate {
   id        String   @id @default(cuid())
