@@ -35,7 +35,13 @@ const STICKY_CORE: Record<string, { left: number; width: number }> = {
   nama: { left: 320, width: 220 },
 };
 
-export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndikator[] }) {
+export function PendudukTable({
+  initialAspects,
+  initialQuery = "",
+}: {
+  initialAspects: KelompokIndikator[];
+  initialQuery?: string;
+}) {
   const canWrite = useCanWrite();
   const [rows, setRows] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
@@ -46,8 +52,8 @@ export function PendudukTable({ initialAspects }: { initialAspects: KelompokIndi
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [sorting, setSorting] = useState<SortingState>([{ id: "createdAt", desc: true }]);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState(initialQuery);
+  const [debouncedSearch, setDebouncedSearch] = useState(initialQuery);
   const [dusun, setDusun] = useState("");
   const [rw, setRw] = useState("");
   const [rt, setRt] = useState("");
