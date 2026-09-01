@@ -86,7 +86,27 @@ export async function renderLetterPdf(document: LetterDocument) {
   pdf.moveDown(2);
   const village = settings.kopBaris3 || "Desa";
   const date = document.letter.createdAt.toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" });
-  pdf.text(`${village}, ${date}\nKepala ${village},\n\n\n\n${settings.namaKepala || "Kepala Desa"}`, 330, pdf.y, { width: 190, align: "center" });
+  const signatureX = 330;
+  const signatureY = pdf.y;
+  const signatureWidth = 190;
+  pdf.text(`${village}, ${date}\nKepala ${village},`, signatureX, signatureY, { width: signatureWidth, align: "center" });
+  if (document.tandaTangan) {
+    try {
+      pdf.image(document.tandaTangan.bytes, signatureX + 25, signatureY + 31, {
+        fit: [140, 58],
+        align: "center",
+        valign: "center",
+      });
+    } catch {
+      pdf.font("Helvetica-Oblique").fontSize(9).fillColor("#94a3b8")
+        .text("(Ttd Digital)", signatureX, signatureY + 53, { width: signatureWidth, align: "center" });
+    }
+  } else {
+    pdf.font("Helvetica-Oblique").fontSize(9).fillColor("#94a3b8")
+      .text("(Ttd Digital)", signatureX, signatureY + 53, { width: signatureWidth, align: "center" });
+  }
+  pdf.fillColor("#000000").font("Helvetica-Bold").fontSize(10)
+    .text(settings.namaKepala || "Kepala Desa", signatureX, signatureY + 97, { width: signatureWidth, align: "center", underline: true });
   if (settings.disclaimer) pdf.fontSize(7).fillColor("#64748b").text(settings.disclaimer, 58, 770, { width: 479, align: "center" });
   pdf.end();
   return completed;

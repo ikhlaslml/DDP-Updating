@@ -6,11 +6,26 @@ import { FORBIDDEN, getAuthContext, isOperator, UNAUTHORIZED } from "@/lib/tenan
 
 export const runtime = "nodejs";
 
-const purposeSchema = z.enum(["RESPONDEN", "LOGO_DESA"]);
+const purposeSchema = z.enum(["RESPONDEN", "LOGO_DESA", "TANDA_TANGAN"]);
 const RULES = {
   RESPONDEN: { types: new Set(["image/jpeg", "image/png", "image/webp"]), max: 1_500_000 },
   LOGO_DESA: { types: new Set(["image/jpeg", "image/png", "image/svg+xml"]), max: 2_000_000 },
+  TANDA_TANGAN: { types: new Set(["image/jpeg", "image/png"]), max: 1_000_000 },
 } as const;
+
+const EXTENSIONS_BY_MIME: Record<string, readonly string[]> = {
+  "image/jpeg": ["jpg", "jpeg"],
+  "image/png": ["png"],
+  "image/webp": ["webp"],
+  "image/svg+xml": ["svg"],
+};
+
+function hasValidFileName(file: File) {
+  const name = file.name.trim();
+  if (!name || name.length > 255 || /[\\/\0\r\n]/.test(name)) return false;
+  const extension = name.split(".").pop()?.toLocaleLowerCase("en-US");
+  return Boolean(extension && EXTENSIONS_BY_MIME[file.type]?.includes(extension));
+}
 
 function svgIsSafe(text: string) {
   return (
@@ -36,6 +51,9 @@ export async function POST(req: NextRequest) {
   const rules = RULES[purpose.data];
   if (!rules.types.has(file.type as never)) {
     return NextResponse.json({ error: "Tipe berkas tidak didukung untuk unggahan ini" }, { status: 415 });
+  }
+  if (!hasValidFileName(file)) {
+    return NextResponse.json({ error: "Nama atau ekstensi berkas tidak sesuai dengan tipe gambar" }, { status: 400 });
   }
   if (!file.size || file.size > rules.max) {
     return NextResponse.json({ error: `Ukuran berkas maksimal ${Math.round(rules.max / 1_000_000)} MB` }, { status: 413 });

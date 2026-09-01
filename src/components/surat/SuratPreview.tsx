@@ -14,6 +14,9 @@ export type SuratSettings = {
   logoUrl?: string | null;
   logoMediaAssetId?: string | null;
   logoUpdatedAt?: string | Date | null;
+  tandaTanganUrl?: string | null;
+  tandaTanganMediaAssetId?: string | null;
+  tandaTanganUpdatedAt?: string | Date | null;
 };
 
 export type Warga = {
@@ -117,7 +120,18 @@ export function SuratPreview({
         <div className="text-center text-sm">
           <p>{namaDesa}, {tanggal}</p>
           <p>Kepala {namaDesa},</p>
-          <p className="my-8 italic text-slate-400">(Ttd Digital)</p>
+          {settings.tandaTanganUrl ? (
+            <div className="my-3 flex h-20 items-center justify-center">
+              <Image
+                src={settings.tandaTanganUrl}
+                alt="Tanda tangan kepala desa"
+                width={140}
+                height={80}
+                unoptimized
+                className="h-20 w-36 object-contain"
+              />
+            </div>
+          ) : <p className="my-8 italic text-slate-400">(Ttd Digital)</p>}
           <p className="font-bold underline">{settings.namaKepala || "Kepala Desa"}</p>
         </div>
       </div>

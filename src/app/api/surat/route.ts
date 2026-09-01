@@ -8,8 +8,9 @@ const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"
 const issueSchema = z.object({
   templateId: z.string().min(1),
   pendudukId: z.string().min(1),
-  keperluan: z.string().trim().max(500).optional().default(""),
+  keperluan: z.string().trim().min(1, "Keperluan surat wajib diisi").max(500),
   peristiwaId: z.string().optional(),
+  confirmed: z.literal(true, { error: "Surat harus dipratinjau dan diperiksa sebelum diterbitkan" }),
 });
 
 const LETTER_RESIDENT_SELECT = {
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
   if (!ctx) return UNAUTHORIZED;
   if (!isOperator(ctx.role)) return FORBIDDEN;
   const submitted = issueSchema.safeParse(await req.json().catch(() => null));
-  if (!submitted.success) return NextResponse.json({ error: "Penduduk dan template wajib dipilih" }, { status: 400 });
+  if (!submitted.success) return NextResponse.json({ error: submitted.error.issues[0]?.message ?? "Data surat belum lengkap" }, { status: 400 });
 
   try {
     const created = await prisma.$transaction(async (tx) => {

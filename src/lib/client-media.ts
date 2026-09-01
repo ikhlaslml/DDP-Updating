@@ -28,7 +28,7 @@ export async function compressRespondentPhoto(file: File) {
   });
 }
 
-export async function uploadMedia(file: File, purpose: "RESPONDEN" | "LOGO_DESA") {
+export async function uploadMedia(file: File, purpose: "RESPONDEN" | "LOGO_DESA" | "TANDA_TANGAN") {
   const form = new FormData();
   form.set("file", file);
   form.set("purpose", purpose);

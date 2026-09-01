@@ -16,7 +16,7 @@ function parseObject<T>(value: string | null): Partial<T> {
 export async function getIssuedLetterDocument(
   id: string,
   desaId: string,
-  options: { includeLogo?: boolean } = {}
+  options: { includeLogo?: boolean; includeTandaTangan?: boolean } = {}
 ) {
   const letter = await prisma.suratTerbit.findFirst({ where: { id, desaId } });
   if (!letter) return null;
@@ -35,6 +35,7 @@ export async function getIssuedLetterDocument(
     ?.replace(/\{\{nama_desa\}\}/g, settings.kopBaris3 || "Desa")
     .replace(/\{\{keperluan\}\}/g, letter.keperluan || "________") ?? "";
   let logo: { bytes: Buffer; mimeType: string } | undefined;
+  let tandaTangan: { bytes: Buffer; mimeType: string } | undefined;
   if (options.includeLogo && settings.logoMediaAssetId) {
     const asset = await prisma.mediaAsset.findFirst({
       where: { id: settings.logoMediaAssetId, desaId, purpose: "LOGO_DESA" },
@@ -47,12 +48,25 @@ export async function getIssuedLetterDocument(
       }
     }
   }
+  if (options.includeTandaTangan && settings.tandaTanganMediaAssetId) {
+    const asset = await prisma.mediaAsset.findFirst({
+      where: { id: settings.tandaTanganMediaAssetId, desaId, purpose: "TANDA_TANGAN" },
+    });
+    if (asset) {
+      try {
+        tandaTangan = { bytes: await readPrivateMedia(asset), mimeType: asset.mimeType };
+      } catch {
+        // Surat tetap dapat dicetak dengan penanda tanda tangan bila media lama tidak dapat dibaca.
+      }
+    }
+  }
   return {
     letter,
     settings: settings as SuratSettings,
     warga: warga as Warga,
     body,
     logo,
+    tandaTangan,
     templateNama: letter.templateNama ?? currentTemplate?.nama ?? "Surat Keterangan",
   };
 }

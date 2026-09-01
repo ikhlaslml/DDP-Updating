@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!ctx) return UNAUTHORIZED;
   const id = (await params).id;
   try {
-    const document = await getIssuedLetterDocument(id, ctx.desaId, { includeLogo: true });
+    const document = await getIssuedLetterDocument(id, ctx.desaId, { includeLogo: true, includeTandaTangan: true });
     if (!document) return NextResponse.json({ error: "Surat tidak ditemukan" }, { status: 404 });
     const pdf = await renderLetterPdf(document);
     const inline = req.nextUrl.searchParams.get("mode") === "inline";
