@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { getAuthContext, isOperator } from "@/lib/tenant";
 import { RespondentVisitForm } from "@/components/penduduk/RespondentVisitForm";
 import { DdpBuildingPhoto } from "@/components/penduduk/DdpBuildingPhoto";
+import { compareFamilyMembers, compareFamilyNkk } from "@/lib/family-order";
 
 function parseJson(value: string | null) {
   try { return JSON.parse(value ?? "{}") as Record<string, unknown>; } catch { return {}; }
@@ -21,14 +22,13 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
   const code = Number((await params).kode);
   if (!Number.isSafeInteger(code) || code <= 0) notFound();
 
-  const [building, legacy, pendingRows, residents, pendingPeople, sessions, progressRows] = await Promise.all([
+  const [building, legacy, pendingRows, residents, pendingPeople, sessions, progressRows, deletedBuilding] = await Promise.all([
     prisma.bangunan.findFirst({ where: { desaId: ctx.desaId, kode: code } }),
     prisma.penduduk.findFirst({ where: { desaId: ctx.desaId, kode_bangunan: code, statusAktif: true } }),
     prisma.stagingChange.findMany({ where: { desaId: ctx.desaId, entityType: "BANGUNAN", status: "PENDING" } }),
     prisma.penduduk.findMany({
       where: { desaId: ctx.desaId, kode_bangunan: code, statusAktif: true },
       select: { id: true, nkk: true, nik: true, nama: true, status_dalam_keluarga: true },
-      orderBy: [{ nkk: "asc" }, { nama: "asc" }],
     }),
     prisma.stagingChange.findMany({
       where: { desaId: ctx.desaId, entityType: "PENDUDUK", aksi: "CREATE", status: "PENDING" },
@@ -42,9 +42,10 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
       where: { desaId: ctx.desaId, kodeBangunan: code },
       orderBy: { updatedAt: "desc" },
     }),
+    prisma.bangunanDihapus.findUnique({ where: { desaId_kodeBangunan: { desaId: ctx.desaId, kodeBangunan: code } }, select: { id: true } }),
   ]);
   const stagedBuilding = pendingRows.map((row) => ({ row, data: parseJson(row.data) })).find(({ data }) => Number(data.kode) === code);
-  if (!building && !legacy && !stagedBuilding) notFound();
+  if (deletedBuilding || (!building && !legacy && !stagedBuilding)) notFound();
   const buildingData = building ?? stagedBuilding?.data ?? legacy;
   const stagedResidents = pendingPeople
     .map((row) => ({ ...row, parsed: parseJson(row.data) }))
@@ -52,11 +53,14 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
   const latest = sessions[0];
 
   const progressByNkk = new Map(progressRows.map((row) => [row.nkk, row]));
-  const families = new Map<string, { nkk: string; head: string; headId: string | null; count: number; pending: boolean }>();
+  type Member = { id: string; nama: string | null; nik: string | null; status_dalam_keluarga: string | null; pending: boolean };
+  type Family = { nkk: string; head: string; headId: string | null; count: number; pending: boolean; members: Member[] };
+  const families = new Map<string, Family>();
   for (const resident of residents) {
     const nkk = resident.nkk ?? "Tanpa NKK";
-    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: false };
+    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: false, members: [] };
     current.count += 1;
+    current.members.push({ ...resident, pending: false });
     if (resident.status_dalam_keluarga === "Kepala Keluarga") {
       current.head = resident.nama ?? "Tanpa nama";
       current.headId = resident.id;
@@ -65,9 +69,16 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
   }
   for (const row of stagedResidents) {
     const nkk = String(row.parsed.nkk ?? "Tanpa NKK");
-    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: true };
+    const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: true, members: [] };
     current.count += 1;
     current.pending = true;
+    current.members.push({
+      id: row.id,
+      nama: typeof row.parsed.nama === "string" ? row.parsed.nama : null,
+      nik: typeof row.parsed.nik === "string" ? row.parsed.nik : null,
+      status_dalam_keluarga: typeof row.parsed.status_dalam_keluarga === "string" ? row.parsed.status_dalam_keluarga : null,
+      pending: true,
+    });
     if (row.parsed.status_dalam_keluarga === "Kepala Keluarga") current.head = String(row.parsed.nama ?? "Tanpa nama");
     families.set(nkk, current);
   }
@@ -104,10 +115,29 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900"><UsersRound className="h-5 w-5 text-indigo-600" /> Daftar Keluarga</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {[...families.values()].map((family) => {
+          {[...families.values()].sort((left, right) => compareFamilyNkk(left.nkk, right.nkk)).map((family) => {
             const progress = progressByNkk.get(family.nkk);
             const incomplete = progress?.status === "BELUM_LENGKAP";
-            return <div key={family.nkk} className="rounded-xl border border-slate-200 p-4"><div className="flex flex-col items-start gap-3 sm:flex-row sm:justify-between"><div className="min-w-0"><p className="break-words font-bold text-slate-900">{family.head}</p><p className="break-all text-sm text-slate-500">No. KK {family.nkk}</p></div><div className="flex flex-col items-start gap-1 sm:items-end">{family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu penggabungan</span> : null}<span className={`rounded-full px-2 py-1 text-xs font-semibold ${incomplete ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800"}`}>{incomplete ? `Belum lengkap · Aspek ${progress.aspekTerakhir}/6` : "Data lengkap"}</span></div></div><div className="mt-3 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-slate-500">{family.count} orang tercatat</p>{incomplete && family.headId ? <Link href={`/penduduk/${family.headId}/edit`} className="text-xs font-bold text-indigo-600 hover:underline">Lanjutkan Pendataan →</Link> : null}</div></div>;
+            return (
+              <div key={family.nkk} className="rounded-xl border border-slate-200 p-4">
+                <div className="flex flex-col items-start gap-3 sm:flex-row sm:justify-between">
+                  <div className="min-w-0"><p className="break-words font-bold text-slate-900">{family.head}</p><p className="break-all text-sm text-slate-500">No. KK {family.nkk}</p></div>
+                  <div className="flex flex-col items-start gap-1 sm:items-end">
+                    {family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu penggabungan</span> : null}
+                    <span className={`rounded-full px-2 py-1 text-xs font-semibold ${incomplete ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800"}`}>{incomplete ? `Belum lengkap · Aspek ${progress.aspekTerakhir}/6` : "Data lengkap"}</span>
+                  </div>
+                </div>
+                <ul className="mt-3 divide-y divide-slate-100 rounded-lg border border-slate-100 bg-slate-50 px-3">
+                  {[...family.members].sort(compareFamilyMembers).map((member) => (
+                    <li key={member.id} className="flex items-center justify-between gap-3 py-2 text-sm">
+                      <span className="min-w-0 break-words font-medium text-slate-700">{member.nama ?? "Tanpa nama"}{member.pending ? <span className="ml-2 text-xs font-normal text-amber-700">(menunggu)</span> : null}</span>
+                      <span className="shrink-0 text-xs text-slate-500">{member.status_dalam_keluarga ?? "Hubungan belum diisi"}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-slate-500">{family.count} orang tercatat</p>{incomplete && family.headId ? <Link href={`/penduduk/${family.headId}/edit`} className="text-xs font-bold text-indigo-600 hover:underline">Lanjutkan Pendataan →</Link> : null}</div>
+              </div>
+            );
           })}
           {!families.size ? <p className="text-sm text-slate-500">Belum ada keluarga pada bangunan ini.</p> : null}
         </div>

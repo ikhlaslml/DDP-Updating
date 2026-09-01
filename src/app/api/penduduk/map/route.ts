@@ -5,7 +5,7 @@ import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 export async function GET() {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
-  const [rows, buildings, desa] = await Promise.all([
+  const [rows, buildings, desa, deletedBuildings] = await Promise.all([
     prisma.penduduk.findMany({
       // Count every resident. Coordinates are validated separately below so a
       // member without coordinates does not disappear from household totals.
@@ -49,7 +49,12 @@ export async function GET() {
       where: { id: ctx.desaId },
       select: { kodeWilayah: true, droneTilePrefix: true, centerLat: true, centerLng: true },
     }),
+    prisma.bangunanDihapus.findMany({ where: { desaId: ctx.desaId }, select: { kodeBangunan: true } }),
   ]);
+  const deletedCodes = new Set(deletedBuildings.map((building) => building.kodeBangunan));
+  // Residents remain in the baseline for audit/move workflow, but a building
+  // that was physically removed must no longer appear as a household marker.
+  const activeRows = rows.filter((row) => row.kode_bangunan === null || !deletedCodes.has(row.kode_bangunan));
 
   const households = new Map<
     string,
@@ -71,11 +76,11 @@ export async function GET() {
   >();
 
   const householdCountByNkk = new Map<string, number>();
-  for (const row of rows) {
+  for (const row of activeRows) {
     if (row.nkk) householdCountByNkk.set(row.nkk, (householdCountByNkk.get(row.nkk) ?? 0) + 1);
   }
 
-  for (const r of rows) {
+  for (const r of activeRows) {
     if (!r.nkk) continue;
     // lat/lng are character varying in the `ajaib` schema — parse to numbers.
     const latNum = r.lat != null ? parseFloat(r.lat) : NaN;
@@ -112,19 +117,19 @@ export async function GET() {
   }
 
   const residentCountByBuilding = new Map<number, number>();
-  for (const row of rows) {
+  for (const row of activeRows) {
     if (row.kode_bangunan !== null) {
       residentCountByBuilding.set(row.kode_bangunan, (residentCountByBuilding.get(row.kode_bangunan) ?? 0) + 1);
     }
   }
 
-  const fallbackCode = (desa?.kodeWilayah ?? rows.find((row) => row.kode_deskel)?.kode_deskel)?.replace(/\D/g, "");
+  const fallbackCode = (desa?.kodeWilayah ?? activeRows.find((row) => row.kode_deskel)?.kode_deskel)?.replace(/\D/g, "");
   const formattedFallback =
     fallbackCode?.length === 10
       ? `${fallbackCode.slice(0, 2)}.${fallbackCode.slice(2, 4)}.${fallbackCode.slice(4, 6)}.${fallbackCode.slice(6)}`
       : null;
 
-  const validBuildings = buildings.flatMap((building) => {
+  const validBuildings = buildings.filter((building) => !deletedCodes.has(building.kode)).flatMap((building) => {
     try {
       const polygon = JSON.parse(building.polygon) as {
         type?: unknown;

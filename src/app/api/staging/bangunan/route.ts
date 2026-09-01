@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { buildingSubmissionSchema, validateAndSerializePolygon } from "@/lib/building";
 import { HOUSEHOLD_INHERITED_FIELDS } from "@/lib/survey";
@@ -9,6 +10,13 @@ import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenan
 import { registerIncompleteFamily } from "@/lib/family-progress";
 
 export const runtime = "nodejs";
+
+const buildingDeletionSchema = z.object({
+  aksi: z.literal("DELETE"),
+  kode: z.coerce.number().int().positive(),
+  alasan: z.string().trim().min(3, "Alasan penghapusan wajib diisi").max(500),
+  keterangan: z.string().trim().max(500).optional(),
+});
 
 function ageFromDate(value: unknown) {
   const date = value instanceof Date ? value : value ? new Date(String(value)) : null;
@@ -51,12 +59,75 @@ async function nextBuildingCode(tx: Prisma.TransactionClient, desaId: string) {
       return [];
     }
   });
-  return Math.max(
-    100_000,
-    maxBuilding._max.kode ?? 0,
-    maxLegacyBuilding._max.kode_bangunan ?? 0,
-    ...stagedCodes
-  ) + 1;
+  // Kode bangunan unik dalam satu desa. Mulai dari 1 pada desa kosong dan
+  // lanjutkan setelah kode terbesar yang sudah ada pada baseline atau staging.
+  return Math.max(0, maxBuilding._max.kode ?? 0, maxLegacyBuilding._max.kode_bangunan ?? 0, ...stagedCodes) + 1;
+}
+
+async function stageBuildingDeletion(
+  desaId: string,
+  actor: { userId: string; userName: string; userEmail: string },
+  data: z.infer<typeof buildingDeletionSchema>
+) {
+  return prisma.$transaction(async (tx) => {
+    const [building, occupants, tombstone, pending, pendingResidents] = await Promise.all([
+      tx.bangunan.findFirst({
+        where: { desaId, kode: data.kode },
+        select: { jenis: true, kategori: true, alamat: true, dusun: true, rw: true, rt: true },
+      }),
+      tx.penduduk.findMany({
+        where: { desaId, kode_bangunan: data.kode, statusAktif: true },
+        select: { nkk: true, alamat: true, dusun: true, rw: true, rt: true },
+      }),
+      tx.bangunanDihapus.findUnique({ where: { desaId_kodeBangunan: { desaId, kodeBangunan: data.kode } }, select: { id: true } }),
+      tx.stagingChange.findMany({
+        where: { desaId, entityType: "BANGUNAN", aksi: "DELETE", status: "PENDING" },
+        select: { data: true },
+      }),
+      tx.stagingChange.findMany({
+        where: { desaId, entityType: "PENDUDUK", status: "PENDING" },
+        select: { data: true },
+      }),
+    ]);
+    if (tombstone) throw new Error("Bangunan ini sudah dihapus dari peta aktif");
+    const pendingForCode = pending.some((change) => {
+      try { return Number((JSON.parse(change.data ?? "{}") as { kode?: unknown }).kode) === data.kode; } catch { return false; }
+    });
+    if (pendingForCode) throw new Error("Penghapusan bangunan ini sudah menunggu penggabungan");
+    const pendingResidentChange = pendingResidents.some((change) => {
+      try { return Number((JSON.parse(change.data ?? "{}") as { kode_bangunan?: unknown }).kode_bangunan) === data.kode; } catch { return false; }
+    });
+    if (pendingResidentChange) throw new Error("Bangunan ini masih memiliki perubahan penghuni yang menunggu penggabungan. Selesaikan atau batalkan perubahan tersebut terlebih dahulu.");
+    if (!building && occupants.length === 0) throw new Error("Bangunan tidak ditemukan pada desa ini");
+
+    const reference = building ?? occupants[0];
+    const jumlahKk = new Set(occupants.map((resident) => resident.nkk).filter(Boolean)).size;
+    const change = await tx.stagingChange.create({
+      data: {
+        desaId,
+        entityType: "BANGUNAN",
+        aksi: "DELETE",
+        ringkasan: `Penghapusan bangunan #${data.kode} diajukan; ${jumlahKk} KK dan ${occupants.length} penduduk tetap tersimpan.`,
+        data: JSON.stringify({
+          kode: data.kode,
+          alasan: data.alasan,
+          keterangan: data.keterangan || null,
+          jenis: building?.jenis ?? "BERPENGHUNI",
+          kategori: building?.kategori ?? null,
+          alamat: reference?.alamat ?? null,
+          dusun: reference?.dusun ?? null,
+          rw: reference?.rw ?? null,
+          rt: reference?.rt ?? null,
+          jumlahKk,
+          jumlahPenduduk: occupants.length,
+        }),
+        createdBy: actor.userId,
+        createdByName: actor.userName,
+        createdByEmail: actor.userEmail,
+      },
+    });
+    return { change, jumlahKk, jumlahPenduduk: occupants.length };
+  }, { isolationLevel: "Serializable", timeout: 20_000 });
 }
 
 export async function POST(req: NextRequest) {
@@ -65,6 +136,18 @@ export async function POST(req: NextRequest) {
   if (!isOperator(ctx.role)) return FORBIDDEN;
 
   const raw = await req.json().catch(() => null);
+  if (raw && typeof raw === "object" && (raw as { aksi?: unknown }).aksi === "DELETE") {
+    const deletion = buildingDeletionSchema.safeParse(raw);
+    if (!deletion.success) {
+      return NextResponse.json({ error: deletion.error.issues[0]?.message ?? "Data penghapusan bangunan belum lengkap" }, { status: 400 });
+    }
+    try {
+      const result = await stageBuildingDeletion(ctx.desaId, ctx, deletion.data);
+      return NextResponse.json({ data: result }, { status: 201 });
+    } catch (error) {
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Penghapusan bangunan gagal diajukan" }, { status: 400 });
+    }
+  }
   const submitted = buildingSubmissionSchema.safeParse(raw);
   if (!submitted.success) {
     return NextResponse.json(

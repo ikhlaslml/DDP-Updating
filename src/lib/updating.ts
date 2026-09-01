@@ -24,7 +24,7 @@ async function snapshotWithClient(
   const max = await db.snapshot.aggregate({ where: { desaId }, _max: { urutan: true } });
   const nextUrutan = (max._max.urutan ?? -1) + 1;
   const kode = `T${nextUrutan}`;
-  const [baseline, buildings] = await Promise.all([
+  const [baseline, buildings, deletedBuildings] = await Promise.all([
     db.penduduk.findMany({ where: { desaId, statusAktif: true } }),
     db.bangunan.findMany({
       where: { desaId },
@@ -51,12 +51,15 @@ async function snapshotWithClient(
         updatedAt: true,
       },
     }),
+    db.bangunanDihapus.findMany({ where: { desaId }, select: { kodeBangunan: true } }),
   ]);
+  const deletedCodes = new Set(deletedBuildings.map((building) => building.kodeBangunan));
+  const activeBuildings = buildings.filter((building) => !deletedCodes.has(building.kode));
   const buildingCodes = new Set<number>();
   for (const row of baseline) {
-    if (row.kode_bangunan !== null) buildingCodes.add(row.kode_bangunan);
+    if (row.kode_bangunan !== null && !deletedCodes.has(row.kode_bangunan)) buildingCodes.add(row.kode_bangunan);
   }
-  for (const building of buildings) buildingCodes.add(building.kode);
+  for (const building of activeBuildings) buildingCodes.add(building.kode);
 
   const snap = await db.snapshot.create({
     data: {
@@ -91,9 +94,9 @@ async function snapshotWithClient(
     });
   }
 
-  for (let i = 0; i < buildings.length; i += BATCH) {
+  for (let i = 0; i < activeBuildings.length; i += BATCH) {
     await db.snapshotBangunan.createMany({
-      data: buildings.slice(i, i + BATCH).map((building) => ({
+      data: activeBuildings.slice(i, i + BATCH).map((building) => ({
         snapshotId: snap.id,
         kode: building.kode,
         jenis: building.jenis,
@@ -116,6 +119,7 @@ export async function createSnapshotFromBaseline(desaId: string, options: Snapsh
 function summarizeChanges(changes: { entityType: string; aksi: string }[]) {
   const labels: Record<string, string> = {
     "BANGUNAN:CREATE": "bangunan baru",
+    "BANGUNAN:DELETE": "bangunan dihapus secara fisik",
     "PENDUDUK:CREATE": "penduduk baru",
     "PENDUDUK:UPDATE": "data diperbarui",
     "PENDUDUK:DELETE": "data dihapus",
@@ -129,6 +133,15 @@ function summarizeChanges(changes: { entityType: string; aksi: string }[]) {
   return [...counts.entries()]
     .map(([key, count]) => `${count} ${labels[key] ?? "perubahan"}`)
     .join(", ");
+}
+
+function buildingCodeFromChangeData(data: string | null) {
+  try {
+    const code = Number((JSON.parse(data ?? "{}") as { kode?: unknown }).kode);
+    return Number.isSafeInteger(code) && code > 0 ? code : null;
+  } catch {
+    return null;
+  }
 }
 
 function parseEventData(value: string | null) {
@@ -204,6 +217,18 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
       });
       if (pending.length === 0) return { applied: 0, snapshot: null };
 
+      // A physical-building removal must not be merged beside a newly added
+      // resident that still points at that building. The normal UI blocks this
+      // situation, and this second check also protects direct/API submissions
+      // made while a deletion is waiting in Data Perubahan Sementara.
+      const pendingDeletedBuildingCodes = new Set(
+        pending.flatMap((change) =>
+          change.entityType === "BANGUNAN" && change.aksi === "DELETE"
+            ? [buildingCodeFromChangeData(change.data)].filter((code): code is number => code !== null)
+            : []
+        )
+      );
+
       const ordered = [...pending].sort((a, b) => {
         if (a.entityType === b.entityType) return a.createdAt.getTime() - b.createdAt.getTime();
         return a.entityType === "BANGUNAN" ? -1 : 1;
@@ -212,18 +237,43 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
 
       for (const change of ordered) {
         if (change.entityType === "BANGUNAN") {
-          if (change.aksi !== "CREATE" || !change.data) {
+          if (!change.data) throw new Error(`Perubahan bangunan ${change.id} tidak valid`);
+          if (change.aksi === "CREATE") {
+            const data = JSON.parse(change.data) as Prisma.BangunanUncheckedCreateInput;
+            await tx.bangunan.create({
+              data: {
+                ...data,
+                desaId,
+                createdBy: change.createdBy ?? actor.userId,
+                createdByName: change.createdByName ?? actor.userName,
+              },
+            });
+          } else if (change.aksi === "DELETE") {
+            const data = JSON.parse(change.data) as { kode?: unknown; alasan?: unknown; keterangan?: unknown };
+            const kodeBangunan = typeof data.kode === "number" ? data.kode : Number(data.kode);
+            if (!Number.isSafeInteger(kodeBangunan) || kodeBangunan <= 0 || typeof data.alasan !== "string" || !data.alasan.trim()) {
+              throw new Error(`Data penghapusan bangunan ${change.id} tidak valid`);
+            }
+            const exists = await tx.bangunanDihapus.findUnique({
+              where: { desaId_kodeBangunan: { desaId, kodeBangunan } },
+              select: { id: true },
+            });
+            if (exists) throw new Error(`Bangunan #${kodeBangunan} sudah dihapus dari peta aktif`);
+            await tx.bangunanDihapus.create({
+              data: {
+                desaId,
+                kodeBangunan,
+                alasan: data.alasan.trim(),
+                keterangan: typeof data.keterangan === "string" && data.keterangan.trim() ? data.keterangan.trim() : null,
+                stagingChangeId: change.id,
+                deletedBy: change.createdBy ?? actor.userId,
+                deletedByName: change.createdByName ?? actor.userName,
+                deletedByEmail: change.createdByEmail ?? actor.userEmail,
+              },
+            });
+          } else {
             throw new Error(`Perubahan bangunan ${change.id} tidak valid`);
           }
-          const data = JSON.parse(change.data) as Prisma.BangunanUncheckedCreateInput;
-          await tx.bangunan.create({
-            data: {
-              ...data,
-              desaId,
-              createdBy: change.createdBy ?? actor.userId,
-              createdByName: change.createdByName ?? actor.userName,
-            },
-          });
           continue;
         }
 
@@ -342,6 +392,12 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
 
         if (change.aksi === "CREATE" && change.data) {
           const parsed = pendudukCreateSchema.parse(JSON.parse(change.data));
+          if (
+            typeof parsed.kode_bangunan === "number" &&
+            pendingDeletedBuildingCodes.has(parsed.kode_bangunan)
+          ) {
+            throw new Error(`Bangunan #${parsed.kode_bangunan} sedang diajukan untuk dihapus. Pindahkan atau batalkan perubahan keluarga terlebih dahulu.`);
+          }
           const created = await tx.penduduk.create({ data: { ...parsed, desaId } as never });
           await recordFieldUpdates(tx, desaId, created.id, parsed as Record<string, unknown>);
           if (typeof parsed.nkk === "string" && parsed.nkk) affectedNkk.add(parsed.nkk);
@@ -365,6 +421,12 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
           }
         } else if (change.aksi === "UPDATE" && change.pendudukId && change.data) {
           const parsed = pendudukUpdateSchema.parse(JSON.parse(change.data));
+          if (
+            typeof parsed.kode_bangunan === "number" &&
+            pendingDeletedBuildingCodes.has(parsed.kode_bangunan)
+          ) {
+            throw new Error(`Bangunan #${parsed.kode_bangunan} sedang diajukan untuk dihapus. Pilih bangunan tujuan lain terlebih dahulu.`);
+          }
           const current = await tx.penduduk.findFirstOrThrow({
             where: { id: change.pendudukId, desaId },
             select: { nkk: true },

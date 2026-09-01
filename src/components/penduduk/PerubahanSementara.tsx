@@ -58,6 +58,9 @@ const BUILDING_LABELS: Record<string, string> = {
   rw: "Rukun Warga (RW)",
   rt: "Rukun Tetangga (RT)",
   alamat: "Alamat/Keterangan Lokasi",
+  alasan: "Alasan Penghapusan",
+  jumlahKk: "Jumlah KK Tetap Tersimpan",
+  jumlahPenduduk: "Jumlah Penduduk Tetap Tersimpan",
 };
 
 function detailLabel(entityType: DetailRow["entityType"], key: string) {

@@ -6,7 +6,7 @@ export async function GET() {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
 
-  const [desa, buildings, heads] = await Promise.all([
+  const [desa, buildings, heads, occupants, deletedBuildings] = await Promise.all([
     prisma.desa.findUnique({
       where: { id: ctx.desaId },
       select: { nama: true, kodeWilayah: true, droneTilePrefix: true, centerLat: true, centerLng: true },
@@ -44,9 +44,29 @@ export async function GET() {
         lng: true,
       },
     }),
+    prisma.penduduk.findMany({
+      where: { desaId: ctx.desaId, statusAktif: true, kode_bangunan: { not: null } },
+      select: { kode_bangunan: true, nkk: true },
+    }),
+    prisma.bangunanDihapus.findMany({ where: { desaId: ctx.desaId }, select: { kodeBangunan: true } }),
   ]);
 
-  const knownCodes = new Set(buildings.map((building) => building.kode));
+  const deletedCodes = new Set(deletedBuildings.map((building) => building.kodeBangunan));
+  const activeBuildings = buildings.filter((building) => !deletedCodes.has(building.kode));
+  const occupancyByCode = new Map<number, { jumlahPenduduk: number; nkk: Set<string> }>();
+  for (const occupant of occupants) {
+    if (occupant.kode_bangunan === null || deletedCodes.has(occupant.kode_bangunan)) continue;
+    const current = occupancyByCode.get(occupant.kode_bangunan) ?? { jumlahPenduduk: 0, nkk: new Set<string>() };
+    current.jumlahPenduduk += 1;
+    if (occupant.nkk) current.nkk.add(occupant.nkk);
+    occupancyByCode.set(occupant.kode_bangunan, current);
+  }
+  const occupancy = (code: number) => {
+    const current = occupancyByCode.get(code);
+    return { jumlahPenduduk: current?.jumlahPenduduk ?? 0, jumlahKk: current?.nkk.size ?? 0 };
+  };
+
+  const knownCodes = new Set(activeBuildings.map((building) => building.kode));
   const parseCoordinate = (value: string | null, axis: "lat" | "lng") => {
     if (value === null || value.trim() === "") return null;
     const coordinate = Number(value);
@@ -60,7 +80,7 @@ export async function GET() {
     ? `${legacyCode.slice(0, 2)}.${legacyCode.slice(2, 4)}.${legacyCode.slice(4, 6)}.${legacyCode.slice(6)}`
     : null;
   const legacy = heads
-    .filter((head) => head.kode_bangunan !== null && !knownCodes.has(head.kode_bangunan))
+    .filter((head) => head.kode_bangunan !== null && !knownCodes.has(head.kode_bangunan) && !deletedCodes.has(head.kode_bangunan))
     .filter((head, index, rows) => rows.findIndex((other) => other.kode_bangunan === head.kode_bangunan) === index)
     .map((head) => ({
       id: `legacy-${head.kode_bangunan}`,
@@ -78,10 +98,11 @@ export async function GET() {
       kepalaKeluarga: head.nama,
       nkk: head.nkk,
       legacy: true,
+      ...occupancy(head.kode_bangunan as number),
     }));
 
   return NextResponse.json({
-    data: [...buildings.map((building) => ({ ...building, legacy: false })), ...legacy],
+    data: [...activeBuildings.map((building) => ({ ...building, legacy: false, ...occupancy(building.kode) })), ...legacy],
     context: desa
       ? {
           ...desa,

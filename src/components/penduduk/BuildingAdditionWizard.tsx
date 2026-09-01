@@ -49,7 +49,7 @@ const STEPS = [
   { title: "Bangunan", subtitle: "Jenis dan alamat", icon: Building2 },
   { title: "Responden", subtitle: "Nama dan foto", icon: UserRoundCheck },
   { title: "Keluarga", subtitle: "Hanya Aspek 1", icon: Users },
-  { title: "Tinjau", subtitle: "Masuk staging", icon: Check },
+  { title: "Tinjau", subtitle: "Perubahan sementara", icon: Check },
 ];
 
 function payload(values: Record<string, string>, role: SurveyRole) {

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ kod
 
   try {
     const session = await prisma.$transaction(async (tx) => {
-      const [building, legacy, pendingBuildings, media] = await Promise.all([
+      const [building, legacy, pendingBuildings, media, deletedBuilding] = await Promise.all([
         tx.bangunan.findFirst({ where: { desaId: ctx.desaId, kode: code, jenis: "BERPENGHUNI" } }),
         tx.penduduk.findFirst({ where: { desaId: ctx.desaId, kode_bangunan: code, statusAktif: true } }),
         tx.stagingChange.findMany({
@@ -42,7 +42,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ kod
         tx.mediaAsset.findFirst({
           where: { id: submitted.data.mediaAssetId, desaId: ctx.desaId, purpose: "RESPONDEN" },
         }),
+        tx.bangunanDihapus.findUnique({ where: { desaId_kodeBangunan: { desaId: ctx.desaId, kodeBangunan: code } }, select: { id: true } }),
       ]);
+      if (deletedBuilding) throw new Error("Bangunan ini sudah dihapus dari peta aktif dan tidak dapat didata kembali");
       const pending = pendingBuildings.find((row) => stagedBuildingHasCode(row.data, code));
       if (!building && !legacy && !pending) throw new Error("Bangunan berpenghuni tidak ditemukan pada desa ini");
       if (!media || submitted.data.fotoUrl !== `/api/media/${media.id}`) {

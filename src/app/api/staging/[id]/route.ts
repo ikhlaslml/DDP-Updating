@@ -50,7 +50,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
           createdByName: change.createdByName ?? "Operator Desa",
           createdByEmail: change.createdByEmail,
           values:
-            change.aksi === "DELETE"
+            change.entityType === "BANGUNAN"
+              ? proposed
+              : change.aksi === "DELETE"
               ? baseline
               : change.aksi === "UPDATE"
                 ? { ...baseline, ...proposed }

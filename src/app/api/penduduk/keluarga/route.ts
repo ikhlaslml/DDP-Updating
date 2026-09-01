@@ -26,14 +26,17 @@ export async function GET(req: NextRequest) {
     orderBy: { nama: "asc" },
     take: 100,
   });
-  const progress = heads.length ? await prisma.progresPendataanKeluarga.findMany({
-    where: { desaId: ctx.desaId, nkk: { in: heads.flatMap((head) => head.nkk ? [head.nkk] : []) } },
+  const deletedBuildings = await prisma.bangunanDihapus.findMany({ where: { desaId: ctx.desaId }, select: { kodeBangunan: true } });
+  const deletedCodes = new Set(deletedBuildings.map((building) => building.kodeBangunan));
+  const activeHeads = heads.filter((head) => head.kode_bangunan === null || !deletedCodes.has(head.kode_bangunan));
+  const progress = activeHeads.length ? await prisma.progresPendataanKeluarga.findMany({
+    where: { desaId: ctx.desaId, nkk: { in: activeHeads.flatMap((head) => head.nkk ? [head.nkk] : []) } },
     orderBy: { updatedAt: "desc" },
   }) : [];
   const progressByNkk = new Map(progress.map((row) => [row.nkk, row]));
 
   return NextResponse.json({
-    data: heads.map((head) => ({
+    data: activeHeads.map((head) => ({
       id: head.id,
       nkk: head.nkk as string,
       nik: head.nik ?? "",

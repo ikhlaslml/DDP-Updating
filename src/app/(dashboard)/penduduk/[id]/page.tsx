@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { KELOMPOK_ORDER, KELOMPOK_LABEL, kolomByKelompok } from "@/lib/indikator";
+import { KELOMPOK_ORDER, KELOMPOK_LABEL, operationalKolomByKelompok } from "@/lib/indikator";
 import { formatCell } from "@/lib/format";
 import { DeleteButtonRedirect } from "@/components/penduduk/DeleteButtonRedirect";
 import { getAuthContext } from "@/lib/tenant";
 import { fieldLabel } from "@/lib/field-labels";
 import { Building2, ImageIcon, Pencil } from "lucide-react";
 
-const GROUPED = kolomByKelompok();
+const GROUPED = operationalKolomByKelompok();
 
 export default async function DetailPendudukPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -18,6 +18,9 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
   if (!record) notFound();
 
   const data = record as unknown as Record<string, unknown>;
+  const deletedBuilding = typeof data.kode_bangunan === "number"
+    ? await prisma.bangunanDihapus.findUnique({ where: { desaId_kodeBangunan: { desaId: ctx.desaId, kodeBangunan: data.kode_bangunan } }, select: { id: true } })
+    : null;
 
   return (
     <div>
@@ -30,12 +33,14 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
           <p className="text-sm text-slate-500">
             NIK {String(data.nik ?? "-")} &middot; NKK {String(data.nkk ?? "-")} &middot; {String(data.dusun ?? "-")}
           </p>
-          {typeof data.kode_bangunan === "number" ? (
+          {typeof data.kode_bangunan === "number" && !deletedBuilding ? (
             <Link href={`/bangunan/${data.kode_bangunan}`} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
               <Building2 className="h-4 w-4" />
               <ImageIcon className="h-4 w-4" />
               Buka Detail Bangunan &amp; Foto DDP
             </Link>
+          ) : deletedBuilding ? (
+            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">Bangunan fisik dengan kode ini sudah dihapus dari peta aktif. Data warga tetap tersimpan untuk riwayat dan dapat dipindahkan ke bangunan lain melalui alur pembaruan.</p>
           ) : (
             <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">Warga ini belum memiliki kode bangunan sehingga foto bangunan belum dapat dicari.</p>
           )}

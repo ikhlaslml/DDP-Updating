@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Baby, Building2, ChevronDown, HeartPulse, LogIn, LogOut, UserPlus, UsersRound } from "lucide-react";
+import { Baby, Building2, ChevronDown, HeartPulse, LogIn, LogOut, Trash2, UserPlus, UsersRound } from "lucide-react";
 
 const OPTIONS = [
   {
@@ -39,6 +39,13 @@ const OPTIONS = [
     description: "Digitasi bangunan baru beserta seluruh penghuninya.",
     icon: Building2,
     color: "bg-indigo-50 text-indigo-600",
+  },
+  {
+    href: "/penduduk/hapus-bangunan",
+    title: "Hapus Bangunan",
+    description: "Ajukan penghapusan bangunan fisik tanpa menghapus data penghuninya.",
+    icon: Trash2,
+    color: "bg-rose-50 text-rose-600",
   },
   {
     href: "/penduduk/tambah-keluarga",

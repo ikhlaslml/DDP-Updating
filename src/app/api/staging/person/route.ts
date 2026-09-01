@@ -62,6 +62,16 @@ function derivedFields(data: Record<string, unknown>) {
   };
 }
 
+function hasPendingBuildingDeletion(changes: { data: string | null }[], code: number) {
+  return changes.some((change) => {
+    try {
+      return Number((JSON.parse(change.data ?? "{}") as { kode?: unknown }).kode) === code;
+    } catch {
+      return false;
+    }
+  });
+}
+
 export async function POST(req: NextRequest) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
@@ -90,10 +100,19 @@ export async function POST(req: NextRequest) {
 
         if (role === "HEAD") {
           const code = body.data.buildingCode as number;
-          const [building, legacy] = await Promise.all([
+          const [building, legacy, deletedBuilding, pendingBuildingDeletions] = await Promise.all([
             tx.bangunan.findFirst({ where: { desaId: ctx.desaId, kode: code } }),
             tx.penduduk.findFirst({ where: { desaId: ctx.desaId, kode_bangunan: code, statusAktif: true } }),
+            tx.bangunanDihapus.findUnique({ where: { desaId_kodeBangunan: { desaId: ctx.desaId, kodeBangunan: code } }, select: { id: true } }),
+            tx.stagingChange.findMany({
+              where: { desaId: ctx.desaId, entityType: "BANGUNAN", aksi: "DELETE", status: "PENDING" },
+              select: { data: true },
+            }),
           ]);
+          if (deletedBuilding) throw new Error("Bangunan ini sudah dihapus dari peta aktif dan tidak dapat ditempati kembali");
+          if (hasPendingBuildingDeletion(pendingBuildingDeletions, code)) {
+            throw new Error("Bangunan ini sedang diajukan untuk dihapus. Tunggu penggabungan atau batalkan penghapusan terlebih dahulu.");
+          }
           if (!building && !legacy) throw new Error("Bangunan tidak ditemukan pada desa ini");
           if (building?.jenis === "TIDAK_BERPENGHUNI") {
             throw new Error("Bangunan ini tercatat tidak berpenghuni. Ubah status bangunan terlebih dahulu.");
@@ -145,6 +164,22 @@ export async function POST(req: NextRequest) {
             where: { desaId: ctx.desaId, nkk, statusAktif: true, status_dalam_keluarga: "Kepala Keluarga" },
           });
           if (!head) throw new Error("Kepala keluarga tidak ditemukan");
+          if (head.kode_bangunan !== null) {
+            const [deletedBuilding, pendingBuildingDeletions] = await Promise.all([
+              tx.bangunanDihapus.findUnique({
+                where: { desaId_kodeBangunan: { desaId: ctx.desaId, kodeBangunan: head.kode_bangunan } },
+                select: { id: true },
+              }),
+              tx.stagingChange.findMany({
+                where: { desaId: ctx.desaId, entityType: "BANGUNAN", aksi: "DELETE", status: "PENDING" },
+                select: { data: true },
+              }),
+            ]);
+            if (deletedBuilding) throw new Error("Bangunan keluarga ini sudah dihapus dari peta aktif; pindahkan keluarga terlebih dahulu");
+            if (hasPendingBuildingDeletion(pendingBuildingDeletions, head.kode_bangunan)) {
+              throw new Error("Bangunan keluarga ini sedang diajukan untuk dihapus. Tunggu penggabungan atau batalkan penghapusan terlebih dahulu.");
+            }
+          }
           if (!data.status_dalam_keluarga || data.status_dalam_keluarga === "Kepala Keluarga") {
             throw new Error("Pilih status anggota dalam keluarga");
           }
