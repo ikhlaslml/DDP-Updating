@@ -36,10 +36,11 @@ export async function GET() {
   if (!ctx) return UNAUTHORIZED;
   const now = new Date();
   const startMonth = new Date(now.getFullYear(), now.getMonth() - 11, 1);
-  const [all, demographicEvents] = await Promise.all([prisma.penduduk.findMany({
+  const [all, demographicEvents, deletedBuildings] = await Promise.all([prisma.penduduk.findMany({
     where: { desaId: ctx.desaId, statusAktif: true },
     select: {
       nkk: true,
+      kode_bangunan: true,
       dusun: true,
       jk: true,
       usia: true,
@@ -54,10 +55,20 @@ export async function GET() {
   }), prisma.peristiwaKependudukan.findMany({
     where: { desaId: ctx.desaId, tanggal: { gte: startMonth } },
     select: { jenis: true, tanggal: true },
+  }), prisma.bangunanDihapus.findMany({
+    where: { desaId: ctx.desaId },
+    select: { kodeBangunan: true },
   })]);
 
   const totalPenduduk = all.length;
   const totalKk = new Set(all.map((r) => r.nkk).filter(Boolean)).size;
+  // One physical building may contain several KK. The resident baseline is
+  // authoritative for whether a building is occupied, so count its distinct
+  // codes rather than Bangunan rows (which can also contain empty buildings).
+  const deletedCodes = new Set(deletedBuildings.map((building) => building.kodeBangunan));
+  const totalBangunan = new Set(
+    all.map((row) => row.kode_bangunan).filter((kode): kode is number => kode !== null && !deletedCodes.has(kode))
+  ).size;
 
   const perDusun: Record<string, number> = {};
   const pyramid: Record<string, { L: number; P: number }> = {};
@@ -111,6 +122,7 @@ export async function GET() {
   return NextResponse.json({
     totalPenduduk,
     totalKk,
+    totalBangunan,
     perDusun: Object.entries(perDusun).map(([label, value]) => ({ label, value })),
     piramidaPenduduk: AGE_BUCKET_ORDER.filter((b) => pyramid[b]).map((b) => ({
       usia: b,

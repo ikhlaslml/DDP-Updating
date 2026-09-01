@@ -37,6 +37,10 @@ export const KELOMPOK_ORDER = [
 export type KelompokIndikator = (typeof KELOMPOK_ORDER)[number];
 export const CORE_RESIDENT_COLUMNS = ["nkk", "nik", "nama"] as const;
 
+// Identitas internal ini tetap ada pada baseline/API/ekspor untuk kebutuhan
+// integrasi, tetapi tidak perlu muncul pada layar kerja operator desa.
+export const OPERATIONAL_HIDDEN_COLUMNS = new Set(["abs_id", "subjek"]);
+
 export const KELOMPOK_LABEL = mapping._meta.kelompok;
 
 export function kolomByKelompok(): Record<string, [string, KolomDef][]> {
@@ -62,6 +66,24 @@ export function columnsForKelompok(groups: Iterable<KelompokIndikator>) {
     ...KELOMPOK_ORDER.flatMap((group) => selected.has(group) ? grouped[group].map(([name]) => name) : []),
   ];
   return [...new Set(columns)];
+}
+
+export function isOperationalColumn(name: string) {
+  return !OPERATIONAL_HIDDEN_COLUMNS.has(name);
+}
+
+export function operationalColumnsForKelompok(groups: Iterable<KelompokIndikator>) {
+  return columnsForKelompok(groups).filter(isOperationalColumn);
+}
+
+export function operationalKolomByKelompok(): Record<string, [string, KolomDef][]> {
+  const grouped = kolomByKelompok();
+  return Object.fromEntries(
+    KELOMPOK_ORDER.map((group) => [
+      group,
+      grouped[group].filter(([name]) => isOperationalColumn(name)),
+    ])
+  );
 }
 
 export const ALL_COLUMNS = Object.keys(mapping.kolom);

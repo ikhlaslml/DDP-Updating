@@ -3,14 +3,14 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import { KELOMPOK_ORDER, KELOMPOK_LABEL, kolomByKelompok, ALL_COLUMNS, mapping } from "@/lib/indikator";
+import { KELOMPOK_ORDER, KELOMPOK_LABEL, operationalKolomByKelompok, ALL_COLUMNS, mapping } from "@/lib/indikator";
 import { inputValueFromRecord } from "@/lib/format";
 import { buildPayload } from "@/lib/payload";
 import { REQUIRED_FIELDS } from "@/lib/validation";
 import { FieldInput } from "./FieldInput";
 import { FREQUENCY_LABELS, parameterFrequency, parameterIsEditable, type UpdateFrequency } from "@/lib/parameter-metadata";
 
-const GROUPED = kolomByKelompok();
+const GROUPED = operationalKolomByKelompok();
 
 export function PendudukForm({
   mode,
@@ -129,7 +129,7 @@ export function PendudukForm({
             </select>
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-violet-500">⌄</span>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-violet-700">Daftar mengikuti subjek dan jadwal parameter. Pertanyaan nonaktif, perhitungan sistem, data lama, data temporer, serta parameter yang tidak berubah tidak ditampilkan.</p>
+          <p className="mt-2 text-xs leading-relaxed text-violet-700">Daftar mengikuti jenis pendataan dan jadwal parameter. Pertanyaan nonaktif, perhitungan sistem, data lama, data sementara, serta parameter yang tidak berubah tidak ditampilkan.</p>
         </div>
       ) : null}
       <div className="flex flex-wrap gap-2 mb-6">

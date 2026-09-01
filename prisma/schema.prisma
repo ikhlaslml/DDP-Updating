@@ -93,7 +93,6 @@ model Penduduk {
   keterampilan                String?
   pelatihan                   String?
   pelatihan_ket               String?
-  refreshing                  String?
   pekarangan                  String?
   pekarangan_luas             Float?
   pekarangan_air              String?
@@ -256,6 +255,7 @@ model Penduduk {
   bencana_rumah_kondisi       String?
   bencana_rumah_bagianrusak   String?
   bencana_ketenum_bangunan    String?
+  refreshing                  String?
   baju_frek                   String?
   rp_sph                      Float?
   makan_frek                  String?
@@ -422,6 +422,25 @@ model Bangunan {
   @@index([desaId, jenis])
 }
 
+// Physical building removed from the active spatial registry. Residents and
+// family history remain intact; this is an auditable tombstone, not a cascade.
+model BangunanDihapus {
+  id            String   @id @default(cuid())
+  desaId        String
+  kodeBangunan  Int
+  alasan        String
+  keterangan    String?
+  stagingChangeId String?
+  deletedBy     String
+  deletedByName String?
+  deletedByEmail String?
+  deletedAt     DateTime @default(now())
+
+  @@unique([desaId, kodeBangunan])
+  @@index([desaId, deletedAt])
+  @@index([stagingChangeId])
+}
+
 // Metadata for files stored outside PostgreSQL (private Blob/local development storage).
 model MediaAsset {
   id              String   @id @default(cuid())
@@ -578,9 +597,13 @@ model PengaturanDesa {
   logoUrl    String?
   logoMediaAssetId String?
   logoUpdatedAt DateTime?
+  tandaTanganUrl String?
+  tandaTanganMediaAssetId String?
+  tandaTanganUpdatedAt DateTime?
   updatedAt  DateTime @updatedAt
 
   @@index([desaId, logoMediaAssetId])
+  @@index([desaId, tandaTanganMediaAssetId])
 }
 
 // Master catalog derived verbatim (trimmed) from Borang Harga.xlsx.

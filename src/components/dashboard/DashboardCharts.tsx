@@ -16,7 +16,7 @@ import {
   PieChart,
   Pie,
 } from "recharts";
-import { Baby, HeartPulse, Home as HomeIcon, LogIn, LogOut, MapPinned, Users } from "lucide-react";
+import { Baby, Building2, HeartPulse, Home as HomeIcon, LogIn, LogOut, MapPinned, Users } from "lucide-react";
 import { StatCard } from "./StatCard";
 import { CircularProgress } from "./CircularProgress";
 import { SERIES, CHART_INK } from "@/lib/chart-colors";
@@ -24,6 +24,7 @@ import { SERIES, CHART_INK } from "@/lib/chart-colors";
 type Stats = {
   totalPenduduk: number;
   totalKk: number;
+  totalBangunan: number;
   perDusun: { label: string; value: number }[];
   piramidaPenduduk: { usia: string; L: number; P: number }[];
   pendidikan: { label: string; value: number }[];
@@ -103,7 +104,7 @@ export function DashboardCharts() {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <StatCard label="Migrasi Masuk" value={stats.demografi.migrasiMasuk.toLocaleString("id-ID")} icon={LogIn} />
         <StatCard label="Migrasi Keluar" value={stats.demografi.migrasiKeluar.toLocaleString("id-ID")} icon={LogOut} />
-        <StatCard label="Migrasi Neto" value={(stats.demografi.migrasiNeto > 0 ? "+" : "") + stats.demografi.migrasiNeto.toLocaleString("id-ID")} />
+        <StatCard label="Jumlah Bangunan" value={stats.totalBangunan.toLocaleString("id-ID")} icon={Building2} />
         <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
       </div>
 

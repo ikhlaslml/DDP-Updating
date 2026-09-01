@@ -12,7 +12,7 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 import {
-  columnsForKelompok,
+  operationalColumnsForKelompok,
   KELOMPOK_ORDER,
   mapping,
   type KelompokIndikator,
@@ -61,7 +61,9 @@ export function PendudukTable({
   const [miskinBps, setMiskinBps] = useState("");
   const [facets, setFacets] = useState<Facets>({ dusun: [], rw: [], rt: [] });
   const [selectedAspects, setSelectedAspects] = useState<Set<KelompokIndikator>>(() => new Set(initialAspects));
-  const visible = useMemo(() => columnsForKelompok(selectedAspects), [selectedAspects]);
+  // ABS ID dan Jenis Subjek tetap dipakai untuk integrasi, tetapi tidak
+  // membebani layar kerja operator.
+  const visible = useMemo(() => operationalColumnsForKelompok(selectedAspects), [selectedAspects]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 350);
@@ -211,37 +213,37 @@ export function PendudukTable({
   return (
     <div className="space-y-4">
       <AspectFilterPanel selected={selectedAspects} onChange={changeAspects} />
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-100 bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama, NIK, NKK, alamat..."
-          className="min-h-10 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:w-64"
+          className="min-h-10 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:w-56"
         />
-        <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
+        <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="min-h-10 max-w-full rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua Dusun</option>
           {facets.dusun.map((d) => (
             <option key={d} value={d}>{d}</option>
           ))}
         </select>
-        <select value={rw} onChange={(e) => setRw(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
+        <select value={rw} onChange={(e) => setRw(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua RW</option>
           {facets.rw.map((v) => (
             <option key={v} value={v}>RW {v}</option>
           ))}
         </select>
-        <select value={rt} onChange={(e) => setRt(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
+        <select value={rt} onChange={(e) => setRt(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua RT</option>
           {facets.rt.map((v) => (
             <option key={v} value={v}>RT {v}</option>
           ))}
         </select>
-        <select value={jk} onChange={(e) => setJk(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
+        <select value={jk} onChange={(e) => setJk(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua Jenis Kelamin</option>
           <option value="L">Laki-laki</option>
           <option value="P">Perempuan</option>
         </select>
-        <select value={miskinBps} onChange={(e) => setMiskinBps(e.target.value)} className="rounded-lg border border-slate-300 px-2 py-2 text-sm">
+        <select value={miskinBps} onChange={(e) => setMiskinBps(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
           <option value="">Semua Status Kemiskinan</option>
           <option value="true">Miskin (BPS)</option>
           <option value="false">Tidak Miskin</option>
@@ -298,7 +300,7 @@ export function PendudukTable({
         ))}
       </div>
 
-      <div className="hidden overscroll-x-contain overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] md:block">
+      <div className="hidden max-h-[min(66vh,680px)] overscroll-contain overflow-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] md:block">
         <table className="w-max min-w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-200">
             {table.getHeaderGroups().map((hg) => (
@@ -311,7 +313,7 @@ export function PendudukTable({
                       key={header.id}
                       onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
                       style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
-                      className={`px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "sticky z-20 bg-slate-50 shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "sticky z-30 bg-slate-50 text-right shadow-[-1px_0_0_#e2e8f0] max-sm:hidden" : ""}`}
+                      className={`sticky top-0 z-20 px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap select-none bg-slate-50 ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "z-30 shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "z-40 text-right shadow-[-1px_0_0_#e2e8f0] max-sm:hidden" : ""}`}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getIsSorted() === "asc" && " ▲"}

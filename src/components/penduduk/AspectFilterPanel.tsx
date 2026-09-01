@@ -2,14 +2,14 @@
 
 import { CheckCheck, ListFilter, RotateCcw } from "lucide-react";
 import {
-  columnsForKelompok,
   KELOMPOK_LABEL,
   KELOMPOK_ORDER,
-  kolomByKelompok,
+  operationalColumnsForKelompok,
+  operationalKolomByKelompok,
   type KelompokIndikator,
 } from "@/lib/indikator";
 
-const GROUPED = kolomByKelompok();
+const GROUPED = operationalKolomByKelompok();
 
 export function AspectFilterPanel({
   selected,
@@ -18,7 +18,7 @@ export function AspectFilterPanel({
   selected: Set<KelompokIndikator>;
   onChange: (next: Set<KelompokIndikator>) => void;
 }) {
-  const activeColumns = columnsForKelompok(selected).length;
+  const activeColumns = operationalColumnsForKelompok(selected).length;
 
   function toggle(group: KelompokIndikator) {
     const next = new Set(selected);
