@@ -87,6 +87,9 @@ export const HOUSEHOLD_INHERITED_FIELDS = [
   "tanah_bukti",
   "pbb_punya",
   "pbb_tahunbayar",
+  // Frekuensi liburan adalah jawaban tingkat keluarga dan harus sama untuk
+  // seluruh anggota pada NKK yang sama di tabel penduduk terdenormalisasi.
+  "refreshing",
   "kesediaan",
   "media_informasi",
   "aset_ekonomi",

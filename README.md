@@ -136,6 +136,27 @@ tidak ditambah atau diubah. Pastikan backup database tersedia sebelum release pe
 **5. (Opsional) Custom domain & subdomain** — tambah `desapresisi.id` + wildcard
 `*.desapresisi.id` di Vercel untuk subdomain per desa.
 
+### Merapikan kode bangunan demo lama
+
+Seed baru membuat kode bangunan `1, 2, 3, ...` per desa. Seed tidak mengubah data
+yang sudah ada. Untuk database demo lama yang seluruh kodenya masih `100000+`, buat
+backup lalu lakukan dry-run berikut terlebih dahulu:
+
+```powershell
+npm run db:resequence:demo-buildings -- --desa desa-setu
+```
+
+Jika laporan hanya menunjukkan data dummy yang benar, terapkan secara eksplisit:
+
+```powershell
+npm run db:resequence:demo-buildings -- --desa desa-setu --apply --confirm-demo
+```
+
+Untuk empat tenant demo bawaan gunakan `--all-demo` sebagai pengganti `--desa`.
+Saat apply, nilai dummy lama `refreshing` Ya/Tidak juga diselaraskan menjadi kategori
+frekuensi `1x`/`tidak pernah`. Alat ini tidak untuk CSV/API DDP asli dan tidak pernah
+berjalan otomatis ketika deploy.
+
 ## Struktur penting
 
 - `config/indikator-mapping.json` — pemetaan 286 kolom ke 6 kelompok indikator + tipe.

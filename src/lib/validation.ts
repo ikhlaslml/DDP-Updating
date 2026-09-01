@@ -3,6 +3,10 @@ import { mapping, type KolomDef } from "./indikator";
 import { allParameterOptions, parameterAcceptsMultiple } from "./parameter-metadata";
 
 const NIK_NKK_RE = /^\d{16}$/;
+// The old demo seed incorrectly stored refreshing as Ya/Tidak. Keep those
+// values readable and editable as legacy data while new UI/import values use
+// the annual-frequency buckets from the indicator mapping.
+const LEGACY_REFRESHING_VALUES = ["Ya", "Tidak"];
 // Indonesia's rough bounding box.
 const LAT_RANGE: [number, number] = [-11, 6];
 const LNG_RANGE: [number, number] = [95, 141];
@@ -33,7 +37,13 @@ function coreZodType(name: string, def: KolomDef): z.ZodTypeAny {
       return v !== "" && !Number.isNaN(n) && n >= min && n <= max;
     }, `Di luar rentang ${axis} Indonesia`);
   }
-  const configuredOptions = [...new Set([...(def.enum ?? []), ...allParameterOptions(name)])];
+  const configuredOptions = [
+    ...new Set([
+      ...(def.enum ?? []),
+      ...allParameterOptions(name),
+      ...(name === "refreshing" ? LEGACY_REFRESHING_VALUES : []),
+    ]),
+  ];
   if (configuredOptions.length) {
     return z.string().refine(
       (value) => {

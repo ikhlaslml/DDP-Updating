@@ -13,11 +13,11 @@
     },
     "jumlah_per_kelompok": {
       "identitas_keluarga": 42,
-      "pendidikan_kebudayaan": 9,
+      "pendidikan_kebudayaan": 8,
       "infrastruktur_lingkungan": 16,
       "sosial_hukum_ham": 50,
       "kesehatan_kerja_jamsos": 96,
-      "sandang_pangan_papan": 73
+      "sandang_pangan_papan": 74
     },
     "target_per_kelompok": {
       "identitas_keluarga": 41,
@@ -29,11 +29,11 @@
     },
     "selisih_per_kelompok": {
       "identitas_keluarga": 1,
-      "pendidikan_kebudayaan": 0,
+      "pendidikan_kebudayaan": -1,
       "infrastruktur_lingkungan": 0,
       "sosial_hukum_ham": 0,
       "kesehatan_kerja_jamsos": 24,
-      "sandang_pangan_papan": 2
+      "sandang_pangan_papan": 3
     },
     "perlu_konfirmasi": [
       "subjek",
@@ -554,18 +554,6 @@
       "label": "Pelatihan Ket",
       "tipe": "string",
       "pg_tipe": "text",
-      "perlu_konfirmasi": false
-    },
-    "refreshing": {
-      "kelompok": "pendidikan_kebudayaan",
-      "kelompok_label": "Pendidikan dan Kebudayaan",
-      "label": "Refreshing",
-      "tipe": "string",
-      "pg_tipe": "character varying",
-      "enum": [
-        "Ya",
-        "Tidak"
-      ],
       "perlu_konfirmasi": false
     },
     "pekarangan": {
@@ -1958,6 +1946,21 @@
       "tipe": "string",
       "pg_tipe": "text",
       "perlu_konfirmasi": true
+    },
+    "refreshing": {
+      "kelompok": "sandang_pangan_papan",
+      "kelompok_label": "Sandang, Pangan, dan Papan",
+      "label": "Refreshing",
+      "tipe": "string",
+      "pg_tipe": "character varying",
+      "enum": [
+        "tidak pernah",
+        "1x",
+        "2x",
+        "3x",
+        "lebih dari 3x"
+      ],
+      "perlu_konfirmasi": false
     },
     "baju_frek": {
       "kelompok": "sandang_pangan_papan",

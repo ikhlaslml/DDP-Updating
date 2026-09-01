@@ -49,7 +49,7 @@ const group1 = [
 
 const group2 = [
   "partisipasi_sekolah", "ijazah", "rp_pendidikan", "bantuan_pendidikan",
-  "pendidikan_anggota", "keterampilan", "pelatihan", "pelatihan_ket", "refreshing",
+  "pendidikan_anggota", "keterampilan", "pelatihan", "pelatihan_ket",
 ];
 
 const group3 = [
@@ -105,7 +105,9 @@ const group5 = [
 ];
 
 const group6 = [
-  "baju_frek", "rp_sph", "makan_frek", "makan_menu", "tempat_belanja",
+  // Refreshing is the household's annual holiday frequency, not education
+  // and not a Ya/Tidak value.
+  "refreshing", "baju_frek", "rp_sph", "makan_frek", "makan_menu", "tempat_belanja",
   "rp_belanja", "rp_pangan", "rp_non_pangan",
   "kon_beras", "kon_biskuit", "kon_jagung", "kon_kentang", "kon_mie", "kon_roti",
   "kon_singkong", "kon_sukun", "kon_ketan", "kon_sapi", "kon_ayam", "kon_babi",
@@ -224,6 +226,8 @@ const ENUMS = {
   ijazah: ["Tidak/Belum Sekolah", "SD", "SMP", "SMA", "D1/D2/D3", "S1", "S2", "S3"],
   rumah_milik: ["Milik Sendiri", "Sewa", "Kontrak", "Menumpang", "Dinas", "Lainnya"],
   kerja_status: ["Bekerja", "Tidak Bekerja", "Belum Bekerja", "Pensiun", "Pelajar/Mahasiswa"],
+  // Stored as varchar in the DDP baseline, but semantically a frequency bucket.
+  refreshing: ["tidak pernah", "1x", "2x", "3x", "lebih dari 3x"],
 };
 
 // Yes/no fields stored as character varying in `ajaib` — modeled as enum Ya/Tidak.
@@ -233,7 +237,7 @@ const YESNO = new Set([
   "akta_nikah", "akta_cerai", "bpjs_kes", "bpjs_tk",
   "hp_punya", "pbb_punya", "menabung", "menetap", "kulkas", "wifi",
   "rumah_pln", "rumah_solar", "pekarangan", "lahan", "ternak", "tki",
-  "sampah_pilah", "sampah_olah", "perokok", "refreshing", "pelatihan",
+  "sampah_pilah", "sampah_olah", "perokok", "pelatihan",
   "responden", "miskin_bps", "miskin_ekstrem", "miskin_bpsd",
 ]);
 
@@ -289,7 +293,7 @@ const output = {
 fs.mkdirSync(path.join(__dirname, "..", "config"), { recursive: true });
 fs.writeFileSync(
   path.join(__dirname, "..", "config", "indikator-mapping.json"),
-  JSON.stringify(output, null, 2)
+  `${JSON.stringify(output, null, 2)}\n`
 );
 
 console.log("total columns:", allCols.length);

@@ -49,7 +49,7 @@
 "penduduk","keterampilan","text","string","pendidikan_kebudayaan"
 "penduduk","pelatihan","character varying","string","pendidikan_kebudayaan"
 "penduduk","pelatihan_ket","text","string","pendidikan_kebudayaan"
-"penduduk","refreshing","character varying","string","pendidikan_kebudayaan"
+"penduduk","refreshing","character varying","string","sandang_pangan_papan"
 "penduduk","pekarangan","character varying","string","infrastruktur_lingkungan"
 "penduduk","pekarangan_luas","numeric","float","infrastruktur_lingkungan"
 "penduduk","pekarangan_air","character varying","string","infrastruktur_lingkungan"

@@ -102,100 +102,121 @@ const HANDLED = new Set([
   "alamat", "status_dalam_keluarga", "status_kawin", "punya_ktp", "punya_aktalahir",
   "nama_kepala_rumah", "nama_tulang_punggung", "no_hp", "jml_keluarga", "tgl_lahir",
   "jk", "agama", "suku", "kerja_profesi", "ijazah", "tgl_kawin", "usia",
-  "usia_dec", "miskin_bps", "miskin_ekstrem", "miskin_bpsd", "skor_kls",
+  "usia_dec", "miskin_bps", "miskin_ekstrem", "miskin_bpsd", "skor_kls", "refreshing",
 ]);
 
 const columns = Object.entries(mapping.kolom) as [string, ColDef][];
+const FREKUENSI_LIBURAN = ["tidak pernah", "1x", "2x", "3x", "lebih dari 3x"];
 
 async function seedPenduduk(desaId: string, slug: string, deskel: string, kodeWil6: string, kodeDeskel: string, centerLat: number, centerLng: number, target: number) {
   const records: Record<string, unknown>[] = [];
+  // Kode bangunan adalah identifier lokal per desa/kode_deskel. Satu bangunan
+  // dapat menaungi lebih dari satu KK, sementara setiap anggota pada satu KK
+  // tetap membawa kode bangunan yang sama di tabel penduduk terdenormalisasi.
+  let buildingCounter = 0;
   while (records.length < target) {
-    familyCounter++;
+    buildingCounter++;
     const dusun = faker.helpers.arrayElement(DUSUN);
     const dusunIndex = DUSUN.indexOf(dusun);
     const baseLat = centerLat + (dusunIndex - 2) * 0.0025;
     const baseLng = centerLng + (dusunIndex - 2) * 0.0025;
     const rw = randInt(1, 4);
     const rt = randInt(1, 6);
-    const kodeBangunan = 100000 + familyCounter;
-    const nkk = makeNkk(familyCounter, kodeWil6);
-    const familySurname = faker.person.lastName();
-    const kepalaNama = `${faker.person.firstName()} ${familySurname}`;
-    const jmlKeluarga = randInt(2, 6);
+    const kodeBangunan = buildingCounter;
     const lat = baseLat + (Math.random() - 0.5) * 0.01;
     const lng = baseLng + (Math.random() - 0.5) * 0.01;
-    const isMiskin = Math.random() < 0.22;
-    const skorKls = isMiskin ? randInt(1, 40) : randInt(41, 100);
+    const alamat = `${faker.location.streetAddress()}, ${dusun}`;
+    // Most houses contain one KK; a meaningful subset contains two so list,
+    // map, and dashboard logic exercise the real one-building/many-KK rule.
+    const jumlahKkDiBangunan = Math.random() < 0.22 ? 2 : 1;
 
-    const members = Math.min(jmlKeluarga, target - records.length);
-    for (let m = 0; m < members; m++) {
-      const isKepala = m === 0;
-      const jk = isKepala ? "L" : faker.helpers.arrayElement(["L", "P"]);
-      const statusDalamKeluarga = isKepala
-        ? "Kepala Keluarga"
-        : m === 1
-        ? faker.helpers.arrayElement(["Istri", "Suami"])
-        : faker.helpers.arrayElement(STATUS_DALAM_KELUARGA.slice(2));
-      const age = isKepala ? randInt(30, 65) : statusDalamKeluarga === "Istri" ? randInt(25, 60) : randInt(0, 30);
-      const tglLahir = randomDateBetweenAges(age, age);
-      const usia = new Date(2026, 6, 21).getFullYear() - tglLahir.getFullYear();
-      const nama = isKepala ? kepalaNama : `${faker.person.firstName(jk === "L" ? "male" : "female")} ${familySurname}`;
-      const statusKawin = usia < 17 ? "Belum Kawin" : faker.helpers.arrayElement(["Belum Kawin", "Kawin", "Kawin", "Cerai Hidup", "Cerai Mati"]);
-      const nik = makeNik(tglLahir, jk, nikSeq++, kodeWil6);
-      const agama = pickWeighted(AGAMA, AGAMA_WEIGHTS);
-      const suku = faker.helpers.arrayElement(SUKU);
-      const kerjaProfesi = usia < 15 ? "Pelajar/Mahasiswa" : faker.helpers.arrayElement(PROFESI);
-      const ijazah =
-        usia < 6 ? "Tidak/Belum Sekolah" : usia < 12 ? "SD" : usia < 15 ? "SMP" : faker.helpers.arrayElement(IJAZAH.slice(1));
+    for (let keluargaKe = 0; keluargaKe < jumlahKkDiBangunan && records.length < target; keluargaKe++) {
+      familyCounter++;
+      const nkk = makeNkk(familyCounter, kodeWil6);
+      const familySurname = faker.person.lastName();
+      const kepalaNama = `${faker.person.firstName()} ${familySurname}`;
+      const rencanaAnggota = randInt(2, 6);
+      const members = Math.min(rencanaAnggota, target - records.length);
+      const isMiskin = Math.random() < 0.22;
+      const skorKls = isMiskin ? randInt(1, 40) : randInt(41, 100);
+      const refreshing = faker.helpers.arrayElement(FREKUENSI_LIBURAN);
 
-      const record: Record<string, unknown> = {
-        desaId,
-        abs_id: `ABS-${slug}-${String(records.length + 1).padStart(6, "0")}`,
-        subjek: "Individu",
-        datamasuk: faker.date.recent({ days: 400 }),
-        enumerator: faker.person.fullName(),
-        kode_bangunan: kodeBangunan,
-        kode_deskel: kodeDeskel,
-        deskel,
-        dusun,
-        rw,
-        rt,
-        lat: lat.toFixed(6),
-        lng: lng.toFixed(6),
-        responden: kepalaNama,
-        kesediaan: "Ya",
-        nkk,
-        nama,
-        nik,
-        alamat: `${faker.location.streetAddress()}, ${dusun}`,
-        status_dalam_keluarga: statusDalamKeluarga,
-        status_kawin: statusKawin,
-        punya_ktp: usia >= 17 ? "Ya" : "Tidak",
-        punya_aktalahir: Math.random() < 0.92 ? "Ya" : "Tidak",
-        nama_kepala_rumah: kepalaNama,
-        nama_tulang_punggung: kepalaNama,
-        no_hp: isKepala ? faker.phone.number({ style: "national" }) : Math.random() < 0.6 ? faker.phone.number({ style: "national" }) : null,
-        jml_keluarga: jmlKeluarga,
-        tgl_lahir: tglLahir,
-        jk,
-        agama,
-        suku,
-        kerja_profesi: kerjaProfesi,
-        ijazah,
-        tgl_kawin: statusKawin === "Kawin" ? randomDateBetweenAges(usia - randInt(1, 5), usia - randInt(1, 5)) : null,
-        usia,
-        usia_dec: Math.round((usia + Math.random()) * 100) / 100,
-        miskin_bps: isMiskin ? "Ya" : "Tidak",
-        miskin_ekstrem: isMiskin && Math.random() < 0.3 ? "Ya" : "Tidak",
-        miskin_bpsd: isMiskin ? "Ya" : "Tidak",
-        skor_kls: skorKls,
-      };
+      for (let m = 0; m < members; m++) {
+        const isKepala = m === 0;
+        const jk = isKepala ? "L" : faker.helpers.arrayElement(["L", "P"]);
+        const statusDalamKeluarga = isKepala
+          ? "Kepala Keluarga"
+          : m === 1
+          ? faker.helpers.arrayElement(["Istri", "Suami"])
+          : faker.helpers.arrayElement(STATUS_DALAM_KELUARGA.slice(2));
+        const age = isKepala
+          ? randInt(30, 65)
+          : statusDalamKeluarga === "Istri" || statusDalamKeluarga === "Suami"
+            ? randInt(25, 60)
+            : randInt(0, 30);
+        const tglLahir = randomDateBetweenAges(age, age);
+        const usia = new Date(2026, 6, 21).getFullYear() - tglLahir.getFullYear();
+        const nama = isKepala ? kepalaNama : `${faker.person.firstName(jk === "L" ? "male" : "female")} ${familySurname}`;
+        const statusKawin = usia < 17 ? "Belum Kawin" : faker.helpers.arrayElement(["Belum Kawin", "Kawin", "Kawin", "Cerai Hidup", "Cerai Mati"]);
+        const nik = makeNik(tglLahir, jk, nikSeq++, kodeWil6);
+        const agama = pickWeighted(AGAMA, AGAMA_WEIGHTS);
+        const suku = faker.helpers.arrayElement(SUKU);
+        const kerjaProfesi = usia < 15 ? "Pelajar/Mahasiswa" : faker.helpers.arrayElement(PROFESI);
+        const ijazah =
+          usia < 6 ? "Tidak/Belum Sekolah" : usia < 12 ? "SD" : usia < 15 ? "SMP" : faker.helpers.arrayElement(IJAZAH.slice(1));
 
-      for (const [col, def] of columns) {
-        if (HANDLED.has(col)) continue;
-        record[col] = genericValueFor(col, def);
+        const record: Record<string, unknown> = {
+          desaId,
+          abs_id: `ABS-${slug}-${String(records.length + 1).padStart(6, "0")}`,
+          subjek: isKepala ? "Keluarga" : "Individu",
+          datamasuk: faker.date.recent({ days: 400 }),
+          enumerator: faker.person.fullName(),
+          kode_bangunan: kodeBangunan,
+          kode_deskel: kodeDeskel,
+          deskel,
+          dusun,
+          rw,
+          rt,
+          lat: lat.toFixed(6),
+          lng: lng.toFixed(6),
+          responden: kepalaNama,
+          kesediaan: "Ya",
+          nkk,
+          nama,
+          nik,
+          alamat,
+          status_dalam_keluarga: statusDalamKeluarga,
+          status_kawin: statusKawin,
+          punya_ktp: usia >= 17 ? "Ya" : "Tidak",
+          punya_aktalahir: Math.random() < 0.92 ? "Ya" : "Tidak",
+          nama_kepala_rumah: kepalaNama,
+          nama_tulang_punggung: kepalaNama,
+          no_hp: isKepala ? faker.phone.number({ style: "national" }) : Math.random() < 0.6 ? faker.phone.number({ style: "national" }) : null,
+          // `members` is authoritative, including the final short family when
+          // the requested demo population boundary is reached.
+          jml_keluarga: members,
+          refreshing,
+          tgl_lahir: tglLahir,
+          jk,
+          agama,
+          suku,
+          kerja_profesi: kerjaProfesi,
+          ijazah,
+          tgl_kawin: statusKawin === "Kawin" ? randomDateBetweenAges(usia - randInt(1, 5), usia - randInt(1, 5)) : null,
+          usia,
+          usia_dec: Math.round((usia + Math.random()) * 100) / 100,
+          miskin_bps: isMiskin ? "Ya" : "Tidak",
+          miskin_ekstrem: isMiskin && Math.random() < 0.3 ? "Ya" : "Tidak",
+          miskin_bpsd: isMiskin ? "Ya" : "Tidak",
+          skor_kls: skorKls,
+        };
+
+        for (const [col, def] of columns) {
+          if (HANDLED.has(col)) continue;
+          record[col] = genericValueFor(col, def);
+        }
+        records.push(record);
       }
-      records.push(record);
     }
   }
 

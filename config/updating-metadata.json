@@ -914,7 +914,7 @@
             "lebih dari 3x"
           ],
           "inputType": "select",
-          "help": "Frekuensi Refreshing adalah aktivitas keluarga menghabiskan waktu untuk liburan."
+          "help": "Pilih jumlah kali keluarga berlibur dalam 1 tahun terakhir. Ini bukan pilihan Ya/Tidak; 1x, 2x, dan 3x menunjukkan jumlah kejadian, sedangkan lebih dari 3x adalah kategori tersendiri."
         }
       }
     },
