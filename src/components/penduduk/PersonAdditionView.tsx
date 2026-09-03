@@ -164,7 +164,7 @@ export function PersonAdditionView({
             <p className="mt-1 text-sm text-slate-500">
               {isHead
                 ? "Kepala keluarga baru harus ditautkan ke bangunan yang ada. Jika bangunannya belum ada, gunakan Tambah Bangunan terlebih dahulu."
-                : "Nomor KK, koordinat, alamat, dan jawaban rumah tangga akan diwariskan otomatis—operator tidak perlu mengetik ulang."}
+                : "Nomor KK, lokasi, alamat, dan data rumah tangga akan terisi otomatis. Anda tidak perlu mengetiknya ulang."}
             </p>
           </div>
         </div>
@@ -175,7 +175,7 @@ export function PersonAdditionView({
             <select id="building-source" value={buildingCode} onChange={(event) => setBuildingCode(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-3 text-sm">
               <option value="">-- pilih kode bangunan --</option>
               {buildings.map((building) => (
-                <option key={building.kode} value={building.kode}>#{building.kode} — {building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}{building.legacy ? " (baseline)" : ""}</option>
+                <option key={building.kode} value={building.kode}>#{building.kode} — {building.alamat || `${building.dusun}, RW ${building.rw}/RT ${building.rt}`}{building.legacy ? " (data awal)" : ""}</option>
               ))}
             </select>
           </div>
@@ -233,7 +233,7 @@ export function PersonAdditionView({
           {eventType ? (
             <section className="rounded-2xl border border-sky-100 bg-sky-50 p-5">
               <h2 className="font-bold text-sky-950">Data Peristiwa {eventType === "KELAHIRAN" ? "Kelahiran" : "Migrasi Masuk"}</h2>
-              <p className="mt-1 text-sm text-sky-800">Peristiwa dicatat terpisah dari profil penduduk dan ikut masuk ke riwayat snapshot.</p>
+              <p className="mt-1 text-sm text-sky-800">Peristiwa dicatat terpisah dari data warga dan masuk ke riwayat periode setelah diterapkan.</p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {eventType === "MIGRASI_MASUK" ? <label className="text-sm font-medium text-slate-700">Tanggal Masuk *<input type="date" max={new Date().toISOString().slice(0, 10)} required value={eventDetails.tanggal} onChange={(event) => setEventDetails((current) => ({ ...current, tanggal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label> : null}
                 {eventType === "MIGRASI_MASUK" ? <label className="text-sm font-medium text-slate-700">Daerah Asal *<input required value={eventDetails.asal} onChange={(event) => setEventDetails((current) => ({ ...current, asal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label> : null}
@@ -245,11 +245,11 @@ export function PersonAdditionView({
           ) : null}
           <SurveyEditor role={role} value={record} onChange={setRecord} errors={errors} idPrefix={isHead ? "new-head" : "new-member"} allowedGroups={isHead ? ["identitas_keluarga"] : undefined} />
           <div className="flex justify-end border-t border-slate-200 pt-5">
-            <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Aspek 1 & Kembali ke Daftar Keluarga" : "Simpan ke Perubahan Sementara"}</button>
+            <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Aspek 1 & Kembali ke Daftar Keluarga" : "Simpan Perubahan"}</button>
           </div>
         </>
       ) : (
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center text-sm text-slate-500">Pilih sumber data di atas untuk membuka formulir sesuai Definisi Operasional.</div>
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center text-sm text-slate-500">Pilih keluarga atau bangunan di atas untuk membuka formulir.</div>
       )}
     </div>
   );

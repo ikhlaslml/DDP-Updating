@@ -6,7 +6,7 @@ export default function RiwayatPage() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Riwayat Data</h1>
         <p className="mt-1 text-sm text-slate-500">
-          Lihat snapshot data kependudukan pada setiap periode (T0, T1, …).
+          Lihat riwayat data kependudukan pada setiap periode pembaruan.
         </p>
       </div>
       <RiwayatView />

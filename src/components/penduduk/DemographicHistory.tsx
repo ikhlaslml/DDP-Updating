@@ -23,7 +23,7 @@ export function DemographicHistory({ mode }: { mode: "DEATH" | "EVENT" }) {
     <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
       <div>
         <h2 className="text-lg font-bold text-slate-900">{mode === "DEATH" ? "Tabel Arsip Kematian" : "Riwayat Peristiwa Kependudukan"}</h2>
-        {mode === "EVENT" ? <p className="mt-1 text-xs text-slate-500">Surat hanya dibuat dari peristiwa yang sudah digabungkan ke baseline.</p> : null}
+        {mode === "EVENT" ? <p className="mt-1 text-xs text-slate-500">Surat hanya dapat dibuat dari peristiwa yang sudah diterapkan ke data warga.</p> : null}
       </div>
       <div className="mt-4 overflow-x-auto">
         <table className="min-w-full text-sm">
@@ -38,7 +38,7 @@ export function DemographicHistory({ mode }: { mode: "DEATH" | "EVENT" }) {
                 <td className="px-3 py-2 font-medium">{row.nama}</td><td className="px-3 py-2">{row.nik}</td><td className="px-3 py-2">{row.nkk}</td>
                 {mode === "DEATH" && "penyebab" in row ? <><td className="px-3 py-2">{row.penyebab ?? "-"}</td><td className="px-3 py-2">{row.punyaAkta ?? "-"}</td></> : "jenis" in row ? <td className="px-3 py-2 text-right"><Link href={`/layanan-surat?peristiwaId=${row.id}`} className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50"><FileText className="h-3.5 w-3.5" /> Buat Surat</Link></td> : null}
               </tr>
-            )) : <tr><td colSpan={8} className="px-3 py-8 text-center text-slate-400">Belum ada peristiwa yang telah digabungkan.</td></tr>}
+            )) : <tr><td colSpan={8} className="px-3 py-8 text-center text-slate-400">Belum ada peristiwa yang telah diterapkan.</td></tr>}
           </tbody>
         </table>
       </div>

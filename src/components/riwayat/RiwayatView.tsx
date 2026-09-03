@@ -140,7 +140,7 @@ export function RiwayatView() {
                 })}
               </span>
               <span>
-                Digabungkan oleh: <strong className="font-semibold text-slate-700">{snapshotMeta.createdByName ?? "Sistem"}</strong>
+                Diterapkan oleh: <strong className="font-semibold text-slate-700">{snapshotMeta.createdByName ?? "Sistem"}</strong>
                 {snapshotMeta.createdByEmail ? ` (${snapshotMeta.createdByEmail})` : ""}
               </span>
               <span>{snapshotMeta.changeCount} perubahan • {snapshotMeta.jumlahBangunan} bangunan</span>
@@ -180,7 +180,7 @@ export function RiwayatView() {
               href={`/api/snapshot/${selected}/export`}
               className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:w-auto"
             >
-              Export Excel
+              Unduh Excel
             </a>
           )}
         </div>
@@ -200,7 +200,7 @@ export function RiwayatView() {
         <div className="flex flex-col gap-2 border-b border-indigo-100 bg-white/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-sm font-bold text-slate-800">Perubahan pada Periode Ini</h3>
-            {changes?.previous ? <p className="mt-0.5 text-xs text-slate-500">Dibandingkan dengan periode {changes.previous.kode}. Riwayat di bawah berasal dari snapshot yang sudah disimpan, bukan perubahan yang masih menunggu penggabungan.</p> : <p className="mt-0.5 text-xs text-slate-500">{selected ? "Ini adalah data awal; belum ada periode sebelumnya untuk dibandingkan." : "Pilih periode untuk melihat perubahan."}</p>}
+            {changes?.previous ? <p className="mt-0.5 text-xs text-slate-500">Dibandingkan dengan periode {changes.previous.kode}. Riwayat di bawah berasal dari data yang sudah diterapkan, bukan perubahan yang masih menunggu.</p> : <p className="mt-0.5 text-xs text-slate-500">{selected ? "Ini adalah data awal; belum ada periode sebelumnya untuk dibandingkan." : "Pilih periode untuk melihat perubahan."}</p>}
           </div>
           {changes?.previous ? <div className="flex flex-wrap gap-1.5 text-xs font-semibold"><span className="rounded-full bg-white px-2 py-1 text-emerald-700">{changes.summary.added} ditambahkan</span><span className="rounded-full bg-white px-2 py-1 text-indigo-700">{changes.summary.updated} diperbarui</span><span className="rounded-full bg-white px-2 py-1 text-rose-700">{changes.summary.removed} tidak lagi ada</span></div> : null}
         </div>
@@ -215,7 +215,7 @@ export function RiwayatView() {
                       <td className="min-w-48 px-4 py-3"><p className="font-semibold text-slate-800">{change.nama ?? "Tanpa nama"}</p><p className="mt-0.5 text-xs text-slate-500">NIK {change.nik ?? "-"}<br />No. KK {change.nkk ?? "-"}</p></td>
                       <td className="min-w-[28rem] px-4 py-3 text-slate-700">
                         {change.kind === "ADDED" ? <span className="font-medium text-emerald-700">Data warga baru ditambahkan pada periode ini.</span> : null}
-                        {change.kind === "REMOVED" ? <span className="font-medium text-rose-700">Data warga tidak lagi berada pada baseline aktif periode ini.</span> : null}
+                        {change.kind === "REMOVED" ? <span className="font-medium text-rose-700">Data warga tidak lagi berada pada daftar warga aktif di periode ini.</span> : null}
                         {change.kind === "UPDATED" ? <ul className="space-y-1.5">{change.fields.map((field) => <li key={field.key} className="break-words"><strong>{field.label}:</strong> <span className="text-slate-500">{formatChangedValue(field, field.before)}</span> <span aria-hidden="true">→</span> <span className="font-medium text-slate-800">{formatChangedValue(field, field.after)}</span></li>)}</ul> : null}
                       </td>
                     </tr>

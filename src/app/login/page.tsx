@@ -3,9 +3,9 @@ import { BrandMarkIcon, BrandWordmark } from "@/components/login/BrandMark";
 import { Database, Layers, ShieldCheck } from "lucide-react";
 
 const POINTS = [
-  { icon: Database, text: "Data sensus DDP lengkap per desa" },
-  { icon: Layers, text: "Pembaruan berperiode T0/T1 yang tertelusur" },
-  { icon: ShieldCheck, text: "Multi-tenant & peran akses aman" },
+  { icon: Database, text: "Data warga dan keluarga untuk setiap desa" },
+  { icon: Layers, text: "Riwayat pembaruan data yang mudah ditelusuri" },
+  { icon: ShieldCheck, text: "Akses aman sesuai peran pengguna" },
 ];
 
 export default async function LoginPage({
@@ -26,13 +26,13 @@ export default async function LoginPage({
           </span>
           <div>
             <p className="text-lg font-extrabold leading-tight">Data Desa Presisi</p>
-            <p className="text-xs text-white/70">Solusi Satu Data Indonesia</p>
+            <p className="text-xs text-white/70">Sistem pembaruan data desa</p>
           </div>
         </div>
 
         <div className="max-w-md">
           <h1 className="text-3xl font-extrabold leading-tight">
-            Dashboard Kependudukan Desa berbasis Data Desa Presisi
+            Kelola pembaruan data warga desa
           </h1>
           <ul className="mt-8 space-y-4">
             {POINTS.map((p) => (
@@ -66,7 +66,7 @@ export default async function LoginPage({
         </div>
 
         <p className="mt-6 max-w-sm text-center text-xs text-slate-400">
-          Tiap desa memiliki subdomain sendiri, mis. <span className="font-medium text-slate-500">desa-setu.desapresisi.id</span>
+          Setiap desa memiliki alamat aplikasi sendiri, misalnya <span className="font-medium text-slate-500">desa-setu.desapresisi.id</span>
         </p>
       </div>
     </div>

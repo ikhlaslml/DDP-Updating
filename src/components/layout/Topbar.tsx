@@ -65,7 +65,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
                 {email}
               </span>
               <span className="block text-[11px] leading-tight text-slate-400">
-                {role === "pemerintah_desa" ? "Pemerintah Desa (lihat)" : "Operator"}
+                {role === "pemerintah_desa" ? "Hanya melihat" : "Operator Desa"}
               </span>
             </span>
             <ChevronDown className="h-4 w-4 text-slate-400" />
@@ -79,7 +79,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
                 className="flex min-h-11 w-full items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-red-600"
               >
                 <LogOut className="h-4 w-4" />
-                Logout
+                Keluar
               </button>
             </div>
           )}

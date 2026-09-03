@@ -71,7 +71,7 @@ export function Sidebar({
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 py-3" aria-label="Navigasi utama">
+      <nav className="flex-1 overflow-y-auto px-4 py-3 pb-6" aria-label="Navigasi utama">
         <div className="space-y-4">
           {NAV_SECTIONS.map((section) => (
             <section key={section.label} aria-labelledby={`nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`}>
@@ -92,15 +92,6 @@ export function Sidebar({
           ))}
         </div>
       </nav>
-
-      <div className="px-4 py-4">
-        <div className="rounded-xl bg-indigo-50 p-4">
-          <p className="text-xs font-semibold text-indigo-700">Data Desa Presisi</p>
-          <p className="text-xs text-indigo-500 mt-1 leading-relaxed">
-            286 parameter sensus dalam 6 kelompok indikator.
-          </p>
-        </div>
-      </div>
     </aside>
   );
 }

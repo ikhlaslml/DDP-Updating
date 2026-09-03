@@ -47,7 +47,7 @@ export function PeriodExportControls() {
   return (
     <div className="space-y-4">
       <p className="text-xs text-slate-500">
-        Pilih periode data yang sudah disimpan. Perubahan yang masih menunggu penggabungan tidak ikut diekspor.
+        Pilih periode data yang sudah disimpan. Perubahan yang masih menunggu diterapkan tidak ikut diunduh.
       </p>
       <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
         <label className="min-w-0 text-sm font-medium text-slate-700 sm:min-w-72">
@@ -88,7 +88,7 @@ export function PeriodExportControls() {
       {error ? <p role="alert" className="text-xs font-medium text-red-600">{error}</p> : null}
       {!loading && !error && periods.length === 0 ? (
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          Belum ada periode data yang dapat diekspor. Impor baseline atau gabungkan perubahan terlebih dahulu.
+          Belum ada periode data yang dapat diunduh. Impor data awal atau terapkan perubahan terlebih dahulu.
         </p>
       ) : null}
     </div>

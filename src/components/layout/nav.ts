@@ -19,7 +19,7 @@ export const NAV_SECTIONS = [
     items: [
       { href: "/penduduk", label: "Data Kependudukan", icon: Users },
       { href: "/riwayat", label: "Riwayat Data", icon: History },
-      { href: "/penambahan-titik-sarpras", label: "Peta Sarpras", icon: MapPinned },
+      { href: "/penambahan-titik-sarpras", label: "Peta Sarana Desa", icon: MapPinned },
     ],
   },
   {

@@ -4,7 +4,7 @@ import { Building2, UserPlus, UsersRound } from "lucide-react";
 const paths = [
   { href: "/penduduk/migrasi-masuk/anggota", title: "Anggota ke Keluarga Lama", description: "Pendatang bergabung ke No. KK yang sudah disensus.", icon: UserPlus, color: "bg-orange-50 text-orange-600" },
   { href: "/penduduk/migrasi-masuk/kepala", title: "Keluarga ke Bangunan Lama", description: "Kepala keluarga pendatang menempati bangunan yang sudah terdata.", icon: UsersRound, color: "bg-emerald-50 text-emerald-600" },
-  { href: "/penduduk/migrasi-masuk/bangunan", title: "Keluarga dan Bangunan Baru", description: "Digitasi bangunan baru lalu data seluruh keluarga pendatang.", icon: Building2, color: "bg-indigo-50 text-indigo-600" },
+  { href: "/penduduk/migrasi-masuk/bangunan", title: "Keluarga dan Bangunan Baru", description: "Tambahkan bangunan baru, lalu catat data keluarga pendatang.", icon: Building2, color: "bg-indigo-50 text-indigo-600" },
 ];
 
 export default function MigrasiMasukPage() {
@@ -13,7 +13,7 @@ export default function MigrasiMasukPage() {
       <div>
         <Link href="/penduduk" className="text-sm font-medium text-indigo-600 hover:underline">&larr; Kembali ke Data Kependudukan</Link>
         <h1 className="mt-2 text-2xl font-bold text-slate-900">Migrasi Masuk</h1>
-        <p className="mt-1 text-sm text-slate-500">Pilih jalur berdasarkan keluarga dan bangunan tujuan.</p>
+        <p className="mt-1 text-sm text-slate-500">Pilih cara pencatatan sesuai tempat tinggal keluarga yang pindah masuk.</p>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
         {paths.map((path) => {

@@ -147,29 +147,29 @@ export function PerubahanSementara() {
     setMerging(false);
     setConfirmMerge(false);
     if (response.ok) window.location.reload();
-    else setMergeError(json.error ?? "Perubahan tidak dapat digabungkan.");
+    else setMergeError(json.error ?? "Perubahan tidak dapat diterapkan.");
   }
 
   return (
     <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Data Perubahan Sementara</h2>
-          <p className="mt-1 text-xs text-slate-500">Seluruh perubahan dilengkapi identitas operator dan waktu pengajuan.</p>
+          <h2 className="text-lg font-bold text-slate-900">Perubahan yang Menunggu Diterapkan</h2>
+          <p className="mt-1 text-xs text-slate-500">Setiap perubahan mencatat nama operator dan waktu pencatatannya.</p>
         </div>
         {canWrite ? (
-          <button type="button" disabled={!rows.length} onClick={() => setConfirmMerge(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40"><Merge className="h-4 w-4" /> Gabungkan {rows.length} Perubahan</button>
+          <button type="button" disabled={!rows.length} onClick={() => setConfirmMerge(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40"><Merge className="h-4 w-4" /> Terapkan {rows.length} Perubahan</button>
         ) : null}
       </div>
 
-      <p className="mt-3 rounded-xl bg-sky-50 px-4 py-3 text-xs leading-relaxed text-sky-800">Bangunan dan penghuninya disimpan dalam satu grup atomik. Membatalkan baris bangunan akan membatalkan seluruh penghuni di grup yang sama.</p>
+      <p className="mt-3 rounded-xl bg-sky-50 px-4 py-3 text-xs leading-relaxed text-sky-800">Perubahan pada satu bangunan dan penghuninya diproses bersama. Jika perubahan bangunan dibatalkan, perubahan penghuni pada bangunan tersebut juga dibatalkan.</p>
       {mergeError ? <p role="alert" className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{mergeError}</p> : null}
 
       <div className="mt-4 overflow-x-auto">
         {loading ? (
           <p className="py-8 text-center text-sm text-slate-400">Memuat perubahan...</p>
         ) : rows.length === 0 ? (
-          <p className="py-8 text-center text-sm text-slate-400">Tidak ada data sementara. Tambah, ubah, atau hapus data di tabel baseline.</p>
+          <p className="py-8 text-center text-sm text-slate-400">Belum ada perubahan yang menunggu diterapkan. Gunakan tombol Catat Perubahan untuk memperbarui data.</p>
         ) : (
           <table className="min-w-full text-sm">
             <thead className="border-b border-slate-200 text-left text-xs font-semibold uppercase text-slate-500">
@@ -211,7 +211,7 @@ export function PerubahanSementara() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-sm">
           <div role="dialog" aria-modal="true" aria-labelledby="staging-detail-title" className="flex max-h-[90vh] w-full max-w-6xl flex-col rounded-2xl bg-white shadow-2xl">
             <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-4">
-              <div><h3 id="staging-detail-title" className="text-lg font-bold text-slate-900">Rincian Data Perubahan Sementara</h3><p className="mt-1 text-sm text-slate-500">Periksa seluruh nilai sebelum menekan Gabungkan Perubahan{details.groupId ? " — seluruh kartu berikut merupakan satu grup atomik." : "."}</p></div>
+              <div><h3 id="staging-detail-title" className="text-lg font-bold text-slate-900">Rincian perubahan</h3><p className="mt-1 text-sm text-slate-500">Periksa seluruh nilai sebelum menerapkan perubahan{details.groupId ? " — semua kartu berikut diproses bersama." : "."}</p></div>
               <button type="button" title="Tutup" aria-label="Tutup rincian" onClick={() => setDetails(null)} className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"><X className="h-5 w-5" /></button>
             </div>
             <div className="space-y-5 overflow-y-auto p-6">
@@ -229,7 +229,7 @@ export function PerubahanSementara() {
                     <header className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 px-5 py-3"><div><p className="text-sm font-bold text-slate-900">{detail.entityType === "BANGUNAN" ? "Bangunan" : personTitle}</p><p className="text-xs text-slate-500">{detail.ringkasan}</p></div><span className="text-xs text-slate-500">{detail.createdByName} • {new Date(detail.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "medium" })}</span></header>
                     <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_auto]">
                       <dl className="grid gap-x-5 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
-                        {detail.entityType === "BANGUNAN" && points ? <div><dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Polygon Bangunan</dt><dd className="mt-0.5 text-sm text-slate-700">{points} titik sudut; centroid dihitung server</dd></div> : null}
+                        {detail.entityType === "BANGUNAN" && points ? <div><dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Batas Bangunan di Peta</dt><dd className="mt-0.5 text-sm text-slate-700">{points} titik sudut; titik tengah dihitung otomatis</dd></div> : null}
                         {entries.map(([key, value]) => <div key={key}><dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{detailLabel(detail.entityType, key)}</dt><dd className="mt-0.5 break-words text-sm text-slate-700">{detailValue(key, value)}</dd></div>)}
                       </dl>
                       {photo ? <Image src={photo} alt="Foto bangunan yang diajukan" width={180} height={240} unoptimized className="h-48 w-36 rounded-xl object-cover ring-1 ring-slate-200" /> : null}
@@ -245,10 +245,10 @@ export function PerubahanSementara() {
       {confirmMerge ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-slate-900">Konfirmasi Penggabungan Data</h3>
-            <p className="mt-3 text-sm text-slate-600">Anda akan menerapkan <strong>{rows.length} perubahan</strong> secara atomik ke baseline.</p>
-            <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800">Snapshot baru akan mencatat nama operator, waktu, jumlah perubahan, penduduk, dan bangunan.</p>
-            <div className="mt-5 flex justify-end gap-2"><button type="button" onClick={() => setConfirmMerge(false)} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">Batal</button><button type="button" disabled={merging} onClick={merge} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">{merging ? "Menggabungkan..." : "Ya, Gabungkan"}</button></div>
+            <h3 className="text-lg font-bold text-slate-900">Terapkan Perubahan Data</h3>
+            <p className="mt-3 text-sm text-slate-600">Anda akan menerapkan <strong>{rows.length} perubahan</strong> sekaligus ke daftar data warga.</p>
+            <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800">Riwayat periode baru akan menyimpan nama operator, waktu, serta jumlah data warga dan bangunan yang berubah.</p>
+            <div className="mt-5 flex justify-end gap-2"><button type="button" onClick={() => setConfirmMerge(false)} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">Batal</button><button type="button" disabled={merging} onClick={merge} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">{merging ? "Menerapkan..." : "Ya, Terapkan"}</button></div>
           </div>
         </div>
       ) : null}

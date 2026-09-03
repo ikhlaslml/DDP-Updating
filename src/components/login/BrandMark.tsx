@@ -16,7 +16,7 @@ export function BrandWordmark({ tagline = true }: { tagline?: boolean }) {
         <span style={{ color: "#122A44" }}>Data Desa </span>
         <span style={{ color: "#7A1F2E" }}>Presisi</span>
       </p>
-      {tagline && <p className="text-[11px] font-medium text-slate-400 tracking-wide">Solusi Satu Data Indonesia</p>}
+      {tagline && <p className="text-[11px] font-medium text-slate-400 tracking-wide">Sistem pembaruan data desa</p>}
     </div>
   );
 }

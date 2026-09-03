@@ -114,10 +114,10 @@ export function BuildingDigitizer({
           <Crosshair className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
             <p className="font-semibold">
-              {drawing ? "Klik setiap sudut atap bangunan pada peta" : "Polygon bangunan siap digunakan"}
+              {drawing ? "Tandai setiap sudut atap bangunan pada peta" : "Batas bangunan siap digunakan"}
             </p>
             <p className="text-xs text-indigo-700">
-              {points.length} titik direkam{centerPoint ? ` • centroid ${centerPoint.lat.toFixed(6)}, ${centerPoint.lng.toFixed(6)}` : ""}
+              {points.length} titik dicatat{centerPoint ? " • titik tengah sudah dihitung" : ""}
             </p>
           </div>
         </div>
@@ -125,11 +125,11 @@ export function BuildingDigitizer({
           <button
             type="button"
             aria-pressed={drawing}
-            aria-label="Aktifkan mode digitasi bangunan"
+            aria-label="Tandai batas bangunan di peta"
             onClick={() => setDrawing(true)}
             className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-indigo-700 shadow-sm ring-1 ring-indigo-200"
           >
-            <Pentagon className="h-4 w-4" /> Digitasi
+            <Pentagon className="h-4 w-4" /> Tandai peta
           </button>
           <button
             type="button"

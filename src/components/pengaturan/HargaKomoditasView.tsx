@@ -179,7 +179,7 @@ export function HargaKomoditasView() {
         const name = String(imported[1] ?? "").trim();
         const unit = String(imported[2] ?? "").trim();
         if (no !== catalog.urutan || name !== catalog.nama || unit !== catalog.satuan) {
-          throw new Error(`Baris ${index + 1} tidak cocok dengan master: ${catalog.nama} (${catalog.satuan}).`);
+          throw new Error(`Baris ${index + 1} tidak cocok dengan daftar komoditas: ${catalog.nama} (${catalog.satuan}).`);
         }
         const price = parseImportedPrice(imported[3]);
         next[catalog.id] = price === null ? "" : String(price);
@@ -219,7 +219,7 @@ export function HargaKomoditasView() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Harga Komoditas Desa</h2>
-            <p className="mt-1 max-w-3xl text-sm text-slate-500">Master 45 komoditas dan satuan mengikuti Borang Harga.xlsx. Harga disimpan per desa dan periode agar riwayat tidak saling menimpa.</p>
+            <p className="mt-1 max-w-3xl text-sm text-slate-500">Daftar komoditas dan satuan mengikuti Borang Harga.xlsx. Harga disimpan menurut desa dan periode agar riwayatnya tetap ada.</p>
           </div>
           <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             {canWrite ? (

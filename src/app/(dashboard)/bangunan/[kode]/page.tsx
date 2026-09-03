@@ -89,7 +89,7 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
         <div>
           <Link href="/penduduk" className="text-sm font-medium text-indigo-600 hover:underline">&larr; Kembali ke Data Kependudukan</Link>
           <h1 className="mt-2 flex items-center gap-2 text-2xl font-bold text-slate-900"><Building2 className="h-6 w-6 text-indigo-600" /> Bangunan #{code}</h1>
-          <p className="mt-1 text-sm text-slate-500">{building ? "Sudah masuk baseline" : stagedBuilding ? "Menunggu penggabungan" : "Bangunan baseline sensus"}</p>
+          <p className="mt-1 text-sm text-slate-500">{building ? "Data bangunan sudah diterapkan" : stagedBuilding ? "Menunggu diterapkan" : "Bangunan dari data awal sensus"}</p>
         </div>
         {isOperator(ctx.role) ? <RespondentVisitForm code={code} /> : null}
       </div>
@@ -123,7 +123,7 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
                 <div className="flex flex-col items-start gap-3 sm:flex-row sm:justify-between">
                   <div className="min-w-0"><p className="break-words font-bold text-slate-900">{family.head}</p><p className="break-all text-sm text-slate-500">No. KK {family.nkk}</p></div>
                   <div className="flex flex-col items-start gap-1 sm:items-end">
-                    {family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu penggabungan</span> : null}
+                    {family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu diterapkan</span> : null}
                     <span className={`rounded-full px-2 py-1 text-xs font-semibold ${incomplete ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800"}`}>{incomplete ? `Belum lengkap · Aspek ${progress.aspekTerakhir}/6` : "Data lengkap"}</span>
                   </div>
                 </div>

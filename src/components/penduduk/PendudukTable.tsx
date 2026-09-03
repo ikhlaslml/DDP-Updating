@@ -66,6 +66,10 @@ export function PendudukTable({
   const visible = useMemo(() => operationalColumnsForKelompok(selectedAspects), [selectedAspects]);
 
   useEffect(() => {
+    if (window.matchMedia("(max-width: 767px)").matches) setPageSize(10);
+  }, []);
+
+  useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 350);
     return () => clearTimeout(t);
   }, [search]);
@@ -367,6 +371,7 @@ export function PendudukTable({
         <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
           <select
             value={pageSize}
+            aria-label="Jumlah data setiap halaman"
             onChange={(e) => {
               setPageSize(Number(e.target.value));
               setPageIndex(0);

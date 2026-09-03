@@ -10,8 +10,8 @@ export function RoleBanner() {
     <div className="flex items-center gap-2 border-b border-amber-100 bg-amber-50 px-4 py-2 text-xs text-amber-800 sm:px-6">
       <Eye className="h-3.5 w-3.5 shrink-0" />
       <span>
-        Anda masuk sebagai <strong>Pemerintah Desa</strong> — mode lihat (read-only). Aksi ubah, tambah,
-        hapus, gabungkan, dan terbitkan surat dinonaktifkan.
+        Anda masuk sebagai <strong>Pemerintah Desa</strong>. Anda dapat melihat data, tetapi tidak dapat menambah,
+        mengubah, menghapus, menerapkan perubahan, atau menerbitkan surat.
       </span>
     </div>
   );

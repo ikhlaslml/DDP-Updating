@@ -97,7 +97,7 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
         unoptimized
         className="max-h-80 w-full rounded-xl object-cover"
       />
-      <figcaption className="px-1 pt-2 text-xs text-slate-500">Foto bangunan dari Core Data Desa Presisi · dimuat berdasarkan kode bangunan dan kode desa tenant.</figcaption>
+      <figcaption className="px-1 pt-2 text-xs text-slate-500">Foto bangunan dari pendataan Data Desa Presisi.</figcaption>
     </figure>
   );
 }

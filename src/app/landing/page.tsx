@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Database, Layers, Map, ShieldCheck } from "lucide-react";
 
 const FEATURES = [
-  { icon: Database, title: "Data Sensus Lengkap", desc: "269+ parameter Data Desa Presisi dalam 6 kelompok indikator, siap kelola." },
-  { icon: Layers, title: "Updating Berperiode", desc: "Alur perubahan sementara → gabungkan → snapshot T0/T1 yang immutable." },
-  { icon: Map, title: "Statistik & Peta", desc: "Piramida penduduk, indikator kemiskinan, dan peta sebaran per keluarga." },
-  { icon: ShieldCheck, title: "Multi-Tenant & Aman", desc: "Tiap desa punya subdomain sendiri dengan peran operator & pemerintah desa." },
+  { icon: Database, title: "Data Warga dan Keluarga", desc: "Data sensus disusun dalam enam kelompok indikator." },
+  { icon: Layers, title: "Pembaruan Data", desc: "Setiap perubahan dicatat dan diterapkan setelah diperiksa." },
+  { icon: Map, title: "Peta dan Ringkasan", desc: "Lihat sebaran keluarga serta ringkasan kondisi warga." },
+  { icon: ShieldCheck, title: "Akses Sesuai Peran", desc: "Data setiap desa dikelola terpisah sesuai tugas pengguna." },
 ];
 
 export default function LandingPage() {
@@ -27,11 +27,10 @@ export default function LandingPage() {
             desapresisi.id
           </p>
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Platform Kependudukan Desa berbasis Data Desa Presisi
+            Sistem pembaruan data warga desa
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-600">
-            Kelola data warga secara presisi, perbarui berperiode, dan sajikan statistik desa —
-            semuanya dalam satu dashboard multi-tenant per desa.
+            Catat perubahan penduduk, lihat sebaran keluarga, dan siapkan data desa yang rapi dalam satu tempat.
           </p>
           <div className="mt-8 flex items-center justify-center gap-3">
             <Link href="/login" className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700">
@@ -42,7 +41,7 @@ export default function LandingPage() {
             </a>
           </div>
           <p className="mt-4 text-xs text-slate-400">
-            Contoh tenant: desa-setu.desapresisi.id &middot; desa-gunung-putri.desapresisi.id
+            Contoh alamat desa: desa-setu.desapresisi.id &middot; desa-gunung-putri.desapresisi.id
           </p>
         </section>
 
@@ -60,7 +59,7 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-t border-slate-100 py-8 text-center text-sm text-slate-400">
-        © {new Date().getFullYear()} Data Desa Presisi — desapresisi.id
+        © {new Date().getFullYear()} Data Desa Presisi · desapresisi.id
       </footer>
     </div>
   );

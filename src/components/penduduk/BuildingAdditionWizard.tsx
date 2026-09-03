@@ -29,7 +29,7 @@ const BuildingDigitizer = dynamic(
   () => import("@/components/peta/BuildingDigitizer").then((module) => module.BuildingDigitizer),
   {
     ssr: false,
-    loading: () => <div className="flex min-h-[420px] items-center justify-center rounded-2xl bg-slate-100 text-sm text-slate-500">Menyiapkan peta digitasi...</div>,
+    loading: () => <div className="flex min-h-[420px] items-center justify-center rounded-2xl bg-slate-100 text-sm text-slate-500">Menyiapkan peta...</div>,
   }
 );
 
@@ -45,11 +45,11 @@ type BuildingForm = {
 };
 
 const STEPS = [
-  { title: "Digitasi", subtitle: "Gambar batas atap", icon: MapPinned },
+  { title: "Peta", subtitle: "Tandai batas atap", icon: MapPinned },
   { title: "Bangunan", subtitle: "Jenis dan alamat", icon: Building2 },
   { title: "Responden", subtitle: "Nama dan foto", icon: UserRoundCheck },
   { title: "Keluarga", subtitle: "Hanya Aspek 1", icon: Users },
-  { title: "Tinjau", subtitle: "Perubahan sementara", icon: Check },
+  { title: "Periksa", subtitle: "Sebelum disimpan", icon: Check },
 ];
 
 function payload(values: Record<string, string>, role: SurveyRole) {
@@ -127,7 +127,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
   function validateCurrentStep() {
     setGeneralError(null);
     if (step === 0 && points.length < 3) {
-      setGeneralError("Digitasi minimal tiga sudut bangunan sebelum melanjutkan.");
+      setGeneralError("Tandai sedikitnya tiga sudut bangunan sebelum melanjutkan.");
       return false;
     }
     if (step === 1) {
@@ -140,7 +140,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         return false;
       }
       if (!occupied && (!building.keterangan.trim() || !building.fotoUrl)) {
-        setGeneralError("Nama/jenis spesifik dan foto bangunan tidak berpenghuni wajib dilengkapi sesuai DO DDP.");
+        setGeneralError("Nama atau jenis spesifik serta foto bangunan wajib diisi.");
         return false;
       }
     }
@@ -420,13 +420,13 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
 
       {step === 4 ? (
         <section className="space-y-5 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-          <div><h2 className="text-xl font-bold text-slate-900">Tinjau Sebelum Masuk Perubahan Sementara</h2><p className="mt-1 text-sm text-slate-500">Belum mengubah baseline. Operator masih dapat membatalkan grup ini sebelum penggabungan.</p></div>
+          <div><h2 className="text-xl font-bold text-slate-900">Periksa Sebelum Disimpan</h2><p className="mt-1 text-sm text-slate-500">Bangunan belum masuk ke daftar warga. Anda masih dapat membatalkan perubahan ini sebelum diterapkan.</p></div>
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Spasial</p><p className="mt-2 font-semibold text-slate-900">{points.length} titik polygon</p><p className="text-sm text-slate-500">Centroid dihitung otomatis oleh server</p></div>
+            <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Lokasi di Peta</p><p className="mt-2 font-semibold text-slate-900">{points.length} titik batas</p><p className="text-sm text-slate-500">Titik tengah dihitung otomatis</p></div>
             <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Bangunan</p><p className="mt-2 font-semibold text-slate-900">{occupied ? "Berpenghuni" : building.kategori}</p><p className="text-sm text-slate-500">{building.dusun}, RW {building.rw}/RT {building.rt}</p></div>
             <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Penghuni</p><p className="mt-2 font-semibold text-slate-900">{occupied ? `${members.length + 1} orang` : "Tidak ada penghuni"}</p><p className="text-sm text-slate-500">{occupied ? head.nama || "Kepala belum diisi" : "Tidak membuat baris penduduk"}</p></div>
           </div>
-          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">Setelah disimpan, bangunan dan seluruh penghuninya tampil sebagai satu grup di Data Perubahan Sementara.</div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">Setelah disimpan, bangunan dan penghuninya akan muncul bersama pada daftar perubahan yang menunggu diterapkan.</div>
         </section>
       ) : null}
 
@@ -435,7 +435,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         {step < 4 ? (
           <button type="button" disabled={step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo)} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
         ) : (
-          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Aspek 1 & Lihat Daftar Keluarga" : "Simpan ke Perubahan Sementara"}</button>
+          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Aspek 1 & Lihat Daftar Keluarga" : "Simpan Perubahan"}</button>
         )}
       </div>
     </div>

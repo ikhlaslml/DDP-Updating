@@ -45,9 +45,9 @@ export function SurveyEditor({
         <p>
           {role === "HEAD"
             ? allowedGroups?.length === 1
-              ? "Pada alur tambah keluarga baru hanya Aspek 1 — Identitas Keluarga yang diisi. Aspek 2–6 dilengkapi kemudian melalui Lanjutkan Pendataan."
-              : "Sesuai DO Data Desa Presisi, kepala keluarga mengisi data dirinya sekaligus kondisi rumah tangga. Pertanyaan operasional dan koordinat diisi otomatis oleh sistem."
-            : "Anggota keluarga hanya mengisi pertanyaan individual. Nomor KK, bangunan, alamat, dan jawaban rumah tangga diwarisi otomatis dari kepala keluarga."}
+              ? "Pada alur tambah keluarga baru, cukup isi Aspek 1 — Identitas Keluarga. Aspek 2–6 dapat dilengkapi melalui Lanjutkan Pendataan."
+              : "Isi data kepala keluarga dan kondisi rumah tangga. Lokasi serta beberapa isian teknis akan diisi otomatis oleh sistem."
+            : "Untuk anggota keluarga, isi hanya data individu. Nomor KK, bangunan, alamat, dan data rumah tangga mengikuti kepala keluarga."}
         </p>
       </div>
 
