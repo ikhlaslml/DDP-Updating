@@ -29,6 +29,17 @@ function hasFlag(name: string) {
   return process.argv.includes(`--${name}`);
 }
 
+function dataCollectionYear(value: string | undefined) {
+  if (value === undefined) return undefined;
+  if (!/^\d{4}$/.test(value)) throw new Error("--tahun-pendataan harus berupa tahun empat digit, misalnya 2024");
+  const year = Number(value);
+  const currentYear = new Date().getFullYear();
+  if (year < 1900 || year > currentYear + 1) {
+    throw new Error(`--tahun-pendataan harus berada antara 1900 dan ${currentYear + 1}`);
+  }
+  return year;
+}
+
 function chunks<T>(values: T[], size: number) {
   const output: T[][] = [];
   for (let index = 0; index < values.length; index += size) output.push(values.slice(index, index + size));
@@ -63,6 +74,7 @@ function resolveVillage(row: Record<string, string>, villages: Village[]) {
 async function main() {
   const fileArgument = argument("file");
   const expectedVillageCount = Number(argument("expected-villages") ?? "4");
+  const tahunPendataan = dataCollectionYear(argument("tahun-pendataan"));
   const apply = hasFlag("apply");
   if (!fileArgument) throw new Error('Gunakan --file "C:\\lokasi\\data-empat-desa.csv"');
   if (!Number.isInteger(expectedVillageCount) || expectedVillageCount < 1 || expectedVillageCount > 50) {
@@ -207,6 +219,7 @@ async function main() {
     console.log(`Baris bermasalah  : ${errorCount.toLocaleString("id-ID")}`);
     console.log(`Kolom tidak dikenal: ${unknownColumns.length}`);
     console.log(`Peringatan beda nama (kode tetap cocok): ${nameWarningCount}`);
+    if (tahunPendataan) console.log(`Tahun pendataan  : ${tahunPendataan}`);
     console.log("\nPembagian tenant:");
     for (const village of targetVillages) {
       console.log(`- ${village.nama} (${formatVillageCode(village.kodeWilayah)}): ${(counts.get(village.id) ?? 0).toLocaleString("id-ID")} baris`);
@@ -234,6 +247,10 @@ async function main() {
         const villageRows = prepared.filter((row) => row.village.id === village.id).map((row) => row.data);
         for (const batch of chunks(villageRows, INSERT_BATCH)) await tx.penduduk.createMany({ data: batch });
 
+        if (tahunPendataan) {
+          await tx.desa.update({ where: { id: village.id }, data: { tahunPendataan } });
+        }
+
         const inserted = await tx.penduduk.findMany({ where: { desaId: village.id }, orderBy: { id: "asc" } });
         const buildingCount = new Set(inserted.flatMap((row) => row.kode_bangunan === null ? [] : [row.kode_bangunan])).size;
         const snapshot = await tx.snapshot.create({
@@ -241,7 +258,7 @@ async function main() {
             desaId: village.id,
             kode: "T0",
             urutan: 0,
-            label: "Baseline Awal Impor Empat Desa",
+            label: tahunPendataan ? `Data Dasar ${tahunPendataan}` : "Baseline Awal Impor Empat Desa",
             catatan: `Impor aman CSV SHA-256 ${checksum}`,
             jumlah: inserted.length,
             jumlahBangunan: buildingCount,

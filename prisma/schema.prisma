@@ -17,6 +17,10 @@ model Desa {
   slug      String   @unique // subdomain, e.g. "desa-setu"
   nama      String
   kodeWilayah String? // official village code used by spatial layers
+  kecamatan String? // administrative profile, kept separate from letterhead copy
+  kabupatenKota String?
+  provinsi String?
+  tahunPendataan Int? // authoritative baseline/data-collection year for this tenant
   droneTilePrefix String? // maps-xyz bucket prefix, e.g. 32.01.02.2004
   centerLat Float?
   centerLng Float?

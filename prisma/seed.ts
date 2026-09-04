@@ -326,8 +326,29 @@ async function main() {
 
   const desaSetu = await prisma.desa.upsert({
     where: { slug: "desa-setu" },
-    update: { nama: "Desa Setu", kodeWilayah: "32.01.05.2007", droneTilePrefix: "32.01.05.2007", centerLat: -6.557, centerLng: 106.866 },
-    create: { slug: "desa-setu", nama: "Desa Setu", kodeWilayah: "32.01.05.2007", droneTilePrefix: "32.01.05.2007", centerLat: -6.557, centerLng: 106.866 },
+    update: {
+      nama: "Desa Setu",
+      kodeWilayah: "32.01.05.2007",
+      kecamatan: "Jasinga",
+      kabupatenKota: "Bogor",
+      provinsi: "Jawa Barat",
+      tahunPendataan: 2024,
+      droneTilePrefix: "32.01.05.2007",
+      centerLat: -6.557,
+      centerLng: 106.866,
+    },
+    create: {
+      slug: "desa-setu",
+      nama: "Desa Setu",
+      kodeWilayah: "32.01.05.2007",
+      kecamatan: "Jasinga",
+      kabupatenKota: "Bogor",
+      provinsi: "Jawa Barat",
+      tahunPendataan: 2024,
+      droneTilePrefix: "32.01.05.2007",
+      centerLat: -6.557,
+      centerLng: 106.866,
+    },
   });
   const existingGunungPutri = await prisma.desa.findUnique({ where: { slug: "desa-gunung-putri" } });
   const existingCibubur = await prisma.desa.findUnique({ where: { slug: "desa-cibubur" } });
