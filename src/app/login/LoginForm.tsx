@@ -19,7 +19,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="email"
           required
           autoComplete="email"
-          className="min-h-[48px] w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-[#7A1F2E] focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/25"
+          className="min-h-[48px] w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-ddp-maroon focus:outline-none focus:ring-2 focus:ring-ddp-maroon/25"
           placeholder="nama@desa.id"
         />
       </div>
@@ -33,7 +33,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="password"
           required
           autoComplete="current-password"
-          className="min-h-[48px] w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-[#7A1F2E] focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/25"
+          className="min-h-[48px] w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-ddp-maroon focus:outline-none focus:ring-2 focus:ring-ddp-maroon/25"
           placeholder="Masukkan kata sandi"
         />
       </div>
@@ -45,7 +45,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="min-h-[48px] w-full rounded-lg bg-[#7A1F2E] px-4 py-2.5 font-semibold text-white transition-colors hover:bg-[#651825] focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+        className="min-h-[48px] w-full rounded-lg bg-ddp-maroon px-4 py-2.5 font-semibold text-white transition-colors hover:bg-ddp-maroon-hover focus:outline-none focus:ring-2 focus:ring-ddp-maroon/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Memproses..." : "Masuk"}
       </button>

@@ -108,7 +108,7 @@ export function DashboardCharts() {
         <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
       </div>
 
-      <ChartCard title="Kelahiran, Kematian & Mobilitas Penduduk - 12 Bulan Terakhir" action={{ href: "/penduduk", label: "Kelola Data" }}>
+      <ChartCard title="Kelahiran, Kematian & Mobilitas Penduduk" action={{ href: "/penduduk", label: "Kelola Data" }}>
         <ResponsiveContainer width="100%" height={320}>
           <BarChart data={stats.demografi.bulanan} margin={{ left: 4, right: 8 }}>
             <CartesianGrid stroke={CHART_INK.grid} vertical={false} />
@@ -153,7 +153,7 @@ export function DashboardCharts() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Ringkasan Mobilitas 12 Bulan" action={{ href: "/penduduk/migrasi-masuk", label: "Lihat Riwayat" }}>
+        <ChartCard title="Ringkasan Mobilitas" action={{ href: "/penduduk/migrasi-masuk", label: "Lihat Riwayat" }}>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart
               data={[

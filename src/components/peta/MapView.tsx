@@ -8,6 +8,7 @@ import { latLngBounds } from "leaflet";
 import { Info } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import { MapLayers } from "@/components/peta/MapLayers";
+import { BRAND_COLORS } from "@/lib/brand-colors";
 import { STATUS, SERIES } from "@/lib/chart-colors";
 
 type Household = {
@@ -176,9 +177,9 @@ export function MapView() {
                 key={building.id}
                 positions={positions}
                 pathOptions={{
-                  color: occupied ? "#4f46e5" : "#f97316",
+                  color: occupied ? BRAND_COLORS.navy : "#f97316",
                   weight: 2,
-                  fillColor: occupied ? "#6366f1" : "#fb923c",
+                  fillColor: occupied ? BRAND_COLORS.navyMuted : "#fb923c",
                   fillOpacity: 0.22,
                 }}
               >

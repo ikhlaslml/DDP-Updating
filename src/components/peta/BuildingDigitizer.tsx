@@ -15,6 +15,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { MapLayers } from "@/components/peta/MapLayers";
 import type { SpatialPoint } from "@/lib/building";
+import { BRAND_COLORS } from "@/lib/brand-colors";
 
 function centroid(points: SpatialPoint[]): SpatialPoint | null {
   if (points.length < 3) return null;
@@ -178,17 +179,17 @@ export function BuildingDigitizer({
           {positions.length >= 3 ? (
             <Polygon
               positions={positions}
-              pathOptions={{ color: "#4f46e5", weight: 3, fillColor: "#6366f1", fillOpacity: 0.22 }}
+              pathOptions={{ color: BRAND_COLORS.navy, weight: 3, fillColor: BRAND_COLORS.navyMuted, fillOpacity: 0.22 }}
             />
           ) : positions.length >= 2 ? (
-            <Polyline positions={positions} pathOptions={{ color: "#4f46e5", weight: 3, dashArray: "8 6" }} />
+            <Polyline positions={positions} pathOptions={{ color: BRAND_COLORS.navy, weight: 3, dashArray: "8 6" }} />
           ) : null}
           {points.map((point, index) => (
             <CircleMarker
               key={`${point.lat}-${point.lng}-${index}`}
               center={[point.lat, point.lng]}
               radius={5}
-              pathOptions={{ color: "white", weight: 2, fillColor: "#4f46e5", fillOpacity: 1 }}
+              pathOptions={{ color: "white", weight: 2, fillColor: BRAND_COLORS.navy, fillOpacity: 1 }}
             >
               <Tooltip permanent direction="top" offset={[0, -5]}>{index + 1}</Tooltip>
             </CircleMarker>

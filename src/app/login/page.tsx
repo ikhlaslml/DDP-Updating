@@ -1,6 +1,7 @@
 import { LoginForm } from "./LoginForm";
 import { BrandMarkIcon, BrandWordmark } from "@/components/login/BrandMark";
 import { Database, Layers, ShieldCheck } from "lucide-react";
+import { BRAND_COLORS } from "@/lib/brand-colors";
 
 const POINTS = [
   { icon: Database, text: "Data warga dan keluarga yang terintegrasi" },
@@ -21,7 +22,8 @@ export default async function LoginPage({
       {/* Brand panel (hidden on small screens) */}
       <section
         aria-label="Informasi Data Desa Presisi"
-        className="relative hidden overflow-hidden bg-[linear-gradient(135deg,#122A44_0%,#303044_52%,#7A1F2E_100%)] px-11 py-12 text-white lg:flex lg:min-h-[100dvh] lg:flex-col lg:justify-between xl:px-14"
+        style={{ background: `linear-gradient(135deg, ${BRAND_COLORS.navy} 0%, #173B5E 52%, ${BRAND_COLORS.maroon} 100%)` }}
+        className="relative hidden overflow-hidden px-11 py-12 text-white lg:flex lg:min-h-[100dvh] lg:flex-col lg:justify-between xl:px-14"
       >
         <div className="flex items-center gap-3">
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">

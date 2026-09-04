@@ -1,21 +1,23 @@
 // Validated categorical palette (light mode) — see dataviz skill references/palette.md.
 // Order is fixed and never cycled; slot assignment follows the entity, not rank.
+import { BRAND_COLORS } from "./brand-colors";
+
 export const SERIES = {
-  blue: "#2a78d6",
+  blue: BRAND_COLORS.navy,
   orange: "#eb6834",
   aqua: "#1baf7a",
   yellow: "#eda100",
   magenta: "#e87ba4",
   green: "#008300",
-  violet: "#4a3aa7",
-  red: "#e34948",
+  violet: BRAND_COLORS.navyMuted,
+  red: BRAND_COLORS.maroon,
 };
 
 export const STATUS = {
   good: "#0ca30c",
   warning: "#fab219",
   serious: "#ec835a",
-  critical: "#d03b3b",
+  critical: BRAND_COLORS.maroon,
 };
 
 export const CHART_INK = {

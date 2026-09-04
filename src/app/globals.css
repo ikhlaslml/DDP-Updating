@@ -12,6 +12,101 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/*
+ * Identitas visual DDP Updating.
+ *
+ * Indigo/blue/violet sebelumnya dipakai sebagai warna utama pada banyak
+ * komponen. Pemetaan ini mempertahankan makna utility yang sudah ada, tetapi
+ * menampilkan palet biru DDP yang konsisten. Red/rose tetap khusus untuk
+ * kesalahan dan tindakan destruktif, dengan merah DDP sebagai warna utamanya.
+ */
+@theme {
+  --color-ddp-navy: #00254F;
+  --color-ddp-navy-hover: #001F42;
+  --color-ddp-navy-active: #001A37;
+  --color-ddp-navy-subtle: #F3F7FA;
+  --color-ddp-navy-border: #C3D8E6;
+  --color-ddp-navy-focus: #3E6F92;
+
+  --color-ddp-maroon: #8B0000;
+  --color-ddp-maroon-hover: #720000;
+  --color-ddp-maroon-active: #5C0000;
+  --color-ddp-maroon-subtle: #FFF5F5;
+  --color-ddp-maroon-border: #F8C9C9;
+
+  --color-indigo-50: #F3F7FA;
+  --color-indigo-100: #E0EBF2;
+  --color-indigo-200: #C3D8E6;
+  --color-indigo-300: #9EBED3;
+  --color-indigo-400: #7098B5;
+  --color-indigo-500: #3E6F92;
+  --color-indigo-600: #00254F;
+  --color-indigo-700: #001F42;
+  --color-indigo-800: #001A37;
+  --color-indigo-900: #00152E;
+  --color-indigo-950: #000E1F;
+
+  --color-blue-50: #F3F7FA;
+  --color-blue-100: #E0EBF2;
+  --color-blue-200: #C3D8E6;
+  --color-blue-300: #9EBED3;
+  --color-blue-400: #7098B5;
+  --color-blue-500: #3E6F92;
+  --color-blue-600: #00254F;
+  --color-blue-700: #001F42;
+  --color-blue-800: #001A37;
+  --color-blue-900: #00152E;
+  --color-blue-950: #000E1F;
+
+  --color-violet-50: #F3F7FA;
+  --color-violet-100: #E0EBF2;
+  --color-violet-200: #C3D8E6;
+  --color-violet-300: #9EBED3;
+  --color-violet-400: #7098B5;
+  --color-violet-500: #3E6F92;
+  --color-violet-600: #00254F;
+  --color-violet-700: #001F42;
+  --color-violet-800: #001A37;
+  --color-violet-900: #00152E;
+  --color-violet-950: #000E1F;
+
+  --color-purple-50: #F3F7FA;
+  --color-purple-100: #E0EBF2;
+  --color-purple-200: #C3D8E6;
+  --color-purple-300: #9EBED3;
+  --color-purple-400: #7098B5;
+  --color-purple-500: #3E6F92;
+  --color-purple-600: #00254F;
+  --color-purple-700: #001F42;
+  --color-purple-800: #001A37;
+  --color-purple-900: #00152E;
+  --color-purple-950: #000E1F;
+
+  --color-red-50: #FFF5F5;
+  --color-red-100: #FDE8E8;
+  --color-red-200: #F8C9C9;
+  --color-red-300: #F0A3A3;
+  --color-red-400: #DF6F6F;
+  --color-red-500: #B93434;
+  --color-red-600: #8B0000;
+  --color-red-700: #720000;
+  --color-red-800: #5C0000;
+  --color-red-900: #480000;
+  --color-red-950: #2F0000;
+
+  --color-rose-50: #FFF5F5;
+  --color-rose-100: #FDE8E8;
+  --color-rose-200: #F8C9C9;
+  --color-rose-300: #F0A3A3;
+  --color-rose-400: #DF6F6F;
+  --color-rose-500: #B93434;
+  --color-rose-600: #8B0000;
+  --color-rose-700: #720000;
+  --color-rose-800: #5C0000;
+  --color-rose-900: #480000;
+  --color-rose-950: #2F0000;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -25,7 +120,7 @@ body {
 }
 
 .ddp-map-popup .ddp-map-secondary-link {
-  color: #4338ca !important;
+  color: var(--color-ddp-navy) !important;
 }
 
 /* Print: only the letter sheet is visible. */
