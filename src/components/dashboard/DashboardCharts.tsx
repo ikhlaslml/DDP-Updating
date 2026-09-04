@@ -181,7 +181,7 @@ export function DashboardCharts() {
         </ChartCard>
       </div>
 
-      <ChartCard title="Piramida Penduduk (Usia x Jenis Kelamin)">
+      <ChartCard title="Piramida Penduduk">
         <ResponsiveContainer width="100%" height={420}>
           <BarChart data={pyramidData} layout="vertical" stackOffset="sign" margin={{ left: 8 }}>
             <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
@@ -201,7 +201,7 @@ export function DashboardCharts() {
       </ChartCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <ChartCard title="Komposisi Pendidikan (Ijazah)">
+        <ChartCard title="Capaian Pendidikan">
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={stats.pendidikan} layout="vertical" margin={{ left: 24 }}>
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
@@ -215,7 +215,7 @@ export function DashboardCharts() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Pekerjaan Utama (10 Teratas)">
+        <ChartCard title="Pekerjaan Utama">
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={stats.pekerjaan} layout="vertical" margin={{ left: 24 }}>
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
@@ -229,7 +229,7 @@ export function DashboardCharts() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Komposisi Agama">
+        <ChartCard title="Agama">
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
               <Pie
@@ -241,6 +241,8 @@ export function DashboardCharts() {
                 innerRadius={55}
                 outerRadius={85}
                 paddingAngle={2}
+                label={({ value }) => Number(value).toLocaleString("id-ID")}
+                labelLine={false}
                 stroke="#fff"
                 strokeWidth={2}
                 isAnimationActive={false}
