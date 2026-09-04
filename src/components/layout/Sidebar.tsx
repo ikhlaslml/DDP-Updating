@@ -85,23 +85,28 @@ export function Sidebar({
 
       <nav className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-8" aria-label="Navigasi utama">
         <div className="space-y-4">
-          {NAV_SECTIONS.map((section) => (
-            <section key={section.label} aria-labelledby={`nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`}>
-              <p id={`nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`} className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">{section.label}</p>
-              <div className="space-y-1">
-                {section.items.map((item) => (
-                  <NavLink
-                    key={item.href}
-                    href={item.href}
-                    label={item.label}
-                    icon={item.icon}
-                    active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)}
-                    onClick={onNavigate}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+          {NAV_SECTIONS.map((section) => {
+            const showSectionLabel = section.label !== "Ringkasan";
+            const sectionLabelId = `nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`;
+
+            return (
+              <section key={section.label} aria-labelledby={showSectionLabel ? sectionLabelId : undefined}>
+                {showSectionLabel ? <p id={sectionLabelId} className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">{section.label}</p> : null}
+                <div className="space-y-1">
+                  {section.items.map((item) => (
+                    <NavLink
+                      key={item.href}
+                      href={item.href}
+                      label={item.label}
+                      icon={item.icon}
+                      active={item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)}
+                      onClick={onNavigate}
+                    />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </div>
       </nav>
     </aside>
