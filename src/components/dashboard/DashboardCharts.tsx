@@ -47,6 +47,9 @@ type Stats = {
 
 const AGAMA_COLORS = [SERIES.blue, SERIES.orange, SERIES.aqua, SERIES.yellow, SERIES.magenta, SERIES.green];
 
+// Kedua grafik pada baris dua kolom memakai tinggi sama agar kartunya sejajar.
+const ROW_CHART_HEIGHT = 380;
+
 function ChartCard({
   title,
   action,
@@ -108,7 +111,7 @@ export function DashboardCharts() {
         <StatCard label="Jumlah Dusun" value={String(stats.perDusun.length)} icon={MapPinned} />
       </div>
 
-      <ChartCard title="Kelahiran, Kematian & Mobilitas Penduduk" action={{ href: "/penduduk", label: "Kelola Data" }}>
+      <ChartCard title="Kelahiran, Kematian, dan Migrasi Penduduk" action={{ href: "/penduduk", label: "Kelola Data" }}>
         <ResponsiveContainer width="100%" height={320}>
           <BarChart data={stats.demografi.bulanan} margin={{ left: 4, right: 8 }}>
             <CartesianGrid stroke={CHART_INK.grid} vertical={false} />
@@ -124,18 +127,18 @@ export function DashboardCharts() {
         </ResponsiveContainer>
       </ChartCard>
 
-      <ChartCard title="Cakupan Kepemilikan Dokumen & Jaminan Sosial">
+      <ChartCard title="Kepemilikan Dokumen dan Jaminan Sosial">
         <div className="flex flex-wrap items-center justify-around gap-6 py-2">
-          <CircularProgress value={stats.cakupan.ktp} label="Punya KTP" color={SERIES.violet} />
-          <CircularProgress value={stats.cakupan.aktaLahir} label="Punya Akta Lahir" color={SERIES.aqua} />
-          <CircularProgress value={stats.cakupan.bpjsKes} label="Peserta BPJS Kesehatan" color={SERIES.yellow} />
+          <CircularProgress value={stats.cakupan.ktp} label="KTP" color={SERIES.violet} />
+          <CircularProgress value={stats.cakupan.aktaLahir} label="Akta Lahir" color={SERIES.aqua} />
+          <CircularProgress value={stats.cakupan.bpjsKes} label="BPJS Kesehatan" color={SERIES.yellow} />
         </div>
       </ChartCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ChartCard title="Sebaran Penduduk per Dusun" action={{ href: "/penduduk", label: "Lihat Data" }}>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={stats.perDusun} layout="vertical" margin={{ left: 24 }}>
+          <ResponsiveContainer width="100%" height={ROW_CHART_HEIGHT}>
+            <BarChart data={stats.perDusun} layout="vertical" margin={{ left: 24, right: 32 }}>
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
               <XAxis type="number" tick={{ fill: CHART_INK.muted, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
               <YAxis
@@ -146,59 +149,32 @@ export function DashboardCharts() {
                 axisLine={{ stroke: CHART_INK.axis }}
               />
               <Tooltip />
-              <Bar dataKey="value" name="Penduduk" fill={SERIES.blue} radius={[0, 4, 4, 0]} barSize={18}>
+              <Bar dataKey="value" name="Penduduk" fill={SERIES.blue} radius={[0, 4, 4, 0]} maxBarSize={22}>
                 <LabelList dataKey="value" position="right" fill={CHART_INK.secondary} fontSize={12} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Ringkasan Mobilitas" action={{ href: "/penduduk/migrasi-masuk", label: "Lihat Riwayat" }}>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart
-              data={[
-                { label: "Migrasi Masuk", value: stats.demografi.migrasiMasuk },
-                { label: "Migrasi Keluar", value: stats.demografi.migrasiKeluar },
-                { label: "Kelahiran", value: stats.demografi.kelahiran },
-                { label: "Kematian", value: stats.demografi.kematian },
-              ]}
-              layout="vertical"
-              margin={{ left: 24 }}
-            >
+        <ChartCard title="Piramida Penduduk">
+          <ResponsiveContainer width="100%" height={ROW_CHART_HEIGHT}>
+            <BarChart data={pyramidData} layout="vertical" stackOffset="sign" margin={{ left: 8, right: 8 }}>
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
-              <XAxis type="number" tick={{ fill: CHART_INK.muted, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
-              <YAxis type="category" dataKey="label" width={110} tick={{ fill: CHART_INK.secondary, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
-              <Tooltip />
-              <Bar dataKey="value" name="Peristiwa" radius={[0, 4, 4, 0]} barSize={24}>
-                <Cell fill={SERIES.aqua} />
-                <Cell fill={SERIES.blue} />
-                <Cell fill={SERIES.magenta} />
-                <Cell fill={SERIES.orange} />
-                <LabelList dataKey="value" position="right" fill={CHART_INK.secondary} fontSize={12} />
-              </Bar>
+              <XAxis
+                type="number"
+                tick={{ fill: CHART_INK.muted, fontSize: 12 }}
+                axisLine={{ stroke: CHART_INK.axis }}
+                tickFormatter={(v: number) => String(Math.abs(v))}
+              />
+              <YAxis type="category" dataKey="usia" width={50} tick={{ fill: CHART_INK.secondary, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
+              <Tooltip formatter={(v) => Math.abs(Number(v))} />
+              <Legend />
+              <Bar dataKey="L" name="Laki-laki" fill={SERIES.blue} stackId="pyramid" barSize={14} />
+              <Bar dataKey="P" name="Perempuan" fill={SERIES.orange} stackId="pyramid" barSize={14} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
-
-      <ChartCard title="Piramida Penduduk">
-        <ResponsiveContainer width="100%" height={420}>
-          <BarChart data={pyramidData} layout="vertical" stackOffset="sign" margin={{ left: 8 }}>
-            <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
-            <XAxis
-              type="number"
-              tick={{ fill: CHART_INK.muted, fontSize: 12 }}
-              axisLine={{ stroke: CHART_INK.axis }}
-              tickFormatter={(v: number) => String(Math.abs(v))}
-            />
-            <YAxis type="category" dataKey="usia" width={50} tick={{ fill: CHART_INK.secondary, fontSize: 12 }} axisLine={{ stroke: CHART_INK.axis }} />
-            <Tooltip formatter={(v) => Math.abs(Number(v))} />
-            <Legend />
-            <Bar dataKey="L" name="Laki-laki" fill={SERIES.blue} stackId="pyramid" barSize={14} />
-            <Bar dataKey="P" name="Perempuan" fill={SERIES.orange} stackId="pyramid" barSize={14} />
-          </BarChart>
-        </ResponsiveContainer>
-      </ChartCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ChartCard title="Capaian Pendidikan">

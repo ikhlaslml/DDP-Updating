@@ -179,7 +179,7 @@ export function PerubahanSementara() {
                 <th className="px-3 py-2">Nama/Kategori</th>
                 <th className="px-3 py-2">Lokasi</th>
                 <th className="px-3 py-2">Status</th>
-                <th className="px-3 py-2">Operator & Waktu</th>
+                <th className="px-3 py-2">Operator dan Waktu</th>
                 <th className="px-3 py-2">Ringkasan</th>
                 <th className="px-3 py-2">Aksi</th>
               </tr>

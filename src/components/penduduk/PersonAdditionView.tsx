@@ -245,7 +245,7 @@ export function PersonAdditionView({
           ) : null}
           <SurveyEditor role={role} value={record} onChange={setRecord} errors={errors} idPrefix={isHead ? "new-head" : "new-member"} allowedGroups={isHead ? ["identitas_keluarga"] : undefined} />
           <div className="flex justify-end border-t border-slate-200 pt-5">
-            <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Aspek 1 & Kembali ke Daftar Keluarga" : "Simpan Perubahan"}</button>
+            <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Aspek 1 dan Kembali ke Daftar Keluarga" : "Simpan Perubahan"}</button>
           </div>
         </>
       ) : (

@@ -33,7 +33,7 @@ export const NAV_SECTIONS = [
     label: "Administrasi",
     items: [
       { href: "/pengaturan", label: "Administrasi Desa", icon: Building2 },
-      { href: "/impor-ekspor", label: "Impor & Ekspor", icon: FileSpreadsheet },
+      { href: "/impor-ekspor", label: "Impor dan Ekspor", icon: FileSpreadsheet },
     ],
   },
 ];

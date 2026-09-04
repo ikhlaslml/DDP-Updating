@@ -435,7 +435,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         {step < 4 ? (
           <button type="button" disabled={step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo)} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
         ) : (
-          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Aspek 1 & Lihat Daftar Keluarga" : "Simpan Perubahan"}</button>
+          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Aspek 1 dan Lihat Daftar Keluarga" : "Simpan Perubahan"}</button>
         )}
       </div>
     </div>
