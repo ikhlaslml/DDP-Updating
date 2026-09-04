@@ -7,10 +7,10 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
   const [state, formAction, pending] = useActionState(loginAction, undefined);
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-5">
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="email">
+        <label className="mb-1.5 block text-sm font-medium text-slate-700" htmlFor="email">
           Email
         </label>
         <input
@@ -19,13 +19,13 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="email"
           required
           autoComplete="email"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
-          placeholder="you@example.com"
+          className="min-h-[48px] w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-[#7A1F2E] focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/25"
+          placeholder="nama@desa.id"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="password">
-          Password
+        <label className="mb-1.5 block text-sm font-medium text-slate-700" htmlFor="password">
+          Kata sandi
         </label>
         <input
           id="password"
@@ -33,19 +33,19 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="password"
           required
           autoComplete="current-password"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/40 focus:border-[#7A1F2E]"
-          placeholder="********"
+          className="min-h-[48px] w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-[#7A1F2E] focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/25"
+          placeholder="Masukkan kata sandi"
         />
       </div>
       {state?.error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+        <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600">
           {state.error}
         </p>
       )}
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-[#7A1F2E] text-white font-medium py-2 hover:bg-[#651825] disabled:opacity-60"
+        className="min-h-[48px] w-full rounded-lg bg-[#7A1F2E] px-4 py-2.5 font-semibold text-white transition-colors hover:bg-[#651825] focus:outline-none focus:ring-2 focus:ring-[#7A1F2E]/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Memproses..." : "Masuk"}
       </button>
