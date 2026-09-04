@@ -97,8 +97,8 @@ export function DashboardCharts() {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         <StatCard label="Total Penduduk" value={stats.totalPenduduk.toLocaleString("id-ID")} icon={Users} />
         <StatCard label="Total KK" value={stats.totalKk.toLocaleString("id-ID")} icon={HomeIcon} />
-        <StatCard label="Kelahiran 12 Bulan" value={stats.demografi.kelahiran.toLocaleString("id-ID")} icon={Baby} />
-        <StatCard label="Kematian 12 Bulan" value={stats.demografi.kematian.toLocaleString("id-ID")} icon={HeartPulse} />
+        <StatCard label="Kelahiran" value={stats.demografi.kelahiran.toLocaleString("id-ID")} icon={Baby} />
+        <StatCard label="Kematian" value={stats.demografi.kematian.toLocaleString("id-ID")} icon={HeartPulse} />
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">

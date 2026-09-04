@@ -12,7 +12,7 @@ import {
 export const NAV_SECTIONS = [
   {
     label: "Ringkasan",
-    items: [{ href: "/", label: "Dashboard", icon: LayoutDashboard }],
+    items: [{ href: "/", label: "Ringkasan", icon: LayoutDashboard }],
   },
   {
     label: "Data Desa",

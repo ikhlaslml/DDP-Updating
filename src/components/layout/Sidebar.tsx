@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -47,31 +48,42 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const { desaNama } = useAuthInfo();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const frame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
+    return () => window.cancelAnimationFrame(frame);
+  }, [mobileOpen]);
 
   return (
     <aside
+      role={mobileOpen ? "dialog" : undefined}
+      aria-modal={mobileOpen || undefined}
+      aria-label={mobileOpen ? "Menu navigasi" : undefined}
       className={clsx(
-        "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-100 bg-white transition-transform duration-200 ease-in-out",
+        "fixed inset-0 z-[2000] flex w-full flex-col border-r border-slate-100 bg-white overscroll-contain transition-transform duration-200 ease-in-out lg:inset-y-0 lg:left-0 lg:right-auto lg:z-40 lg:w-64",
         mobileOpen ? "translate-x-0" : "-translate-x-full",
         desktopOpen ? "lg:translate-x-0" : "lg:-translate-x-full"
       )}
     >
-      <div className="flex h-16 shrink-0 items-center gap-2.5 px-5 sm:px-6">
+      <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-slate-100 px-5 sm:px-6">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold text-sm">
           D
         </div>
         <span className="font-bold text-slate-900 tracking-tight truncate">{desaNama}</span>
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={onNavigate}
           aria-label="Tutup menu"
-          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-700 lg:hidden"
+          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 lg:hidden"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 py-3 pb-6" aria-label="Navigasi utama">
+      <nav className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-8" aria-label="Navigasi utama">
         <div className="space-y-4">
           {NAV_SECTIONS.map((section) => (
             <section key={section.label} aria-labelledby={`nav-${section.label.toLocaleLowerCase("id-ID").replaceAll(" ", "-")}`}>

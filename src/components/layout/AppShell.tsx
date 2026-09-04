@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
@@ -19,18 +19,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
   }
 
+  function closeMobileSidebar() {
+    setMobileOpen(false);
+  }
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const bodyOverflow = document.body.style.overflow;
+    const htmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = htmlOverflow;
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") closeMobileSidebar();
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [mobileOpen]);
+
   return (
     <div className="min-h-screen bg-[#F7F7FB]">
-      <Sidebar desktopOpen={desktopOpen} mobileOpen={mobileOpen} onNavigate={() => setMobileOpen(false)} />
-
-      {/* Mobile backdrop */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-slate-900/40 lg:hidden"
-          onClick={() => setMobileOpen(false)}
-          aria-hidden
-        />
-      )}
+      <Sidebar desktopOpen={desktopOpen} mobileOpen={mobileOpen} onNavigate={closeMobileSidebar} />
 
       <div
         className={clsx(
