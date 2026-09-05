@@ -180,7 +180,7 @@ export function RiwayatView() {
               href={`/api/snapshot/${selected}/export`}
               className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:w-auto"
             >
-              Unduh Excel
+              Unduh Rekap
             </a>
           )}
         </div>
