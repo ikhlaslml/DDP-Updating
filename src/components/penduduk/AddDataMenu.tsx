@@ -48,7 +48,7 @@ export function AddDataMenu() {
         onClick={() => setOpen((current) => !current)}
         className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
       >
-        Catat <ChevronDown className="h-4 w-4" />
+        Pembaruan Data <ChevronDown className="h-4 w-4" />
       </button>
       {open ? (
         <>

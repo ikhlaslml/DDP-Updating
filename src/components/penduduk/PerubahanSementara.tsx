@@ -167,7 +167,7 @@ export function PerubahanSementara() {
         {loading ? (
           <p className="py-8 text-center text-sm text-slate-400">Memuat perubahan...</p>
         ) : rows.length === 0 ? (
-          <p className="py-8 text-center text-sm text-slate-400">Belum ada perubahan yang menunggu diterapkan. Gunakan tombol Catat Perubahan untuk memperbarui data.</p>
+          <p className="py-8 text-center text-sm text-slate-400">Belum ada perubahan yang menunggu diterapkan. Gunakan tombol Pembaruan Data untuk memperbarui data.</p>
         ) : (
           <table className="min-w-full text-sm">
             <thead className="border-b border-slate-200 text-center text-xs font-semibold uppercase text-slate-500">
