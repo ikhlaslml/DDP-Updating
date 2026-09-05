@@ -30,7 +30,7 @@ export function AspectFilterPanel({
     <section className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-3 sm:p-4" aria-labelledby="filter-aspek-title">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 id="filter-aspek-title" className="text-sm font-bold text-slate-800">Pilih kelompok data</h3>
+          <h3 id="filter-aspek-title" className="text-sm font-bold text-slate-800">Pilih aspek data</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} isian ditampilkan</span>

@@ -154,7 +154,7 @@ export function PerubahanSementara() {
     <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Perubahan yang Menunggu Diterapkan</h2>
+          <h2 className="text-lg font-bold text-slate-900">Konfirmasi Perubahan</h2>
         </div>
         {canWrite ? (
           <button type="button" disabled={!rows.length} onClick={() => setConfirmMerge(true)} className="inline-flex min-h-10 items-center rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40">Terapkan {rows.length}</button>
