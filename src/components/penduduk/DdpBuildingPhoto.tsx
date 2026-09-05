@@ -37,18 +37,22 @@ function ZoomToolbar({
         type="button"
         onClick={() => onZoom(zoom - ZOOM_STEP)}
         disabled={zoom <= ZOOM_MIN}
-        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-slate-200 px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        aria-label="Perkecil"
+        title="Perkecil"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        <ZoomOut className="h-3.5 w-3.5" /> Perkecil
+        <ZoomOut className="h-3.5 w-3.5" />
       </button>
       <span className="min-w-12 text-center text-xs font-semibold text-slate-500">{Math.round(zoom * 100)}%</span>
       <button
         type="button"
         onClick={() => onZoom(zoom + ZOOM_STEP)}
         disabled={zoom >= ZOOM_MAX}
-        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-slate-200 px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        aria-label="Perbesar"
+        title="Perbesar"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        <ZoomIn className="h-3.5 w-3.5" /> Perbesar
+        <ZoomIn className="h-3.5 w-3.5" />
       </button>
       {extra}
     </div>
@@ -165,9 +169,11 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
             <button
               type="button"
               onClick={() => setExpanded(true)}
-              className="inline-flex min-h-9 items-center gap-1 rounded-lg bg-indigo-600 px-2.5 text-xs font-semibold text-white hover:bg-indigo-700"
+              aria-label="Layar penuh"
+              title="Layar penuh"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
             >
-              <Maximize2 className="h-3.5 w-3.5" /> Layar penuh
+              <Maximize2 className="h-3.5 w-3.5" />
             </button>
           )}
         />

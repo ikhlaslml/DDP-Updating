@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
-import { Download, FileSpreadsheet, History, LoaderCircle, Save } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useCanWrite } from "@/components/providers/AuthInfo";
 
 type CommodityRow = {
@@ -223,7 +223,7 @@ export function HargaKomoditasView() {
           <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             {canWrite ? (
               <label className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto">
-                <FileSpreadsheet className="h-4 w-4" /> Impor Excel
+                Impor Excel
                 <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(event) => {
                   const file = event.currentTarget.files?.[0];
                   if (file) void importWorkbook(file, event.currentTarget);
@@ -231,7 +231,7 @@ export function HargaKomoditasView() {
               </label>
             ) : null}
             <button type="button" disabled={!rows.length} onClick={() => void exportWorkbook()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 sm:w-auto">
-              <Download className="h-4 w-4" /> Ekspor Excel
+              Ekspor Excel
             </button>
           </div>
         </div>
@@ -245,7 +245,7 @@ export function HargaKomoditasView() {
           </label>
           <div className="flex items-end">
             {canWrite ? <button type="button" disabled={saving || loading} onClick={() => void saveAll()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 lg:w-auto">
-              {saving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Simpan Massal ({filledCount})
+              {saving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : null} Simpan ({filledCount})
             </button> : <span className="text-xs text-slate-400">Mode lihat; hanya operator yang dapat mengubah harga.</span>}
           </div>
         </div>
@@ -288,7 +288,7 @@ export function HargaKomoditasView() {
 
       <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div><h3 className="flex items-center gap-2 font-bold text-slate-900"><History className="h-4 w-4" /> Riwayat Antarperiode</h3></div>
+          <div><h3 className="font-bold text-slate-900">Riwayat Antarperiode</h3></div>
           <label className="text-xs font-medium text-slate-600">Komoditas
             <select value={historyCommodityId} onChange={(event) => setHistoryCommodityId(event.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm sm:min-w-56">
               {rows.map((row) => <option key={row.id} value={row.id}>{row.nama} ({row.satuan})</option>)}

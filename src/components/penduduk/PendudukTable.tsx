@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Eye, FileSpreadsheet, FileText, Pencil } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -26,7 +26,7 @@ import { InlineEditableCell } from "./InlineEditableCell";
 import { fieldLabel } from "@/lib/field-labels";
 import { LOCKED_IDENTITY_FIELDS } from "@/lib/updating-columns";
 
-const LOCKED_TABLE_FIELDS = new Set<string>(LOCKED_IDENTITY_FIELDS);
+const LOCKED_TABLE_FIELDS = new Set<string>(LOCKED_IDENTITY_FIELDS.filter((field) => field !== "nama"));
 
 type Row = Record<string, unknown> & { id: string };
 type CellStatus = "JATUH_TEMPO" | "MENUNGGU_PENGGABUNGAN" | "TERKINI";
@@ -132,18 +132,6 @@ export function PendudukTable({
         id: name,
         header: fieldLabel(name, mapping.kolom[name]),
         cell: (info) => {
-          if (name === "nama") {
-            return (
-              <Link
-                href={`/penduduk/${info.row.original.id}`}
-                className="inline-flex items-center gap-1.5 font-semibold text-indigo-700 hover:underline"
-                title={`Buka detail ${String(info.row.original.nama ?? "penduduk")}`}
-              >
-                {formatCell(info.getValue(), mapping.kolom[name])}
-                <Eye className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              </Link>
-            );
-          }
           if (LOCKED_TABLE_FIELDS.has(name)) {
             return formatCell(info.getValue(), mapping.kolom[name]);
           }
@@ -171,19 +159,18 @@ export function PendudukTable({
           <div className="flex items-center justify-end gap-1 whitespace-nowrap">
             <Link
               href={`/penduduk/${row.original.id}`}
-              title="Lihat detail"
-              aria-label={`Lihat detail ${String(row.original.nama ?? "penduduk")}`}
-              className="inline-flex h-9 items-center justify-center gap-1 rounded-lg px-2 text-xs font-semibold text-indigo-700 hover:bg-indigo-50"
+              title="Lihat"
+              aria-label={`Lihat ${String(row.original.nama ?? "penduduk")}`}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-700 hover:bg-indigo-50"
             >
               <Eye className="h-4 w-4" />
-              Detail
             </Link>
             {canWrite && (
               <>
                 <Link
                   href={`/penduduk/${row.original.id}/edit`}
-                  title="Ubah data"
-                  aria-label={`Ubah data ${String(row.original.nama ?? "penduduk")}`}
+                  title="Ubah"
+                  aria-label={`Ubah ${String(row.original.nama ?? "penduduk")}`}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-amber-600 hover:bg-amber-50"
                 >
                   <Pencil className="h-4 w-4" />
@@ -273,15 +260,15 @@ export function PendudukTable({
         <div className="ml-auto flex flex-wrap items-center gap-2 max-sm:ml-0 max-sm:w-full">
           <a
             href={`/api/penduduk/export?${exportQuery}&format=xlsx`}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="inline-flex min-h-10 items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            <FileSpreadsheet className="h-4 w-4" /> Excel
+            Excel
           </a>
           <a
             href={`/api/penduduk/export?${exportQuery}&format=csv`}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="inline-flex min-h-10 items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            <FileText className="h-4 w-4" /> CSV
+            CSV
           </a>
           {canWrite ? <AddDataMenu /> : null}
         </div>
@@ -290,9 +277,12 @@ export function PendudukTable({
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
       <div className="hidden flex-wrap items-center gap-3 text-xs text-slate-600 md:flex">
+        <span className="inline-flex items-center gap-1.5">
+          <Pencil className="h-3 w-3 text-slate-400" />
+          <span className="border-b border-dashed border-slate-400">Bisa diubah</span>
+        </span>
         <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-red-100 ring-1 ring-red-300" /> Jatuh tempo</span>
-        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-amber-100 ring-1 ring-amber-300" /> Menunggu penggabungan</span>
-        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-white ring-1 ring-slate-300" /> Terkini / insidentil</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-amber-100 ring-1 ring-amber-300" /> Menunggu diterapkan</span>
       </div>
 
       <div className="grid gap-3 md:hidden">
@@ -304,7 +294,20 @@ export function PendudukTable({
           <article key={row.id} className={`rounded-2xl border p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] ${row.status_dalam_keluarga === "Kepala Keluarga" ? "border-sky-200 bg-sky-50" : "border-slate-200 bg-white"}`}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="break-words font-bold text-slate-900">{formatCell(row.nama, mapping.kolom.nama)}</h3>
+                <h3 className="break-words font-bold text-slate-900">
+                  {canWrite ? (
+                    <InlineEditableCell
+                      pendudukId={row.id}
+                      nkk={String(row.nkk ?? "")}
+                      field="nama"
+                      value={row.nama}
+                      status={cellStatus[row.id]?.nama}
+                      personRole={row.status_dalam_keluarga === "Kepala Keluarga" ? "HEAD" : "MEMBER"}
+                      canWrite={canWrite}
+                      onSaved={fetchData}
+                    />
+                  ) : formatCell(row.nama, mapping.kolom.nama)}
+                </h3>
                 <p className="mt-1 break-all text-xs text-slate-500">NIK {formatCell(row.nik, mapping.kolom.nik)}</p>
               </div>
               <span className="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">{formatCell(row.jk, mapping.kolom.jk)}</span>
@@ -315,8 +318,8 @@ export function PendudukTable({
               <div><dt className="font-semibold uppercase tracking-wide text-slate-400">RW / RT</dt><dd className="mt-1 font-medium text-slate-700">{formatCell(row.rw, mapping.kolom.rw)} / {formatCell(row.rt, mapping.kolom.rt)}</dd></div>
             </dl>
             <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
-              <Link href={`/penduduk/${row.id}`} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white"><Eye className="h-4 w-4" /> Detail</Link>
-              {canWrite ? <Link href={`/penduduk/${row.id}/edit`} aria-label={`Ubah data ${String(row.nama ?? "penduduk")}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-amber-200 px-3 py-2 text-sm font-semibold text-amber-700"><Pencil className="h-4 w-4" /> Ubah</Link> : null}
+              <Link href={`/penduduk/${row.id}`} aria-label={`Lihat ${String(row.nama ?? "penduduk")}`} className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-indigo-600 px-3 py-2 text-white"><Eye className="h-4 w-4" /></Link>
+              {canWrite ? <Link href={`/penduduk/${row.id}/edit`} aria-label={`Ubah ${String(row.nama ?? "penduduk")}`} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-amber-200 px-3 py-2 text-amber-700"><Pencil className="h-4 w-4" /></Link> : null}
               {canWrite ? <DeleteButton id={row.id} nama={String(row.nama ?? "")} onDeleted={fetchData} /> : null}
             </div>
           </article>

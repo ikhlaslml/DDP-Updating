@@ -73,8 +73,10 @@ export function cycleLabel(cycle: PeriodicCycle) {
   return cycle === "ANNUAL" ? "1 Tahun" : "6 Bulan";
 }
 
+const INLINE_IDENTITY_CORRECTIONS = new Set<string>(["nama"]);
+
 const TECHNICAL_INLINE_BLOCK = new Set<string>([
-  ...LOCKED_IDENTITY_FIELDS,
+  ...LOCKED_IDENTITY_FIELDS.filter((field) => !INLINE_IDENTITY_CORRECTIONS.has(field)),
   ...EXCLUDED_PERIODIC_FIELDS,
   "abs_id",
   "subjek",

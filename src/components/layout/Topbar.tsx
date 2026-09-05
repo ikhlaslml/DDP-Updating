@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Bell, Search, ChevronDown, LogOut, Menu } from "lucide-react";
+import { Bell, Search, ChevronDown, Menu } from "lucide-react";
 import { useAuthInfo } from "@/components/providers/AuthInfo";
 
 export function Topbar({
@@ -176,7 +176,6 @@ export function Topbar({
                 onClick={() => signOut({ callbackUrl: "/login" })}
                 className="flex min-h-11 w-full items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-red-600"
               >
-                <LogOut className="h-4 w-4" />
                 Keluar
               </button>
             </div>

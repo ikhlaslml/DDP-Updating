@@ -1,6 +1,5 @@
 "use client";
 
-import { CheckCheck, ListFilter, RotateCcw } from "lucide-react";
 import {
   KELOMPOK_LABEL,
   KELOMPOK_ORDER,
@@ -31,12 +30,12 @@ export function AspectFilterPanel({
     <section className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-3 sm:p-4" aria-labelledby="filter-aspek-title">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 id="filter-aspek-title" className="flex items-center gap-2 text-sm font-bold text-slate-800"><ListFilter className="h-4 w-4 text-indigo-600" /> Pilih kelompok data</h3>
+          <h3 id="filter-aspek-title" className="text-sm font-bold text-slate-800">Pilih kelompok data</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} kolom aktif</span>
-          <button type="button" onClick={() => onChange(new Set(KELOMPOK_ORDER))} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50"><CheckCheck className="h-3.5 w-3.5" /> Pilih semua</button>
-          <button type="button" onClick={() => onChange(new Set())} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"><RotateCcw className="h-3.5 w-3.5" /> Bersihkan</button>
+          <button type="button" onClick={() => onChange(new Set(KELOMPOK_ORDER))} className="inline-flex min-h-9 items-center rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50">Pilih semua</button>
+          <button type="button" onClick={() => onChange(new Set())} className="inline-flex min-h-9 items-center rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50">Bersihkan</button>
         </div>
       </div>
       <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">

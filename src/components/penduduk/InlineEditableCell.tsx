@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, Pencil, X } from "lucide-react";
 import { FieldInput } from "@/components/penduduk/FieldInput";
 import { formatCell, inputValueFromRecord } from "@/lib/format";
 import { mapping } from "@/lib/indikator";
@@ -46,7 +46,9 @@ export function InlineEditableCell({
   const [error, setError] = useState<string | null>(null);
 
   const display = formatCell(value, def);
+  const empty = !display || display === "-";
   const tone = status ? STATUS_CLASS[status] : "";
+  const emphasis = field === "nama" ? "font-semibold text-slate-900" : "";
 
   function startEdit() {
     if (!editable || pending) return;
@@ -81,7 +83,20 @@ export function InlineEditableCell({
 
   if (editing) {
     return (
-      <div className="min-w-[14rem] space-y-1" onClick={(event) => event.stopPropagation()}>
+      <div
+        className="min-w-[14rem] space-y-1"
+        onClick={(event) => event.stopPropagation()}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            void save();
+          }
+          if (event.key === "Escape") {
+            event.preventDefault();
+            setEditing(false);
+          }
+        }}
+      >
         <FieldInput
           name={field}
           def={def}
@@ -97,19 +112,21 @@ export function InlineEditableCell({
             type="button"
             disabled={saving}
             onClick={() => void save()}
-            className="inline-flex h-8 items-center gap-1 rounded-lg bg-indigo-600 px-2 text-xs font-semibold text-white disabled:opacity-50"
+            aria-label="Simpan"
+            title="Simpan"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white disabled:opacity-50"
           >
             <Check className="h-3.5 w-3.5" />
-            Simpan
           </button>
           <button
             type="button"
             disabled={saving}
             onClick={() => setEditing(false)}
-            className="inline-flex h-8 items-center gap-1 rounded-lg border border-slate-300 px-2 text-xs font-semibold text-slate-600"
+            aria-label="Batal"
+            title="Batal"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600"
           >
             <X className="h-3.5 w-3.5" />
-            Batal
           </button>
         </div>
       </div>
@@ -117,13 +134,13 @@ export function InlineEditableCell({
   }
 
   const title = pending
-    ? "Menunggu penggabungan"
+    ? "Menunggu diterapkan"
     : status === "JATUH_TEMPO"
-      ? "Jatuh tempo. Klik untuk mengubah isian ini saja."
+      ? "Jatuh tempo. Ketuk untuk mengubah."
       : editable
         ? isHouseholdField(field)
-          ? "Klik untuk mengubah. Perubahan berlaku untuk seluruh anggota KK."
-          : "Klik untuk mengubah isian ini saja."
+          ? "Bisa diubah. Berlaku untuk seluruh anggota KK."
+          : "Bisa diubah"
         : undefined;
 
   return (
@@ -131,14 +148,24 @@ export function InlineEditableCell({
       type="button"
       disabled={!editable}
       title={title}
+      aria-label={editable ? `Ubah ${display || "isian kosong"}` : undefined}
       onClick={startEdit}
-      className={`block w-full rounded-md px-1.5 py-1 text-left ${tone} ${
-        editable
-          ? "cursor-pointer hover:ring-1 hover:ring-indigo-300"
-          : "cursor-default"
+      className={`group/cell flex w-full min-w-0 items-center gap-1.5 rounded-md px-1.5 py-1 text-left ${tone} ${
+        editable ? "cursor-text hover:bg-indigo-50/80" : "cursor-default"
       } ${pending ? "cursor-not-allowed" : ""}`}
     >
-      {display}
+      <span
+        className={`min-w-0 flex-1 truncate ${emphasis} ${
+          editable && !pending
+            ? "border-b border-dashed border-slate-300 group-hover/cell:border-indigo-400"
+            : ""
+        } ${empty ? "text-slate-400" : ""}`}
+      >
+        {empty ? "Kosong" : display}
+      </span>
+      {editable && !pending ? (
+        <Pencil className="h-3 w-3 shrink-0 text-slate-400 group-hover/cell:text-indigo-600" aria-hidden="true" />
+      ) : null}
     </button>
   );
 }

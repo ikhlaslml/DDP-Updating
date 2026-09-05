@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { Activity, Building2, Clock3, Eye, Merge, UserRound, X } from "lucide-react";
+import { Activity, Building2, Clock3, Eye, UserRound, X } from "lucide-react";
 import { formatCell } from "@/lib/format";
 import { mapping } from "@/lib/indikator";
 import { fieldLabel } from "@/lib/field-labels";
@@ -157,7 +157,7 @@ export function PerubahanSementara() {
           <h2 className="text-lg font-bold text-slate-900">Perubahan yang Menunggu Diterapkan</h2>
         </div>
         {canWrite ? (
-          <button type="button" disabled={!rows.length} onClick={() => setConfirmMerge(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40"><Merge className="h-4 w-4" /> Terapkan {rows.length} Perubahan</button>
+          <button type="button" disabled={!rows.length} onClick={() => setConfirmMerge(true)} className="inline-flex min-h-10 items-center rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40">Terapkan {rows.length}</button>
         ) : null}
       </div>
 

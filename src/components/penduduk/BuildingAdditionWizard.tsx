@@ -8,8 +8,6 @@ import clsx from "clsx";
 import {
   Building2,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Home,
   MapPinned,
   Store,
@@ -313,7 +311,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
               }}
               className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white"
             >
-              {eventAccepted ? "Data Peristiwa Siap" : "Selanjutnya"} <ChevronRight className="h-4 w-4" />
+              {eventAccepted ? "Siap" : "Lanjutkan"}
             </button>
           </div>
         </section>
@@ -479,11 +477,11 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       ) : null}
 
       <div className="flex items-center justify-between border-t border-slate-200 pt-5">
-        <button type="button" disabled={step === 0 || submitting} onClick={back} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-40"><ChevronLeft className="h-4 w-4" /> Sebelumnya</button>
+        <button type="button" disabled={step === 0 || submitting} onClick={back} className="inline-flex min-h-11 items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-40">Sebelumnya</button>
         {step < 4 ? (
-          <button type="button" disabled={(eventType === "MIGRASI_MASUK" && !eventAccepted) || (step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo))} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
+          <button type="button" disabled={(eventType === "MIGRASI_MASUK" && !eventAccepted) || (step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo))} onClick={next} className="inline-flex min-h-11 items-center rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan</button>
         ) : (
-          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Keluarga Baru" : "Simpan Perubahan"}</button>
+          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">{submitting ? "Menyimpan..." : "Simpan"}</button>
         )}
       </div>
     </div>

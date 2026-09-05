@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import { Building2, Check, ChevronRight, Search, UserPlus, UsersRound } from "lucide-react";
+import { Building2, Search, UserPlus, UsersRound } from "lucide-react";
 import { SurveyEditor } from "@/components/penduduk/SurveyEditor";
 import { RespondentIdentityFields, type RespondentIdentityValue } from "@/components/penduduk/RespondentIdentityFields";
 import { buildPayload } from "@/lib/payload";
@@ -328,7 +328,7 @@ export function PersonAdditionView({
                 onClick={() => setRespondentAccepted(true)}
                 className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Lanjut ke Pendataan Keluarga <ChevronRight className="h-4 w-4" />
+                Lanjutkan
               </button>
             </div>
           ) : null}
@@ -386,7 +386,7 @@ export function PersonAdditionView({
                     }}
                     className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white"
                   >
-                    Selanjutnya ke Pendataan Keluarga <ChevronRight className="h-4 w-4" />
+                    Lanjutkan
                   </button>
                 </div>
               ) : null}
@@ -438,7 +438,7 @@ export function PersonAdditionView({
                 optionalFields={eventType === "KELAHIRAN" ? ["nik"] : undefined}
               />
               <div className="flex justify-end border-t border-slate-200 pt-5">
-                <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Keluarga Baru" : "Simpan Aspek 1"}</button>
+                <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50">{submitting ? "Menyimpan..." : "Simpan"}</button>
               </div>
             </>
           ) : null}

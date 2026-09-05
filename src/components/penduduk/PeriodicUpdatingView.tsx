@@ -4,13 +4,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   AlertCircle,
-  Check,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Clock3,
   RefreshCw,
-  Save,
   UsersRound,
 } from "lucide-react";
 import { FieldInput } from "@/components/penduduk/FieldInput";
@@ -279,7 +277,7 @@ export function PeriodicUpdatingView() {
           onClick={() => setSelectedNkk(null)}
           className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
         >
-          <ChevronLeft className="h-4 w-4" /> Kembali ke daftar keluarga
+          Kembali
         </button>
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -311,7 +309,7 @@ export function PeriodicUpdatingView() {
                 onClick={() => confirmNoChange({ scope: "FAMILY", nkk: detail.nkk, fields: dueFamily.map((cell) => cell.field) })}
                 className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-emerald-200 px-3 py-2 text-xs font-semibold text-emerald-700"
               >
-                <Check className="h-4 w-4" /> Semua tidak berubah ({dueFamily.length})
+                Tidak berubah ({dueFamily.length})
               </button>
             ) : null}
           </div>
@@ -347,7 +345,7 @@ export function PeriodicUpdatingView() {
                           onClick={() => confirmNoChange({ scope: "FAMILY", nkk: detail.nkk, fields: [cell.field] })}
                           className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-emerald-700"
                         >
-                          <Check className="h-3.5 w-3.5" /> Tidak berubah
+                          Tidak berubah
                         </button>
                       ) : null}
                     </div>
@@ -364,7 +362,7 @@ export function PeriodicUpdatingView() {
                 onClick={() => submitStage({ scope: "FAMILY", nkk: detail.nkk, data: familyChanges })}
                 className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
               >
-                <Save className="h-4 w-4" /> Simpan perubahan keluarga ({Object.keys(familyChanges).length})
+                Simpan ({Object.keys(familyChanges).length})
               </button>
             </div>
           ) : null}
@@ -396,7 +394,7 @@ export function PeriodicUpdatingView() {
                       onClick={() => confirmNoChange({ scope: "PERSON", pendudukId: member.id, fields: due.map((cell) => cell.field) })}
                       className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-emerald-200 px-3 py-2 text-xs font-semibold text-emerald-700"
                     >
-                      <Check className="h-4 w-4" /> Semua tidak berubah ({due.length})
+                      Tidak berubah ({due.length})
                     </button>
                   ) : null}
                 </div>
@@ -432,7 +430,7 @@ export function PeriodicUpdatingView() {
                             onClick={() => confirmNoChange({ scope: "PERSON", pendudukId: member.id, fields: [cell.field] })}
                             className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-emerald-700"
                           >
-                            <Check className="h-3.5 w-3.5" /> Tidak berubah
+                            Tidak berubah
                           </button>
                         ) : null}
                       </div>
@@ -449,7 +447,7 @@ export function PeriodicUpdatingView() {
                       onClick={() => submitStage({ scope: "PERSON", pendudukId: member.id, data: changes })}
                       className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-semibold text-white disabled:opacity-40"
                     >
-                      <Save className="h-4 w-4" /> Simpan anggota ({Object.keys(changes).length})
+                      Simpan ({Object.keys(changes).length})
                     </button>
                   </div>
                 ) : null}
@@ -558,7 +556,7 @@ export function PeriodicUpdatingView() {
                       setDetail(null);
                       setSelectedNkk(family.nkk);
                     }} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-xs font-semibold text-white">
-                      {canWrite ? "Perbarui" : "Lihat"} <ChevronRight className="h-4 w-4" />
+                      {canWrite ? "Perbarui" : "Lihat"}
                     </button>
                   </td>
                 </tr>

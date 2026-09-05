@@ -128,17 +128,20 @@ export function BuildingDigitizer({
             aria-pressed={drawing}
             aria-label="Tandai batas bangunan di peta"
             onClick={() => setDrawing(true)}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-indigo-700 shadow-sm ring-1 ring-indigo-200"
+            title="Tandai"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-indigo-700 shadow-sm ring-1 ring-indigo-200"
           >
-            <Pentagon className="h-4 w-4" /> Tandai peta
+            <Pentagon className="h-4 w-4" />
           </button>
           <button
             type="button"
             disabled={!points.length}
             onClick={() => onChange(points.slice(0, -1))}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 disabled:opacity-40"
+            aria-label="Urungkan"
+            title="Urungkan"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm ring-1 ring-slate-200 disabled:opacity-40"
           >
-            <Undo2 className="h-4 w-4" /> Urungkan
+            <Undo2 className="h-4 w-4" />
           </button>
           <button
             type="button"
@@ -147,17 +150,21 @@ export function BuildingDigitizer({
               onChange([]);
               setDrawing(true);
             }}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 disabled:opacity-40"
+            aria-label="Reset"
+            title="Reset"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm ring-1 ring-slate-200 disabled:opacity-40"
           >
-            <RotateCcw className="h-4 w-4" /> Reset
+            <RotateCcw className="h-4 w-4" />
           </button>
           <button
             type="button"
             disabled={points.length < 3}
             onClick={() => setDrawing(false)}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white disabled:opacity-40"
+            aria-label="Selesai"
+            title="Selesai"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-600 text-white disabled:opacity-40"
           >
-            <Check className="h-4 w-4" /> Selesai
+            <Check className="h-4 w-4" />
           </button>
         </div>
       </div>

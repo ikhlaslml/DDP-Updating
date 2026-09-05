@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CalendarDays, Download, FileClock, Printer, Search, X } from "lucide-react";
+import { CalendarDays, Download, Printer, Search } from "lucide-react";
 
 type Template = { id: string; nama: string };
 type LetterRow = {
@@ -71,7 +71,7 @@ export function SuratHistory({ templates }: { templates: Template[] }) {
   return (
     <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div><h2 className="flex items-center gap-2 text-lg font-bold text-slate-900"><FileClock className="h-5 w-5 text-indigo-600" /> Riwayat Layanan Surat</h2></div>
+        <div><h2 className="text-lg font-bold text-slate-900">Riwayat Layanan Surat</h2></div>
         <span className="rounded-full bg-indigo-50 px-3 py-1.5 text-sm font-bold text-indigo-700">{total} surat</span>
       </div>
 
@@ -81,7 +81,7 @@ export function SuratHistory({ templates }: { templates: Template[] }) {
         <label className="relative"><span className="mb-1 block text-xs font-semibold text-slate-500">Sampai tanggal</span><CalendarDays className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 text-slate-400" /><input type="date" value={dateTo} min={dateFrom || undefined} onChange={(event) => { setDateTo(event.target.value); setPage(1); }} className="w-full rounded-xl border border-slate-300 py-2.5 pl-10 pr-3 text-sm" /></label>
         <label><span className="mb-1 block text-xs font-semibold text-slate-500">Jenis surat</span><select value={templateId} onChange={(event) => { setTemplateId(event.target.value); setPage(1); }} className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm"><option value="">Semua jenis</option>{templates.map((template) => <option key={template.id} value={template.id}>{template.nama}</option>)}</select></label>
       </div>
-      {(query || dateFrom || dateTo || templateId) ? <button type="button" onClick={clearFilters} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:underline"><X className="h-3.5 w-3.5" /> Bersihkan filter</button> : null}
+      {(query || dateFrom || dateTo || templateId) ? <button type="button" onClick={clearFilters} className="mt-3 text-xs font-semibold text-indigo-600 hover:underline">Bersihkan filter</button> : null}
 
       {error ? <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
