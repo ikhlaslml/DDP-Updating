@@ -117,7 +117,6 @@ export function Topbar({
             <div className="absolute right-0 z-50 mt-2 w-[min(22rem,calc(100vw-1.5rem))] rounded-2xl border border-slate-100 bg-white p-3 shadow-xl">
               <div className="px-2 pb-2">
                 <p className="font-semibold text-slate-900">Pembaruan Berkala</p>
-                <p className="text-xs text-slate-500">Pengingat tidak mengunci perubahan data.</p>
               </div>
               {[
                 ["6 Bulan", "6-bulan", reminders?.sixMonths],

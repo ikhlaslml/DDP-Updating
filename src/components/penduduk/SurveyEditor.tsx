@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import clsx from "clsx";
-import { CheckCircle2, ClipboardCheck } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { FieldInput } from "@/components/penduduk/FieldInput";
 import { KELOMPOK_LABEL, KELOMPOK_ORDER, mapping } from "@/lib/indikator";
 import { REQUIRED_FIELDS } from "@/lib/validation";
@@ -52,19 +52,6 @@ export function SurveyEditor({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-start gap-3 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm text-sky-900">
-        <ClipboardCheck className="mt-0.5 h-4 w-4 shrink-0" />
-        <p>
-          {role === "HEAD"
-            ? allowedGroups?.length === 1
-              ? "Pada alur tambah keluarga baru, cukup isi Aspek 1 — Identitas Keluarga. Aspek 2–6 dapat dilengkapi melalui Lanjutkan Pendataan."
-              : "Isi seluruh 6 aspek kepala keluarga dan data rumah tangga. Identitas anggota ditanyakan terpisah, satu per satu."
-            : allowedGroups?.length === 1
-              ? "Untuk anggota keluarga, cukup isi Aspek 1 — Identitas. Nomor KK, bangunan, alamat, dan data rumah tangga (aspek 2–6) mengikuti kepala keluarga."
-              : "Untuk anggota keluarga, isi hanya data individu. Nomor KK, bangunan, alamat, dan data rumah tangga mengikuti kepala keluarga."}
-        </p>
-      </div>
-
       <div className="flex flex-wrap gap-2 pb-1">
         {groups.map((group, index) => {
           const fields = grouped[group].filter((name) => isConditionalFieldVisible(name, value, role));

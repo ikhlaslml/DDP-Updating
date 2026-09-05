@@ -219,7 +219,6 @@ export function HargaKomoditasView() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Harga Komoditas Desa</h2>
-            <p className="mt-1 max-w-3xl text-sm text-slate-500">Daftar komoditas dan satuan mengikuti Borang Harga.xlsx. Harga disimpan menurut desa dan periode agar riwayatnya tetap ada.</p>
           </div>
           <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             {canWrite ? (
@@ -289,7 +288,7 @@ export function HargaKomoditasView() {
 
       <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div><h3 className="flex items-center gap-2 font-bold text-slate-900"><History className="h-4 w-4" /> Riwayat Antarperiode</h3><p className="mt-1 text-sm text-slate-500">Perubahan harga tersimpan sebagai data periode terpisah.</p></div>
+          <div><h3 className="flex items-center gap-2 font-bold text-slate-900"><History className="h-4 w-4" /> Riwayat Antarperiode</h3></div>
           <label className="text-xs font-medium text-slate-600">Komoditas
             <select value={historyCommodityId} onChange={(event) => setHistoryCommodityId(event.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm sm:min-w-56">
               {rows.map((row) => <option key={row.id} value={row.id}>{row.nama} ({row.satuan})</option>)}

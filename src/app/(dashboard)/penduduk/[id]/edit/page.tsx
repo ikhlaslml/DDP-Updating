@@ -12,10 +12,7 @@ export default async function EditPendudukPage({ params }: { params: Promise<{ i
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-1">Ubah Data: {record.nama}</h1>
-      <p className="text-sm text-slate-500 mb-6">
-        Lengkapi data per kelompok indikator. Kolom bertanda * wajib diisi.
-      </p>
+      <h1 className="mb-6 text-2xl font-bold text-slate-900">Ubah Data: {record.nama}</h1>
       <PendudukForm mode="edit" id={id} initial={record as unknown as Record<string, unknown>} />
     </div>
   );

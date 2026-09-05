@@ -23,7 +23,6 @@ export function DemographicHistory({ mode }: { mode: "DEATH" | "EVENT" }) {
     <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
       <div>
         <h2 className="text-lg font-bold text-slate-900">{mode === "DEATH" ? "Tabel Arsip Kematian" : "Riwayat Peristiwa Kependudukan"}</h2>
-        {mode === "EVENT" ? <p className="mt-1 text-xs text-slate-500">Surat hanya dapat dibuat dari peristiwa yang sudah diterapkan ke data warga.</p> : null}
       </div>
       <div className="mt-4 overflow-x-auto">
         <table className="min-w-full text-sm">

@@ -268,11 +268,6 @@ export function PersonAdditionView({
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600"><HeaderIcon className="h-6 w-6" /></span>
           <div>
             <h2 className="text-lg font-bold text-slate-900">{isHead ? "Pilih Bangunan yang Sudah Terdata" : "Pilih Kepala Keluarga yang Sudah Disensus"}</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {isHead
-                ? "Kepala keluarga baru harus ditautkan ke bangunan yang ada. Jika bangunannya belum ada, gunakan Tambah Bangunan terlebih dahulu."
-                : "Nomor KK, lokasi, alamat, dan data rumah tangga akan terisi otomatis. Anda tidak perlu mengetiknya ulang."}
-            </p>
           </div>
         </div>
 
@@ -399,16 +394,10 @@ export function PersonAdditionView({
           ) : null}
           {eventType !== "MIGRASI_MASUK" || eventAccepted ? (
             <>
-              {eventType === "KELAHIRAN" ? (
-                <p className="rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-3 text-sm text-indigo-800">
-                  NIK bayi boleh dikosongkan. Sistem akan membuat NIK sementara 16 digit yang tetap dapat diperbarui saat dokumen resmi tersedia.
-                </p>
-              ) : null}
               {isHead ? (
                 <div className="flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
                   <div>
                     <h2 className="text-xl font-bold text-slate-900">Pendataan Keluarga Baru</h2>
-                    <p className="mt-1 text-sm text-slate-500">Isi seluruh 6 aspek kepala keluarga. Identitas tiap anggota ditanyakan satu per satu, hanya pertanyaan khusus anggota.</p>
                   </div>
                   <label className="text-xs font-semibold text-slate-600">Jumlah anggota selain kepala
                     <input type="number" min="0" max="30" value={extraMembers.length} onChange={(event) => setMemberCount(Number(event.target.value))} className="mt-1 block w-32 rounded-xl border border-slate-300 px-3 py-2 text-sm" />

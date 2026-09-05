@@ -289,10 +289,6 @@ export function PendudukTable({
 
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
-      <p className="text-xs text-slate-500">
-        <span className="md:hidden">Ketuk tombol <strong>Detail</strong> pada kartu warga untuk membuka data keluarga dan bangunan.</span>
-        <span className="hidden md:inline">Keluarga diurutkan per Nomor KK. Baris kepala keluarga berwarna biru muda, anggota lain putih. Klik sel untuk mengubah satu isian.</span>
-      </p>
       <div className="hidden flex-wrap items-center gap-3 text-xs text-slate-600 md:flex">
         <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-red-100 ring-1 ring-red-300" /> Jatuh tempo</span>
         <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-amber-100 ring-1 ring-amber-300" /> Menunggu penggabungan</span>

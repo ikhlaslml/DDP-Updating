@@ -32,7 +32,6 @@ export function AspectFilterPanel({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 id="filter-aspek-title" className="flex items-center gap-2 text-sm font-bold text-slate-800"><ListFilter className="h-4 w-4 text-indigo-600" /> Pilih kelompok data</h3>
-          <p className="mt-1 text-xs text-slate-500">Nomor KK, NIK, dan nama selalu tampil di sisi kiri.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} kolom aktif</span>

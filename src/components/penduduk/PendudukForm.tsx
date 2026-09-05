@@ -129,7 +129,6 @@ export function PendudukForm({
             </select>
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-violet-500">⌄</span>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-violet-700">Daftar mengikuti jenis pendataan dan jadwal parameter. Pertanyaan nonaktif, perhitungan sistem, data lama, data sementara, serta parameter yang tidak berubah tidak ditampilkan.</p>
         </div>
       ) : null}
       <div className="flex flex-wrap gap-2 mb-6">

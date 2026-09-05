@@ -303,9 +303,6 @@ export function PeriodicUpdatingView() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h3 className="font-bold text-slate-900">Parameter Tingkat Keluarga</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Disimpan satu kali lalu diterapkan konsisten ke seluruh anggota keluarga.
-              </p>
             </div>
             {canWrite && dueFamily.length ? (
               <button
@@ -376,7 +373,6 @@ export function PeriodicUpdatingView() {
         <section className="space-y-4">
           <div>
             <h3 className="font-bold text-slate-900">Parameter Per Anggota</h3>
-            <p className="mt-1 text-xs text-slate-500">Hanya indikator yang benar-benar melekat pada masing-masing jiwa.</p>
           </div>
           {detail.members.map((member) => {
             const draft = memberDrafts[member.id] ?? {};
@@ -474,10 +470,6 @@ export function PeriodicUpdatingView() {
           </span>
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Pembaruan Berkala Keluarga</h1>
-            <p className="mt-1 text-sm text-slate-500">
-              Jatuh tempo dihitung dari tanggal pendataan ditambah {cycle === "6-bulan" ? "6" : "12"} bulan.
-              Keluarga yang sudah lewat tempo ditampilkan di atas.
-            </p>
           </div>
         </div>
         <div className="mt-5 flex gap-2 border-b border-slate-200">

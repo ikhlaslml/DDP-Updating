@@ -200,7 +200,6 @@ export function RiwayatView() {
         <div className="flex flex-col gap-2 border-b border-indigo-100 bg-white/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-sm font-bold text-slate-800">Perubahan pada Periode Ini</h3>
-            {changes?.previous ? <p className="mt-0.5 text-xs text-slate-500">Dibandingkan dengan periode {changes.previous.kode}. Riwayat di bawah berasal dari data yang sudah diterapkan, bukan perubahan yang masih menunggu.</p> : <p className="mt-0.5 text-xs text-slate-500">{selected ? "Ini adalah data awal; belum ada periode sebelumnya untuk dibandingkan." : "Pilih periode untuk melihat perubahan."}</p>}
           </div>
           {changes?.previous ? <div className="flex flex-wrap gap-1.5 text-xs font-semibold"><span className="rounded-full bg-white px-2 py-1 text-emerald-700">{changes.summary.added} ditambahkan</span><span className="rounded-full bg-white px-2 py-1 text-indigo-700">{changes.summary.updated} diperbarui</span><span className="rounded-full bg-white px-2 py-1 text-rose-700">{changes.summary.removed} tidak lagi ada</span></div> : null}
         </div>

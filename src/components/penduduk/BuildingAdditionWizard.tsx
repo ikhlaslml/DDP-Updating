@@ -56,11 +56,11 @@ type MigrationEventDetails = MigrationRegionValue & {
 };
 
 const STEPS = [
-  { title: "Peta", subtitle: "Tandai batas atap", icon: MapPinned },
-  { title: "Bangunan", subtitle: "Jenis dan alamat", icon: Building2 },
-  { title: "Responden", subtitle: "Nama dan foto", icon: UserRoundCheck },
-  { title: "Keluarga", subtitle: "6 aspek dan anggota", icon: Users },
-  { title: "Periksa", subtitle: "Sebelum disimpan", icon: Check },
+  { title: "Peta", icon: MapPinned },
+  { title: "Bangunan", icon: Building2 },
+  { title: "Responden", icon: UserRoundCheck },
+  { title: "Keluarga", icon: Users },
+  { title: "Periksa", icon: Check },
 ];
 
 function payload(values: Record<string, string>, role: SurveyRole) {
@@ -336,7 +336,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
               )}
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm"><Icon className="h-4 w-4" /></span>
-              <div><p className="text-sm font-semibold">{item.title}</p><p className="text-xs opacity-75">{item.subtitle}</p></div>
+              <div><p className="text-sm font-semibold">{item.title}</p></div>
             </div>
           );
         })}
@@ -360,7 +360,6 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         <section className="space-y-6 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-7">
           <div>
             <h2 className="text-xl font-bold text-slate-900">Klasifikasi Bangunan</h2>
-            <p className="mt-1 text-sm text-slate-500">Pilih berdasarkan pemakaian aktual bangunan sesuai Definisi Operasional DDP.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <button
@@ -369,7 +368,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
               className={clsx("flex items-start gap-4 rounded-2xl border-2 p-5 text-left", occupied ? "border-indigo-500 bg-indigo-50" : "border-slate-200")}
             >
               <Home className={clsx("h-6 w-6", occupied ? "text-indigo-600" : "text-slate-400")} />
-              <span><strong className="block text-slate-900">Bangunan Berpenghuni</strong><span className="mt-1 block text-sm text-slate-500">Ditinggali satu atau lebih keluarga; lanjutkan sensus seluruh penghuni.</span></span>
+              <span><strong className="block text-slate-900">Bangunan Berpenghuni</strong></span>
             </button>
             <button
               type="button"
@@ -377,7 +376,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
               className={clsx("flex items-start gap-4 rounded-2xl border-2 p-5 text-left", !occupied ? "border-orange-500 bg-orange-50" : "border-slate-200")}
             >
               <Store className={clsx("h-6 w-6", !occupied ? "text-orange-600" : "text-slate-400")} />
-              <span><strong className="block text-slate-900">Bangunan Tidak Berpenghuni</strong><span className="mt-1 block text-sm text-slate-500">Usaha, fasilitas publik, kandang, rumah kosong, dan bangunan nonhunian lain.</span></span>
+              <span><strong className="block text-slate-900">Bangunan Tidak Berpenghuni</strong></span>
             </button>
           </div>
 
@@ -438,7 +437,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       {step === 3 && occupied ? (
         <section className="space-y-5">
           <div className="flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-            <div><h2 className="text-xl font-bold text-slate-900">Penghuni Bangunan</h2><p className="mt-1 text-sm text-slate-500">Isi seluruh 6 aspek kepala keluarga. Identitas tiap anggota ditanyakan satu per satu, hanya pertanyaan khusus anggota.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900">Penghuni Bangunan</h2></div>
             <div className="flex flex-wrap items-end gap-3">
               <label className="text-xs font-semibold text-slate-600">Jumlah anggota selain kepala
                 <input type="number" min="0" max="30" value={members.length} onChange={(event) => setMemberCount(Number(event.target.value))} className="mt-1 block w-32 rounded-xl border border-slate-300 px-3 py-2 text-sm" />
@@ -470,13 +469,12 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
 
       {step === 4 ? (
         <section className="space-y-5 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-          <div><h2 className="text-xl font-bold text-slate-900">Periksa Sebelum Disimpan</h2><p className="mt-1 text-sm text-slate-500">Bangunan belum masuk ke daftar warga. Anda masih dapat membatalkan perubahan ini sebelum diterapkan.</p></div>
+          <div><h2 className="text-xl font-bold text-slate-900">Periksa Sebelum Disimpan</h2></div>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Lokasi di Peta</p><p className="mt-2 font-semibold text-slate-900">{points.length} titik batas</p><p className="text-sm text-slate-500">Titik tengah dihitung otomatis</p></div>
             <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Bangunan</p><p className="mt-2 font-semibold text-slate-900">{occupied ? "Berpenghuni" : building.kategori}</p><p className="text-sm text-slate-500">{building.dusun}, RW {building.rw}/RT {building.rt}</p></div>
             <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase text-slate-400">Penghuni</p><p className="mt-2 font-semibold text-slate-900">{occupied ? `${members.length + 1} orang` : "Tidak ada penghuni"}</p><p className="text-sm text-slate-500">{occupied ? head.nama || "Kepala belum diisi" : "Tidak membuat baris penduduk"}</p></div>
           </div>
-          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">Setelah disimpan, bangunan dan penghuninya akan muncul bersama pada daftar perubahan yang menunggu diterapkan.</div>
         </section>
       ) : null}
 

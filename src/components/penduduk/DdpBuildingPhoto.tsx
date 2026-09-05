@@ -133,9 +133,6 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
           <div className="min-w-0">
             <h2 className="font-bold text-amber-950">Foto bangunan DDP belum dapat ditampilkan</h2>
             <p className="mt-1 break-words text-sm text-amber-900">{error || "Foto belum tersedia."}</p>
-            <p className="mt-2 text-xs leading-relaxed text-amber-800">
-              Pastikan kode bangunan <strong>{code}</strong> dan kode wilayah desa pada database sama dengan data Core DDP.
-            </p>
             <button
               type="button"
               onClick={() => {
@@ -185,9 +182,6 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
           <BuildingPhotoImage src={imageUrl} code={code} zoom={zoom} />
         </button>
       </div>
-      <figcaption className="px-1 pt-2 text-xs text-slate-500">
-        Foto bangunan utuh dari pendataan Data Desa Presisi. Gunakan perkecil/perbesar atau layar penuh untuk menyesuaikan ukuran.
-      </figcaption>
       {expanded ? (
         <div
           role="presentation"

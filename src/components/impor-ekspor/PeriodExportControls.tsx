@@ -46,9 +46,6 @@ export function PeriodExportControls() {
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-slate-500">
-        Pilih periode data yang sudah disimpan. Perubahan yang masih menunggu diterapkan tidak ikut diunduh.
-      </p>
       <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
         <label className="min-w-0 text-sm font-medium text-slate-700 sm:min-w-72">
           Pilih Periode Data

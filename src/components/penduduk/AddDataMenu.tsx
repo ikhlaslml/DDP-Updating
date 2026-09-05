@@ -5,62 +5,14 @@ import Link from "next/link";
 import { Baby, Building2, ChevronDown, ClipboardPenLine, HeartPulse, LogIn, LogOut, Trash2, UserPlus, UsersRound, X } from "lucide-react";
 
 const OPTIONS = [
-  {
-    href: "/penduduk/kelahiran",
-    title: "Kelahiran",
-    description: "Catat bayi lahir pada keluarga yang sudah terdata.",
-    icon: Baby,
-    color: "bg-pink-50 text-pink-600",
-  },
-  {
-    href: "/penduduk/migrasi-masuk",
-    title: "Migrasi Masuk",
-    description: "Catat warga atau keluarga yang pindah masuk ke desa.",
-    icon: LogIn,
-    color: "bg-sky-50 text-sky-600",
-  },
-  {
-    href: "/penduduk/kematian",
-    title: "Kematian",
-    description: "Catat penduduk yang meninggal dan simpan riwayatnya.",
-    icon: HeartPulse,
-    color: "bg-rose-50 text-rose-600",
-  },
-  {
-    href: "/penduduk/migrasi-keluar",
-    title: "Migrasi Keluar",
-    description: "Catat penduduk atau keluarga yang pindah keluar desa.",
-    icon: LogOut,
-    color: "bg-amber-50 text-amber-600",
-  },
-  {
-    href: "/penduduk/tambah-bangunan",
-    title: "Tambah Bangunan",
-    description: "Tambahkan bangunan baru ke peta dan data desa.",
-    icon: Building2,
-    color: "bg-indigo-50 text-indigo-600",
-  },
-  {
-    href: "/penduduk/hapus-bangunan",
-    title: "Hapus Bangunan",
-    description: "Catat bangunan yang sudah tidak ada di peta.",
-    icon: Trash2,
-    color: "bg-rose-50 text-rose-600",
-  },
-  {
-    href: "/penduduk/tambah-keluarga",
-    title: "Tambah Kepala Keluarga",
-    description: "Catat keluarga baru lengkap 6 aspek, plus identitas tiap anggota.",
-    icon: UsersRound,
-    color: "bg-emerald-50 text-emerald-600",
-  },
-  {
-    href: "/penduduk/tambah-anggota",
-    title: "Tambah Anggota Keluarga",
-    description: "Catat anggota pada keluarga yang sudah ada.",
-    icon: UserPlus,
-    color: "bg-orange-50 text-orange-600",
-  },
+  { href: "/penduduk/kelahiran", title: "Kelahiran", icon: Baby, color: "bg-pink-50 text-pink-600" },
+  { href: "/penduduk/migrasi-masuk", title: "Migrasi Masuk", icon: LogIn, color: "bg-sky-50 text-sky-600" },
+  { href: "/penduduk/kematian", title: "Kematian", icon: HeartPulse, color: "bg-rose-50 text-rose-600" },
+  { href: "/penduduk/migrasi-keluar", title: "Migrasi Keluar", icon: LogOut, color: "bg-amber-50 text-amber-600" },
+  { href: "/penduduk/tambah-bangunan", title: "Tambah Bangunan", icon: Building2, color: "bg-indigo-50 text-indigo-600" },
+  { href: "/penduduk/hapus-bangunan", title: "Hapus Bangunan", icon: Trash2, color: "bg-rose-50 text-rose-600" },
+  { href: "/penduduk/tambah-keluarga", title: "Tambah Kepala Keluarga", icon: UsersRound, color: "bg-emerald-50 text-emerald-600" },
+  { href: "/penduduk/tambah-anggota", title: "Tambah Anggota Keluarga", icon: UserPlus, color: "bg-orange-50 text-orange-600" },
 ];
 
 export function AddDataMenu() {
@@ -105,7 +57,6 @@ export function AddDataMenu() {
             <header className="flex items-start justify-between gap-4 border-b border-slate-100 px-4 py-4 sm:px-5">
               <div>
                 <h2 id="add-data-options-title" className="text-base font-bold text-slate-900">Pilih kegiatan</h2>
-                <p className="mt-1 text-sm text-slate-500">Pilih perubahan data yang ingin dicatat.</p>
               </div>
               <button type="button" onClick={() => { setOpen(false); buttonRef.current?.focus(); }} aria-label="Tutup" className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800"><X className="h-5 w-5" /></button>
             </header>
@@ -113,9 +64,9 @@ export function AddDataMenu() {
               {OPTIONS.map((option) => {
                 const Icon = option.icon;
                 return (
-                  <Link key={option.href} href={option.href} onClick={() => setOpen(false)} className="flex min-h-[5.75rem] items-start gap-3 rounded-xl p-3 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500">
+                  <Link key={option.href} href={option.href} onClick={() => setOpen(false)} className="flex min-h-14 items-center gap-3 rounded-xl p-3 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500">
                     <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${option.color}`}><Icon className="h-5 w-5" /></span>
-                    <span className="min-w-0"><strong className="block text-sm text-slate-900">{option.title}</strong><span className="mt-0.5 block text-xs leading-relaxed text-slate-500">{option.description}</span></span>
+                    <span className="min-w-0"><strong className="block text-sm text-slate-900">{option.title}</strong></span>
                   </Link>
                 );
               })}

@@ -155,14 +155,12 @@ export function PerubahanSementara() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold text-slate-900">Perubahan yang Menunggu Diterapkan</h2>
-          <p className="mt-1 text-xs text-slate-500">Setiap perubahan mencatat nama operator dan waktu pencatatannya.</p>
         </div>
         {canWrite ? (
           <button type="button" disabled={!rows.length} onClick={() => setConfirmMerge(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40"><Merge className="h-4 w-4" /> Terapkan {rows.length} Perubahan</button>
         ) : null}
       </div>
 
-      <p className="mt-3 rounded-xl bg-sky-50 px-4 py-3 text-xs leading-relaxed text-sky-800">Perubahan pada satu bangunan dan penghuninya diproses bersama. Jika perubahan bangunan dibatalkan, perubahan penghuni pada bangunan tersebut juga dibatalkan.</p>
       {mergeError ? <p role="alert" className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{mergeError}</p> : null}
 
       <div className="mt-4 overflow-x-auto">
@@ -211,7 +209,7 @@ export function PerubahanSementara() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-sm">
           <div role="dialog" aria-modal="true" aria-labelledby="staging-detail-title" className="flex max-h-[90vh] w-full max-w-6xl flex-col rounded-2xl bg-white shadow-2xl">
             <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-4">
-              <div><h3 id="staging-detail-title" className="text-lg font-bold text-slate-900">Rincian perubahan</h3><p className="mt-1 text-sm text-slate-500">Periksa seluruh nilai sebelum menerapkan perubahan{details.groupId ? " — semua kartu berikut diproses bersama." : "."}</p></div>
+              <div><h3 id="staging-detail-title" className="text-lg font-bold text-slate-900">Rincian perubahan</h3></div>
               <button type="button" title="Tutup" aria-label="Tutup rincian" onClick={() => setDetails(null)} className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"><X className="h-5 w-5" /></button>
             </div>
             <div className="space-y-5 overflow-y-auto p-6">

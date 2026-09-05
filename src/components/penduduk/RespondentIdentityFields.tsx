@@ -67,7 +67,6 @@ export function RespondentIdentityFields({
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"><UserRoundCheck className="h-5 w-5" /></span>
         <div>
           <h2 className="text-lg font-bold text-slate-900">Identitas Responden</h2>
-          <p className="mt-1 text-sm text-slate-500">Wajib diisi sebelum membuka Aspek 1. Draf nama dan foto tersimpan di perangkat ini saat halaman dimuat ulang atau jaringan terputus.</p>
         </div>
       </div>
 
