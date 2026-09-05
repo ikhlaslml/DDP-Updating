@@ -25,16 +25,16 @@ export function DemographicHistory({ mode }: { mode: "DEATH" | "EVENT" }) {
       </div>
       <div className="mt-4 overflow-x-auto">
         <table className="min-w-full text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
-            <tr><th className="px-3 py-2">Tanggal</th><th className="px-3 py-2">Jenis</th><th className="px-3 py-2">Nama</th><th className="px-3 py-2">NIK</th><th className="px-3 py-2">No. KK</th>{mode === "DEATH" ? <><th className="px-3 py-2">Penyebab</th><th className="px-3 py-2">Akta</th></> : <th className="px-3 py-2 text-right">Tindak Lanjut</th>}</tr>
+          <thead className="border-b border-slate-200 bg-slate-50 text-center text-xs uppercase text-slate-500">
+            <tr><th className="px-3 py-2">Tanggal</th><th className="px-3 py-2">Jenis</th><th className="px-3 py-2">Nama</th><th className="px-3 py-2">NIK</th><th className="px-3 py-2">No. KK</th>{mode === "DEATH" ? <><th className="px-3 py-2">Penyebab</th><th className="px-3 py-2">Akta</th></> : <th className="px-3 py-2">Tindak Lanjut</th>}</tr>
           </thead>
           <tbody>
             {rows.length ? rows.map((row) => (
-              <tr key={row.id} className="border-b border-slate-100">
+              <tr key={row.id} className="border-b border-slate-100 text-center">
                 <td className="px-3 py-2">{new Date(row.tanggal).toLocaleDateString("id-ID")}</td>
                 <td className="px-3 py-2">{"jenis" in row ? row.jenis.replaceAll("_", " ") : "KEMATIAN"}</td>
                 <td className="px-3 py-2 font-medium">{row.nama}</td><td className="px-3 py-2">{row.nik}</td><td className="px-3 py-2">{row.nkk}</td>
-                {mode === "DEATH" && "penyebab" in row ? <><td className="px-3 py-2">{row.penyebab ?? "-"}</td><td className="px-3 py-2">{row.punyaAkta ?? "-"}</td></> : "jenis" in row ? <td className="px-3 py-2 text-right"><Link href={`/layanan-surat?peristiwaId=${row.id}`} className="inline-flex items-center rounded-lg border border-indigo-200 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50">Buat Surat</Link></td> : null}
+                {mode === "DEATH" && "penyebab" in row ? <><td className="px-3 py-2">{row.penyebab ?? "-"}</td><td className="px-3 py-2">{row.punyaAkta ?? "-"}</td></> : "jenis" in row ? <td className="px-3 py-2"><Link href={`/layanan-surat?peristiwaId=${row.id}`} className="inline-flex items-center rounded-lg border border-indigo-200 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50">Buat Surat</Link></td> : null}
               </tr>
             )) : <tr><td colSpan={8} className="px-3 py-8 text-center text-slate-400">Belum ada peristiwa yang telah diterapkan.</td></tr>}
           </tbody>

@@ -541,13 +541,13 @@ export function PeriodicUpdatingView() {
       <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+            <thead className="bg-slate-50 text-center text-xs uppercase tracking-wide text-slate-500">
               <tr>
                 <th className="sticky left-0 z-10 bg-slate-50 px-4 py-3">Keluarga</th>
                 <th className="px-4 py-3">Lokasi</th>
                 <th className="px-4 py-3">Jatuh tempo</th>
                 <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Aksi</th>
+                <th className="px-4 py-3">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -556,7 +556,7 @@ export function PeriodicUpdatingView() {
               ) : !list?.data.length ? (
                 <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Tidak ada keluarga yang sesuai.</td></tr>
               ) : list.data.map((family) => (
-                <tr key={family.nkk} className="border-t border-slate-100">
+                <tr key={family.nkk} className="border-t border-slate-100 text-center">
                   <td className="sticky left-0 bg-white px-4 py-3">
                     <p className="font-semibold text-slate-900">{family.namaKepala}</p>
                     <p className="text-xs text-slate-500">No. KK {family.nkk} · {family.jumlahAnggota} anggota</p>
@@ -566,7 +566,7 @@ export function PeriodicUpdatingView() {
                     <span className="text-xs text-slate-600">{family.dueFamilyFields} keluarga · {family.dueMemberFields} anggota</span>
                   </td>
                   <td className="px-4 py-3"><StatusBadge status={family.status} /></td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3">
                     <button type="button" onClick={() => {
                       setDetail(null);
                       setSelectedNkk(family.nkk);

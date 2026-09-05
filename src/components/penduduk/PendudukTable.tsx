@@ -156,7 +156,7 @@ export function PendudukTable({
         id: "_actions",
         header: "Aksi",
         cell: ({ row }) => (
-          <div className="flex items-center justify-end gap-1 whitespace-nowrap">
+          <div className="flex items-center justify-center gap-1 whitespace-nowrap">
             <Link
               href={`/penduduk/${row.original.id}`}
               title="Lihat"
@@ -228,7 +228,7 @@ export function PendudukTable({
     <div className="space-y-4">
       <AspectFilterPanel selected={selectedAspects} onChange={changeAspects} />
       <div className="flex flex-wrap items-end gap-2 rounded-2xl border border-slate-100 bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-        <label className="min-w-0 flex-1 text-xs font-semibold text-slate-500 sm:max-w-64">
+        <label className="block min-w-0 flex-1 text-xs font-semibold text-slate-500 sm:max-w-64">
           Cari
           <input
             value={search}
@@ -237,36 +237,36 @@ export function PendudukTable({
             className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </label>
-        <label className="text-xs font-semibold text-slate-500">
+        <label className="block min-w-[8.5rem] text-xs font-semibold text-slate-500">
           Dusun
-          <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="mt-1.5 min-h-11 max-w-full rounded-xl border border-slate-300 px-2 py-2 text-sm">
+          <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-2 py-2 text-sm">
             <option value="">Semua dusun</option>
             {facets.dusun.map((d) => (
               <option key={d} value={d}>{d}</option>
             ))}
           </select>
         </label>
-        <label className="text-xs font-semibold text-slate-500">
+        <label className="block min-w-[7rem] text-xs font-semibold text-slate-500">
           RW
-          <select value={rw} onChange={(e) => setRw(e.target.value)} className="mt-1.5 min-h-11 rounded-xl border border-slate-300 px-2 py-2 text-sm">
+          <select value={rw} onChange={(e) => setRw(e.target.value)} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-2 py-2 text-sm">
             <option value="">Semua RW</option>
             {facets.rw.map((v) => (
               <option key={v} value={v}>RW {v}</option>
             ))}
           </select>
         </label>
-        <label className="text-xs font-semibold text-slate-500">
+        <label className="block min-w-[7rem] text-xs font-semibold text-slate-500">
           RT
-          <select value={rt} onChange={(e) => setRt(e.target.value)} className="mt-1.5 min-h-11 rounded-xl border border-slate-300 px-2 py-2 text-sm">
+          <select value={rt} onChange={(e) => setRt(e.target.value)} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-2 py-2 text-sm">
             <option value="">Semua RT</option>
             {facets.rt.map((v) => (
               <option key={v} value={v}>RT {v}</option>
             ))}
           </select>
         </label>
-        <label className="text-xs font-semibold text-slate-500">
+        <label className="block min-w-[9rem] text-xs font-semibold text-slate-500">
           Jenis kelamin
-          <select value={jk} onChange={(e) => setJk(e.target.value)} className="mt-1.5 min-h-11 rounded-xl border border-slate-300 px-2 py-2 text-sm">
+          <select value={jk} onChange={(e) => setJk(e.target.value)} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-2 py-2 text-sm">
             <option value="">Semua</option>
             <option value="L">Laki-laki</option>
             <option value="P">Perempuan</option>
@@ -356,7 +356,7 @@ export function PendudukTable({
                       title={fullLabel}
                       onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
                       style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 132 } : { minWidth: "9.5rem" }}
-                      className={`sticky top-0 bg-slate-50 px-3 py-2.5 text-left text-xs font-semibold leading-snug text-slate-600 shadow-[inset_0_-1px_0_#cbd5e1] select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "z-30 whitespace-nowrap shadow-[1px_0_0_#e2e8f0,inset_0_-1px_0_#cbd5e1]" : actions ? "z-40 whitespace-nowrap text-right shadow-[-1px_0_0_#e2e8f0,inset_0_-1px_0_#cbd5e1]" : "z-20 whitespace-normal break-words"}`}
+                      className={`sticky top-0 bg-slate-50 px-3 py-2.5 text-center text-xs font-semibold leading-snug text-slate-600 shadow-[inset_0_-1px_0_#cbd5e1] select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "z-30 whitespace-nowrap shadow-[1px_0_0_#e2e8f0,inset_0_-1px_0_#cbd5e1]" : actions ? "z-40 whitespace-nowrap shadow-[-1px_0_0_#e2e8f0,inset_0_-1px_0_#cbd5e1]" : "z-20 whitespace-normal break-words"}`}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getIsSorted() === "asc" && " ▲"}
@@ -400,7 +400,7 @@ export function PendudukTable({
                       <td
                         key={cell.id}
                         style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 132 } : undefined}
-                        className={`border-b border-slate-100 px-3 py-2 whitespace-nowrap text-slate-700 ${baseBg} ${sticky ? "sticky z-10 overflow-hidden text-ellipsis shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "sticky z-20 shadow-[-1px_0_0_#e2e8f0]" : ""}`}
+                        className={`border-b border-slate-100 px-3 py-2 whitespace-nowrap text-center text-slate-700 ${baseBg} ${sticky ? "sticky z-10 overflow-hidden text-ellipsis shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "sticky z-20 shadow-[-1px_0_0_#e2e8f0]" : ""}`}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>

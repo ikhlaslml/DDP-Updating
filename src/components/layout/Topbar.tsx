@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Bell, Search, ChevronDown, Menu } from "lucide-react";
+import { Bell, Search, ChevronDown, PanelLeft } from "lucide-react";
 import { useAuthInfo } from "@/components/providers/AuthInfo";
 
 export function Topbar({
@@ -80,7 +80,7 @@ export function Topbar({
           aria-label="Buka/tutup menu"
           className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 hover:text-slate-800"
         >
-          <Menu className="h-5 w-5" />
+          <PanelLeft className="h-5 w-5" />
         </button>
         <form onSubmit={handleSearch} className="min-w-0 max-w-md flex-1">
           <div className="relative">

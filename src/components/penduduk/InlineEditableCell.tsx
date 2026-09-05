@@ -150,12 +150,12 @@ export function InlineEditableCell({
       title={title}
       aria-label={editable ? `Ubah ${display || "isian kosong"}` : undefined}
       onClick={startEdit}
-      className={`group/cell flex w-full min-w-0 items-center gap-1.5 rounded-md px-1.5 py-1 text-left ${tone} ${
+      className={`group/cell flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-1.5 py-1 text-center ${tone} ${
         editable ? "cursor-text hover:bg-indigo-50/80" : "cursor-default"
       } ${pending ? "cursor-not-allowed" : ""}`}
     >
       <span
-        className={`min-w-0 flex-1 truncate ${emphasis} ${
+        className={`min-w-0 truncate ${emphasis} ${
           editable && !pending
             ? "border-b border-dashed border-slate-300 group-hover/cell:border-indigo-400"
             : ""

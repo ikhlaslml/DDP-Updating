@@ -118,13 +118,13 @@ export function ImportForm() {
               <table className="min-w-full text-xs">
                 <thead className="bg-slate-50">
                   <tr>
-                    <th className="px-2 py-1 text-left">Baris</th>
-                    <th className="px-2 py-1 text-left">Kesalahan</th>
+                    <th className="px-2 py-1 text-center">Baris</th>
+                    <th className="px-2 py-1 text-center">Kesalahan</th>
                   </tr>
                 </thead>
                 <tbody>
                   {report.rowErrors.map((re) => (
-                    <tr key={re.row} className="border-t border-slate-100">
+                    <tr key={re.row} className="border-t border-slate-100 text-center">
                       <td className="px-2 py-1 align-top">{re.row}</td>
                       <td className="px-2 py-1">
                         {Object.entries(re.errors).map(([field, msg]) => (

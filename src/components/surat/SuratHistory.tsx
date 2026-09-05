@@ -125,16 +125,16 @@ export function SuratHistory({ templates }: { templates: Template[] }) {
       {error ? <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
         <table className="min-w-[900px] w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase text-slate-500"><tr><th className="px-4 py-3">Tanggal</th><th className="px-4 py-3">Nomor / Jenis</th><th className="px-4 py-3">Warga</th><th className="px-4 py-3">Keperluan</th><th className="px-4 py-3">Diterbitkan oleh</th><th className="px-4 py-3 text-right">Aksi</th></tr></thead>
+          <thead className="bg-slate-50 text-center text-xs font-semibold uppercase text-slate-500"><tr><th className="px-4 py-3">Tanggal</th><th className="px-4 py-3">Nomor / Jenis</th><th className="px-4 py-3">Warga</th><th className="px-4 py-3">Keperluan</th><th className="px-4 py-3">Diterbitkan oleh</th><th className="px-4 py-3">Aksi</th></tr></thead>
           <tbody>
             {loading ? <tr><td colSpan={6} className="px-4 py-10 text-center text-slate-400">Memuat riwayat...</td></tr> : rows.length === 0 ? <tr><td colSpan={6} className="px-4 py-10 text-center text-slate-400">Tidak ada surat yang sesuai.</td></tr> : rows.map((row) => (
-              <tr key={row.id} className="border-t border-slate-100 align-top hover:bg-slate-50/70">
+              <tr key={row.id} className="border-t border-slate-100 align-top text-center hover:bg-slate-50/70">
                 <td className="whitespace-nowrap px-4 py-3">{new Date(row.createdAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })}<br /><span className="text-xs text-slate-400">{new Date(row.createdAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}</span></td>
                 <td className="px-4 py-3"><p className="font-semibold text-slate-900">{row.nomor}</p><p className="text-xs text-slate-500">{row.templateNama ?? "Surat"}</p></td>
                 <td className="px-4 py-3"><p className="font-semibold text-slate-800">{row.namaWarga ?? "-"}</p><p className="text-xs text-slate-500">NIK {row.nik ?? "-"}</p></td>
                 <td className="max-w-56 px-4 py-3 text-slate-600">{row.keperluan || "-"}</td>
                 <td className="px-4 py-3 text-slate-600">{row.issuedByName || "Tidak tercatat"}</td>
-                <td className="px-4 py-3"><div className="flex justify-end gap-1"><button type="button" onClick={() => window.open(`/api/surat/${row.id}/pdf?mode=inline`, "_blank", "noopener,noreferrer")} title="Cetak ulang" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50"><Printer className="h-4 w-4" /></button><a href={`/api/surat/${row.id}/pdf`} title="Unduh ulang" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-emerald-600 hover:bg-emerald-50"><Download className="h-4 w-4" /></a></div></td>
+                <td className="px-4 py-3"><div className="flex justify-center gap-1"><button type="button" onClick={() => window.open(`/api/surat/${row.id}/pdf?mode=inline`, "_blank", "noopener,noreferrer")} title="Cetak ulang" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50"><Printer className="h-4 w-4" /></button><a href={`/api/surat/${row.id}/pdf`} title="Unduh ulang" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-emerald-600 hover:bg-emerald-50"><Download className="h-4 w-4" /></a></div></td>
               </tr>
             ))}
           </tbody>

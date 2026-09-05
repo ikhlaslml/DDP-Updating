@@ -170,7 +170,7 @@ export function PerubahanSementara() {
           <p className="py-8 text-center text-sm text-slate-400">Belum ada perubahan yang menunggu diterapkan. Gunakan tombol Catat Perubahan untuk memperbarui data.</p>
         ) : (
           <table className="min-w-full text-sm">
-            <thead className="border-b border-slate-200 text-left text-xs font-semibold uppercase text-slate-500">
+            <thead className="border-b border-slate-200 text-center text-xs font-semibold uppercase text-slate-500">
               <tr>
                 <th className="px-3 py-2">Jenis</th>
                 <th className="px-3 py-2">Identitas</th>
@@ -188,15 +188,15 @@ export function PerubahanSementara() {
                 const isBuilding = row.entityType === "BANGUNAN";
                 const isEvent = row.entityType === "PERISTIWA";
                 return (
-                  <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                  <tr key={row.id} className="border-b border-slate-100 last:border-0 text-center hover:bg-slate-50">
                     <td className="px-3 py-3"><span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${isBuilding ? "bg-indigo-50 text-indigo-700" : isEvent ? "bg-sky-50 text-sky-700" : "bg-slate-100 text-slate-700"}`}>{isBuilding ? <Building2 className="h-3.5 w-3.5" /> : isEvent ? <Activity className="h-3.5 w-3.5" /> : <UserRound className="h-3.5 w-3.5" />}{isBuilding ? "Bangunan" : isEvent ? row.eventType?.replaceAll("_", " ") : "Warga"}</span></td>
                     <td className="px-3 py-3 whitespace-nowrap text-slate-700">{isBuilding ? `#${row.row.kodeBangunan ?? "-"}` : <><span className="block">No. KK {row.row.nkk ?? "-"}</span><span className="text-xs text-slate-400">NIK {row.row.nik ?? "-"}</span></>}</td>
                     <td className="px-3 py-3 whitespace-nowrap font-medium text-slate-800">{isBuilding ? row.row.kategoriBangunan ?? (row.row.jenisBangunan === "BERPENGHUNI" ? "Berpenghuni" : "Tidak berpenghuni") : row.row.nama ?? "-"}{!isBuilding && row.row.jk ? <span className="ml-2 text-xs font-normal text-slate-400">{row.row.jk === "L" ? "Laki-laki" : "Perempuan"} • {formatCell(row.row.tgl_lahir, mapping.kolom.tgl_lahir)}</span> : null}</td>
                     <td className="max-w-xs px-3 py-3 text-slate-600">{row.row.alamat || row.row.dusun || "-"}</td>
                     <td className="px-3 py-3"><span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${badge.cls}`}>{badge.label}</span></td>
-                    <td className="px-3 py-3 whitespace-nowrap"><p className="font-medium text-slate-700">{row.createdByName}</p>{row.createdByEmail ? <p className="text-xs text-slate-400">{row.createdByEmail}</p> : null}<p className="mt-1 flex items-center gap-1 text-xs text-slate-400"><Clock3 className="h-3 w-3" />{new Date(row.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "medium" })}</p></td>
+                    <td className="px-3 py-3 whitespace-nowrap"><p className="font-medium text-slate-700">{row.createdByName}</p>{row.createdByEmail ? <p className="text-xs text-slate-400">{row.createdByEmail}</p> : null}<p className="mt-1 flex items-center justify-center gap-1 text-xs text-slate-400"><Clock3 className="h-3 w-3" />{new Date(row.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "medium" })}</p></td>
                     <td className="max-w-xs px-3 py-3 text-slate-500">{row.ringkasan ?? "-"}</td>
-                    <td className="px-3 py-3"><div className="flex items-center gap-1"><button type="button" title="Lihat rincian perubahan" aria-label="Lihat rincian perubahan" disabled={loadingDetails} onClick={() => inspect(row.id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50 disabled:opacity-40"><Eye className="h-4 w-4" /></button>{canWrite ? <button type="button" title={row.groupId ? "Batalkan seluruh grup" : "Batalkan perubahan"} aria-label="Batalkan perubahan" onClick={() => cancel(row.id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-red-600 hover:bg-red-50"><X className="h-4 w-4" /></button> : null}</div></td>
+                    <td className="px-3 py-3"><div className="flex items-center justify-center gap-1"><button type="button" title="Lihat rincian perubahan" aria-label="Lihat rincian perubahan" disabled={loadingDetails} onClick={() => inspect(row.id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50 disabled:opacity-40"><Eye className="h-4 w-4" /></button>{canWrite ? <button type="button" title={row.groupId ? "Batalkan seluruh grup" : "Batalkan perubahan"} aria-label="Batalkan perubahan" onClick={() => cancel(row.id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-red-600 hover:bg-red-50"><X className="h-4 w-4" /></button> : null}</div></td>
                   </tr>
                 );
               })}

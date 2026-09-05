@@ -210,10 +210,10 @@ export function RiwayatView() {
           <>
             <div className="max-h-96 overflow-auto">
               <table className="min-w-full text-sm">
-                <thead className="sticky top-0 z-10 bg-indigo-50 text-left text-xs font-semibold uppercase text-slate-500"><tr><th className="px-4 py-2">Warga</th><th className="px-4 py-2">Perubahan</th></tr></thead>
+                <thead className="sticky top-0 z-10 bg-indigo-50 text-center text-xs font-semibold uppercase text-slate-500"><tr><th className="px-4 py-2">Warga</th><th className="px-4 py-2">Perubahan</th></tr></thead>
                 <tbody>
                   {changes.data.map((change) => (
-                    <tr key={change.key} className="border-t border-indigo-100/70 align-top">
+                    <tr key={change.key} className="border-t border-indigo-100/70 align-top text-center">
                       <td className="min-w-48 px-4 py-3"><p className="font-semibold text-slate-800">{change.nama ?? "Tanpa nama"}</p><p className="mt-0.5 text-xs text-slate-500">NIK {change.nik ?? "-"}<br />No. KK {change.nkk ?? "-"}</p></td>
                       <td className="min-w-[28rem] px-4 py-3 text-slate-700">
                         {change.kind === "ADDED" ? <span className="font-medium text-emerald-700">Warga baru pada versi ini.</span> : null}
@@ -232,7 +232,7 @@ export function RiwayatView() {
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-100">
         <table className="min-w-full text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold uppercase text-slate-500">
+          <thead className="border-b border-slate-200 bg-slate-50 text-center text-xs font-semibold uppercase text-slate-500">
             <tr>
               {COLS.map((c) => (
                 <th key={c.key} className="px-3 py-2 whitespace-nowrap">{c.label}</th>
@@ -252,7 +252,7 @@ export function RiwayatView() {
               rows.map((r, i) => (
                 <tr key={i} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                   {COLS.map((c) => (
-                    <td key={c.key} className="px-3 py-2 whitespace-nowrap text-slate-700">
+                    <td key={c.key} className="px-3 py-2 whitespace-nowrap text-center text-slate-700">
                       {formatCell(r[c.key], mapping.kolom[c.key])}
                     </td>
                   ))}

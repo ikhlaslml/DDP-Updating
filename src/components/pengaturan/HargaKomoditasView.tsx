@@ -259,20 +259,20 @@ export function HargaKomoditasView() {
           <span className="text-xs text-slate-500">{filledCount} dari {rows.length} harga terisi</span>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-[860px] w-full text-left text-sm">
+          <table className="min-w-[860px] w-full text-center text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
               <tr><th className="px-4 py-3">No</th><th className="px-4 py-3">Komoditas</th><th className="px-4 py-3">Satuan</th><th className="px-4 py-3">Harga periode ini</th><th className="px-4 py-3">Harga terakhir tersimpan</th></tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? <tr><td colSpan={5} className="px-4 py-16 text-center text-slate-400"><LoaderCircle className="mx-auto mb-2 h-5 w-5 animate-spin" />Memuat harga...</td></tr> : rows.map((row, index) => (
                 <Fragment key={row.id}>
-                  {index === 0 || rows[index - 1].kategori !== row.kategori ? <tr className="bg-indigo-50/70"><th colSpan={5} className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-indigo-700">{row.kategori}</th></tr> : null}
+                  {index === 0 || rows[index - 1].kategori !== row.kategori ? <tr className="bg-indigo-50/70"><th colSpan={5} className="px-4 py-2 text-center text-xs font-bold uppercase tracking-wider text-indigo-700">{row.kategori}</th></tr> : null}
                   <tr className="align-top hover:bg-slate-50/60">
                     <td className="px-4 py-3 text-slate-500">{row.urutan}</td>
                     <td className="px-4 py-3 font-medium text-slate-800">{row.nama}</td>
                     <td className="px-4 py-3 text-slate-600">{row.satuan}</td>
                     <td className="px-4 py-2">
-                      <div className="relative w-48"><span className="pointer-events-none absolute left-3 top-2.5 text-xs text-slate-400">Rp</span><input type="number" inputMode="decimal" min="0" step="0.01" value={values[row.id] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [row.id]: event.target.value }))} disabled={!canWrite} aria-label={`Harga ${row.nama}`} className="min-h-10 w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3 text-right tabular-nums disabled:bg-slate-50" /></div>
+                      <div className="relative mx-auto w-48"><span className="pointer-events-none absolute left-3 top-2.5 text-xs text-slate-400">Rp</span><input type="number" inputMode="decimal" min="0" step="0.01" value={values[row.id] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [row.id]: event.target.value }))} disabled={!canWrite} aria-label={`Harga ${row.nama}`} className="min-h-10 w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3 text-right tabular-nums disabled:bg-slate-50" /></div>
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-600">
                       <p className="font-semibold text-slate-800">{rupiah(row.hargaTerakhir)}</p>
@@ -296,7 +296,7 @@ export function HargaKomoditasView() {
           </label>
         </div>
         <div className="mt-4 overflow-x-auto">
-          <table className="min-w-[620px] w-full text-left text-sm"><thead className="bg-slate-50 text-xs uppercase text-slate-500"><tr><th className="px-3 py-2">Periode</th><th className="px-3 py-2">Harga</th><th className="px-3 py-2">Sumber</th><th className="px-3 py-2">Diperbarui</th></tr></thead><tbody className="divide-y divide-slate-100">
+          <table className="min-w-[620px] w-full text-center text-sm"><thead className="bg-slate-50 text-xs uppercase text-slate-500"><tr><th className="px-3 py-2">Periode</th><th className="px-3 py-2">Harga</th><th className="px-3 py-2">Sumber</th><th className="px-3 py-2">Diperbarui</th></tr></thead><tbody className="divide-y divide-slate-100">
             {selectedHistory.length ? selectedHistory.map((item) => <tr key={item.id}><td className="px-3 py-2 font-medium">{item.periode}</td><td className="px-3 py-2">{rupiah(item.harga)}</td><td className="px-3 py-2">{item.sumberData}</td><td className="px-3 py-2 text-xs text-slate-500">{new Date(item.updatedAt).toLocaleString("id-ID")}<br />{item.updatedByName ?? "Operator"}</td></tr>) : <tr><td colSpan={4} className="px-3 py-8 text-center text-slate-400">Belum ada riwayat harga untuk komoditas ini.</td></tr>}
           </tbody></table>
         </div>
