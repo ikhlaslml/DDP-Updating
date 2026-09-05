@@ -112,7 +112,7 @@ function intersects(a: SpatialPoint, b: SpatialPoint, c: SpatialPoint, d: Spatia
 export function validateAndSerializePolygon(points: SpatialPoint[]) {
   const unique = new Set(points.map((point) => `${point.lat.toFixed(7)},${point.lng.toFixed(7)}`));
   if (unique.size < 3) throw new Error("Polygon membutuhkan minimal tiga titik berbeda");
-  if (unique.size !== points.length) throw new Error("Setiap sudut polygon harus berupa titik yang berbeda");
+  if (unique.size !== points.length) throw new Error("Setiap sudut batas bangunan harus berupa titik yang berbeda");
 
   for (let i = 0; i < points.length; i += 1) {
     const a = points[i];
@@ -121,7 +121,7 @@ export function validateAndSerializePolygon(points: SpatialPoint[]) {
       if (Math.abs(i - j) <= 1 || (i === 0 && j === points.length - 1)) continue;
       const c = points[j];
       const d = points[(j + 1) % points.length];
-      if (intersects(a, b, c, d)) throw new Error("Garis polygon tidak boleh saling berpotongan");
+      if (intersects(a, b, c, d)) throw new Error("Garis batas bangunan tidak boleh saling berpotongan");
     }
   }
 
@@ -145,7 +145,7 @@ export function validateAndSerializePolygon(points: SpatialPoint[]) {
     localCentroidLng += (currentLng + nextLng) * cross;
     localCentroidLat += (currentLat + nextLat) * cross;
   }
-  if (Math.abs(twiceArea) < 1e-12) throw new Error("Luas polygon tidak boleh nol");
+  if (Math.abs(twiceArea) < 1e-12) throw new Error("Batas bangunan belum membentuk bidang");
   const centroidLng = origin.lng + localCentroidLng / (3 * twiceArea);
   const centroidLat = origin.lat + localCentroidLat / (3 * twiceArea);
 

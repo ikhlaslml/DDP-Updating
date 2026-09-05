@@ -76,7 +76,7 @@ export function ImportForm() {
           href="/api/penduduk/export?template=1&format=csv"
           className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 sm:w-auto sm:border-transparent sm:px-0"
         >
-          Unduh template CSV
+          Unduh contoh tabel
         </a>
       </form>
 
@@ -84,7 +84,7 @@ export function ImportForm() {
         <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           <p className="font-medium">{error.error}</p>
           {error.missingRequiredColumns && error.missingRequiredColumns.length > 0 && (
-            <p className="mt-1">Kolom wajib yang hilang: {error.missingRequiredColumns.map((field) => fieldLabel(field)).join(", ")}</p>
+            <p className="mt-1">Kolom wajib yang belum ada: {error.missingRequiredColumns.map((field) => fieldLabel(field)).join(", ")}</p>
           )}
           {error.unknownColumns && error.unknownColumns.length > 0 && (
             <p className="mt-1">Kolom tidak dikenali (diabaikan): {error.unknownColumns.join(", ")}</p>
@@ -98,11 +98,11 @@ export function ImportForm() {
       {report && (
         <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
           <p className="text-sm text-slate-700">
-            Total baris: <strong>{report.totalRows}</strong> — Masuk Perubahan Sementara:{" "}
+            Total baris: <strong>{report.totalRows}</strong> — Menunggu diterapkan:{" "}
             <strong className="text-emerald-600">{report.successCount}</strong> — Gagal:{" "}
             <strong className="text-red-600">{report.failCount}</strong>
           </p>
-          {report.successCount > 0 ? <p className="mt-1 text-xs font-medium text-indigo-600">Periksa hasil impor di Data Kependudukan, lalu gunakan Gabungkan Perubahan setelah datanya benar.</p> : null}
+          {report.successCount > 0 ? <p className="mt-1 text-xs font-medium text-indigo-600">Periksa hasil di Data Kependudukan, lalu terapkan perubahan setelah datanya benar.</p> : null}
           {report.unknownColumns.length > 0 && (
             <p className="text-xs text-amber-600 mt-1">
               Kolom tidak dikenali (diabaikan): {report.unknownColumns.join(", ")}
@@ -110,7 +110,7 @@ export function ImportForm() {
           )}
           {report.ignoredDeprecatedColumns.length > 0 && (
             <p className="mt-1 text-xs text-amber-600">
-              Kolom yang sudah dipensiunkan (diabaikan): {report.ignoredDeprecatedColumns.join(", ")}
+              Kolom yang sudah tidak dipakai (diabaikan): {report.ignoredDeprecatedColumns.join(", ")}
             </p>
           )}
           {report.rowErrors.length > 0 && (

@@ -121,7 +121,7 @@ export function DemographicExitView({ type }: { type: "KEMATIAN" | "MIGRASI_KELU
   return (
     <div className="space-y-5">
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900">Pilih Penduduk</h2>
+        <h2 className="text-lg font-bold text-slate-900">Pilih warga</h2>
         <div className="relative mt-4 max-w-xl"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Cari nama, NIK, atau No. KK..." className="w-full rounded-xl border border-slate-300 py-3 pl-10 pr-3 text-sm" /></div>
         <select value={selectedId} onChange={(event) => { setSelectedId(event.target.value); setReplacementId(""); setFamily([]); }} className="mt-3 w-full rounded-xl border border-slate-300 px-3 py-3 text-sm">
           <option value="">-- pilih penduduk aktif --</option>
@@ -135,14 +135,14 @@ export function DemographicExitView({ type }: { type: "KEMATIAN" | "MIGRASI_KELU
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <label className="text-sm font-medium text-slate-700">Tanggal Peristiwa *<input type="date" max={new Date().toISOString().slice(0, 10)} value={tanggal} onChange={(event) => setTanggal(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5" /></label>
           {type === "MIGRASI_KELUAR" ? <label className="text-sm font-medium text-slate-700">Cakupan *<select value={scope} onChange={(event) => { setScope(event.target.value as "INDIVIDUAL" | "FAMILY"); setReplacementId(""); }} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="INDIVIDUAL">Individu</option><option value="FAMILY">Seluruh keluarga</option></select></label> : null}
-          {type === "KEMATIAN" ? <label className="text-sm font-medium text-slate-700">Penyebab Kematian *<select value={penyebab} onChange={(event) => setPenyebab(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="">-- pilih --</option>{DEATH_CAUSES.map((cause) => <option key={cause}>{cause}</option>)}</select></label> : null}
-          {type === "KEMATIAN" ? <label className="text-sm font-medium text-slate-700">Kepemilikan Akta Kematian<select value={punyaAkta} onChange={(event) => setPunyaAkta(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="">-- pilih --</option><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></label> : null}
+          {type === "KEMATIAN" ? <label className="text-sm font-medium text-slate-700">Penyebab Kematian *<select value={penyebab} onChange={(event) => setPenyebab(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="">Pilih</option>{DEATH_CAUSES.map((cause) => <option key={cause}>{cause}</option>)}</select></label> : null}
+          {type === "KEMATIAN" ? <label className="text-sm font-medium text-slate-700">Kepemilikan Akta Kematian<select value={punyaAkta} onChange={(event) => setPunyaAkta(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="">Pilih</option><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></label> : null}
           {type === "KEMATIAN" && punyaAkta === "Ya" ? <label className="text-sm font-medium text-slate-700">Nomor Akta Kematian<input value={nomorAkta} onChange={(event) => setNomorAkta(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5" /></label> : null}
           {type === "MIGRASI_KELUAR" ? (
             <MigrationRegionFields direction="tujuan" value={destination} onChange={setDestination} />
           ) : null}
           {type === "MIGRASI_KELUAR" ? <label className="text-sm font-medium text-slate-700">Alasan Pindah<input value={alasan} onChange={(event) => setAlasan(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5" /></label> : null}
-          {replacementRequired ? <label className="text-sm font-medium text-slate-700">Kepala Keluarga Pengganti *<select value={replacementId} onChange={(event) => setReplacementId(event.target.value)} className="mt-1 w-full rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5"><option value="">-- pilih anggota --</option>{replacementOptions.map((member) => <option key={member.id} value={member.id}>{member.nama} — {member.status_dalam_keluarga}</option>)}</select></label> : null}
+          {replacementRequired ? <label className="text-sm font-medium text-slate-700">Kepala Keluarga Pengganti *<select value={replacementId} onChange={(event) => setReplacementId(event.target.value)} className="mt-1 w-full rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5"><option value="">Pilih anggota</option>{replacementOptions.map((member) => <option key={member.id} value={member.id}>{member.nama} — {member.status_dalam_keluarga}</option>)}</select></label> : null}
         </div>
       </section> : null}
 

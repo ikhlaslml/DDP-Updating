@@ -52,15 +52,15 @@ const BUILDING_LABELS: Record<string, string> = {
   jenis: "Jenis Bangunan",
   kategori: "Kategori Bangunan",
   keterangan: "Nama/Jenis Spesifik",
-  centroidLat: "Koordinat Lintang (Centroid)",
-  centroidLng: "Koordinat Bujur (Centroid)",
+  centroidLat: "Koordinat lintang (titik tengah)",
+  centroidLng: "Koordinat bujur (titik tengah)",
   dusun: "Dusun/Kampung/Dukuh",
   rw: "Rukun Warga (RW)",
   rt: "Rukun Tetangga (RT)",
   alamat: "Alamat/Keterangan Lokasi",
   alasan: "Alasan Penghapusan",
   jumlahKk: "Jumlah KK Tetap Tersimpan",
-  jumlahPenduduk: "Jumlah Penduduk Tetap Tersimpan",
+  jumlahPenduduk: "Jumlah warga tetap tersimpan",
 };
 
 function detailLabel(entityType: DetailRow["entityType"], key: string) {
@@ -172,12 +172,12 @@ export function PerubahanSementara() {
           <table className="min-w-full text-sm">
             <thead className="border-b border-slate-200 text-left text-xs font-semibold uppercase text-slate-500">
               <tr>
-                <th className="px-3 py-2">Entitas</th>
+                <th className="px-3 py-2">Jenis</th>
                 <th className="px-3 py-2">Identitas</th>
                 <th className="px-3 py-2">Nama/Kategori</th>
                 <th className="px-3 py-2">Lokasi</th>
                 <th className="px-3 py-2">Status</th>
-                <th className="px-3 py-2">Operator dan Waktu</th>
+                <th className="px-3 py-2">Petugas dan waktu</th>
                 <th className="px-3 py-2">Ringkasan</th>
                 <th className="px-3 py-2">Aksi</th>
               </tr>
@@ -189,7 +189,7 @@ export function PerubahanSementara() {
                 const isEvent = row.entityType === "PERISTIWA";
                 return (
                   <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                    <td className="px-3 py-3"><span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${isBuilding ? "bg-indigo-50 text-indigo-700" : isEvent ? "bg-sky-50 text-sky-700" : "bg-slate-100 text-slate-700"}`}>{isBuilding ? <Building2 className="h-3.5 w-3.5" /> : isEvent ? <Activity className="h-3.5 w-3.5" /> : <UserRound className="h-3.5 w-3.5" />}{isBuilding ? "Bangunan" : isEvent ? row.eventType?.replaceAll("_", " ") : "Penduduk"}</span></td>
+                    <td className="px-3 py-3"><span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${isBuilding ? "bg-indigo-50 text-indigo-700" : isEvent ? "bg-sky-50 text-sky-700" : "bg-slate-100 text-slate-700"}`}>{isBuilding ? <Building2 className="h-3.5 w-3.5" /> : isEvent ? <Activity className="h-3.5 w-3.5" /> : <UserRound className="h-3.5 w-3.5" />}{isBuilding ? "Bangunan" : isEvent ? row.eventType?.replaceAll("_", " ") : "Warga"}</span></td>
                     <td className="px-3 py-3 whitespace-nowrap text-slate-700">{isBuilding ? `#${row.row.kodeBangunan ?? "-"}` : <><span className="block">No. KK {row.row.nkk ?? "-"}</span><span className="text-xs text-slate-400">NIK {row.row.nik ?? "-"}</span></>}</td>
                     <td className="px-3 py-3 whitespace-nowrap font-medium text-slate-800">{isBuilding ? row.row.kategoriBangunan ?? (row.row.jenisBangunan === "BERPENGHUNI" ? "Berpenghuni" : "Tidak berpenghuni") : row.row.nama ?? "-"}{!isBuilding && row.row.jk ? <span className="ml-2 text-xs font-normal text-slate-400">{row.row.jk === "L" ? "Laki-laki" : "Perempuan"} • {formatCell(row.row.tgl_lahir, mapping.kolom.tgl_lahir)}</span> : null}</td>
                     <td className="max-w-xs px-3 py-3 text-slate-600">{row.row.alamat || row.row.dusun || "-"}</td>
@@ -220,8 +220,8 @@ export function PerubahanSementara() {
                 const personTitle = detail.values.status_dalam_keluarga === "Kepala Keluarga"
                   ? "Kepala Keluarga"
                   : detail.values.nama
-                    ? `Anggota/Penduduk — ${String(detail.values.nama)}`
-                    : `Penduduk ${index + 1}`;
+                    ? `Anggota — ${String(detail.values.nama)}`
+                    : `Warga ${index + 1}`;
                 return (
                   <article key={detail.id} className="overflow-hidden rounded-2xl border border-slate-200">
                     <header className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 px-5 py-3"><div><p className="text-sm font-bold text-slate-900">{detail.entityType === "BANGUNAN" ? "Bangunan" : personTitle}</p><p className="text-xs text-slate-500">{detail.ringkasan}</p></div><span className="text-xs text-slate-500">{detail.createdByName} • {new Date(detail.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "medium" })}</span></header>

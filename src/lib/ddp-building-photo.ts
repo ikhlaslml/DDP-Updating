@@ -43,9 +43,9 @@ export async function fetchDdpBuildingPhoto(code: number, kodeDeskel: string): P
     signal: AbortSignal.timeout(10_000),
   });
   if (response.status === 404) return null;
-  if (!response.ok) throw new Error(`Core DDP merespons HTTP ${response.status}`);
+  if (!response.ok) throw new Error("Foto bangunan tidak dapat diambil saat ini");
   const payload = await response.json() as unknown;
-  if (!Array.isArray(payload)) throw new Error("Respons foto bangunan Core DDP tidak valid");
+  if (!Array.isArray(payload)) throw new Error("Data foto bangunan tidak valid");
 
   const matches = payload
     .filter((row): row is BuildingPhotoResponse => Boolean(row && typeof row === "object"))

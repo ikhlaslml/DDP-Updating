@@ -122,7 +122,7 @@ export function PendudukForm({
               onChange={(event) => { setFrequencyFilter(event.target.value as "ALL" | UpdateFrequency); setCurrentStep(0); }}
               className="w-full appearance-none rounded-xl border border-violet-200 bg-white px-4 py-3 pr-10 text-sm font-semibold text-slate-800 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
             >
-              <option value="ALL">Semua parameter aktif · {roleLabel}</option>
+              <option value="ALL">Semua isian yang dapat diubah · {roleLabel}</option>
               {availableFrequencies.map((frequency) => (
                 <option key={frequency} value={frequency}>{FREQUENCY_LABELS[frequency]} · {roleLabel} · {frequencyCounts[frequency]} pertanyaan</option>
               ))}
@@ -176,7 +176,7 @@ export function PendudukForm({
             role={formRole}
           />
         ))}
-        {visibleFields.length === 0 ? <p className="col-span-full py-8 text-center text-sm text-slate-400">Tidak ada parameter dengan jadwal ini pada kelompok terpilih.</p> : null}
+        {visibleFields.length === 0 ? <p className="col-span-full py-8 text-center text-sm text-slate-400">Tidak ada isian dengan jadwal ini pada kelompok yang dipilih.</p> : null}
       </div>
 
       <div className="flex items-center justify-between mt-6">

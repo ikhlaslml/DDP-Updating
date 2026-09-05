@@ -267,7 +267,7 @@ export function PersonAdditionView({
         <div className="flex items-start gap-4">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600"><HeaderIcon className="h-6 w-6" /></span>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">{isHead ? "Pilih Bangunan yang Sudah Terdata" : "Pilih Kepala Keluarga yang Sudah Disensus"}</h2>
+            <h2 className="text-lg font-bold text-slate-900">{isHead ? "Pilih bangunan yang sudah terdata" : "Pilih kepala keluarga yang sudah terdata"}</h2>
           </div>
         </div>
 
@@ -359,7 +359,7 @@ export function PersonAdditionView({
                       if (mother) {
                         setEventDetails((current) => ({ ...current, nikIbu: mother.nik ?? "", namaIbu: mother.nama ?? "" }));
                       }
-                    }} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5"><option value="">-- pilih atau isi manual --</option>{familyMembers.filter((member) => member.jk === "P" || member.jk === "Perempuan").map((member) => <option key={member.id} value={member.id}>{member.nama} — {member.nik}</option>)}</select></label>
+                    }} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5"><option value="">Pilih atau isi sendiri</option>{familyMembers.filter((member) => member.jk === "P" || member.jk === "Perempuan").map((member) => <option key={member.id} value={member.id}>{member.nama} — {member.nik}</option>)}</select></label>
                     <label className="text-sm font-medium text-slate-700">Nama Ibu *<input required value={eventDetails.namaIbu} onChange={(event) => setEventDetails((current) => ({ ...current, namaIbu: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
                     <label className="text-sm font-medium text-slate-700">NIK Ibu *<input required inputMode="numeric" maxLength={16} value={eventDetails.nikIbu} onChange={(event) => setEventDetails((current) => ({ ...current, nikIbu: event.target.value.replace(/\D/g, "").slice(0, 16) }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
                     <label className="text-sm font-medium text-slate-700">Anak Ke-*<input required type="number" min={1} value={eventDetails.anakKe} onChange={(event) => setEventDetails((current) => ({ ...current, anakKe: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>

@@ -93,7 +93,7 @@ async function listFromLocalDatabase(input: CensusListInput): Promise<CensusList
 
 function remoteEndpoint(kodeWilayah: string) {
   const baseUrl = process.env.DDP_API_BASE_URL?.replace(/\/$/, "");
-  if (!baseUrl) throw new Error("DDP_API_BASE_URL belum dikonfigurasi");
+  if (!baseUrl) throw new Error("Sumber data pendataan belum disetel");
   const pathTemplate = process.env.DDP_API_RESIDENTS_PATH ?? "/v1/desa/{kodeWilayah}/penduduk";
   const path = pathTemplate.replace("{kodeWilayah}", encodeURIComponent(kodeWilayah));
   return new URL(path, `${baseUrl}/`);
@@ -125,9 +125,9 @@ function normalizedRemoteRows(payload: unknown, columns: string[]) {
 }
 
 async function listFromRubyApi(input: CensusListInput): Promise<CensusListResult> {
-  if (!input.kodeWilayah) throw new Error("Tenant belum memiliki kode wilayah untuk API DDP");
+  if (!input.kodeWilayah) throw new Error("Kode wilayah desa belum diisi");
   const token = process.env.DDP_API_TOKEN;
-  if (!token) throw new Error("DDP_API_TOKEN belum dikonfigurasi");
+  if (!token) throw new Error("Sumber data pendataan belum disetel");
 
   const endpoint = remoteEndpoint(input.kodeWilayah);
   const passThrough = ["q", "dusun", "rw", "rt", "jk"];
@@ -151,7 +151,7 @@ async function listFromRubyApi(input: CensusListInput): Promise<CensusListResult
     cache: "no-store",
     signal: AbortSignal.timeout(timeoutMs),
   });
-  if (!response.ok) throw new Error(`API DDP merespons HTTP ${response.status}`);
+  if (!response.ok) throw new Error("Data pendataan tidak dapat diambil saat ini");
   const normalized = normalizedRemoteRows(await response.json(), input.columns);
   return { ...normalized, source: "ruby" };
 }

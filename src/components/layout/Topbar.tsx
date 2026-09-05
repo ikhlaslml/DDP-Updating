@@ -131,7 +131,7 @@ export function Topbar({
                     className="flex min-h-14 items-center justify-between rounded-xl px-3 py-2 hover:bg-slate-50"
                   >
                     <span>
-                      <span className="block text-sm font-semibold text-slate-800">Siklus {label as string}</span>
+                      <span className="block text-sm font-semibold text-slate-800">Jadwal {label as string}</span>
                       <span className="block text-xs text-slate-500">
                         {summary?.dueFamilies ?? 0} keluarga · {summary?.dueFields ?? 0} isian
                       </span>

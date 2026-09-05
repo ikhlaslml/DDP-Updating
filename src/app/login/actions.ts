@@ -16,7 +16,7 @@ export async function loginAction(
     return {};
   } catch (err) {
     if (err instanceof AuthError) {
-      return { error: "Email atau password salah." };
+      return { error: "Email atau kata sandi salah." };
     }
     // NextAuth throws a special redirect error on success; rethrow so Next.js can handle it.
     throw err;

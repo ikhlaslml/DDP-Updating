@@ -31,7 +31,7 @@ const metadata = raw as {
 };
 
 export const FREQUENCY_LABELS: Record<UpdateFrequency, string> = {
-  INCIDENTAL: "Insidentil",
+  INCIDENTAL: "Jika ada perubahan",
   SIX_MONTHS: "6 bulan",
   ANNUAL: "1 tahun",
   IMMUTABLE: "Tidak berubah",

@@ -132,7 +132,7 @@ function MapBuildingPhoto({ code }: { code: number }) {
   return (
     <Image
       src={`/api/bangunan/${code}/foto-ddp`}
-      alt={`Foto bangunan DDP nomor ${code}`}
+      alt={`Foto bangunan nomor ${code}`}
       width={280}
       height={160}
       unoptimized

@@ -13,11 +13,11 @@ export async function readExcelTextRows(
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(bytes as never);
   const worksheet = workbook.worksheets[0];
-  if (!worksheet) throw new Error("Berkas Excel tidak memiliki sheet");
+  if (!worksheet) throw new Error("Berkas tidak memiliki lembar data");
   const maxRows = limits.maxRows ?? 10_001;
   const maxColumns = limits.maxColumns ?? 300;
   if (worksheet.rowCount > maxRows || worksheet.columnCount > maxColumns) {
-    throw new Error(`Berkas Excel melebihi batas ${maxRows - 1} baris atau ${maxColumns} kolom`);
+    throw new Error(`Berkas melebihi batas ${maxRows - 1} baris atau ${maxColumns} kolom`);
   }
   const rows: string[][] = [];
   for (let rowNumber = 1; rowNumber <= worksheet.rowCount; rowNumber += 1) {

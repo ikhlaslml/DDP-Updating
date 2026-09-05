@@ -33,7 +33,7 @@ export function AspectFilterPanel({
           <h3 id="filter-aspek-title" className="text-sm font-bold text-slate-800">Pilih kelompok data</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} kolom ditampilkan</span>
+          <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} isian ditampilkan</span>
           <button type="button" onClick={() => onChange(new Set(KELOMPOK_ORDER))} className="inline-flex min-h-9 items-center rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50">Pilih semua</button>
           <button type="button" onClick={() => onChange(new Set())} className="inline-flex min-h-9 items-center rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50">Bersihkan</button>
         </div>
@@ -42,7 +42,7 @@ export function AspectFilterPanel({
         {KELOMPOK_ORDER.map((group) => (
           <label key={group} className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border px-3 py-2 text-sm transition ${selected.has(group) ? "border-indigo-300 bg-white text-indigo-800 shadow-sm" : "border-slate-200 bg-white/60 text-slate-600 hover:bg-white"}`}>
             <input type="checkbox" checked={selected.has(group)} onChange={() => toggle(group)} className="h-4 w-4 shrink-0 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
-            <span className="min-w-0"><span className="block font-semibold leading-tight">{KELOMPOK_LABEL[group]}</span><span className="mt-0.5 block text-[11px] text-slate-400">{GROUPED[group].length} kolom</span></span>
+            <span className="min-w-0"><span className="block font-semibold leading-tight">{KELOMPOK_LABEL[group]}</span><span className="mt-0.5 block text-[11px] text-slate-400">{GROUPED[group].length} isian</span></span>
           </label>
         ))}
       </div>

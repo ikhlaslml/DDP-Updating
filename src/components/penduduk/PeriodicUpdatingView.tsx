@@ -437,7 +437,7 @@ export function PeriodicUpdatingView() {
                     ))}
                   </div>
                 ) : (
-                  <p className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-500">Tidak ada parameter per jiwa pada siklus ini.</p>
+                  <p className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-500">Tidak ada isian per orang pada jadwal ini.</p>
                 )}
                 {canWrite && member.cells.length ? (
                   <div className="mt-4 flex justify-end border-t border-slate-100 pt-4">
@@ -532,7 +532,7 @@ export function PeriodicUpdatingView() {
         <p className="text-sm text-slate-600">
           <strong className="text-slate-900">{list.summary.dueFamilies}</strong> keluarga jatuh tempo
           {list.summary.waitingFamilies ? ` · ${list.summary.waitingFamilies} menunggu diterapkan` : ""}
-          {` · ${list.summary.total} keluarga pada filter ini`}
+          {` · ${list.summary.total} keluarga pada pencarian ini`}
         </p>
       ) : null}
 
@@ -554,7 +554,7 @@ export function PeriodicUpdatingView() {
               {loading ? (
                 <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Memuat keluarga...</td></tr>
               ) : !list?.data.length ? (
-                <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Tidak ada keluarga sesuai filter.</td></tr>
+                <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Tidak ada keluarga yang sesuai.</td></tr>
               ) : list.data.map((family) => (
                 <tr key={family.nkk} className="border-t border-slate-100">
                   <td className="sticky left-0 bg-white px-4 py-3">

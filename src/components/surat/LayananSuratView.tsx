@@ -192,7 +192,7 @@ export function LayananSuratView({ eventId, initialTab = "terbitkan" }: { eventI
                 <div><label className="block text-xs font-medium text-slate-600">Keperluan <span className="text-rose-600">*</span></label><input value={keperluan} onChange={(event) => { setKeperluan(event.target.value); resetIssueState(); }} placeholder="Contoh: melamar pekerjaan" className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" /></div>
                 {issueError ? <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{issueError}</p> : null}
                 <button type="button" onClick={openPreview} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-50 sm:w-auto">Pratinjau</button>
-                {!canWrite ? <p className="text-xs text-slate-400">Mode lihat: penerbitan surat hanya untuk operator.</p> : null}
+                {!canWrite ? <p className="text-xs text-slate-400">Penerbitan surat hanya untuk petugas.</p> : null}
               </div>
             )}
           </section>

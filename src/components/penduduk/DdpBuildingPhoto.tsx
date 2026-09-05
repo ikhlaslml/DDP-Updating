@@ -12,7 +12,7 @@ function BuildingPhotoImage({ src, code, zoom }: { src: string; code: number; zo
   return (
     <Image
       src={src}
-      alt={`Foto bangunan DDP nomor ${code}`}
+      alt={`Foto bangunan nomor ${code}`}
       width={1600}
       height={1200}
       unoptimized
@@ -78,7 +78,7 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
       .then(async (response) => {
         if (!response.ok) {
           const payload = await response.json().catch(() => ({})) as { error?: string };
-          throw new Error(payload.error || `Foto bangunan gagal dimuat (HTTP ${response.status})`);
+          throw new Error(payload.error || "Foto bangunan tidak dapat dimuat");
         }
         return response.blob();
       })
@@ -123,7 +123,7 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
     return (
       <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm" aria-live="polite">
         <p className="flex items-center gap-2 text-sm text-slate-500">
-          <RefreshCw className="h-4 w-4 animate-spin" /> Memeriksa foto bangunan #{code} di Core DDP...
+          <RefreshCw className="h-4 w-4 animate-spin" /> Mencari foto bangunan #{code}...
         </p>
       </section>
     );
@@ -135,7 +135,7 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
         <div className="flex items-start gap-3">
           <ImageOff className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
           <div className="min-w-0">
-            <h2 className="font-bold text-amber-950">Foto bangunan DDP belum dapat ditampilkan</h2>
+            <h2 className="font-bold text-amber-950">Foto bangunan belum dapat ditampilkan</h2>
             <p className="mt-1 break-words text-sm text-amber-900">{error || "Foto belum tersedia."}</p>
             <button
               type="button"
@@ -160,7 +160,7 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
         <div className="flex items-center gap-2">
           <Building2 className="h-5 w-5 text-indigo-600" />
-          <h2 className="font-bold text-slate-900">Foto Bangunan Core DDP</h2>
+          <h2 className="font-bold text-slate-900">Foto bangunan</h2>
         </div>
         <ZoomToolbar
           zoom={zoom}
@@ -197,7 +197,7 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={`Foto bangunan DDP nomor ${code}`}
+            aria-label={`Foto bangunan nomor ${code}`}
             onClick={(event) => event.stopPropagation()}
             className="flex max-h-[92vh] w-full max-w-6xl flex-col rounded-2xl bg-white p-3 shadow-2xl"
           >

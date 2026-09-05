@@ -68,6 +68,6 @@ export async function readPrivateMedia(asset: {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store",
   });
-  if (!response.ok) throw new Error(`Media Blob tidak dapat dibaca (HTTP ${response.status})`);
+  if (!response.ok) throw new Error("Berkas gambar tidak dapat dibaca");
   return Buffer.from(await response.arrayBuffer());
 }

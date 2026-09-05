@@ -150,7 +150,7 @@ export function HargaKomoditasView() {
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.load(await file.arrayBuffer() as never);
       const firstSheet = workbook.worksheets[0];
-      if (!firstSheet) throw new Error("Berkas Excel tidak memiliki sheet.");
+      if (!firstSheet) throw new Error("Berkas tidak memiliki lembar data.");
       if (firstSheet.rowCount > 100 || firstSheet.columnCount > 10) throw new Error("Borang melebihi batas ukuran yang diizinkan.");
       const matrix: unknown[][] = [];
       for (let rowNumber = 1; rowNumber <= firstSheet.rowCount; rowNumber += 1) {
@@ -163,10 +163,10 @@ export function HargaKomoditasView() {
         matrix.push(cells);
       }
       const headerIndex = matrix.findIndex((row) => row.some((cell) => String(cell).trim() !== ""));
-      if (headerIndex < 0) throw new Error("Sheet Excel kosong.");
+      if (headerIndex < 0) throw new Error("Lembar data kosong.");
       const headers = matrix[headerIndex].slice(0, 4).map((cell) => String(cell).trim());
       if (headers.some((header, index) => header !== WORKBOOK_HEADERS[index])) {
-        throw new Error("Header Excel harus: No, Nama Pangan, Satuan, Harga Per Satuan (Rp).");
+        throw new Error("Judul kolom harus: No, Nama Pangan, Satuan, Harga Per Satuan (Rp).");
       }
       const importedRows = matrix.slice(headerIndex + 1).filter((row) => row.some((cell) => String(cell).trim() !== ""));
       if (importedRows.length !== rows.length) {
@@ -223,7 +223,7 @@ export function HargaKomoditasView() {
           <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             {canWrite ? (
               <label className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto">
-                Impor Excel
+                Impor rekap
                 <input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(event) => {
                   const file = event.currentTarget.files?.[0];
                   if (file) void importWorkbook(file, event.currentTarget);
@@ -231,7 +231,7 @@ export function HargaKomoditasView() {
               </label>
             ) : null}
             <button type="button" disabled={!rows.length} onClick={() => void exportWorkbook()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 sm:w-auto">
-              Ekspor Excel
+              Unduh rekap
             </button>
           </div>
         </div>
@@ -246,7 +246,7 @@ export function HargaKomoditasView() {
           <div className="flex items-end">
             {canWrite ? <button type="button" disabled={saving || loading} onClick={() => void saveAll()} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 lg:w-auto">
               {saving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : null} Simpan ({filledCount})
-            </button> : <span className="text-xs text-slate-400">Mode lihat; hanya operator yang dapat mengubah harga.</span>}
+            </button> : <span className="text-xs text-slate-400">Hanya petugas yang dapat mengubah harga.</span>}
           </div>
         </div>
         {message ? <p className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{message}</p> : null}
@@ -288,7 +288,7 @@ export function HargaKomoditasView() {
 
       <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div><h3 className="font-bold text-slate-900">Riwayat Antarperiode</h3></div>
+          <div><h3 className="font-bold text-slate-900">Riwayat harga</h3></div>
           <label className="text-xs font-medium text-slate-600">Komoditas
             <select value={historyCommodityId} onChange={(event) => setHistoryCommodityId(event.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm sm:min-w-56">
               {rows.map((row) => <option key={row.id} value={row.id}>{row.nama} ({row.satuan})</option>)}

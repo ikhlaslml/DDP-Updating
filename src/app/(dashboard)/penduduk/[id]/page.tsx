@@ -37,7 +37,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
             <Link href={`/bangunan/${data.kode_bangunan}`} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
               <Building2 className="h-4 w-4" />
               <ImageIcon className="h-4 w-4" />
-              Buka Detail Bangunan dan Foto DDP
+              Buka detail bangunan dan foto
             </Link>
           ) : deletedBuilding ? (
             <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">Bangunan fisik dengan kode ini sudah dihapus dari peta aktif. Data warga tetap tersimpan untuk riwayat dan dapat dipindahkan ke bangunan lain melalui alur pembaruan.</p>

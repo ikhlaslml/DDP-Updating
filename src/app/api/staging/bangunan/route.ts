@@ -166,7 +166,7 @@ export async function POST(req: NextRequest) {
     spatial = validateAndSerializePolygon(submitted.data.building.points);
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Polygon tidak valid" },
+      { error: error instanceof Error ? error.message : "Batas bangunan di peta tidak valid" },
       { status: 400 }
     );
   }

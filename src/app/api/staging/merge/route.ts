@@ -15,7 +15,7 @@ export async function POST() {
       userEmail: ctx.userEmail,
     });
     if (result.applied === 0) {
-      return NextResponse.json({ error: "Tidak ada perubahan untuk digabungkan" }, { status: 400 });
+      return NextResponse.json({ error: "Tidak ada perubahan untuk diterapkan" }, { status: 400 });
     }
     return NextResponse.json({
       applied: result.applied,
@@ -25,7 +25,7 @@ export async function POST() {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Penggabungan gagal dan seluruh perubahan dibatalkan" },
+      { error: error instanceof Error ? error.message : "Penerapan gagal dan seluruh perubahan dibatalkan" },
       { status: 400 }
     );
   }
