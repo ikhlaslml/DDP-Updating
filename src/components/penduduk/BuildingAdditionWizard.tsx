@@ -17,6 +17,11 @@ import {
   Users,
 } from "lucide-react";
 import { SurveyEditor } from "@/components/penduduk/SurveyEditor";
+import {
+  EMPTY_MIGRATION_REGION,
+  MigrationRegionFields,
+  type MigrationRegionValue,
+} from "@/components/penduduk/MigrationRegionFields";
 import { RespondentIdentityFields, type RespondentIdentityValue } from "@/components/penduduk/RespondentIdentityFields";
 import { NON_RESIDENTIAL_CATEGORIES, type SpatialPoint } from "@/lib/building";
 import { uploadMedia, type UploadedMedia } from "@/lib/client-media";
@@ -42,6 +47,12 @@ type BuildingForm = {
   rw: string;
   rt: string;
   alamat: string;
+};
+
+type MigrationEventDetails = MigrationRegionValue & {
+  tanggal: string;
+  nomorDokumen: string;
+  keterangan: string;
 };
 
 const STEPS = [
@@ -84,7 +95,13 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [eventDetails, setEventDetails] = useState({ tanggal: "", asal: "", nomorDokumen: "", keterangan: "" });
+  const [eventDetails, setEventDetails] = useState<MigrationEventDetails>({
+    ...EMPTY_MIGRATION_REGION,
+    tanggal: "",
+    nomorDokumen: "",
+    keterangan: "",
+  });
+  const [eventAccepted, setEventAccepted] = useState(false);
 
   useEffect(() => {
     fetch("/api/bangunan")
@@ -194,8 +211,13 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
   }
 
   async function submit() {
-    if (eventType === "MIGRASI_MASUK" && (!eventDetails.tanggal || !eventDetails.asal.trim())) {
-      setGeneralError("Tanggal masuk dan daerah asal wajib diisi untuk migrasi masuk.");
+    if (
+      eventType === "MIGRASI_MASUK" &&
+      (!eventDetails.tanggal ||
+        [eventDetails.desaKelurahan, eventDetails.kecamatan, eventDetails.kabupatenKota, eventDetails.provinsi]
+          .some((value) => !value.trim()))
+    ) {
+      setGeneralError("Tanggal masuk dan struktur wilayah asal wajib diisi lengkap.");
       return;
     }
     setSubmitting(true);
@@ -261,15 +283,42 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       {eventType === "MIGRASI_MASUK" ? (
         <section className="rounded-2xl border border-sky-100 bg-sky-50 p-5">
           <h2 className="font-bold text-sky-950">Migrasi Masuk Keluarga ke Bangunan Baru</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <label className="text-sm font-medium text-slate-700">Tanggal Masuk *<input type="date" max={new Date().toISOString().slice(0, 10)} value={eventDetails.tanggal} onChange={(event) => setEventDetails((current) => ({ ...current, tanggal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
-            <label className="text-sm font-medium text-slate-700">Daerah Asal *<input value={eventDetails.asal} onChange={(event) => setEventDetails((current) => ({ ...current, asal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <label className="text-sm font-medium text-slate-700">Tanggal Masuk *<input type="date" max={new Date().toISOString().slice(0, 10)} value={eventDetails.tanggal} onChange={(event) => { setEventDetails((current) => ({ ...current, tanggal: event.target.value })); setEventAccepted(false); }} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
+            <MigrationRegionFields
+              direction="asal"
+              value={eventDetails}
+              onChange={(region) => {
+                setEventDetails((current) => ({ ...current, ...region }));
+                setEventAccepted(false);
+              }}
+            />
             <label className="text-sm font-medium text-slate-700">Nomor Dokumen<input value={eventDetails.nomorDokumen} onChange={(event) => setEventDetails((current) => ({ ...current, nomorDokumen: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
             <label className="text-sm font-medium text-slate-700">Keterangan<input value={eventDetails.keterangan} onChange={(event) => setEventDetails((current) => ({ ...current, keterangan: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label>
           </div>
+          <div className="mt-5 flex justify-end border-t border-sky-200 pt-4">
+            <button
+              type="button"
+              onClick={() => {
+                const complete =
+                  Boolean(eventDetails.tanggal) &&
+                  [eventDetails.desaKelurahan, eventDetails.kecamatan, eventDetails.kabupatenKota, eventDetails.provinsi]
+                    .every((value) => value.trim());
+                if (!complete) {
+                  setGeneralError("Lengkapi tanggal dan seluruh struktur wilayah asal terlebih dahulu.");
+                  return;
+                }
+                setGeneralError(null);
+                setEventAccepted(true);
+              }}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white"
+            >
+              {eventAccepted ? "Data Peristiwa Siap" : "Selanjutnya"} <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </section>
       ) : null}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div id="building-steps" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {STEPS.map((item, index) => {
           const Icon = item.icon;
           const disabled = !occupied && (index === 2 || index === 3);
@@ -433,7 +482,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       <div className="flex items-center justify-between border-t border-slate-200 pt-5">
         <button type="button" disabled={step === 0 || submitting} onClick={back} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-40"><ChevronLeft className="h-4 w-4" /> Sebelumnya</button>
         {step < 4 ? (
-          <button type="button" disabled={step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo)} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
+          <button type="button" disabled={(eventType === "MIGRASI_MASUK" && !eventAccepted) || (step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo))} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
         ) : (
           <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Aspek 1 dan Lihat Daftar Keluarga" : "Simpan Perubahan"}</button>
         )}

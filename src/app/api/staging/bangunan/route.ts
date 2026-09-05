@@ -8,6 +8,11 @@ import { HOUSEHOLD_INHERITED_FIELDS } from "@/lib/survey";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 import { registerIncompleteFamily } from "@/lib/family-progress";
+import {
+  generatedMigrationRegionKey,
+  migrationRegionLabel,
+  type MigrationRegion,
+} from "@/lib/migration-region";
 
 export const runtime = "nodejs";
 
@@ -164,6 +169,20 @@ export async function POST(req: NextRequest) {
       { error: error instanceof Error ? error.message : "Polygon tidak valid" },
       { status: 400 }
     );
+  }
+
+  const normalizedEventData: Record<string, unknown> | undefined = submitted.data.eventData
+    ? { ...submitted.data.eventData }
+    : undefined;
+  if (submitted.data.eventType === "MIGRASI_MASUK" && normalizedEventData) {
+    const region: MigrationRegion = {
+      desaKelurahan: String(normalizedEventData.desaKelurahan ?? ""),
+      kecamatan: String(normalizedEventData.kecamatan ?? ""),
+      kabupatenKota: String(normalizedEventData.kabupatenKota ?? ""),
+      provinsi: String(normalizedEventData.provinsi ?? ""),
+    };
+    normalizedEventData.asal = migrationRegionLabel(region);
+    normalizedEventData.wilayahKodeDeskel = generatedMigrationRegionKey(region);
   }
 
   try {
@@ -363,7 +382,7 @@ export async function POST(req: NextRequest) {
                 : `Anggota keluarga baru pada bangunan #${code}`,
             data: JSON.stringify(resident),
             eventType: submitted.data.eventType,
-            eventData: submitted.data.eventData ? JSON.stringify(submitted.data.eventData) : null,
+            eventData: normalizedEventData ? JSON.stringify(normalizedEventData) : null,
             createdBy: ctx.userId,
             createdByName: ctx.userName,
             createdByEmail: ctx.userEmail,

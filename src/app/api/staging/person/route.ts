@@ -149,6 +149,7 @@ export async function POST(req: NextRequest) {
           : null;
         if (body.data.eventType === "KELAHIRAN") {
           submittedData.status_dalam_keluarga = "Anak";
+          submittedData.status_kawin = "Belum Kawin";
           const generatedNik = !String(submittedData.nik ?? "").trim();
           if (generatedNik) {
             submittedData.nik = await generateProvisionalNik(tx, {
@@ -264,8 +265,23 @@ export async function POST(req: NextRequest) {
           if (!submittedData.status_dalam_keluarga || submittedData.status_dalam_keluarga === "Kepala Keluarga") {
             throw new Error("Pilih status anggota dalam keluarga");
           }
+          const inheritedFieldNames = [
+            ...HOUSEHOLD_INHERITED_FIELDS,
+            "responden",
+            "kesediaan",
+            "kode_bangunan",
+            "kode_deskel",
+            "deskel",
+            "dusun",
+            "rw",
+            "rt",
+            "lat",
+            "lng",
+            "alamat",
+            ...(body.data.eventType === "KELAHIRAN" ? ["agama", "suku"] : []),
+          ];
           const inherited = Object.fromEntries(
-            [...HOUSEHOLD_INHERITED_FIELDS, "responden", "kesediaan", "kode_bangunan", "kode_deskel", "deskel", "dusun", "rw", "rt", "lat", "lng", "alamat"]
+            [...new Set(inheritedFieldNames)]
               .flatMap((field) => head[field as keyof typeof head] !== undefined ? [[field, head[field as keyof typeof head]]] : [])
           );
           const baselineCount = await tx.penduduk.count({ where: { desaId: ctx.desaId, nkk, statusAktif: true } });

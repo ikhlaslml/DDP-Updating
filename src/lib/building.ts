@@ -65,8 +65,15 @@ export const buildingSubmissionSchema = z
     if (value.building.jenis === "TIDAK_BERPENGHUNI" && !value.building.fotoUrl?.startsWith("data:image/")) {
       ctx.addIssue({ code: "custom", path: ["building", "fotoUrl"], message: "Foto bangunan wajib diunggah" });
     }
-    if (value.eventType === "MIGRASI_MASUK" && (!value.eventData?.tanggal || !String(value.eventData.asal ?? "").trim())) {
-      ctx.addIssue({ code: "custom", path: ["eventData"], message: "Tanggal masuk dan daerah asal wajib diisi" });
+    if (value.eventType === "MIGRASI_MASUK") {
+      if (!value.eventData?.tanggal) {
+        ctx.addIssue({ code: "custom", path: ["eventData", "tanggal"], message: "Tanggal masuk wajib diisi" });
+      }
+      for (const field of ["desaKelurahan", "kecamatan", "kabupatenKota", "provinsi"] as const) {
+        if (!String(value.eventData?.[field] ?? "").trim()) {
+          ctx.addIssue({ code: "custom", path: ["eventData", field], message: "Wilayah asal wajib diisi lengkap" });
+        }
+      }
     }
   });
 

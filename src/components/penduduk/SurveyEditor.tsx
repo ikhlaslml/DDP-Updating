@@ -15,6 +15,7 @@ export function SurveyEditor({
   errors = {},
   idPrefix,
   allowedGroups,
+  hiddenFields,
   optionalFields,
 }: {
   role: SurveyRole;
@@ -23,9 +24,18 @@ export function SurveyEditor({
   errors?: Record<string, string>;
   idPrefix: string;
   allowedGroups?: readonly string[];
+  hiddenFields?: readonly string[];
   optionalFields?: readonly string[];
 }) {
-  const grouped = useMemo(() => surveyColumnsByGroup(role), [role]);
+  const grouped = useMemo(() => {
+    const hidden = new Set(hiddenFields);
+    return Object.fromEntries(
+      Object.entries(surveyColumnsByGroup(role)).map(([group, fields]) => [
+        group,
+        fields.filter((field) => !hidden.has(field)),
+      ]),
+    );
+  }, [hiddenFields, role]);
   const groups = KELOMPOK_ORDER.filter((group) => grouped[group]?.length && (!allowedGroups || allowedGroups.includes(group)));
   const [currentGroup, setCurrentGroup] = useState(groups[0]);
   const activeGroup = groups.includes(currentGroup) ? currentGroup : groups[0];

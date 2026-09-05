@@ -298,7 +298,6 @@ export function PersonAdditionView({
           {eventType ? (
             <section className="rounded-2xl border border-sky-100 bg-sky-50 p-5">
               <h2 className="font-bold text-sky-950">Data Peristiwa {eventType === "KELAHIRAN" ? "Kelahiran" : "Migrasi Masuk"}</h2>
-              <p className="mt-1 text-sm text-sky-800">Peristiwa dicatat terpisah dari data warga dan masuk ke riwayat periode setelah diterapkan.</p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {eventType === "MIGRASI_MASUK" ? <label className="text-sm font-medium text-slate-700">Tanggal Masuk *<input type="date" max={new Date().toISOString().slice(0, 10)} required value={eventDetails.tanggal} onChange={(event) => setEventDetails((current) => ({ ...current, tanggal: event.target.value }))} className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5" /></label> : null}
                 {eventType === "MIGRASI_MASUK" ? (
@@ -364,7 +363,12 @@ export function PersonAdditionView({
                 onChange={setRecord}
                 errors={errors}
                 idPrefix={isHead ? "new-head" : "new-member"}
-                allowedGroups={isHead ? ["identitas_keluarga"] : undefined}
+                allowedGroups={["identitas_keluarga"]}
+                hiddenFields={
+                  eventType === "KELAHIRAN"
+                    ? ["status_kawin", "agama", "suku", "status_dalam_keluarga"]
+                    : undefined
+                }
                 optionalFields={eventType === "KELAHIRAN" ? ["nik"] : undefined}
               />
               <div className="flex justify-end border-t border-slate-200 pt-5">
