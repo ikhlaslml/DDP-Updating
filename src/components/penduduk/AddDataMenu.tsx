@@ -50,7 +50,7 @@ const OPTIONS = [
   {
     href: "/penduduk/tambah-keluarga",
     title: "Tambah Kepala Keluarga",
-    description: "Catat keluarga baru pada bangunan yang sudah ada.",
+    description: "Catat keluarga baru lengkap 6 aspek, plus identitas tiap anggota.",
     icon: UsersRound,
     color: "bg-emerald-50 text-emerald-600",
   },

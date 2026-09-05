@@ -31,6 +31,7 @@ const submissionSchema = z
       fotoUrl: z.string().trim().startsWith("/api/media/"),
     }).optional(),
     data: z.record(z.string(), z.unknown()),
+    members: z.array(z.record(z.string(), z.unknown())).max(30).optional(),
   })
   .superRefine((value, ctx) => {
     if (value.role === "HEAD" && !value.buildingCode) {
@@ -41,6 +42,9 @@ const submissionSchema = z
     }
     if (value.role === "MEMBER" && !value.familyNkk) {
       ctx.addIssue({ code: "custom", path: ["familyNkk"], message: "Pilih kepala keluarga" });
+    }
+    if (value.role === "MEMBER" && value.members?.length) {
+      ctx.addIssue({ code: "custom", path: ["members"], message: "Anggota tambahan hanya untuk keluarga baru" });
     }
     if (value.eventType === "KELAHIRAN" && value.role !== "MEMBER") {
       ctx.addIssue({ code: "custom", path: ["eventType"], message: "Kelahiran harus ditambahkan sebagai anggota keluarga" });
@@ -223,7 +227,7 @@ export async function POST(req: NextRequest) {
             subjek: "Keluarga",
             responden: respondent.nama,
             kesediaan: "Ya",
-            jml_keluarga: 1,
+            jml_keluarga: (body.data.members?.length ?? 0) + 1,
           };
           nkk = typeof submittedData.nkk === "string" ? submittedData.nkk : "";
           authoritative.nkk = nkk;
@@ -363,6 +367,88 @@ export async function POST(req: NextRequest) {
             createdByEmail: ctx.userEmail,
           },
         });
+        if (role === "HEAD") {
+          const extraMembers = body.data.members ?? [];
+          const usedNiks = new Set([nik]);
+          for (let index = 0; index < extraMembers.length; index += 1) {
+            const member = extraMembers[index];
+            const status = member.status_dalam_keluarga;
+            if (!status || status === "Kepala Keluarga") {
+              const error = new Error(`Status anggota ${index + 1} dalam keluarga belum valid`) as Error & { fields?: Record<string, string> };
+              error.fields = { [`members.${index}.status_dalam_keluarga`]: "Pilih status anggota dalam keluarga" };
+              throw error;
+            }
+            const inherited = Object.fromEntries(
+              HOUSEHOLD_INHERITED_FIELDS.flatMap((field) =>
+                normalizedData[field] !== undefined ? [[field, normalizedData[field]]] : []
+              )
+            );
+            const memberParsed = pendudukCreateSchema.safeParse({
+              ...member,
+              ...inherited,
+              ...authoritative,
+              ...derivedFields(member),
+              subjek: "Individu",
+              status_dalam_keluarga: status,
+              enumerator: ctx.userName,
+            });
+            if (!memberParsed.success) {
+              const error = new Error(`Data anggota keluarga ${index + 1} belum lengkap`) as Error & { fields?: Record<string, string> };
+              error.fields = Object.fromEntries(
+                Object.entries(flattenZodError(memberParsed.error)).map(([key, message]) => [`members.${index}.${key}`, message])
+              );
+              throw error;
+            }
+            const memberData: Record<string, unknown> = {
+              ...(memberParsed.data as Record<string, unknown>),
+              ...inherited,
+              ...authoritative,
+              subjek: "Individu",
+              status_dalam_keluarga: status,
+            };
+            const memberMissing = [...REQUIRED_FIELDS].filter((field) => {
+              const value = memberData[field];
+              return value === undefined || value === null || value === "";
+            });
+            if (memberMissing.length) {
+              const error = new Error(`Data anggota keluarga ${index + 1} belum lengkap`) as Error & { fields?: Record<string, string> };
+              error.fields = Object.fromEntries(memberMissing.map((field) => [`members.${index}.${field}`, "Wajib diisi"]));
+              throw error;
+            }
+            const memberNik = String(memberData.nik);
+            if (usedNiks.has(memberNik)) {
+              const error = new Error("NIK penghuni tidak boleh duplikat") as Error & { fields?: Record<string, string> };
+              error.fields = { [`members.${index}.nik`]: "Ada NIK yang sama dalam satu keluarga" };
+              throw error;
+            }
+            usedNiks.add(memberNik);
+            const [memberBaseline, memberPending] = await Promise.all([
+              tx.penduduk.findUnique({ where: { nik: memberNik } }),
+              tx.stagingChange.findFirst({ where: { entityType: "PENDUDUK", status: "PENDING", nik: memberNik } }),
+            ]);
+            if (memberPending) throw new Error(`NIK anggota ${index + 1} sudah terdaftar di perubahan sementara`);
+            if (memberBaseline) throw new Error(`NIK anggota ${index + 1} sudah terdaftar sebagai penduduk`);
+            await tx.stagingChange.create({
+              data: {
+                desaId: ctx.desaId,
+                entityType: "PENDUDUK",
+                groupId,
+                aksi: "CREATE",
+                nik: memberNik,
+                nama: typeof memberData.nama === "string" ? memberData.nama : null,
+                ringkasan: body.data.eventType === "MIGRASI_MASUK"
+                  ? `Migrasi masuk anggota keluarga pada bangunan #${selectedBuildingCode}`
+                  : `Anggota keluarga baru pada bangunan #${selectedBuildingCode}`,
+                data: JSON.stringify(memberData),
+                eventType: body.data.eventType,
+                eventData: normalizedEventData ? JSON.stringify(normalizedEventData) : null,
+                createdBy: ctx.userId,
+                createdByName: ctx.userName,
+                createdByEmail: ctx.userEmail,
+              },
+            });
+          }
+        }
         if (role === "HEAD" && selectedBuildingCode !== null) {
           await registerIncompleteFamily(tx, {
             desaId: ctx.desaId,
@@ -371,6 +457,7 @@ export async function POST(req: NextRequest) {
             stagingGroupId: groupId,
             userId: ctx.userId,
             userName: ctx.userName,
+            complete: true,
           });
         }
         if (role === "HEAD" && selectedBuildingCode !== null && respondentMediaId) {

@@ -18,9 +18,11 @@ export async function registerIncompleteFamily(
     stagingGroupId: string;
     userId: string;
     userName: string;
+    complete?: boolean;
   }
 ) {
   const periode = await currentSurveyPeriod(tx, input.desaId);
+  const complete = Boolean(input.complete);
   return tx.progresPendataanKeluarga.upsert({
     where: { desaId_nkk_periode: { desaId: input.desaId, nkk: input.nkk, periode } },
     create: {
@@ -28,18 +30,18 @@ export async function registerIncompleteFamily(
       nkk: input.nkk,
       kodeBangunan: input.kodeBangunan,
       periode,
-      status: "BELUM_LENGKAP",
-      aspekTerakhir: 1,
-      aspekSelesai: "[1]",
+      status: complete ? "LENGKAP" : "BELUM_LENGKAP",
+      aspekTerakhir: complete ? 6 : 1,
+      aspekSelesai: complete ? "[1,2,3,4,5,6]" : "[1]",
       stagingGroupId: input.stagingGroupId,
       updatedBy: input.userId,
       updatedByName: input.userName,
     },
     update: {
       kodeBangunan: input.kodeBangunan,
-      status: "BELUM_LENGKAP",
-      aspekTerakhir: 1,
-      aspekSelesai: "[1]",
+      status: complete ? "LENGKAP" : "BELUM_LENGKAP",
+      aspekTerakhir: complete ? 6 : 1,
+      aspekSelesai: complete ? "[1,2,3,4,5,6]" : "[1]",
       stagingGroupId: input.stagingGroupId,
       updatedBy: input.userId,
       updatedByName: input.userName,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import clsx from "clsx";
 import { Building2, Check, ChevronRight, Search, UserPlus, UsersRound } from "lucide-react";
 import { SurveyEditor } from "@/components/penduduk/SurveyEditor";
 import { RespondentIdentityFields, type RespondentIdentityValue } from "@/components/penduduk/RespondentIdentityFields";
@@ -99,7 +100,23 @@ export function PersonAdditionView({
   const [respondentAccepted, setRespondentAccepted] = useState(false);
   const [uploadedRespondent, setUploadedRespondent] = useState<UploadedMedia | null>(null);
   const [eventAccepted, setEventAccepted] = useState(false);
+  const [extraMembers, setExtraMembers] = useState<Record<string, string>[]>([]);
+  const [selectedPerson, setSelectedPerson] = useState(0);
   const isHead = role === "HEAD";
+  const editingHead = !isHead || selectedPerson === 0;
+
+  function setMemberCount(nextCount: number) {
+    const count = Math.max(0, Math.min(30, nextCount));
+    setExtraMembers((current) => {
+      if (current.length === count) return current;
+      if (current.length > count) return current.slice(0, count);
+      return [
+        ...current,
+        ...Array.from({ length: count - current.length }, () => blankSurveyRecord("MEMBER")),
+      ];
+    });
+    setSelectedPerson((current) => Math.min(current, count));
+  }
 
   useEffect(() => {
     if (isHead) {
@@ -151,6 +168,22 @@ export function PersonAdditionView({
       setGeneralError("Tanggal masuk dan struktur wilayah asal wajib diisi lengkap.");
       return;
     }
+    if (isHead) {
+      const missingHead = ["nama", "nik", "nkk", "jk", "tgl_lahir"].find((field) => !record[field]);
+      if (missingHead) {
+        setSelectedPerson(0);
+        setGeneralError("Lengkapi identitas wajib kepala keluarga sebelum menyimpan.");
+        return;
+      }
+      const incompleteMember = extraMembers.findIndex((member) =>
+        ["nama", "nik", "jk", "tgl_lahir", "status_dalam_keluarga"].some((field) => !member[field])
+      );
+      if (incompleteMember >= 0) {
+        setSelectedPerson(incompleteMember + 1);
+        setGeneralError(`Lengkapi identitas wajib anggota keluarga ${incompleteMember + 1}.`);
+        return;
+      }
+    }
     if (
       eventType === "KELAHIRAN" &&
       (!record.tgl_lahir ||
@@ -191,6 +224,7 @@ export function PersonAdditionView({
             tanggal: eventType === "KELAHIRAN" ? record.tgl_lahir : eventDetails.tanggal,
           } : undefined,
           data: toPayload(record, role),
+          members: isHead ? extraMembers.map((member) => toPayload(member, "MEMBER")) : undefined,
         }),
       });
       const json = await response.json();
@@ -213,6 +247,19 @@ export function PersonAdditionView({
   const sourceSelected = isHead ? Boolean(buildingCode) : Boolean(familyNkk);
   const respondentComplete = Boolean(respondent.nama.trim() && respondent.photo);
   const HeaderIcon = isHead ? UsersRound : UserPlus;
+  const editorRole: SurveyRole = editingHead ? role : "MEMBER";
+  const editorValue = editingHead ? record : extraMembers[selectedPerson - 1] ?? record;
+  const currentErrors = Object.fromEntries(
+    Object.entries(errors).flatMap(([key, value]) => {
+      if (!isHead || selectedPerson === 0) {
+        if (key.startsWith("members.")) return [];
+        return [[key, value]];
+      }
+      const prefix = `members.${selectedPerson - 1}.`;
+      if (key.startsWith(prefix)) return [[key.slice(prefix.length), value]];
+      return [];
+    })
+  );
 
   return (
     <div className="space-y-6">
@@ -286,7 +333,7 @@ export function PersonAdditionView({
                 onClick={() => setRespondentAccepted(true)}
                 className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Lanjut ke Aspek 1 <ChevronRight className="h-4 w-4" />
+                Lanjut ke Pendataan Keluarga <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           ) : null}
@@ -344,7 +391,7 @@ export function PersonAdditionView({
                     }}
                     className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white"
                   >
-                    Selanjutnya ke Identitas <ChevronRight className="h-4 w-4" />
+                    Selanjutnya ke Pendataan Keluarga <ChevronRight className="h-4 w-4" />
                   </button>
                 </div>
               ) : null}
@@ -357,13 +404,43 @@ export function PersonAdditionView({
                   NIK bayi boleh dikosongkan. Sistem akan membuat NIK sementara 16 digit yang tetap dapat diperbarui saat dokumen resmi tersedia.
                 </p>
               ) : null}
+              {isHead ? (
+                <div className="flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900">Pendataan Keluarga Baru</h2>
+                    <p className="mt-1 text-sm text-slate-500">Isi seluruh 6 aspek kepala keluarga. Identitas tiap anggota ditanyakan satu per satu, hanya pertanyaan khusus anggota.</p>
+                  </div>
+                  <label className="text-xs font-semibold text-slate-600">Jumlah anggota selain kepala
+                    <input type="number" min="0" max="30" value={extraMembers.length} onChange={(event) => setMemberCount(Number(event.target.value))} className="mt-1 block w-32 rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </label>
+                </div>
+              ) : null}
+              {isHead ? (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {[record, ...extraMembers].map((person, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setSelectedPerson(index)}
+                      className={clsx("shrink-0 rounded-xl border px-4 py-3 text-left", selectedPerson === index ? "border-indigo-500 bg-indigo-50" : "border-slate-200 bg-white")}
+                    >
+                      <span className="block text-xs font-semibold text-indigo-600">{index === 0 ? "Kepala Keluarga" : `Anggota ${index}`}</span>
+                      <span className="mt-0.5 block text-sm font-medium text-slate-800">{person.nama || "Belum diisi"}</span>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
               <SurveyEditor
-                role={role}
-                value={record}
-                onChange={setRecord}
-                errors={errors}
-                idPrefix={isHead ? "new-head" : "new-member"}
-                allowedGroups={["identitas_keluarga"]}
+                key={isHead ? `new-family-${selectedPerson}` : "new-member"}
+                role={editorRole}
+                value={editorValue}
+                onChange={(next) => {
+                  if (editingHead) setRecord(next);
+                  else setExtraMembers((current) => current.map((member, index) => index === selectedPerson - 1 ? next : member));
+                }}
+                errors={currentErrors}
+                idPrefix={isHead ? `new-family-${selectedPerson}` : "new-member"}
+                allowedGroups={editingHead && isHead ? undefined : ["identitas_keluarga"]}
                 hiddenFields={
                   eventType === "KELAHIRAN"
                     ? ["status_kawin", "agama", "suku", "status_dalam_keluarga"]
@@ -372,7 +449,7 @@ export function PersonAdditionView({
                 optionalFields={eventType === "KELAHIRAN" ? ["nik"] : undefined}
               />
               <div className="flex justify-end border-t border-slate-200 pt-5">
-                <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Aspek 1 dan Kembali ke Daftar Keluarga" : "Simpan Aspek 1"}</button>
+                <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : isHead ? "Simpan Keluarga Baru" : "Simpan Aspek 1"}</button>
               </div>
             </>
           ) : null}

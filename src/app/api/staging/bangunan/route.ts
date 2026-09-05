@@ -395,6 +395,7 @@ export async function POST(req: NextRequest) {
           stagingGroupId: groupId,
           userId: ctx.userId,
           userName: ctx.userName,
+          complete: true,
         });
 
         const [latestSession, latestSnapshot] = await Promise.all([

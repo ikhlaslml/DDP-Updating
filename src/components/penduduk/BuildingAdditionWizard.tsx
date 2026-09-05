@@ -59,7 +59,7 @@ const STEPS = [
   { title: "Peta", subtitle: "Tandai batas atap", icon: MapPinned },
   { title: "Bangunan", subtitle: "Jenis dan alamat", icon: Building2 },
   { title: "Responden", subtitle: "Nama dan foto", icon: UserRoundCheck },
-  { title: "Keluarga", subtitle: "Hanya Aspek 1", icon: Users },
+  { title: "Keluarga", subtitle: "6 aspek dan anggota", icon: Users },
   { title: "Periksa", subtitle: "Sebelum disimpan", icon: Check },
 ];
 
@@ -162,7 +162,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       }
     }
     if (step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo)) {
-      setGeneralError("Nama dan foto responden wajib diisi sebelum membuka Aspek 1.");
+      setGeneralError("Nama dan foto responden wajib diisi sebelum membuka pendataan keluarga.");
       return false;
     }
     if (step === 3 && occupied) {
@@ -438,7 +438,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
       {step === 3 && occupied ? (
         <section className="space-y-5">
           <div className="flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-            <div><h2 className="text-xl font-bold text-slate-900">Penghuni Bangunan</h2><p className="mt-1 text-sm text-slate-500">Satu kepala keluarga dan seluruh orang yang tinggal/ditanggung dalam rumah ini.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900">Penghuni Bangunan</h2><p className="mt-1 text-sm text-slate-500">Isi seluruh 6 aspek kepala keluarga. Identitas tiap anggota ditanyakan satu per satu, hanya pertanyaan khusus anggota.</p></div>
             <div className="flex flex-wrap items-end gap-3">
               <label className="text-xs font-semibold text-slate-600">Jumlah anggota selain kepala
                 <input type="number" min="0" max="30" value={members.length} onChange={(event) => setMemberCount(Number(event.target.value))} className="mt-1 block w-32 rounded-xl border border-slate-300 px-3 py-2 text-sm" />
@@ -462,7 +462,8 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
             }}
             errors={currentErrors}
             idPrefix={`building-person-${selectedPerson}`}
-            allowedGroups={["identitas_keluarga"]}
+            allowedGroups={selectedPerson === 0 ? undefined : ["identitas_keluarga"]}
+            key={`building-person-${selectedPerson}`}
           />
         </section>
       ) : null}
@@ -484,7 +485,7 @@ export function BuildingAdditionWizard({ eventType }: { eventType?: "MIGRASI_MAS
         {step < 4 ? (
           <button type="button" disabled={(eventType === "MIGRASI_MASUK" && !eventAccepted) || (step === 2 && occupied && (!respondent.nama.trim() || !respondent.photo))} onClick={next} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjutkan <ChevronRight className="h-4 w-4" /></button>
         ) : (
-          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Aspek 1 dan Lihat Daftar Keluarga" : "Simpan Perubahan"}</button>
+          <button type="button" disabled={submitting} onClick={submit} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"><Check className="h-4 w-4" /> {submitting ? "Menyimpan..." : occupied ? "Simpan Keluarga Baru" : "Simpan Perubahan"}</button>
         )}
       </div>
     </div>
