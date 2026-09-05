@@ -75,6 +75,13 @@ const STATUS_VIEW = {
   },
 } as const;
 
+function dueQuestionLabel(familyCount: number, memberCount: number) {
+  const parts: string[] = [];
+  if (familyCount > 0) parts.push(`${familyCount} pertanyaan tingkat keluarga`);
+  if (memberCount > 0) parts.push(`${memberCount} pertanyaan per anggota`);
+  return parts.length ? parts.join(" · ") : "Tidak ada";
+}
+
 function StatusBadge({ status }: { status: CellStatus }) {
   const view = STATUS_VIEW[status];
   return (
@@ -545,7 +552,7 @@ export function PeriodicUpdatingView() {
               <tr>
                 <th className="sticky left-0 z-10 bg-slate-50 px-4 py-3">Keluarga</th>
                 <th className="px-4 py-3">Lokasi</th>
-                <th className="px-4 py-3">Jatuh tempo</th>
+                <th className="px-4 py-3">Pertanyaan jatuh tempo</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3">Aksi</th>
               </tr>
@@ -563,7 +570,7 @@ export function PeriodicUpdatingView() {
                   </td>
                   <td className="px-4 py-3 text-slate-600">{family.dusun ?? "-"}, RW {family.rw ?? "-"}/RT {family.rt ?? "-"}</td>
                   <td className="px-4 py-3">
-                    <span className="text-xs text-slate-600">{family.dueFamilyFields} keluarga · {family.dueMemberFields} anggota</span>
+                    <span className="text-xs text-slate-600">{dueQuestionLabel(family.dueFamilyFields, family.dueMemberFields)}</span>
                   </td>
                   <td className="px-4 py-3"><StatusBadge status={family.status} /></td>
                   <td className="px-4 py-3">
