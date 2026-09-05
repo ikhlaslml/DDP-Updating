@@ -275,15 +275,17 @@ export function PendudukTable({
         <div className="ml-auto flex flex-wrap items-center gap-2 max-sm:ml-0 max-sm:w-full">
           <a
             href={`/api/penduduk/export?${exportQuery}&format=xlsx`}
+            title="Unduh rekap"
             className="inline-flex min-h-10 items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
             Rekap
           </a>
           <a
             href={`/api/penduduk/export?${exportQuery}&format=csv`}
+            title="Unduh berkas CSV"
             className="inline-flex min-h-10 items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            Teks
+            CSV
           </a>
           {canWrite ? <AddDataMenu /> : null}
         </div>

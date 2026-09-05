@@ -74,7 +74,7 @@ export function PeriodExportControls() {
           aria-disabled={disabled}
           className={`inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 ${disabled ? inactiveClass : ""}`}
         >
-          Unduh teks
+          Unduh CSV
         </a>
         <a
           href={href("xlsx")}
