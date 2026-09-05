@@ -14,7 +14,7 @@ export const periodicReminderCounts = unstable_cache(
       annual: summarizePeriodicFamilies(annualFamilies),
     };
   },
-  ["periodic-reminder-counts-v1"],
+  ["periodic-reminder-counts-v2"],
   { revalidate: 300, tags: ["periodic-updating"] },
 );
 

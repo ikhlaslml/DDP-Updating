@@ -11,6 +11,7 @@ export type UpdatingResident = {
   nik: string | null;
   nkk: string | null;
   createdAt: Date;
+  datamasuk?: Date | null;
 };
 
 type UpdatingState = {
@@ -115,6 +116,7 @@ export function periodicCellState(
   const lastUpdated =
     state.updatedAtByCell.get(key) ??
     state.baselineOverride ??
+    resident.datamasuk ??
     (resident.nik ? state.snapshotDateByNik.get(resident.nik) : undefined) ??
     state.t0Date ??
     resident.createdAt;

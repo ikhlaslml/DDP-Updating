@@ -205,7 +205,7 @@ export function PengaturanView() {
             />
           </label>
           <p className="mt-2 text-xs text-slate-500">
-            Jika dikosongkan, sistem memakai snapshot terbaru yang memuat warga, lalu T0, dan terakhir tanggal warga dibuat.
+            Jika dikosongkan, sistem memakai tanggal pendataan tiap warga, lalu snapshot, lalu tanggal baris dibuat di aplikasi.
           </p>
           {canWrite ? (
             <div className="mt-4 flex items-center justify-end gap-3">

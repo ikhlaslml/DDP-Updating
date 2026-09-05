@@ -26,9 +26,14 @@ Urutan patokan untuk setiap pasangan penduduk–parameter:
 
 1. `FieldUpdate.updatedAt`.
 2. `PengaturanDesa.tanggalBaselineData` bila operator menetapkannya.
-3. Snapshot terbaru yang memuat NIK penduduk.
-4. Tanggal snapshot T0.
-5. `Penduduk.createdAt`.
+3. `Penduduk.datamasuk` (tanggal pendataan lapangan).
+4. Snapshot terbaru yang memuat NIK penduduk.
+5. Tanggal snapshot T0.
+6. `Penduduk.createdAt`.
+
+Pembanding jatuh tempo memakai waktu server saat permintaan (`new Date()`),
+bukan tanggal impor ke aplikasi. Tanpa langkah 3, data yang baru diimpor
+tetap terlihat “segar” karena `createdAt` dan snapshot T0 mengikuti waktu impor.
 
 Status sel:
 
