@@ -385,6 +385,32 @@ async function main() {
   await seedDesaSettings(desaCitaringgul.id, "Desa Citaringgul", "KECAMATAN BABAKAN MADANG", "Kabupaten Bogor, Jawa Barat 16810");
   await seedDesaSettings(desaBabakanSadeng.id, "Desa Babakan Sadeng", "KECAMATAN LEUWISADENG", "Kabupaten Bogor, Jawa Barat 16641");
 
+  async function compactLegacyBuildingCodes(desaId: string, slug: string) {
+    const LEGACY_MIN = 100_000;
+    const rows = await prisma.penduduk.findMany({
+      where: { desaId, kode_bangunan: { not: null } },
+      select: { kode_bangunan: true },
+    });
+    const codes = [...new Set(rows.flatMap((row) => (row.kode_bangunan === null ? [] : [row.kode_bangunan])))]
+      .sort((left, right) => left - right);
+    if (!codes.length || codes.some((code) => code < LEGACY_MIN)) return;
+    const mapping = new Map(codes.map((code, index) => [code, index + 1]));
+    await prisma.$transaction(async (tx) => {
+      for (const [before] of mapping) {
+        await tx.bangunan.updateMany({ where: { desaId, kode: before }, data: { kode: -before } });
+        await tx.bangunanDihapus.updateMany({ where: { desaId, kodeBangunan: before }, data: { kodeBangunan: -before } });
+      }
+      for (const [before, after] of mapping) {
+        await tx.penduduk.updateMany({ where: { desaId, kode_bangunan: before }, data: { kode_bangunan: after } });
+        await tx.sesiPendataanBangunan.updateMany({ where: { desaId, kodeBangunan: before }, data: { kodeBangunan: after } });
+        await tx.progresPendataanKeluarga.updateMany({ where: { desaId, kodeBangunan: before }, data: { kodeBangunan: after } });
+        await tx.bangunan.updateMany({ where: { desaId, kode: -before }, data: { kode: after } });
+        await tx.bangunanDihapus.updateMany({ where: { desaId, kodeBangunan: -before }, data: { kodeBangunan: after } });
+      }
+    }, { isolationLevel: "Serializable", timeout: 60_000 });
+    console.log(`  ${slug}: kode bangunan dummy dinomori ulang menjadi 1..${codes.length}`);
+  }
+
   console.log("Seeding penduduk per desa...");
   const demoVillages = [
     [desaSetu, "320105", -6.557, 106.866],
@@ -396,6 +422,7 @@ async function main() {
     if ((await prisma.penduduk.count({ where: { desaId: desa.id } })) === 0) {
       await seedPenduduk(desa.id, desa.slug, desa.nama, nikPrefix, desa.kodeWilayah ?? "", centerLat, centerLng, 120);
     }
+    await compactLegacyBuildingCodes(desa.id, desa.slug);
   }
 
   console.log("Done. 4 demo villages ensured with users, settings, templates, data, and T0 snapshots.");

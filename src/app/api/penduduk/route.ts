@@ -15,9 +15,15 @@ export async function GET(req: NextRequest) {
 
   const page = Math.max(1, Number(sp.get("page")) || 1);
   const pageSize = Math.min(200, Math.max(1, Number(sp.get("pageSize")) || 25));
-  const sortByParam = sp.get("sortBy") || "createdAt";
-  const sortDir = sp.get("sortDir") === "asc" ? "asc" : "desc";
-  const sortBy = SORTABLE.has(sortByParam) ? sortByParam : "createdAt";
+  const sortByParam = sp.get("sortBy") || "nkk";
+  const sortBy = SORTABLE.has(sortByParam) ? sortByParam : "nkk";
+  const sortDir = sp.get("sortDir") === "asc"
+    ? "asc"
+    : sp.get("sortDir") === "desc"
+      ? "desc"
+      : sortBy === "nkk"
+        ? "asc"
+        : "desc";
 
   const desa = await prisma.desa.findUnique({ where: { id: ctx.desaId }, select: { kodeWilayah: true } });
   try {

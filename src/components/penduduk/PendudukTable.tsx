@@ -57,7 +57,7 @@ export function PendudukTable({
 
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const [sorting, setSorting] = useState<SortingState>([{ id: "createdAt", desc: true }]);
+  const [sorting, setSorting] = useState<SortingState>([{ id: "nkk", desc: false }]);
   const [search, setSearch] = useState(initialQuery);
   const [debouncedSearch, setDebouncedSearch] = useState(initialQuery);
   const [dusun, setDusun] = useState("");
@@ -291,7 +291,7 @@ export function PendudukTable({
 
       <p className="text-xs text-slate-500">
         <span className="md:hidden">Ketuk tombol <strong>Detail</strong> pada kartu warga untuk membuka data keluarga dan bangunan.</span>
-        <span className="hidden md:inline">Klik sel untuk mengubah satu isian. Parameter keluarga berlaku untuk seluruh anggota KK. Pensil di kolom Aksi tetap membuka form lengkap.</span>
+        <span className="hidden md:inline">Keluarga diurutkan per Nomor KK. Baris kepala keluarga berwarna biru muda, anggota lain putih. Klik sel untuk mengubah satu isian.</span>
       </p>
       <div className="hidden flex-wrap items-center gap-3 text-xs text-slate-600 md:flex">
         <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-red-100 ring-1 ring-red-300" /> Jatuh tempo</span>
@@ -305,7 +305,7 @@ export function PendudukTable({
         ) : rows.length === 0 ? (
           <div className="rounded-2xl border border-slate-100 bg-white px-4 py-8 text-center text-sm text-slate-400">Tidak ada data.</div>
         ) : rows.map((row) => (
-          <article key={row.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+          <article key={row.id} className={`rounded-2xl border p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)] ${row.status_dalam_keluarga === "Kepala Keluarga" ? "border-sky-200 bg-sky-50" : "border-slate-200 bg-white"}`}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <h3 className="break-words font-bold text-slate-900">{formatCell(row.nama, mapping.kolom.nama)}</h3>
@@ -365,8 +365,11 @@ export function PendudukTable({
                 </td>
               </tr>
             ) : (
-              table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="group border-b border-slate-100 last:border-0 hover:bg-slate-50">
+              table.getRowModel().rows.map((row) => {
+                const headRow = row.original.status_dalam_keluarga === "Kepala Keluarga";
+                const rowBg = headRow ? "bg-sky-50 hover:bg-sky-50" : "bg-white hover:bg-slate-50";
+                return (
+                <tr key={row.id} className={`group border-b border-slate-100 last:border-0 ${rowBg}`}>
                   {row.getVisibleCells().map((cell) => {
                     const sticky = STICKY_CORE[cell.column.id];
                     const actions = cell.column.id === "_actions";
@@ -377,18 +380,20 @@ export function PendudukTable({
                         : status === "MENUNGGU_PENGGABUNGAN"
                           ? "bg-amber-50 group-hover:bg-amber-50"
                           : "";
+                    const baseBg = statusBg || (headRow ? "bg-sky-50 group-hover:bg-sky-50" : "bg-white group-hover:bg-slate-50");
                     return (
                       <td
                         key={cell.id}
                         style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
-                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${statusBg} ${sticky ? `sticky z-10 overflow-hidden text-ellipsis ${statusBg || "bg-white group-hover:bg-slate-50"} shadow-[1px_0_0_#e2e8f0]` : ""} ${actions ? "sticky z-20 bg-white shadow-[-1px_0_0_#e2e8f0] group-hover:bg-slate-50 max-sm:hidden" : ""}`}
+                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${baseBg} ${sticky ? `sticky z-10 overflow-hidden text-ellipsis shadow-[1px_0_0_#e2e8f0]` : ""} ${actions ? "sticky z-20 shadow-[-1px_0_0_#e2e8f0] max-sm:hidden" : ""}`}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     );
                   })}
                 </tr>
-              ))
+                );
+              })
             )}
           </tbody>
         </table>

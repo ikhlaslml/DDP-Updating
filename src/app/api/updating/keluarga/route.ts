@@ -42,10 +42,21 @@ export async function GET(req: NextRequest) {
     }
     return true;
   });
+  const statusRank = { JATUH_TEMPO: 0, MENUNGGU_PENGGABUNGAN: 1, TERKINI: 2 } as const;
+  filtered.sort((left, right) => {
+    const rank = statusRank[left.status] - statusRank[right.status];
+    if (rank) return rank;
+    return left.nkk.localeCompare(right.nkk, "id-ID");
+  });
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * pageSize;
   return NextResponse.json({
+    summary: {
+      total: filtered.length,
+      dueFamilies: filtered.filter((family) => family.status === "JATUH_TEMPO").length,
+      waitingFamilies: filtered.filter((family) => family.status === "MENUNGGU_PENGGABUNGAN").length,
+    },
     data: filtered.slice(start, start + pageSize).map((family) => ({
       nkk: family.nkk,
       headId: family.headId,

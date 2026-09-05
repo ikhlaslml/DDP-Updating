@@ -54,6 +54,7 @@ type FamilyDetail = FamilyRow & {
 };
 type ListResponse = {
   data: FamilyRow[];
+  summary?: { total: number; dueFamilies: number; waitingFamilies: number };
   pagination: { page: number; pageSize: number; total: number; totalPages: number };
   facets: { dusun: string[]; rw: number[]; rt: number[] };
 };
@@ -474,7 +475,8 @@ export function PeriodicUpdatingView() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Pembaruan Berkala Keluarga</h1>
             <p className="mt-1 text-sm text-slate-500">
-              Pengingat membantu operator memprioritaskan pekerjaan dan tidak pernah mengunci perubahan.
+              Jatuh tempo dihitung dari tanggal pendataan ditambah {cycle === "6-bulan" ? "6" : "12"} bulan.
+              Keluarga yang sudah lewat tempo ditampilkan di atas.
             </p>
           </div>
         </div>
@@ -520,6 +522,14 @@ export function PeriodicUpdatingView() {
           </select>
         </div>
       </section>
+
+      {list?.summary ? (
+        <p className="text-sm text-slate-600">
+          <strong className="text-slate-900">{list.summary.dueFamilies}</strong> keluarga jatuh tempo
+          {list.summary.waitingFamilies ? ` · ${list.summary.waitingFamilies} menunggu penggabungan` : ""}
+          {` · ${list.summary.total} keluarga pada filter ini`}
+        </p>
+      ) : null}
 
       {error ? <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
 

@@ -11,8 +11,9 @@ export function formatCell(value: unknown, def: KolomDef | undefined): string {
       if (Number.isNaN(d.getTime())) return String(value);
       return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
     }
-    case "float":
     case "int":
+      return typeof value === "number" ? String(value) : String(value);
+    case "float":
       return typeof value === "number" ? value.toLocaleString("id-ID") : String(value);
     default:
       return String(value);
