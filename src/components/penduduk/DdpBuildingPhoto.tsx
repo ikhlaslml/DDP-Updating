@@ -1,14 +1,67 @@
 "use client";
 
 import Image from "next/image";
-import { Building2, ImageOff, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Building2, ImageOff, Maximize2, RefreshCw, X, ZoomIn, ZoomOut } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 2;
+const ZOOM_STEP = 0.25;
+
+function BuildingPhotoImage({ src, code, zoom }: { src: string; code: number; zoom: number }) {
+  return (
+    <Image
+      src={src}
+      alt={`Foto bangunan DDP nomor ${code}`}
+      width={1600}
+      height={1200}
+      unoptimized
+      className="mx-auto h-auto max-w-none object-contain"
+      style={{ width: `${Math.round(zoom * 100)}%`, height: "auto" }}
+    />
+  );
+}
+
+function ZoomToolbar({
+  zoom,
+  onZoom,
+  extra,
+}: {
+  zoom: number;
+  onZoom: (next: number) => void;
+  extra: ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-1">
+      <button
+        type="button"
+        onClick={() => onZoom(zoom - ZOOM_STEP)}
+        disabled={zoom <= ZOOM_MIN}
+        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-slate-200 px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ZoomOut className="h-3.5 w-3.5" /> Perkecil
+      </button>
+      <span className="min-w-12 text-center text-xs font-semibold text-slate-500">{Math.round(zoom * 100)}%</span>
+      <button
+        type="button"
+        onClick={() => onZoom(zoom + ZOOM_STEP)}
+        disabled={zoom >= ZOOM_MAX}
+        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-slate-200 px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ZoomIn className="h-3.5 w-3.5" /> Perbesar
+      </button>
+      {extra}
+    </div>
+  );
+}
 
 export function DdpBuildingPhoto({ code }: { code: number }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [attempt, setAttempt] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -43,6 +96,24 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, [attempt, code]);
+
+  useEffect(() => {
+    if (!expanded) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setExpanded(false);
+    }
+    document.addEventListener("keydown", onKeyDown);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previous;
+    };
+  }, [expanded]);
+
+  function changeZoom(next: number) {
+    setZoom(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round(next / ZOOM_STEP) * ZOOM_STEP)));
+  }
 
   if (loading) {
     return (
@@ -84,20 +155,75 @@ export function DdpBuildingPhoto({ code }: { code: number }) {
   }
 
   return (
-    <figure className="overflow-hidden rounded-2xl border border-slate-100 bg-white p-3 shadow-sm">
-      <div className="mb-2 flex items-center gap-2 px-1">
-        <Building2 className="h-5 w-5 text-indigo-600" />
-        <h2 className="font-bold text-slate-900">Foto Bangunan Core DDP</h2>
+    <figure className="rounded-2xl border border-slate-100 bg-white p-3 shadow-sm">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
+        <div className="flex items-center gap-2">
+          <Building2 className="h-5 w-5 text-indigo-600" />
+          <h2 className="font-bold text-slate-900">Foto Bangunan Core DDP</h2>
+        </div>
+        <ZoomToolbar
+          zoom={zoom}
+          onZoom={changeZoom}
+          extra={(
+            <button
+              type="button"
+              onClick={() => setExpanded(true)}
+              className="inline-flex min-h-9 items-center gap-1 rounded-lg bg-indigo-600 px-2.5 text-xs font-semibold text-white hover:bg-indigo-700"
+            >
+              <Maximize2 className="h-3.5 w-3.5" /> Layar penuh
+            </button>
+          )}
+        />
       </div>
-      <Image
-        src={imageUrl}
-        alt={`Foto bangunan DDP nomor ${code}`}
-        width={900}
-        height={600}
-        unoptimized
-        className="max-h-80 w-full rounded-xl object-cover"
-      />
-      <figcaption className="px-1 pt-2 text-xs text-slate-500">Foto bangunan dari pendataan Data Desa Presisi.</figcaption>
+      <div className="overflow-auto rounded-xl bg-slate-100">
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className="block w-full cursor-zoom-in p-2"
+          aria-label="Buka foto bangunan ukuran penuh"
+        >
+          <BuildingPhotoImage src={imageUrl} code={code} zoom={zoom} />
+        </button>
+      </div>
+      <figcaption className="px-1 pt-2 text-xs text-slate-500">
+        Foto bangunan utuh dari pendataan Data Desa Presisi. Gunakan perkecil/perbesar atau layar penuh untuk menyesuaikan ukuran.
+      </figcaption>
+      {expanded ? (
+        <div
+          role="presentation"
+          onClick={() => setExpanded(false)}
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-[2px]"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Foto bangunan DDP nomor ${code}`}
+            onClick={(event) => event.stopPropagation()}
+            className="flex max-h-[92vh] w-full max-w-6xl flex-col rounded-2xl bg-white p-3 shadow-2xl"
+          >
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
+              <p className="text-sm font-bold text-slate-900">Foto bangunan #{code}</p>
+              <ZoomToolbar
+                zoom={zoom}
+                onZoom={changeZoom}
+                extra={(
+                  <button
+                    type="button"
+                    onClick={() => setExpanded(false)}
+                    aria-label="Tutup foto"
+                    className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-slate-200 px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  >
+                    <X className="h-3.5 w-3.5" /> Tutup
+                  </button>
+                )}
+              />
+            </div>
+            <div className="min-h-0 flex-1 overflow-auto rounded-xl bg-slate-100 p-2">
+              <BuildingPhotoImage src={imageUrl} code={code} zoom={zoom} />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </figure>
   );
 }
