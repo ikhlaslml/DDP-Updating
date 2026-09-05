@@ -363,7 +363,7 @@ export function PersonAdditionView({
                 onChange={setRecord}
                 errors={errors}
                 idPrefix={isHead ? "new-head" : "new-member"}
-                allowedGroups={["identitas_keluarga"]}
+                allowedGroups={isHead ? ["identitas_keluarga"] : undefined}
                 hiddenFields={
                   eventType === "KELAHIRAN"
                     ? ["status_kawin", "agama", "suku", "status_dalam_keluarga"]
