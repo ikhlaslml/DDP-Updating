@@ -379,6 +379,11 @@ model PeristiwaKependudukan {
   nkk            String?
   nama           String?
   data           String?
+  wilayahDeskel String?
+  wilayahKecamatan String?
+  wilayahKabkota String?
+  wilayahProvinsi String?
+  wilayahKodeDeskel String?
   createdBy      String?
   createdByName  String?
   createdByEmail String?
@@ -393,11 +398,43 @@ model FieldUpdate {
   id         String   @id @default(cuid())
   desaId     String?
   pendudukId String
+  nkk        String?
   field      String
+  scope      String   @default("PERSON")
+  source     String   @default("EDIT")
+  updatedById String?
+  updatedByName String?
+  updatedByEmail String?
+  stagingChangeId String?
+  catatan    String?
   updatedAt  DateTime @default(now())
 
   @@unique([pendudukId, field])
   @@index([desaId, field, updatedAt])
+  @@index([desaId, nkk, scope, field])
+  @@index([stagingChangeId])
+}
+
+// Append-only audit history for edits and no-change confirmations.
+model FieldUpdateLog {
+  id         String   @id @default(cuid())
+  desaId     String
+  pendudukId String
+  nkk        String?
+  field      String
+  scope      String
+  source     String
+  updatedById String?
+  updatedByName String?
+  updatedByEmail String?
+  stagingChangeId String?
+  catatan    String?
+  createdAt  DateTime @default(now())
+
+  @@index([desaId, field, createdAt])
+  @@index([desaId, nkk, scope])
+  @@index([pendudukId])
+  @@index([stagingChangeId])
 }
 
 // Digitized physical building. Occupants keep kode_bangunan in Penduduk.
@@ -604,6 +641,7 @@ model PengaturanDesa {
   tandaTanganUrl String?
   tandaTanganMediaAssetId String?
   tandaTanganUpdatedAt DateTime?
+  tanggalBaselineData DateTime?
   updatedAt  DateTime @updatedAt
 
   @@index([desaId, logoMediaAssetId])

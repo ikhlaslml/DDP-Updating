@@ -3,6 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Send } from "lucide-react";
+import {
+  EMPTY_MIGRATION_REGION,
+  MigrationRegionFields,
+  type MigrationRegionValue,
+} from "@/components/penduduk/MigrationRegionFields";
 
 type Resident = {
   id: string;
@@ -38,7 +43,7 @@ export function DemographicExitView({ type }: { type: "KEMATIAN" | "MIGRASI_KELU
   const [penyebab, setPenyebab] = useState("");
   const [punyaAkta, setPunyaAkta] = useState("");
   const [nomorAkta, setNomorAkta] = useState("");
-  const [tujuan, setTujuan] = useState("");
+  const [destination, setDestination] = useState<MigrationRegionValue>(EMPTY_MIGRATION_REGION);
   const [alasan, setAlasan] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -78,12 +83,30 @@ export function DemographicExitView({ type }: { type: "KEMATIAN" | "MIGRASI_KELU
       setError("Kepala keluarga pengganti wajib dipilih.");
       return;
     }
+    if (
+      type === "MIGRASI_KELUAR" &&
+      Object.values(destination).some((value) => !value.trim())
+    ) {
+      setError("Desa/kelurahan, kecamatan, kabupaten/kota, dan provinsi tujuan wajib diisi.");
+      return;
+    }
     setSubmitting(true);
     setError(null);
     const response = await fetch("/api/peristiwa", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type, pendudukId: selected.id, scope, tanggal, replacementId: replacementId || undefined, penyebab, punyaAkta, nomorAkta, tujuan, alasan }),
+      body: JSON.stringify({
+        type,
+        pendudukId: selected.id,
+        scope,
+        tanggal,
+        replacementId: replacementId || undefined,
+        penyebab,
+        punyaAkta,
+        nomorAkta,
+        ...(type === "MIGRASI_KELUAR" ? destination : {}),
+        alasan,
+      }),
     });
     const json = await response.json().catch(() => ({}));
     setSubmitting(false);
@@ -115,7 +138,9 @@ export function DemographicExitView({ type }: { type: "KEMATIAN" | "MIGRASI_KELU
           {type === "KEMATIAN" ? <label className="text-sm font-medium text-slate-700">Penyebab Kematian *<select value={penyebab} onChange={(event) => setPenyebab(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="">-- pilih --</option>{DEATH_CAUSES.map((cause) => <option key={cause}>{cause}</option>)}</select></label> : null}
           {type === "KEMATIAN" ? <label className="text-sm font-medium text-slate-700">Kepemilikan Akta Kematian<select value={punyaAkta} onChange={(event) => setPunyaAkta(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5"><option value="">-- pilih --</option><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></label> : null}
           {type === "KEMATIAN" && punyaAkta === "Ya" ? <label className="text-sm font-medium text-slate-700">Nomor Akta Kematian<input value={nomorAkta} onChange={(event) => setNomorAkta(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5" /></label> : null}
-          {type === "MIGRASI_KELUAR" ? <label className="text-sm font-medium text-slate-700">Daerah Tujuan *<input value={tujuan} onChange={(event) => setTujuan(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5" /></label> : null}
+          {type === "MIGRASI_KELUAR" ? (
+            <MigrationRegionFields direction="tujuan" value={destination} onChange={setDestination} />
+          ) : null}
           {type === "MIGRASI_KELUAR" ? <label className="text-sm font-medium text-slate-700">Alasan Pindah<input value={alasan} onChange={(event) => setAlasan(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5" /></label> : null}
           {replacementRequired ? <label className="text-sm font-medium text-slate-700">Kepala Keluarga Pengganti *<select value={replacementId} onChange={(event) => setReplacementId(event.target.value)} className="mt-1 w-full rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5"><option value="">-- pilih anggota --</option>{replacementOptions.map((member) => <option key={member.id} value={member.id}>{member.nama} — {member.status_dalam_keluarga}</option>)}</select></label> : null}
         </div>

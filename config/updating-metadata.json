@@ -1,11 +1,7 @@
 {
   "_meta": {
     "sources": [
-      "Parameter_DDP_Estimasi_Waktu_Updating (1).xlsx",
-      "jawabantertutup.csv",
-      "merge_pertanyaan.csv",
-      "questions(logic_jawaban).csv",
-      "ajaib_datatype.xlsx"
+      "config/sources/merge_pertanyaan.csv"
     ],
     "tooltipPolicy": "QUESTION_LOGIC_ONLY",
     "unmappedFrequency": [
@@ -13,21 +9,21 @@
       "subjek",
       "datamasuk",
       "enumerator",
+      "kode_bangunan",
+      "kode_deskel",
+      "deskel",
+      "dusun",
+      "rw",
+      "rt",
       "lat",
       "lng",
       "usia",
       "usia_dec",
       "lama_tinggal",
-      "sampah_buang",
       "tanah_nama",
       "tanah_nomor",
-      "nomor_objek_pajak",
       "kandung",
       "kulkas",
-      "hp_merk",
-      "hp_provider",
-      "rp_cicilan",
-      "kerja_ket",
       "nel_kategori",
       "nel_alat_bantu",
       "nel_ikan_tangkap_lain",
@@ -39,14 +35,8 @@
       "nel_asuransi_rp",
       "nel_kredit",
       "nel_pembiayaan_budidaya",
-      "tki_tujuan",
       "penyakit_jumlah",
       "perokok",
-      "lahan_luasnon",
-      "lahan_luas_dikelola",
-      "lahan_luas_tidakdikelola",
-      "lahangarap_luas",
-      "lahansewa_luas",
       "ppkb",
       "ppkt",
       "skor_kls",
@@ -71,114 +61,193 @@
       "bencana_rumah_kondisi",
       "bencana_rumah_bagianrusak",
       "bencana_ketenum_bangunan",
-      "rp_sph",
-      "rp_belanja",
-      "kon_ketan",
-      "kon_oyong",
-      "kon_kelor"
-    ]
+      "rp_belanja"
+    ],
+    "stats": {
+      "totalRows": 336,
+      "activeRows": 294,
+      "inactiveRows": 42,
+      "classifiedSchemaFields": 229,
+      "headFields": 224,
+      "memberFields": 66,
+      "headOnlyFields": 164,
+      "memberOnlyFields": 6,
+      "sharedFields": 60,
+      "classifiedHeadFields": 223,
+      "classifiedMemberFields": 66,
+      "classifiedHeadOnlyFields": 163,
+      "sixMonthFields": 81,
+      "sixMonthHeadFields": 78,
+      "sixMonthMemberFields": 32,
+      "annualFields": 26,
+      "annualHeadFields": 26,
+      "annualMemberFields": 3,
+      "skippedUnknownHeaders": [
+        "alamat_ktp"
+      ]
+    }
   },
   "fields": {
     "abs_id": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.471,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "subjek": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.381,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "datamasuk": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.571,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "enumerator": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.552,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kode_bangunan": {
-      "frequency": "ANNUAL",
-      "frequencySource": "Kode Bangunan",
-      "frequencyConfidence": 1.0,
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kode_deskel": {
-      "frequency": "ANNUAL",
-      "frequencySource": "Kode Desa",
-      "frequencyConfidence": 1.0,
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "deskel": {
-      "frequency": "ANNUAL",
-      "frequencySource": "Desa/Kelurahan",
-      "frequencyConfidence": 1.0,
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "dusun": {
-      "frequency": "ANNUAL",
-      "frequencySource": "Dusun/Kampung/ Dukuh",
-      "frequencyConfidence": 1.0,
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rw": {
-      "frequency": "ANNUAL",
-      "frequencySource": "RW",
-      "frequencyConfidence": 1.0,
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rt": {
-      "frequency": "ANNUAL",
-      "frequencySource": "RT",
-      "frequencyConfidence": 1.0,
+      "frequency": null,
+      "frequencySource": null,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lat": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.444,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lng": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.364,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "responden": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Nama Responden",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nama responden",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -187,12 +256,21 @@
           "inputType": "text",
           "help": "Responden adalah orang yang diwawancarai atau orang memberikan informasi dalam pendataan. Syarat menjadi responden adalah kepala rumah tangga, istri, dan anak (diatas 18 tahun). Isi Nama Responden sesuai dengan nama di KTP."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nkk": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Nomor KK",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nomor kartu keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -201,12 +279,21 @@
           "inputType": "text",
           "help": "Nomor Kartu Keluarga adalah serangkaian angka yang terdiri dari kode provinsi, kota/kabupaten, dan kecamatan. (1) Isi Nomor KK sebanyak 16 digit. (2) Kasus 1 : KK lama, kurang satu angka. Jika kurang tambahkan angka \"0\" dari depan. Misalnya 0+123456789012345. Jadinya (0123456789012345) (3) Kasus 2 : KK hilang. Nomor KK dapat diisi dengan NIK KTP. (4) Kasus 3 : Rumah Tangga baru atau keluarga baru nikah yang belum memiliki KK. Isi dengan NIK sang Suami. Jika, suami tidak memiliki NIK, Isi dengan NIK Istri. (5) Kasus 4 : Tidak Memiliki KK dan NIK. Nomor KK diisi dengan identitas lain yang terdiri dari 16 angka seperti SIM, Nomor BPJS, NPWP, dan lain-lain. Jika kurang dari 16 angka, maka tambahkan angka “0” didepan deret angka tersebut. (6) Kasus 5 : Jika ada anggota keluarga lupa tanggal lahir namun ingat tahun maka, tulis 1 Juli. (7) Kasus 6: Jika ada anggota keluarga lupa tanggal namun ingat bulan dan tahun, tulis tanggal 15"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nama": {
-      "frequency": "INCIDENTAL",
-      "frequencySource": "Nama Responden",
-      "frequencyConfidence": 1.0,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "nama kepala keluarga (sesuai KTP)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -218,12 +305,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nik": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "NIK Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nik kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -235,12 +333,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "alamat": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Alamat Rumah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "alamat rumah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -249,12 +358,21 @@
           "inputType": "text",
           "help": "Alamat bangunan atau rumah sesuai dengan letak responden diwawancara. Jika sama dengan KTP, tuliskan sesuai alamat di KTP. Isi dengan nama Jalan, Blok, dan Nomor rumah."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "status_dalam_keluarga": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Status dalam Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status dalam keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -280,12 +398,23 @@
             "art"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "status_kawin": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Status perkawinan kepala dan anggota keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status perkawinan kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -303,12 +432,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "punya_ktp": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan KTP / KIA kepala dan anggota keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan ktp kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -328,12 +468,23 @@
             "tidak punya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "punya_aktalahir": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan Akta Lahir Kepala Keluarga dan Anggota Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan akta lahir kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -353,12 +504,23 @@
             "tidak punya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nama_kepala_rumah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Nama Kepala Rumah Tangga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nama kepala rumah tangga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -367,12 +529,21 @@
           "inputType": "text",
           "help": "Kepala Rumah Tangga adalah orang bertanggungjawab terhadap keluarga dan mengambil keputusan secara de facto. Kepala Rumah bisa berbeda dengan Kepala Keluarga. Kepala Keluarga ini ditentukan secara sosiologis dalam rumah tangga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nama_tulang_punggung": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Nama Tulang Punggung Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nama tulang punggung keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -381,12 +552,21 @@
           "inputType": "text",
           "help": "Tulang Punggung Keluarga adalah orang yang memenuhi atau membiayai kebutuhan keluarga. Nama Tulang Punggung Keluarga diisi Sesuai dengan KTP."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "no_hp": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Nomor HP Responden",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nomor handphone responden",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -395,12 +575,21 @@
           "inputType": "text",
           "help": "Nomor kontak responden yang memberikan keterangan terkait informasi keluarga yang aktif atau dapat dihubungi untuk verifikasi dan konfirmasi data."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "jml_keluarga": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepala dan Anggota Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepala dan anggota keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -409,12 +598,21 @@
           "inputType": "text",
           "help": "Total keluarga dalam kartu keluarga dan atau tinggal dalam satu rumah. Pilihan jawaban terbuka (Diisi dengan jumlah anggota keluarga termasuk Kepala Keluarga)"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tgl_lahir": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tanggal Lahir Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tanggal lahir kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -426,12 +624,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "jk": {
       "frequency": "IMMUTABLE",
-      "frequencySource": "Jenis Kelamin",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis kelamin kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -451,12 +660,23 @@
             "perempuan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "IMMUTABLE",
+        "MEMBER": "IMMUTABLE"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "thn_datang": {
       "frequency": "IMMUTABLE",
-      "frequencySource": "Tahun Datang ke Desa",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tahun datang ke desa",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -465,12 +685,21 @@
           "inputType": "year",
           "help": "Tahun datang adalah tahun di mana kepala keluarga datang tinggal dan menetap di desa tersebut. Ketika Kepala keluarga adalah penduduk asli maka yang diisi adalah tahun lahir."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "IMMUTABLE"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "dinamika": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Dinamika Kehidupan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "dinamika kehidupan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -482,12 +711,21 @@
           "inputType": "select",
           "help": "Dinamika Kehidupan adalah riwayat hidup seseorang. Fungsi pertanyaan ini untuk proses pembaharuan data kependudukan."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "agama": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Agama",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "agama kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -517,12 +755,23 @@
             "penghayat kepercayaan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "IMMUTABLE"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "suku": {
       "frequency": "IMMUTABLE",
-      "frequencySource": "Etnis/Suku Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "etnis/suku kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -534,12 +783,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "IMMUTABLE",
+        "MEMBER": "IMMUTABLE"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bhs_keluarga": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Bahasa dalam Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bahasa dalam keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -553,12 +813,21 @@
           "inputType": "select",
           "help": "Bahasa dalam keluarga sehari-hari adalah bahasa yang digunakan dalam berkomunikasi dalam kehidupan rumah tangga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bhs_daerah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Bahasa Daerah yang dipakai",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bahasa daerah yang dipakai",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -573,60 +842,102 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tgl_kawin": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tanggal perkawinan kepala keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tanggal perkawinan kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "usia": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.4,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "usia_dec": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.421,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lama_tinggal": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.645,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "punya_kk": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Kepemilikan Kartu Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan kartu keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "menetap": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tinggal Menetap",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tinggal menetap",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -639,24 +950,42 @@
           "inputType": "select",
           "help": "Tinggal Menetap adalah anggota keluarga yang bermukim, berdomisili, tinggal lebih dari enam bulan atau berencana tinggal menetap dalam satu wilayah."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "dead_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Anggota Keluarga yang Meninggal",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah anggota keluarga yang meninggal",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "akta_nikah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan akta nikah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan akta nikah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -666,12 +995,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "akta_cerai": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan akta perceraian",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan akta perceraian",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -681,12 +1021,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "partisipasi_sekolah": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Partisipasi Sekolah kepala dan anggota keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "partisipasi sekolah kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -708,12 +1059,23 @@
             "putus sekolah"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ijazah": {
       "frequency": "ANNUAL",
-      "frequencySource": "Pendidikan/Ijazah Terakhir kepala keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "pendidikan/ijazah terakhir kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -745,12 +1107,23 @@
             "s3"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL",
+        "MEMBER": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_pendidikan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Pengeluaran Pendidikan Kepala dan Anggota Keluarga yang sedang bersekolah (SPP dan Uang Saku/Bulan)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "pengeluaran pendidikan kepala dan anggota keluarga yang sedang bersekolah (SPP dan uang saku/ bulan)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -759,12 +1132,21 @@
           "inputType": "text",
           "help": "Jumlah Seluruh biaya pendidikan terdiri dari Biaya SPP, biaya operasional transportasi, biaya Jajan, biaya kosan, biaya Buku, biaya Laptop, dan biaya praktikum sekolah, dan biaya lain-lain yang dikeluarkan dalam keluarga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bantuan_pendidikan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Bantuan Pendidikan kepala dan anggota keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bantuan pendidikan kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -784,24 +1166,44 @@
             "tidak ada bantuan pendidikan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pendidikan_anggota": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jumlah kepala dan anggota Keluarga yang sedang sekolah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah anggota keluarga yang sedang sekolah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "keterampilan": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Keterampilan Yang Dimiliki Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "keterampilan yang dimiliki kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -847,12 +1249,23 @@
             "wirausaha"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pelatihan": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Keikutsertaan Dalam Pelatihan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "keikutsertaan dalam pelatihan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -872,12 +1285,23 @@
             "tidak mengikuti pelatihan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pelatihan_ket": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jenis Pelatihan Yang Diikuti Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis pelatihan yang diikuti kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -895,33 +1319,23 @@
         "MEMBER": {
           "active": true
         }
-      }
-    },
-    "refreshing": {
-      "frequency": "ANNUAL",
-      "frequencySource": "Frekuensi Liburan Keluarga (1 tahun terakhir)",
-      "frequencyConfidence": 1.0,
-      "datatypeStatus": null,
-      "editable": true,
-      "variants": {
-        "HEAD": {
-          "active": true,
-          "options": [
-            "tidak pernah",
-            "1x",
-            "2x",
-            "3x",
-            "lebih dari 3x"
-          ],
-          "inputType": "select",
-          "help": "Pilih jumlah kali keluarga berlibur dalam 1 tahun terakhir. Ini bukan pilihan Ya/Tidak; 1x, 2x, dan 3x menunjukkan jumlah kejadian, sedangkan lebih dari 3x adalah kategori tersendiri."
-        }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pekarangan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Kepemilikan pekarangan Rumah yang dapat ditanami",
-      "frequencyConfidence": 0.933,
+      "frequencySource": "kepemilikan pekarangan yang dapat ditanami",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -933,12 +1347,21 @@
           "inputType": "select",
           "help": "Pekarangan adalah sebagai area ruang terbuka atau sebidang tanah yang mengelilingi sebuah rumah yang sebagian besar jenisnya berpagar dan biasanya ditanami tanaman lebat, hias, dan berbagai tanaman tahunan untuk penggunaan sehari-hari maupun komersial. Pekarangan Rumah yang dapat ditanami tanaman adalah pemanfaatan tanah pekarangan untuk membudidayakan tanaman tertentu."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pekarangan_luas": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Luas Pekarangan (meter persegi)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "luas pekarangan (meter persegi)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -953,12 +1376,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pekarangan_air": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Sumber Air Pekarangan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air pekarangan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -979,12 +1411,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pekarangan_tinggi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Tinggi Dominan Tanaman Pekarangan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tinggi dominan tanaman pekarangan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1007,12 +1448,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pekarangan_jenis": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Tanaman Pekarangan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis tanaman pekarangan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1038,12 +1488,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pekarangan_komoditas": {
       "frequency": "ANNUAL",
-      "frequencySource": "Tanaman di Pekarangan Dua Tahun Terakhir",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tanaman di pekarangan dua tahun terakhir",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1058,12 +1517,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "sampah_buang": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.898,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "Tempat/cara membuang sampah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1079,36 +1547,63 @@
           "inputType": "select",
           "help": "Tempat Membuang Sampah adalah fasilitas atau tempat yang digunakan oleh rumah tangga untuk membuang sampah."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "sampah_pilah": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Pemilihan sampah organik dan anorganik",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "pemilahan sampah organik dan anorganik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "sampah_olah": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Pengolahan sampah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "pengolahan sampah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_pln": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Daya PLN",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "daya pln",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1123,24 +1618,42 @@
             ">2200 va"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_listrik": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Biaya Listrik Per bulan (Rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "biaya listrik perbulan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "wifi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Akses terhadap internet Wi-Fi",
-      "frequencyConfidence": 0.982,
+      "frequencySource": "akses terhadap internet wifi kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1150,12 +1663,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "airbersih": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Air Bersih Utama",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air bersih utama",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1172,12 +1696,21 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "airminum": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Sumber Air Minum Utama",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air minum utama",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1197,12 +1730,21 @@
             "air kemasan bermerek"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bahanbakar_masak": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Bahan Bakar Masak Utama",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bahan bakar masak utama",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1219,24 +1761,42 @@
             "gas lebih dari 3 kg"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_solar": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan Solar Panel",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan solar panel",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "par_organisasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Keterlibatan Organisasi Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "keterlibatan organisasi kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1279,12 +1839,23 @@
             "musdes/musdus"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "organisasi_nama": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Nama Organisasi Yang Diikuti Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "nama organisasi yang diikuti kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1314,12 +1885,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "par_masyarakat": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Partisipasi Kegiatan Masyarakat Yang Diikuti Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "partisipasi kegiatan masyarakat yang diikuti kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1329,12 +1911,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "par_pemilu": {
       "frequency": "ANNUAL",
-      "frequencySource": "Partisipasi Pemilu/Pilkada/Pilkades Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "partisipasi pemilu/pilkada/pilkades kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1344,12 +1937,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL",
+        "MEMBER": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "par_kebijakan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Partisipasi Dalam Perencanaan Kebijakan Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "partisipasi dalam perencanaan kebijakan kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1359,12 +1963,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bansos": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Keikutsertaan Program Bantuan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "keikutsertaan program bantuan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1385,12 +2000,21 @@
           "inputType": "multiselect",
           "help": "Program bantuan yang diterima dari pihak pemerintah baik dari pemerintah pusat maupun desa."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_zakat": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumlah Zakat Yang Dikeluarkan Selama Setahun Terakhir (Rp)",
-      "frequencyConfidence": 0.957,
+      "frequencySource": "jumlah zakat yang dikeluarkan selama satu tahun terakhir (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1405,12 +2029,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "wakaf": {
       "frequency": "ANNUAL",
-      "frequencySource": "Waqaf Yang Pernah Diberikan Oleh Keluarga (Barang/Infrastruktur)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "waqaf yang pernah diberikan oleh keluarga (barang/infrastruktur)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1425,12 +2058,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_persepuluh": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumlah Persepuluh Yang Dikeluarkan Selama Satu Tahun Terakhir (Rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah persepuluh yang dikeluarkan selama satu tahun terakhir (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1446,12 +2088,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_dharma": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumlah Dharma Dana Yang Dikeluarkan Selama Satu Tahun Terakhir (Rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah dharma dana yang dikeluarkan selama satu tahun terakhir (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1466,12 +2117,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_paramita": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumlah Dana Paramita Yang Dikeluarkan Selama Satu Tahun Terakhir (rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah dana paramita yang dikeluarkan selama satu tahun terakhir (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1486,12 +2146,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_sumbangan": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumlah Sumbangan Sosial Infak dan Sedekah Dalam Satu Tahun Terakhir (Rp)",
-      "frequencyConfidence": 0.986,
+      "frequencySource": "jumlah sumbangan sosial infaq dan sedekah dalam satu tahun terakhir (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1500,12 +2169,21 @@
           "inputType": "text",
           "help": "jumlah sumbangan sosial infaq dan sedekah dalam satu tahun terakhir (rp)"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "disabilitas": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Disabilitas Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis disabilitas kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1529,12 +2207,23 @@
             "sensorik"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "korban_kejahatan": {
-      "frequency": "SIX_MONTHS",
-      "frequencySource": "Pernah Menjadi Korban Kejahatan Di Desa",
-      "frequencyConfidence": 1.0,
+      "frequency": "ANNUAL",
+      "frequencySource": "pernah menjadi korban kejahatan di desa",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1554,12 +2243,23 @@
             "tidak pernah"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL",
+        "MEMBER": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "hukum_bantuan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Apakah Kepala Keluarga Pernah Mendapatkan Bantuan Hukum",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "apakah kepala keluarga pernah mendapatkan bantuan hukum",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1569,12 +2269,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "hukum_jenis": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Bentuk Bantuan Hukum Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bentuk bantuan hukum kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1584,100 +2295,175 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tanah_nama": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.571,
+      "frequencyConfidence": 0,
       "datatypeStatus": "old",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "tanah_nomor": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.526,
+      "frequencyConfidence": 0,
       "datatypeStatus": "old",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nomor_objek_pajak": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.827,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "nomor objek pajak bumi dan bangunan (pbb)",
+      "frequencyConfidence": 1,
       "datatypeStatus": "old",
-      "editable": false,
+      "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tanah_bukti": {
       "frequency": "ANNUAL",
-      "frequencySource": "Bukti Kepemilikan Tanah Bangunan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bukti kepemilikan tanah bangunan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pbb_punya": {
       "frequency": "ANNUAL",
-      "frequencySource": "Memiliki Pajak Bumi dan Bangunan (pbb)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "memiliki pajak bumi dan bangunan (pbb)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pbb_tahunbayar": {
       "frequency": "ANNUAL",
-      "frequencySource": "Tahun Terakhir Bayar Pajak Bumi dan Bangunan (pbb)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tahun terakhir bayar pajak bumi dan bangunan (pbb)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kesediaan": {
       "frequency": "SIX_MONTHS",
       "frequencySource": "kesediaan sebagai responden",
-      "frequencyConfidence": 1.0,
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "medsos": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Penggunaan Media Sosial",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "penggunaan media sosial",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "media_informasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Media Informasi",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "media informasi",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1692,20 +2478,34 @@
           "inputType": "multiselect",
           "help": "Media informasi alah alat untuk mengumpulkan, menyusun, menerima informasi sehingga menjadi bahan yang bermanfaat bagi penerima informasi."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kandung": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": "old",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "aset_ekonomi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Aset-aset ekonomi yang dimiliki",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "aset-aset ekonomi yang dimiliki",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1720,12 +2520,21 @@
           "inputType": "multiselect",
           "help": "Aset-aset ekonomi yang dimiliki adalah manfaat ekonomi masa datang yang cukup pasti yang diperoleh atau dikuasai/ dikendalikan oleh suatu entitas sebagai akibat transaksi atau kejadian masa lalu."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "pinjaman": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Pinjaman",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber pinjaman",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1741,12 +2550,21 @@
           "inputType": "select",
           "help": "Sumber pinjaman adalah sumber dana yang diperoleh dari pihak kedua untuk mendukung keluarga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kb": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Program KB",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "program kb",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1759,20 +2577,34 @@
           "inputType": "select",
           "help": "Program Keluarga Berencana (KB) adalah program pemerintah Indonesia yang bertujuan mengatur jumlah dan jarak kelahiran anak untuk mewujudkan keluarga yang berkualitas, kecil, bahagia, dan sejahtera"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kulkas": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": "changed",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "sepeda_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Sepeda",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan sepeda",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1781,12 +2613,21 @@
           "inputType": "text",
           "help": "Jumlah Sepeda adalah jumlah sepeda yang dimiliki dan digunakan dalam keluarga"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "motor_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Sepeda Motor",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan sepeda motor",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1795,12 +2636,21 @@
           "inputType": "text",
           "help": "Jumlah sepeda motor yang dimiliki dan digunakan dalam keluarga baik yang memiliki surat resmi maupun tidak."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "motor_merk": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Merk Sepeda Motor",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "merk sepeda motor",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1832,12 +2682,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "mobil_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Mobil",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan mobil",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1846,12 +2705,21 @@
           "inputType": "text",
           "help": "Diisi sesuai dengan jumlah mobil yang dimiliki keluarga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "mobil_merk": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Merk Mobil",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "merk mobil",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1888,12 +2756,21 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "perahu_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Perahu",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan perahu",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1902,12 +2779,21 @@
           "inputType": "text",
           "help": "Jumlah perahu yang dimiliki dan digunakan dalam keluarga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "perahu_motor_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Perahu Motor",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan perahu motor",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1916,12 +2802,21 @@
           "inputType": "text",
           "help": "Jumlah perahu motor yang dimiliki dan digunakan dalam keluarga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kapal_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Kapal",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan kapal",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1930,48 +2825,84 @@
           "inputType": "text",
           "help": "Jumlah kapal yang dimiliki dan digunakan dalam keluarga."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "motorlistrik_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Motor Listrik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan motor listrik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "mobillistrik_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kepemilikan Mobil Listrik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kepemilikan mobil listrik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kendaraan_jml": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kendaraan Bermotor Dalam Rumah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah total kendaraan bermotor dalam rumah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_kendaraan": {
       "frequency": "ANNUAL",
-      "frequencySource": "Biaya Operasional Kendaraan Pertahun (Rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "biaya operasional kendaraan pertahun (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -1980,12 +2911,21 @@
           "inputType": "text",
           "help": "Biaya operasional Kendaraan (motor, mobil, perahu, dan kapal milik pribadi) adalah jumlah Biaya yang dikeluarkan untuk Perawatan Rutin (Ganti Oli, Pergantian Suku Cadang), Biaya Bahan Bakar, Pajak selama setahun terakhir."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "hp_punya": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan hp kepala dan anggota keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan hp kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2005,12 +2945,23 @@
             "tidak memiliki ponsel"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "hp_jumlah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah hp yang dimiliki kepala dan anggota keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah hp yang dimiliki kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2028,12 +2979,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "hp_merk": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.667,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "merk hp",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2073,12 +3035,23 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "hp_provider": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.619,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "merk provider",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2114,12 +3087,23 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_komunikasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Biaya Komunikasi perbulan (rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "biaya komunikasi perbulan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2128,48 +3112,84 @@
           "inputType": "text",
           "help": "Jumlah semua pengeluaran terkait komunikasi. Termasuk Biaya Pulsa, Kuota, Langganan WIFI, Biaya telepon rumah, dan Biaya Langganan Koran."
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "elektronik_rumah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan Elektronik Rumahan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan elektronik rumahan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_transportasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Biaya Transportasi Umum Per bulan (Rp)",
-      "frequencyConfidence": 0.986,
+      "frequencySource": "biaya transportasi umum perbulan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_cicilan": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.806,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "pengeluaran untuk cicilan perbulan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_profesi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Profesi Pekerjaan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "profesi pekerjaan kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2255,12 +3275,23 @@
             "seniman"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_status": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Status Pekerjaan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status pekerjaan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2300,12 +3331,23 @@
             "pekerja harian lepas"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_ket": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.87,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "keterangan pekerjaan utama",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2317,12 +3359,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_lokusaha": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Lokasi usaha",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "lokasi usaha",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2348,12 +3401,23 @@
             "di luar desa"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_sampingan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Pekerjaan Sampingan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "pekerjaan sampingan kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2404,12 +3468,23 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_sampingan_ket": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Keterangan Pekerjaan Sampingan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "keterangan pekerjaan sampingan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2435,32 +3510,64 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kerja_skalausaha": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Skala Usaha",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "skala usaha",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_kategori": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.519,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
-      "editable": false,
-      "variants": {}
+      "editable": true,
+      "variants": {
+        "HEAD": {
+          "active": true
+        },
+        "MEMBER": {
+          "active": true
+        }
+      },
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": true,
+      "derived": false
     },
     "nel_jenis": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Nelayan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis nelayan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2483,24 +3590,44 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_jenis_budidaya": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Budidaya Yang dijalankan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis budidaya yang dijalankan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_alat_tangkap": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Alat Tangkap Yang Digunakan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "alat tangkap yang digunakan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2510,20 +3637,36 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_alat_bantu": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.478,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_ikan_tangkap": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Tangkapan Utama",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis tangkapan utama",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2533,20 +3676,36 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_ikan_tangkap_lain": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.596,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_ikan_kecil_perlakuan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Kebiasaan Terhadap Anak Ikan/Benih Ikan Yang Tertangkap",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kebiasaan terhadap anak ikan/benih ikan yang tertangkap",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2556,12 +3715,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_buang_sampah": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Tempat Pembuangan Sampah Aktivitas Nelayan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tempat pembuangan sampah aktivitas nelayan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2571,52 +3741,88 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_ikan": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.638,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_pakan": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.625,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_rucah": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.542,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_rumputlaut": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.491,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_alat": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.596,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_pelatihan_jenis": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jenis Pelatihan Yang Pernah Diikuti",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis Pelatihan yang pernah diikuti",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2626,12 +3832,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_asuransi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Mengikuti Program Asuransi Nelayan/Pembudidaya Ikan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "mengikuti program asuransi nelayan/pembudidaya ikan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2641,36 +3858,62 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_asuransi_rp": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.444,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_kredit": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.48,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_pembiayaan_budidaya": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.642,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_kepemilikan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Status Nelayan Berdasarkan Kepemilikan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status nelayan berdasarkan kepemilikan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2680,24 +3923,44 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_waktu": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Status Nelayan Berdasarkan Waktu",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status nelayan berdasarkan waktu",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_ukurankapal": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Status Nelayan Berdasarkan Ukuran Kapal",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status nelayan berdasarkan ukuran kapal",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2707,12 +3970,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_penangkapan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Area Operasi Penangkapan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "area operasi penangkapan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2722,12 +3996,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_pelatihan": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Pernah Mengikuti Pelatihan Tentang Perikanan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "pernah mengikuti pelatihan tentang perikanan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2737,24 +4022,44 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_jenis": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Budidaya Yang dijalankan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "Jenis budidaya yang dijalankan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_biota_jenis": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jenis Biota Yang Dibudidayakan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis biota yang dibudidayakan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2764,12 +4069,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_budidaya_sarana": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sarana Budidaya Yang Digunakan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sarana budidaya yang digunakan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2779,12 +4095,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_sumber_air": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Air Yang Digunakan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air yang digunakan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2794,12 +4121,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_bibit": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Bibit/Benih",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber bibit/benih",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2809,12 +4147,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_produksi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Jumlah Produksi Dalam Satu Siklus Panen",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah produksi dalam satu siklus panen",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2824,12 +4173,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_hasil_jual": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Kemana Hasil Panen Dijual",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kemana hasil panen dijual",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2839,12 +4199,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS",
+        "MEMBER": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "nel_pernah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Apakah Pernah Mengikuti Pelatihan Budidaya",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "apakah pernah mengikuti pelatihan budidaya",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2854,12 +4225,23 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bpjs_kes": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "JKN-KIS/BPJS",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jkn-kis/bpjs",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -2883,12 +4265,23 @@
             "puik swasta"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bpjs_tk": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "BPJS Ketenagakerjaan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bpjs ketenagakerjaan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3002,12 +4395,23 @@
             "jaminan pensiun"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "menabung": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tempat Menabung",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tempat menabung",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3026,12 +4430,21 @@
           "inputType": "multiselect",
           "help": "tempat menabung"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_tabungan": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah tabungan keluarga perbulan (rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah tabungan keluarga perbulan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3040,12 +4453,21 @@
           "inputType": "text",
           "help": "jumlah tabungan keluarga perbulan (rp)"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tki": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Adakah Anggota Keluarga Yang Bekerja Di luar Negeri",
-      "frequencyConfidence": 0.985,
+      "frequencySource": "Adakah anggota keluarga yang bekerja diluar negeri",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3058,12 +4480,21 @@
           "inputType": "select",
           "help": "adakah anggota keluarga yang menjadi tki"
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tki_tujuan": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.809,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "negara tujuan kerja",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3078,20 +4509,41 @@
             ]
           }
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "penyakit_jumlah": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.571,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
-      "editable": false,
-      "variants": {}
+      "editable": true,
+      "variants": {
+        "HEAD": {
+          "active": true
+        },
+        "MEMBER": {
+          "active": true
+        }
+      },
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": false,
+      "conditionOnly": true,
+      "derived": false
     },
     "penyakit_jenis": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jenis Penyakit Berat Kepala Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis penyakit berat kepala keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3130,12 +4582,23 @@
             "hiv-aids"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "anak_asi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "ASI Eklusif",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "asi eksklusif",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3146,12 +4609,21 @@
             "tidak"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "anak_periksa": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Memeriksakan Bayi ke Fasilitas Kesehatan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "memeriksakan bayi ke fasilitas kesehatan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3163,56 +4635,97 @@
             "tidak pernah"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "anak_mpasi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jenis Makanan Pendamping ASI Yang Diberikan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis makanan pendamping asi yang diberikan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "anak_tb": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tinggi Badan Saat Ini (cm)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "tinggi badan saat ini (cm)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "anak_bb": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Berat Badan Saat Ini (Kg)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "berat badan saat ini (kg)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "perokok": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Lahan Yang Dimiliki Atau Dikelola Keluarga",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "lahan yang dimiliki atau dikelola keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3223,12 +4736,21 @@
             "tidak"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahan_guna": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Pemanfaatan Lahan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "pemanfaatan lahan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3239,24 +4761,42 @@
             "lahan pertanian"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahan_luasnon": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.774,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "luas lahan (meter persegi) non pertanian",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahan_status": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Status Lahan Pertanian",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status lahan pertanian",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3268,36 +4808,63 @@
             "lahan pertanian sewa"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahan_luas_dikelola": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.782,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "total luas (meter persegi) lahan yang dikelola",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahan_luas_tidakdikelola": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.667,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "luas (meter persegi) lahan milik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahanmilik_irigasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Air Irigasi Lahan Milik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air irigasi lahan milik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3309,12 +4876,21 @@
             "tadah hujan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahanmilik_bukti": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Bukti Kepemilikan Lahan Milik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "bukti kepemilikan lahan milik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3326,24 +4902,42 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahanmilik_komoditas": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Riwayat Komoditas Lahan Milik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "riwayat komoditas lahan milik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahanmilik_lokasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Lokasi Lahan Milik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "lokasi lahan milik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3354,24 +4948,42 @@
             "luar desa"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahangarap_luas": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.755,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "luas (meter persegi) lahan garap",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahangarap_irigasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Air Irigasi Lahan Garap",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air irigasi lahan  garap",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3383,24 +4995,42 @@
             "tadah hujan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahangarap_komoditas": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Riwayat Komoditas Lahan Garap",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "riwayat komoditas lahan garap",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahangarap_lokasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Lokasi Lahan Garap",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "lokasi lahan garap",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3411,24 +5041,42 @@
             "luar desa"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahansewa_luas": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.745,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "luas(meter persegi) lahan sewa",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahansewa_irigasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Sumber Air Irigasi Lahan Sewa",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "sumber air irigasi lahan  sewa",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3440,24 +5088,42 @@
             "tadah hujan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahansewa_komoditas": {
       "frequency": "ANNUAL",
-      "frequencySource": "Riwayat Komoditas Lahan Sewa",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "riwayat komoditas lahan sewa",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "lahansewa_lokasi": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Lokasi Lahan Sewa",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "lokasi lahan sewa",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3468,84 +5134,138 @@
             "luar desa"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ppkb": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.429,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "ppkt": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.333,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "skor_kls": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.526,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "miskin_uufm": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.462,
+      "frequencyConfidence": 0,
       "datatypeStatus": "perhitungan sistem",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "pkb": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.462,
+      "frequencyConfidence": 0,
       "datatypeStatus": null,
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "miskin_wb": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.444,
+      "frequencyConfidence": 0,
       "datatypeStatus": "perhitungan sistem",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "miskin_bps": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.545,
+      "frequencyConfidence": 0,
       "datatypeStatus": "perhitungan sistem",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "miskin_ekstrem": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.455,
+      "frequencyConfidence": 0,
       "datatypeStatus": "perhitungan sistem",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "miskin_bpsd": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.522,
+      "frequencyConfidence": 0,
       "datatypeStatus": "perhitungan sistem",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": true
     },
     "asuransi_kes": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Asuransi Kesehatan Selain BPJS",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "asuransi kesehatan selain bpjs",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3555,156 +5275,290 @@
         "MEMBER": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL",
+        "MEMBER": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD",
+        "MEMBER"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_kesfungsional": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_lap_usaha": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.643,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_lapusaha_nama": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.526,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_lapusaha_alamat": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_lapusaha_izin": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.526,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_lapusaha_omzet": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.485,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_lapusaha_tk": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.533,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_kerja_pasca": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.564,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_kerjapasca_lokasi": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.491,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_kerjapasca_penghasilan": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_kerjapasca_harapan": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.522,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_pemulihan_pasca": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.541,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_rumah_kondisi": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.511,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_rumah_bagianrusak": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.531,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "bencana_ketenum_bangunan": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.651,
+      "frequencyConfidence": 0,
       "datatypeStatus": "temporer",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
+    },
+    "refreshing": {
+      "frequency": "ANNUAL",
+      "frequencySource": "frekuensi liburan keluarga (1 tahun terakhir)",
+      "frequencyConfidence": 1,
+      "datatypeStatus": null,
+      "editable": true,
+      "variants": {
+        "HEAD": {
+          "active": true,
+          "options": [
+            "tidak pernah",
+            "1x",
+            "2x",
+            "3x",
+            "lebih dari 3x"
+          ],
+          "inputType": "select",
+          "help": "Pilih jumlah kali keluarga berlibur dalam 1 tahun terakhir. Ini bukan pilihan Ya/Tidak; 1x, 2x, dan 3x menunjukkan jumlah kejadian, sedangkan lebih dari 3x adalah kategori tersendiri."
+        }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "baju_frek": {
       "frequency": "ANNUAL",
-      "frequencySource": "Frekuensi Beli Baju Per tahun Keluarga",
-      "frequencyConfidence": 0.987,
+      "frequencySource": "frekuensi beli baju pertahun keluarga",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_sph": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.838,
+      "frequency": "ANNUAL",
+      "frequencySource": "biaya sandang, papan dan hiburan pertahun (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "makan_frek": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Frekuensi Makan Per hari",
-      "frequencyConfidence": 0.979,
+      "frequencySource": "frekuensi makan perhari",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3717,12 +5571,21 @@
             "1x makan"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "makan_menu": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Menu Makan Per hari",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "menu makan perhari",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3734,12 +5597,21 @@
             "lengkap"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "tempat_belanja": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Tempat Membeli Kebutuhan Bahan Pokok Utama",
-      "frequencyConfidence": 0.923,
+      "frequencySource": "tempat membeli kebutuhan pokok utama",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -3752,608 +5624,1063 @@
             "toko online"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_belanja": {
       "frequency": null,
       "frequencySource": null,
-      "frequencyConfidence": 0.5,
+      "frequencyConfidence": 0,
       "datatypeStatus": "changed",
       "editable": false,
-      "variants": {}
+      "variants": {},
+      "frequencyByRole": {},
+      "askedTo": [],
+      "deprecated": true,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_pangan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Biaya Belanja Bulanan Pangan (Rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "biaya belanja bulanan pangan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rp_non_pangan": {
       "frequency": "SIX_MONTHS",
-      "frequencySource": "Biaya Belanja Bulanan Non Pangan (Rp)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "biaya belanja bulanan non pangan (rp)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_beras": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Beras (Liter) Per bulan",
-      "frequencyConfidence": 0.976,
+      "frequencySource": "beras (liter) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_biskuit": {
-      "frequency": "SIX_MONTHS",
-      "frequencySource": "Biskuit (Gram) per bulan",
-      "frequencyConfidence": 0.977,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "biskuit (gram) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_jagung": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jagung (Kg) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "jagung (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kentang": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kentang (Kg) per bulan",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "kentang (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_mie": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Mie (Bungkus) per bulan",
-      "frequencyConfidence": 0.976,
+      "frequencySource": "mie (bungkus) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_roti": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Roti Tawar (Bungkus) per bulan",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "roti tawar (bungkus) per bulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_singkong": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Singkong (Kg) per bulan",
-      "frequencyConfidence": 0.976,
+      "frequencySource": "singkong (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_sukun": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Sukun (Kg) per bulan",
-      "frequencyConfidence": 0.971,
+      "frequencySource": "sukun (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_ketan": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.897,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "beras ketan (liter) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_sapi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Daging Sapi (Kg) per bulan",
-      "frequencyConfidence": 0.979,
+      "frequencySource": "daging sapi (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_ayam": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Daging Ayam (Kg) per bulan",
-      "frequencyConfidence": 0.979,
+      "frequencySource": "daging ayam (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_babi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Daging Babi (Kg) per bulan",
-      "frequencyConfidence": 0.979,
+      "frequencySource": "daging babi (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_ikan_segar": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Ikan Segar (Kg) per bulan",
-      "frequencyConfidence": 0.978,
+      "frequencySource": "ikan segar (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_ikan_asin": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Ikan Kering/Asin (Kg)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "ikan kering/asin (kg)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_telur": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Telur Ayam (Kg) per bulan",
-      "frequencyConfidence": 0.978,
+      "frequencySource": "telur ayam (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kacang_hijau": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kacang Hijau (Kg) per bulan",
-      "frequencyConfidence": 0.98,
+      "frequencySource": "kacang hijau (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kacang_merah": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kacang merah (Kg) per bulan",
-      "frequencyConfidence": 0.98,
+      "frequencySource": "kacang merah (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kacang_kedelai": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kacang Kedelai (Kg) per bulan",
-      "frequencyConfidence": 0.981,
+      "frequencySource": "kacang kedelai (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kacang_mede": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kacang Mede (Kg) per bulan",
-      "frequencyConfidence": 0.979,
+      "frequencySource": "kacang mede (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_tahu": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tahu (bungkus) per bulan",
-      "frequencyConfidence": 0.977,
+      "frequencySource": "tahu (bungkus) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_tempe": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Tempe (bungkus) per bulan",
-      "frequencyConfidence": 0.978,
+      "frequencySource": "tempe (bungkus) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_bayam": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Bayam (ikat) per bulan",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "bayam (ikat) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kangkung": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kangkung (Ikat) per bulan",
-      "frequencyConfidence": 0.978,
+      "frequencySource": "kangkung (ikat) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_sawi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Sawi (Ikat) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "sawi (ikat) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_terong": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Terong (Kg) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "terong (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_oyong": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.81,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "oyong/gambas (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_daun_singkong": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Daun Singkong (Ikat) per bulan",
-      "frequencyConfidence": 0.982,
+      "frequencySource": "daun singkong (ikat) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_daun_ubi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Daun Ubi (Ikat) per bulan",
-      "frequencyConfidence": 0.978,
+      "frequencySource": "daun ubi (ikat) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_jeruk": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jeruk (Kg) per bulan",
-      "frequencyConfidence": 0.971,
+      "frequencySource": "jeruk (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_mangga": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Mangga (Kg) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "mangga (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_pepaya": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Pepaya (Kg) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "pepaya (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_pisang": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Pisang (Kg) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "pisang (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_alpukat": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Alpukat (Kg) per bulan",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "alpukat (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_semangka": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Semangka (Kg) per bulan",
-      "frequencyConfidence": 0.976,
+      "frequencySource": "semangka (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_melon": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Melon (Kg) per bulan",
-      "frequencyConfidence": 0.971,
+      "frequencySource": "melon (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_cabai": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Cabai (Kg) per bulan",
-      "frequencyConfidence": 0.971,
+      "frequencySource": "cabai (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_bamer": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Bawang Merah (Kg) per bulan",
-      "frequencyConfidence": 0.98,
+      "frequencySource": "bawang merah (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_baput": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Bawang Putih (Kg) per bulan",
-      "frequencyConfidence": 0.98,
+      "frequencySource": "bawang putih (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_migor": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Minyak Goreng (Liter) per/Bulan",
-      "frequencyConfidence": 0.982,
+      "frequencySource": "minyak goreng (liter) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_gas": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Gas (Kg) per bulan",
-      "frequencyConfidence": 0.968,
+      "frequencySource": "gas (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_garam": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Garam (Gram) per bulan",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "garam (gram) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_gula": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Gula (Kg) per bulan",
-      "frequencyConfidence": 0.97,
+      "frequencySource": "gula (kg) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_susu": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Susu (Gelas) per bulan",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "susu (gelas) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_teh": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Teh (Gelas) per bulan",
-      "frequencyConfidence": 0.973,
+      "frequencySource": "teh (gelas) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kopi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Kopi (Gelas) per bulan",
-      "frequencyConfidence": 0.974,
+      "frequencySource": "kopi (gelas) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_rokok": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Rokok (Bungkus) per bulan",
-      "frequencyConfidence": 0.978,
+      "frequencySource": "rokok  (bungkus) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "kon_kelor": {
-      "frequency": null,
-      "frequencySource": null,
-      "frequencyConfidence": 0.809,
+      "frequency": "INCIDENTAL",
+      "frequencySource": "daun kelor (ikat) perbulan",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_lantai": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jenis Lantai Terluas",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis lantai terluas",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -4371,12 +6698,21 @@
             "marmer/granit"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_dinding": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jenis Dinding Terluas",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis dinding terluas",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -4390,12 +6726,21 @@
             "tembok plesteran"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_atap": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jenis Atap terluas",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jenis atap terluas",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -4415,12 +6760,21 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_jamban": {
       "frequency": "ANNUAL",
-      "frequencySource": "Kepemilikan Jamban",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "kepemilikan jamban",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -4431,24 +6785,42 @@
             "tidak ada"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_kamar": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumah Kamar Tidur",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kamar tidur",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_milik": {
       "frequency": "ANNUAL",
-      "frequencySource": "Status Kepemilikan Rumah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "status kepemilikan rumah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -4462,36 +6834,63 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_tingkat": {
       "frequency": "ANNUAL",
-      "frequencySource": "Jumlah Tingkat Rumah",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah tingkat rumah",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "rumah_luas": {
       "frequency": "ANNUAL",
-      "frequencySource": "Luas Bangunan Rumah (Meter Persegi)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "luas bangunan rumah (meter persegi)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "ANNUAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak": {
-      "frequency": "INCIDENTAL",
-      "frequencySource": "Kepemilikan Ternak",
-      "frequencyConfidence": 1.0,
+      "frequency": "SIX_MONTHS",
+      "frequencySource": "kepemilikan ternak",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
@@ -4510,115 +6909,205 @@
             "lainnya"
           ]
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "SIX_MONTHS"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_sapi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Sapi",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah sapi",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_kerbau": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kerbau",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kerbau",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_domba": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Domba",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah domba",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_kambing": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kambing",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kambing",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_ayam": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Ayam",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah ayam",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_itik": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Itik",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah itik",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_kuda": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Kuda",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah kuda",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_babi": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Babi",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah babi",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     },
     "ternak_ikan": {
       "frequency": "INCIDENTAL",
-      "frequencySource": "Jumlah Ikan (Kg)",
-      "frequencyConfidence": 1.0,
+      "frequencySource": "jumlah ikan (kg)",
+      "frequencyConfidence": 1,
       "datatypeStatus": null,
       "editable": true,
       "variants": {
         "HEAD": {
           "active": true
         }
-      }
+      },
+      "frequencyByRole": {
+        "HEAD": "INCIDENTAL"
+      },
+      "askedTo": [
+        "HEAD"
+      ],
+      "deprecated": false,
+      "conditionOnly": false,
+      "derived": false
     }
   },
   "events": {

@@ -15,6 +15,8 @@
     "db:resequence:demo-buildings": "tsx scripts/resequence-demo-building-codes.ts",
     "db:studio": "prisma studio",
     "db:import:multidesa": "tsx scripts/import-multidesa.ts",
+    "build:updating-metadata": "node scripts/build-updating-metadata.mjs",
+    "verify:updating-contract": "tsx scripts/verify-updating-contract.ts",
     "inspect:site": "node tools/inspect/inspect.mjs",
     "audit:responsive": "node tools/inspect/verify-app.mjs",
     "build:mapping": "node scripts/build-indikator-mapping.js && node scripts/build-prisma-schema.js"

@@ -6,6 +6,7 @@ import { toExportValue } from "@/lib/export-import";
 import { fieldLabel } from "@/lib/field-labels";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 import { writeExcelRows } from "@/lib/excel-server";
+import { parameterIsDeprecated } from "@/lib/parameter-metadata";
 
 // Export one frozen period. Snapshot rows are the authoritative source for a
 // selected period; pending changes intentionally do not appear in this file.
@@ -21,12 +22,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     where: { snapshotId: snap.id },
     orderBy: { nkk: "asc" },
   });
+  const exportableColumns = ALL_COLUMNS.filter((column) => !parameterIsDeprecated(column));
   const data = rows.map((r) => {
     const record = JSON.parse(r.data) as Record<string, unknown>;
-    return ALL_COLUMNS.map((col) => toExportValue(record[col], mapping.kolom[col]));
+    return exportableColumns.map((col) => toExportValue(record[col], mapping.kolom[col]));
   });
 
-  const headers = ALL_COLUMNS.map((column) => fieldLabel(column, mapping.kolom[column]));
+  const headers = exportableColumns.map((column) => fieldLabel(column, mapping.kolom[column]));
   const baseName = `penduduk-${snap.kode}`;
 
   if (format === "csv") {

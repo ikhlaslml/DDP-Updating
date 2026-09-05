@@ -13,10 +13,15 @@ type Variant = {
 
 type FieldMetadata = {
   frequency: UpdateFrequency | null;
+  frequencyByRole?: Partial<Record<"HEAD" | "MEMBER", UpdateFrequency>>;
+  askedTo?: ("HEAD" | "MEMBER")[];
   frequencySource: string | null;
   frequencyConfidence: number;
   datatypeStatus?: string | null;
   editable?: boolean;
+  deprecated?: boolean;
+  conditionOnly?: boolean;
+  derived?: boolean;
   variants: Partial<Record<ParameterRole, Variant>>;
 };
 
@@ -34,6 +39,18 @@ export const FREQUENCY_LABELS: Record<UpdateFrequency, string> = {
 
 export function parameterMetadata(field: string) {
   return metadata.fields[field];
+}
+
+export function parameterAskedTo(field: string) {
+  return metadata.fields[field]?.askedTo ?? [];
+}
+
+export function parameterIsDeprecated(field: string) {
+  return Boolean(metadata.fields[field]?.deprecated);
+}
+
+export function parameterIsConditionOnly(field: string) {
+  return Boolean(metadata.fields[field]?.conditionOnly);
 }
 
 export function parameterVariant(field: string, role?: ParameterRole) {
@@ -75,8 +92,12 @@ export function parameterCondition(field: string, role?: ParameterRole) {
   return parameterVariant(field, role)?.condition;
 }
 
-export function parameterFrequency(field: string) {
-  return metadata.fields[field]?.frequency ?? null;
+export function parameterFrequency(field: string, role?: ParameterRole) {
+  const fieldMetadata = metadata.fields[field];
+  if (role === "HEAD" || role === "MEMBER") {
+    return fieldMetadata?.frequencyByRole?.[role] ?? null;
+  }
+  return fieldMetadata?.frequency ?? null;
 }
 
 export function isDue(frequency: UpdateFrequency | null, lastUpdated: Date, now = new Date()) {

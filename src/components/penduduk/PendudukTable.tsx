@@ -58,7 +58,6 @@ export function PendudukTable({
   const [rw, setRw] = useState("");
   const [rt, setRt] = useState("");
   const [jk, setJk] = useState("");
-  const [miskinBps, setMiskinBps] = useState("");
   const [facets, setFacets] = useState<Facets>({ dusun: [], rw: [], rt: [] });
   const [selectedAspects, setSelectedAspects] = useState<Set<KelompokIndikator>>(() => new Set(initialAspects));
   // ABS ID dan Jenis Subjek tetap dipakai untuk integrasi, tetapi tidak
@@ -92,7 +91,6 @@ export function PendudukTable({
     if (rw) params.set("rw", rw);
     if (rt) params.set("rt", rt);
     if (jk) params.set("jk", jk);
-    if (miskinBps) params.set("miskin_bps", miskinBps);
     if (sorting[0]) {
       params.set("sortBy", sorting[0].id);
       params.set("sortDir", sorting[0].desc ? "desc" : "asc");
@@ -111,7 +109,7 @@ export function PendudukTable({
     } finally {
       setLoading(false);
     }
-  }, [pageIndex, pageSize, debouncedSearch, dusun, rw, rt, jk, miskinBps, sorting, selectedAspects]);
+  }, [pageIndex, pageSize, debouncedSearch, dusun, rw, rt, jk, sorting, selectedAspects]);
 
   useEffect(() => {
     fetchData();
@@ -119,7 +117,7 @@ export function PendudukTable({
 
   useEffect(() => {
     setPageIndex(0);
-  }, [debouncedSearch, dusun, rw, rt, jk, miskinBps]);
+  }, [debouncedSearch, dusun, rw, rt, jk]);
 
   const columns = useMemo(() => {
     const cols: ColumnDef<Row, unknown>[] = visible.map((name) =>
@@ -181,11 +179,10 @@ export function PendudukTable({
       ...(rw ? { rw } : {}),
       ...(rt ? { rt } : {}),
       ...(jk ? { jk } : {}),
-      ...(miskinBps ? { miskin_bps: miskinBps } : {}),
     });
     params.set("aspek", KELOMPOK_ORDER.filter((group) => selectedAspects.has(group)).join(","));
     return params.toString();
-  }, [debouncedSearch, dusun, rw, rt, jk, miskinBps, selectedAspects]);
+  }, [debouncedSearch, dusun, rw, rt, jk, selectedAspects]);
 
   function changeAspects(next: Set<KelompokIndikator>) {
     const normalized = new Set(KELOMPOK_ORDER.filter((group) => next.has(group)));
@@ -246,11 +243,6 @@ export function PendudukTable({
           <option value="">Semua Jenis Kelamin</option>
           <option value="L">Laki-laki</option>
           <option value="P">Perempuan</option>
-        </select>
-        <select value={miskinBps} onChange={(e) => setMiskinBps(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
-          <option value="">Semua Status Kemiskinan</option>
-          <option value="true">Miskin (BPS)</option>
-          <option value="false">Tidak Miskin</option>
         </select>
         <div className="ml-auto flex flex-wrap items-center gap-2 max-sm:ml-0 max-sm:w-full">
           <a

@@ -23,8 +23,13 @@ type Household = {
   lat: number;
   lng: number;
   jumlahAnggota: number;
-  miskinBps: boolean;
-  miskinEkstrem: boolean;
+  anggotaPunyaKtp: number;
+  anggotaPunyaAktaLahir: number;
+  anggotaBpjsKesehatan: number;
+  rumahPln: string | null;
+  airBersih: string | null;
+  update6MonthStatus: "JATUH_TEMPO" | "MENUNGGU_PENGGABUNGAN" | "TERKINI";
+  updateAnnualStatus: "JATUH_TEMPO" | "MENUNGGU_PENGGABUNGAN" | "TERKINI";
 };
 
 type Building = {
@@ -43,18 +48,74 @@ type Building = {
   jumlahPenghuni: number;
 };
 
-type IndicatorKey = "miskin_bps" | "miskin_ekstrem" | "none";
+type IndicatorKey = "family_size" | "documents" | "bpjs" | "utilities" | "update_6" | "update_12" | "dusun" | "none";
 
 const INDICATOR_OPTIONS: { value: IndicatorKey; label: string }[] = [
-  { value: "miskin_bps", label: "Status Kemiskinan (BPS)" },
-  { value: "miskin_ekstrem", label: "Kemiskinan Ekstrem" },
+  { value: "family_size", label: "Jumlah Anggota Keluarga" },
+  { value: "documents", label: "Kelengkapan Dokumen" },
+  { value: "bpjs", label: "BPJS Kesehatan" },
+  { value: "utilities", label: "Listrik dan Air Bersih" },
+  { value: "update_6", label: "Status Pembaruan 6 Bulan" },
+  { value: "update_12", label: "Status Pembaruan 1 Tahun" },
+  { value: "dusun", label: "Dusun" },
   { value: "none", label: "Tanpa Pewarnaan" },
 ];
 
-function colorFor(household: Household, indicator: IndicatorKey): string {
-  if (indicator === "miskin_bps") return household.miskinBps ? STATUS.critical : STATUS.good;
-  if (indicator === "miskin_ekstrem") return household.miskinEkstrem ? STATUS.critical : STATUS.good;
-  return SERIES.blue;
+const DUSUN_COLORS = [SERIES.blue, SERIES.orange, SERIES.aqua, SERIES.yellow, SERIES.magenta, SERIES.green, SERIES.red];
+
+function hasAccess(value: string | null) {
+  const normalized = value?.trim().toLocaleLowerCase("id-ID");
+  return Boolean(normalized && !["tidak", "tidak ada", "0", "-"].includes(normalized));
+}
+
+function indicatorResult(household: Household, indicator: IndicatorKey, dusunColors: Map<string, string>) {
+  if (indicator === "family_size") {
+    if (household.jumlahAnggota <= 2) return { color: "#9EBED3", label: "1–2 anggota" };
+    if (household.jumlahAnggota <= 4) return { color: "#3E6F92", label: "3–4 anggota" };
+    if (household.jumlahAnggota <= 6) return { color: SERIES.blue, label: "5–6 anggota" };
+    return { color: STATUS.critical, label: "7 anggota atau lebih" };
+  }
+  if (indicator === "documents") {
+    const complete =
+      household.anggotaPunyaKtp === household.jumlahAnggota &&
+      household.anggotaPunyaAktaLahir === household.jumlahAnggota;
+    const none = household.anggotaPunyaKtp === 0 && household.anggotaPunyaAktaLahir === 0;
+    return complete
+      ? { color: STATUS.good, label: "Dokumen seluruh anggota lengkap" }
+      : none
+        ? { color: STATUS.critical, label: "Belum ada dokumen tercatat" }
+        : { color: STATUS.warning, label: "Dokumen sebagian anggota belum lengkap" };
+  }
+  if (indicator === "bpjs") {
+    if (household.anggotaBpjsKesehatan === household.jumlahAnggota) {
+      return { color: STATUS.good, label: "Seluruh anggota terdaftar" };
+    }
+    if (household.anggotaBpjsKesehatan === 0) {
+      return { color: STATUS.critical, label: "Belum ada anggota terdaftar" };
+    }
+    return { color: STATUS.warning, label: "Sebagian anggota terdaftar" };
+  }
+  if (indicator === "utilities") {
+    const electricity = hasAccess(household.rumahPln);
+    const water = hasAccess(household.airBersih);
+    if (electricity && water) return { color: STATUS.good, label: "Listrik dan air bersih tersedia" };
+    if (electricity || water) return { color: STATUS.warning, label: "Salah satu layanan belum tersedia" };
+    return { color: STATUS.critical, label: "Listrik dan air bersih belum tercatat" };
+  }
+  if (indicator === "update_6" || indicator === "update_12") {
+    const status =
+      indicator === "update_6" ? household.update6MonthStatus : household.updateAnnualStatus;
+    if (status === "JATUH_TEMPO") return { color: STATUS.critical, label: "Jatuh tempo" };
+    if (status === "MENUNGGU_PENGGABUNGAN") {
+      return { color: STATUS.warning, label: "Menunggu penggabungan" };
+    }
+    return { color: STATUS.good, label: "Terkini" };
+  }
+  if (indicator === "dusun") {
+    const name = household.dusun?.trim() || "Tanpa dusun";
+    return { color: dusunColors.get(name) ?? SERIES.violet, label: name };
+  }
+  return { color: SERIES.blue, label: "Titik keluarga" };
 }
 
 function MapBuildingPhoto({ code }: { code: number }) {
@@ -100,7 +161,7 @@ export function MapView() {
   const [droneTilePrefix, setDroneTilePrefix] = useState<string | null>(null);
   const [configuredCenter, setConfiguredCenter] = useState<[number, number] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [indicator, setIndicator] = useState<IndicatorKey>("miskin_bps");
+  const [indicator, setIndicator] = useState<IndicatorKey>("family_size");
 
   useEffect(() => {
     fetch("/api/penduduk/map")
@@ -132,6 +193,39 @@ export function MapView() {
     ],
     [buildings, households]
   );
+  const dusunColors = useMemo(
+    () =>
+      new Map(
+        [...new Set(households.map((household) => household.dusun?.trim() || "Tanpa dusun"))]
+          .sort((left, right) => left.localeCompare(right, "id-ID"))
+          .map((name, index) => [name, DUSUN_COLORS[index % DUSUN_COLORS.length]]),
+      ),
+    [households],
+  );
+  const legend = useMemo(() => {
+    if (indicator === "family_size") {
+      return [
+        ["#9EBED3", "1–2 anggota"],
+        ["#3E6F92", "3–4 anggota"],
+        [SERIES.blue, "5–6 anggota"],
+        [STATUS.critical, "7+ anggota"],
+      ];
+    }
+    if (indicator === "documents") {
+      return [[STATUS.good, "Lengkap"], [STATUS.warning, "Sebagian"], [STATUS.critical, "Belum tercatat"]];
+    }
+    if (indicator === "bpjs") {
+      return [[STATUS.good, "Seluruh anggota"], [STATUS.warning, "Sebagian"], [STATUS.critical, "Belum ada"]];
+    }
+    if (indicator === "utilities") {
+      return [[STATUS.good, "Keduanya tersedia"], [STATUS.warning, "Salah satu"], [STATUS.critical, "Belum tercatat"]];
+    }
+    if (indicator === "update_6" || indicator === "update_12") {
+      return [[STATUS.good, "Terkini"], [STATUS.warning, "Menunggu penggabungan"], [STATUS.critical, "Jatuh tempo"]];
+    }
+    if (indicator === "dusun") return [...dusunColors].map(([name, color]) => [color, name]);
+    return [[SERIES.blue, "Titik keluarga"]];
+  }, [dusunColors, indicator]);
 
   return (
     <div>
@@ -145,12 +239,14 @@ export function MapView() {
         >
           {INDICATOR_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
-        {indicator !== "none" ? (
-          <div className="flex items-center gap-3 text-sm text-slate-600">
-            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded-full" style={{ background: STATUS.good }} /> Tidak</span>
-            <span className="flex items-center gap-1"><span className="h-3 w-3 rounded-full" style={{ background: STATUS.critical }} /> Ya</span>
-          </div>
-        ) : null}
+        <div className="flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600" aria-label="Legenda peta">
+          {legend.map(([color, label]) => (
+            <span key={`${color}-${label}`} className="flex items-center gap-1.5">
+              <span className="h-3 w-3 shrink-0 rounded-full border border-white shadow-sm" style={{ background: color }} />
+              {label}
+            </span>
+          ))}
+        </div>
         {loading ? <span className="text-sm text-slate-400">Memuat peta...</span> : null}
         <span className="w-full text-sm text-slate-400 sm:ml-auto sm:w-auto">
           {buildings.length ? `${buildings.length} bangunan terpetakan · ` : ""}{households.length} keluarga
@@ -199,39 +295,44 @@ export function MapView() {
               </Polygon>
             );
           })}
-          {households.map((household) => (
-            <CircleMarker
-              key={household.id}
-              center={[household.lat, household.lng]}
-              radius={7}
-              pathOptions={{ color: "#fff", weight: 1, fillColor: colorFor(household, indicator), fillOpacity: 0.9 }}
-            >
-              <Popup className="ddp-map-popup" minWidth={300} maxWidth={380}>
-                <div className="space-y-3 text-sm">
-                  <p className="break-words text-base font-semibold">{household.namaKepalaKeluarga}</p>
-                  <p className="break-all">No. KK: {household.nkk}</p>
-                  <p>{household.alamat || `${household.dusun}, RW ${household.rw}/RT ${household.rt}`}</p>
-                  <p>{household.jumlahAnggota} anggota keluarga</p>
-                  <p>Status kemiskinan BPS: {household.miskinBps ? "Miskin" : "Tidak miskin"}</p>
-                  <div className="mt-3 flex flex-col gap-2">
-                    <Link href={`/penduduk/${household.id}`} className="ddp-map-secondary-link inline-flex min-h-11 items-center justify-center rounded-lg border border-indigo-200 bg-white px-3 py-2 text-center font-semibold hover:bg-indigo-50">
-                      Lihat data warga
-                    </Link>
-                    {household.kodeBangunan !== null ? (
-                      <>
-                        <MapBuildingPhoto code={household.kodeBangunan} />
-                        <Link href={`/bangunan/${household.kodeBangunan}`} className="ddp-map-primary-link inline-flex min-h-11 items-center justify-center rounded-lg bg-indigo-600 px-3 py-2 text-center font-semibold hover:bg-indigo-700">
-                          Lihat bangunan dan foto #{household.kodeBangunan}
-                        </Link>
-                      </>
-                    ) : (
-                      <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Kode bangunan belum tersedia.</p>
-                    )}
+          {households.map((household) => {
+            const result = indicatorResult(household, indicator, dusunColors);
+            return (
+              <CircleMarker
+                key={household.id}
+                center={[household.lat, household.lng]}
+                radius={7}
+                pathOptions={{ color: "#fff", weight: 1, fillColor: result.color, fillOpacity: 0.9 }}
+              >
+                <Popup className="ddp-map-popup" minWidth={300} maxWidth={380}>
+                  <div className="space-y-3 text-sm">
+                    <p className="break-words text-base font-semibold">{household.namaKepalaKeluarga}</p>
+                    <p className="break-all">No. KK: {household.nkk}</p>
+                    <p>{household.alamat || `${household.dusun}, RW ${household.rw}/RT ${household.rt}`}</p>
+                    <p>{household.jumlahAnggota} anggota keluarga</p>
+                    <p className="rounded-lg bg-slate-50 px-3 py-2 font-medium text-slate-700">
+                      {INDICATOR_OPTIONS.find((option) => option.value === indicator)?.label}: {result.label}
+                    </p>
+                    <div className="mt-3 flex flex-col gap-2">
+                      <Link href={`/penduduk/${household.id}`} className="ddp-map-secondary-link inline-flex min-h-11 items-center justify-center rounded-lg border border-indigo-200 bg-white px-3 py-2 text-center font-semibold hover:bg-indigo-50">
+                        Lihat data warga
+                      </Link>
+                      {household.kodeBangunan !== null ? (
+                        <>
+                          <MapBuildingPhoto code={household.kodeBangunan} />
+                          <Link href={`/bangunan/${household.kodeBangunan}`} className="ddp-map-primary-link inline-flex min-h-11 items-center justify-center rounded-lg bg-indigo-600 px-3 py-2 text-center font-semibold hover:bg-indigo-700">
+                            Lihat bangunan dan foto #{household.kodeBangunan}
+                          </Link>
+                        </>
+                      ) : (
+                        <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Kode bangunan belum tersedia.</p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </Popup>
-            </CircleMarker>
-          ))}
+                </Popup>
+              </CircleMarker>
+            );
+          })}
         </MapContainer>
       </div>
     </div>

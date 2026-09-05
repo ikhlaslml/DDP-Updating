@@ -142,6 +142,30 @@ Build, lint, TypeScript, validasi Prisma, dan pembacaan ulang 45 baris borang lu
 Perintah `npm audit fix --force` sengaja tidak dijalankan karena justru menurunkan versi
 mayor/minor Prisma dan ExcelJS. Pantau pembaruan upstream sebelum go-live penuh.
 
+## Pembaruan handoff 5 September 2026
+
+Migrasi tambahan `20260905150000_family_periodic_updates` menambah audit
+`FieldUpdateLog`, metadata pembaruan pada `FieldUpdate`, tanggal patokan tenant,
+dan wilayah migrasi terstruktur. Migrasi ini aditif dan tidak menghapus 286 kolom
+baseline. Jalankan setelah seluruh migrasi di atas.
+
+Verifikasi terakhir mencakup:
+
+- generator metadata: 336 baris, 294 aktif, 229 kolom skema terklasifikasi;
+- 40 kolom dipensiunkan hanya dari UI;
+- build produksi, lint, TypeScript, dan validasi Prisma lulus;
+- uji SQLite sementara dengan keluarga empat anggota: empat staging memakai
+  `groupId` yang sama, nilai terpropagasi identik setelah merge, dan empat audit
+  “tidak berubah” tercatat;
+- API mutasi pemerintah desa menghasilkan 403 dan akses NKK tenant lain
+  menghasilkan 404;
+- NIK bayi sementara, identitas ibu, serta kolom wilayah migrasi masuk/keluar
+  berhasil bertahan setelah merge.
+
+Kontrak rinci berada di `docs/pembaruan-berkala.md`,
+`docs/rekonsiliasi-periode-updating.md`, dan
+`docs/rencana-pilot-dan-integrasi-ddp.md`.
+
 ## Berkas yang berubah
 
 - Konfigurasi/dokumentasi: `.env.example`, `.gitignore`, `README.md`, `package.json`,

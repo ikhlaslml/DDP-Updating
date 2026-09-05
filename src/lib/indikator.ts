@@ -1,4 +1,5 @@
 import raw from "../../config/indikator-mapping.json";
+import { parameterIsDeprecated } from "@/lib/parameter-metadata";
 
 export type Tipe = "string" | "int" | "float" | "date" | "boolean";
 
@@ -43,6 +44,10 @@ export const OPERATIONAL_HIDDEN_COLUMNS = new Set(["abs_id", "subjek"]);
 
 export const KELOMPOK_LABEL = mapping._meta.kelompok;
 
+export function isDeprecatedColumn(name: string) {
+  return parameterIsDeprecated(name);
+}
+
 export function kolomByKelompok(): Record<string, [string, KolomDef][]> {
   const result: Record<string, [string, KolomDef][]> = {};
   for (const key of KELOMPOK_ORDER) result[key] = [];
@@ -69,7 +74,7 @@ export function columnsForKelompok(groups: Iterable<KelompokIndikator>) {
 }
 
 export function isOperationalColumn(name: string) {
-  return !OPERATIONAL_HIDDEN_COLUMNS.has(name);
+  return !OPERATIONAL_HIDDEN_COLUMNS.has(name) && !isDeprecatedColumn(name);
 }
 
 export function operationalColumnsForKelompok(groups: Iterable<KelompokIndikator>) {
@@ -98,5 +103,5 @@ export const DEFAULT_VISIBLE_COLUMNS = [
   "jk",
   "usia",
   "status_dalam_keluarga",
-  "miskin_bps",
+  "alamat",
 ];

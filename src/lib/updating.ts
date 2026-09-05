@@ -1,6 +1,18 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { pendudukCreateSchema, pendudukUpdateSchema } from "@/lib/validation";
+import {
+  REQUIRED_FIELDS,
+  pendudukCreateSchema,
+  pendudukUpdateSchema,
+} from "@/lib/validation";
+import { recordFieldUpdate } from "@/lib/field-updates";
+import {
+  HOUSEHOLD_INHERITED_FIELDS,
+  LOCATION_INHERITED_FIELDS,
+  isHouseholdField,
+} from "@/lib/survey";
+import { invalidatePeriodicUpdatingCache } from "@/lib/updating-cache";
+import { mapping } from "@/lib/indikator";
 
 type AuditActor = {
   userId: string;
@@ -160,19 +172,82 @@ function eventDate(details: Record<string, unknown>) {
   return date;
 }
 
+function eventRegionColumns(details: Record<string, unknown>) {
+  return {
+    wilayahDeskel:
+      typeof details.desaKelurahan === "string" ? details.desaKelurahan : null,
+    wilayahKecamatan:
+      typeof details.kecamatan === "string" ? details.kecamatan : null,
+    wilayahKabkota:
+      typeof details.kabupatenKota === "string" ? details.kabupatenKota : null,
+    wilayahProvinsi:
+      typeof details.provinsi === "string" ? details.provinsi : null,
+    wilayahKodeDeskel:
+      typeof details.wilayahKodeDeskel === "string" ? details.wilayahKodeDeskel : null,
+  };
+}
+
+function normalizeStoredRecord(raw: Record<string, unknown>) {
+  return Object.fromEntries(
+    Object.entries(raw).map(([field, value]) => {
+      if (value !== null && value !== undefined && mapping.kolom[field]?.tipe === "date") {
+        const date = value instanceof Date ? value : new Date(String(value));
+        if (Number.isNaN(date.getTime())) throw new Error(`Tanggal ${field} pada staging tidak valid`);
+        return [field, date];
+      }
+      return [field, value];
+    }),
+  );
+}
+
+function parseStagedResidentCreate(value: string) {
+  const raw = JSON.parse(value) as Record<string, unknown>;
+  if (raw.subjek !== "Individu") return pendudukCreateSchema.parse(raw);
+
+  const inherited = new Set<string>([
+    ...HOUSEHOLD_INHERITED_FIELDS,
+    ...LOCATION_INHERITED_FIELDS,
+    "responden",
+    "kesediaan",
+  ]);
+  const submitted = Object.fromEntries(
+    Object.entries(raw).filter(([field]) => !inherited.has(field)),
+  );
+  const parsedSubmitted = pendudukUpdateSchema.parse(submitted);
+  const normalized = {
+    ...normalizeStoredRecord(raw),
+    ...parsedSubmitted,
+  } as Record<string, unknown>;
+  const missing = [...REQUIRED_FIELDS].filter((field) => {
+    const fieldValue = normalized[field];
+    return fieldValue === undefined || fieldValue === null || fieldValue === "";
+  });
+  if (missing.length) throw new Error(`Data penduduk belum lengkap: ${missing.join(", ")}`);
+  return normalized;
+}
+
 async function recordFieldUpdates(
   tx: Prisma.TransactionClient,
   desaId: string,
   pendudukId: string,
+  nkk: string | null,
   data: Record<string, unknown>,
+  actor: AuditActor,
+  stagingChangeId: string,
   updatedAt = new Date()
 ) {
   const fields = Object.entries(data).filter(([, value]) => value !== null && value !== undefined && value !== "");
   for (const [field] of fields) {
-    await tx.fieldUpdate.upsert({
-      where: { pendudukId_field: { pendudukId, field } },
-      update: { updatedAt, desaId },
-      create: { desaId, pendudukId, field, updatedAt },
+    await recordFieldUpdate(tx, {
+      desaId,
+      pendudukId,
+      nkk,
+      field,
+      scope: isHouseholdField(field) ? "FAMILY" : "PERSON",
+      source: "EDIT",
+      actor,
+      stagingChangeId,
+      updatedAt,
     });
   }
 }
@@ -209,7 +284,7 @@ function summarizeActors(
 // Any invalid row rolls the whole merge back so a building cannot be separated
 // from its occupants and no change is silently lost.
 export async function mergeStaging(desaId: string, actor: AuditActor) {
-  return prisma.$transaction(
+  const result = await prisma.$transaction(
     async (tx) => {
       const pending = await tx.stagingChange.findMany({
         where: { desaId, status: "PENDING" },
@@ -337,6 +412,7 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
                   nkk: target.nkk,
                   nama: target.nama,
                   data: JSON.stringify(details),
+                  ...eventRegionColumns(details),
                   createdBy: change.createdBy ?? actor.userId,
                   createdByName: change.createdByName ?? actor.userName,
                   createdByEmail: change.createdByEmail ?? actor.userEmail,
@@ -365,6 +441,7 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
                   nkk: target.nkk,
                   nama: target.nama,
                   data: JSON.stringify(details),
+                  ...eventRegionColumns(details),
                   createdBy: change.createdBy ?? actor.userId,
                   createdByName: change.createdByName ?? actor.userName,
                   createdByEmail: change.createdByEmail ?? actor.userEmail,
@@ -391,7 +468,7 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
         }
 
         if (change.aksi === "CREATE" && change.data) {
-          const parsed = pendudukCreateSchema.parse(JSON.parse(change.data));
+          const parsed = parseStagedResidentCreate(change.data);
           if (
             typeof parsed.kode_bangunan === "number" &&
             pendingDeletedBuildingCodes.has(parsed.kode_bangunan)
@@ -399,7 +476,15 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
             throw new Error(`Bangunan #${parsed.kode_bangunan} sedang diajukan untuk dihapus. Pindahkan atau batalkan perubahan keluarga terlebih dahulu.`);
           }
           const created = await tx.penduduk.create({ data: { ...parsed, desaId } as never });
-          await recordFieldUpdates(tx, desaId, created.id, parsed as Record<string, unknown>);
+          await recordFieldUpdates(
+            tx,
+            desaId,
+            created.id,
+            typeof parsed.nkk === "string" ? parsed.nkk : null,
+            parsed as Record<string, unknown>,
+            actor,
+            change.id,
+          );
           if (typeof parsed.nkk === "string" && parsed.nkk) affectedNkk.add(parsed.nkk);
           if (change.eventType === "KELAHIRAN" || change.eventType === "MIGRASI_MASUK") {
             const details = parseEventData(change.eventData);
@@ -413,6 +498,7 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
                 nkk: created.nkk,
                 nama: created.nama,
                 data: JSON.stringify(details),
+                ...eventRegionColumns(details),
                 createdBy: change.createdBy ?? actor.userId,
                 createdByName: change.createdByName ?? actor.userName,
                 createdByEmail: change.createdByEmail ?? actor.userEmail,
@@ -440,7 +526,15 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
                 : {}),
             } as never,
           });
-          await recordFieldUpdates(tx, desaId, change.pendudukId, parsed as Record<string, unknown>);
+          await recordFieldUpdates(
+            tx,
+            desaId,
+            change.pendudukId,
+            typeof parsed.nkk === "string" ? parsed.nkk : current.nkk,
+            parsed as Record<string, unknown>,
+            actor,
+            change.id,
+          );
           if (current.nkk) affectedNkk.add(current.nkk);
           if (typeof parsed.nkk === "string" && parsed.nkk) affectedNkk.add(parsed.nkk);
           if (change.eventType === "MIGRASI_MASUK") {
@@ -455,6 +549,7 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
                 nkk: typeof parsed.nkk === "string" ? parsed.nkk : current.nkk,
                 nama: typeof parsed.nama === "string" ? parsed.nama : change.nama,
                 data: JSON.stringify(details),
+                ...eventRegionColumns(details),
                 createdBy: change.createdBy ?? actor.userId,
                 createdByName: change.createdByName ?? actor.userName,
                 createdByEmail: change.createdByEmail ?? actor.userEmail,
@@ -503,4 +598,6 @@ export async function mergeStaging(desaId: string, actor: AuditActor) {
     },
     { isolationLevel: "Serializable", timeout: 60_000 }
   );
+  invalidatePeriodicUpdatingCache();
+  return result;
 }

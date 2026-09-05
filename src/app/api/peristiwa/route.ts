@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
+import {
+  generatedMigrationRegionKey,
+  migrationRegionLabel,
+} from "@/lib/migration-region";
 
 const eventSchema = z.object({
   type: z.enum(["KEMATIAN", "MIGRASI_KELUAR"]),
@@ -14,6 +18,10 @@ const eventSchema = z.object({
   punyaAkta: z.string().trim().max(50).optional(),
   nomorAkta: z.string().trim().max(100).optional(),
   tujuan: z.string().trim().max(300).optional(),
+  desaKelurahan: z.string().trim().max(150).optional(),
+  kecamatan: z.string().trim().max(150).optional(),
+  kabupatenKota: z.string().trim().max(150).optional(),
+  provinsi: z.string().trim().max(150).optional(),
   alasan: z.string().trim().max(500).optional(),
 }).superRefine((value, ctx) => {
   if (value.type === "KEMATIAN" && value.scope === "FAMILY") {
@@ -22,8 +30,12 @@ const eventSchema = z.object({
   if (value.type === "KEMATIAN" && !value.penyebab) {
     ctx.addIssue({ code: "custom", path: ["penyebab"], message: "Penyebab kematian wajib dipilih" });
   }
-  if (value.type === "MIGRASI_KELUAR" && !value.tujuan) {
-    ctx.addIssue({ code: "custom", path: ["tujuan"], message: "Tujuan migrasi wajib diisi" });
+  if (value.type === "MIGRASI_KELUAR") {
+    for (const field of ["desaKelurahan", "kecamatan", "kabupatenKota", "provinsi"] as const) {
+      if (!value[field]) {
+        ctx.addIssue({ code: "custom", path: [field], message: "Wilayah tujuan wajib diisi lengkap" });
+      }
+    }
   }
 });
 
@@ -123,10 +135,24 @@ export async function POST(req: NextRequest) {
       });
       if (pending) throw new Error("Salah satu penduduk sudah memiliki perubahan yang menunggu penggabungan");
 
+      const region = parsed.data.type === "MIGRASI_KELUAR"
+        ? {
+            desaKelurahan: parsed.data.desaKelurahan as string,
+            kecamatan: parsed.data.kecamatan as string,
+            kabupatenKota: parsed.data.kabupatenKota as string,
+            provinsi: parsed.data.provinsi as string,
+          }
+        : null;
       const details = {
         ...parsed.data,
         tanggal: parsed.data.tanggal.toISOString(),
         pendudukIds: targetIds,
+        ...(region
+          ? {
+              tujuan: migrationRegionLabel(region),
+              wilayahKodeDeskel: generatedMigrationRegionKey(region),
+            }
+          : {}),
       };
       return tx.stagingChange.create({
         data: {

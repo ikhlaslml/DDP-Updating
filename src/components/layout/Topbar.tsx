@@ -1,24 +1,62 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Search, ChevronDown, LogOut, Menu } from "lucide-react";
+import { Bell, Search, ChevronDown, LogOut, Menu } from "lucide-react";
 import { useAuthInfo } from "@/components/providers/AuthInfo";
 
-export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
+export function Topbar({
+  onToggleSidebar,
+  menuButtonRef,
+}: {
+  onToggleSidebar: () => void;
+  menuButtonRef: React.RefObject<HTMLButtonElement | null>;
+}) {
   const { email, role } = useAuthInfo();
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [reminders, setReminders] = useState<{
+    sixMonths: { dueFamilies: number; dueMembers: number; dueFields: number };
+    annual: { dueFamilies: number; dueMembers: number; dueFields: number };
+  } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const notificationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOpen(false);
+      if (notificationRef.current && !notificationRef.current.contains(e.target as Node)) {
+        setNotificationOpen(false);
+      }
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+        setNotificationOpen(false);
+      }
     }
     document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    function refreshReminders() {
+      fetch("/api/updating/reminders/count")
+        .then((response) => (response.ok ? response.json() : null))
+        .then(setReminders)
+        .catch(() => setReminders(null));
+    }
+    refreshReminders();
+    window.addEventListener("periodic-updating-changed", refreshReminders);
+    return () => window.removeEventListener("periodic-updating-changed", refreshReminders);
   }, []);
 
   function handleSearch(e: React.FormEvent) {
@@ -27,11 +65,16 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   }
 
   const initial = (email || "?").trim().charAt(0).toUpperCase();
+  const dueFamilies =
+    (reminders?.sixMonths.dueFamilies ?? 0) + (reminders?.annual.dueFamilies ?? 0);
+  const dueFields =
+    (reminders?.sixMonths.dueFields ?? 0) + (reminders?.annual.dueFields ?? 0);
 
   return (
     <header className="sticky top-0 z-20 h-16 shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur">
       <div className="flex h-full min-w-0 items-center gap-2 px-3 sm:gap-3 sm:px-6">
         <button
+          ref={menuButtonRef}
           type="button"
           onClick={onToggleSidebar}
           aria-label="Buka/tutup menu"
@@ -51,10 +94,65 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
           </div>
         </form>
 
+        <div className="relative shrink-0" ref={notificationRef}>
+          <button
+            type="button"
+            onClick={() => {
+              setNotificationOpen((current) => !current);
+              setOpen(false);
+            }}
+            aria-label={`${dueFields} isian jatuh tempo`}
+            aria-expanded={notificationOpen}
+            className="relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+          >
+            <Bell className="h-5 w-5" />
+            {dueFamilies > 0 ? (
+              <span className="absolute right-0.5 top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white">
+                {dueFamilies > 99 ? "99+" : dueFamilies}
+              </span>
+            ) : null}
+          </button>
+          {notificationOpen ? (
+            <div className="absolute right-0 z-50 mt-2 w-[min(22rem,calc(100vw-1.5rem))] rounded-2xl border border-slate-100 bg-white p-3 shadow-xl">
+              <div className="px-2 pb-2">
+                <p className="font-semibold text-slate-900">Pembaruan Berkala</p>
+                <p className="text-xs text-slate-500">Pengingat tidak mengunci perubahan data.</p>
+              </div>
+              {[
+                ["6 Bulan", "6-bulan", reminders?.sixMonths],
+                ["1 Tahun", "1-tahun", reminders?.annual],
+              ].map(([label, slug, value]) => {
+                const summary = value as NonNullable<typeof reminders>["sixMonths"] | undefined;
+                return (
+                  <Link
+                    key={slug as string}
+                    href={`/penduduk/pembaruan-berkala?siklus=${slug}`}
+                    onClick={() => setNotificationOpen(false)}
+                    className="flex min-h-14 items-center justify-between rounded-xl px-3 py-2 hover:bg-slate-50"
+                  >
+                    <span>
+                      <span className="block text-sm font-semibold text-slate-800">Siklus {label as string}</span>
+                      <span className="block text-xs text-slate-500">
+                        {summary?.dueFamilies ?? 0} keluarga · {summary?.dueFields ?? 0} isian
+                      </span>
+                    </span>
+                    <span className="rounded-full bg-red-50 px-2 py-1 text-xs font-semibold text-red-700">
+                      {summary?.dueFamilies ?? 0}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : null}
+        </div>
+
         <div className="relative ml-auto shrink-0" ref={menuRef}>
           <button
             type="button"
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => {
+              setOpen((o) => !o);
+              setNotificationOpen(false);
+            }}
             className="flex min-h-11 items-center gap-2 rounded-xl px-1.5 py-1.5 hover:bg-slate-50 sm:px-2"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">

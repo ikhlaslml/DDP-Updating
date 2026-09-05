@@ -8,6 +8,7 @@ type ImportReport = {
   successCount: number;
   failCount: number;
   unknownColumns: string[];
+  ignoredDeprecatedColumns: string[];
   rowErrors: { row: number; errors: Record<string, string> }[];
 };
 
@@ -105,6 +106,11 @@ export function ImportForm() {
           {report.unknownColumns.length > 0 && (
             <p className="text-xs text-amber-600 mt-1">
               Kolom tidak dikenali (diabaikan): {report.unknownColumns.join(", ")}
+            </p>
+          )}
+          {report.ignoredDeprecatedColumns.length > 0 && (
+            <p className="mt-1 text-xs text-amber-600">
+              Kolom yang sudah dipensiunkan (diabaikan): {report.ignoredDeprecatedColumns.join(", ")}
             </p>
           )}
           {report.rowErrors.length > 0 && (

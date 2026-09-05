@@ -1,11 +1,22 @@
-import { randomUUID } from "node:crypto";
+import { randomInt, randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { HOUSEHOLD_INHERITED_FIELDS } from "@/lib/survey";
-import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
+import {
+  REQUIRED_FIELDS,
+  pendudukCreateSchema,
+  pendudukUpdateSchema,
+  flattenZodError,
+} from "@/lib/validation";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 import { registerIncompleteFamily } from "@/lib/family-progress";
+import {
+  generatedMigrationRegionKey,
+  migrationRegionLabel,
+  type MigrationRegion,
+} from "@/lib/migration-region";
 
 const submissionSchema = z
   .object({
@@ -37,8 +48,26 @@ const submissionSchema = z
     if (value.eventType && !value.eventData?.tanggal) {
       ctx.addIssue({ code: "custom", path: ["eventData", "tanggal"], message: "Tanggal peristiwa wajib diisi" });
     }
-    if (value.eventType === "MIGRASI_MASUK" && !String(value.eventData?.asal ?? "").trim()) {
-      ctx.addIssue({ code: "custom", path: ["eventData", "asal"], message: "Daerah asal wajib diisi" });
+    if (value.eventType === "MIGRASI_MASUK") {
+      for (const field of ["desaKelurahan", "kecamatan", "kabupatenKota", "provinsi"] as const) {
+        if (!String(value.eventData?.[field] ?? "").trim()) {
+          ctx.addIssue({ code: "custom", path: ["eventData", field], message: "Wilayah asal wajib diisi lengkap" });
+        }
+      }
+    }
+    if (value.eventType === "KELAHIRAN") {
+      if (!String(value.eventData?.tempatLahir ?? "").trim()) {
+        ctx.addIssue({ code: "custom", path: ["eventData", "tempatLahir"], message: "Tempat lahir wajib diisi" });
+      }
+      if (!/^\d{16}$/.test(String(value.eventData?.nikIbu ?? ""))) {
+        ctx.addIssue({ code: "custom", path: ["eventData", "nikIbu"], message: "NIK ibu harus 16 digit" });
+      }
+      if (!String(value.eventData?.namaIbu ?? "").trim()) {
+        ctx.addIssue({ code: "custom", path: ["eventData", "namaIbu"], message: "Nama ibu wajib diisi" });
+      }
+      if (!Number.isInteger(Number(value.eventData?.anakKe)) || Number(value.eventData?.anakKe) < 1) {
+        ctx.addIssue({ code: "custom", path: ["eventData", "anakKe"], message: "Urutan anak wajib diisi" });
+      }
     }
   });
 
@@ -72,6 +101,29 @@ function hasPendingBuildingDeletion(changes: { data: string | null }[], code: nu
   });
 }
 
+async function generateProvisionalNik(
+  tx: Prisma.TransactionClient,
+  input: { kodeWilayah: string | null; tanggalLahir: unknown; jenisKelamin: unknown },
+) {
+  const birth = new Date(String(input.tanggalLahir ?? ""));
+  if (Number.isNaN(birth.getTime())) throw new Error("Tanggal lahir diperlukan untuk membuat NIK sementara");
+  const region = (input.kodeWilayah ?? "").replace(/\D/g, "").padEnd(6, "0").slice(0, 6);
+  const female = ["P", "Perempuan"].includes(String(input.jenisKelamin ?? ""));
+  const day = String(birth.getUTCDate() + (female ? 40 : 0)).padStart(2, "0");
+  const month = String(birth.getUTCMonth() + 1).padStart(2, "0");
+  const year = String(birth.getUTCFullYear()).slice(-2);
+  const prefix = `${region}${day}${month}${year}`;
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    const nik = `${prefix}${String(randomInt(1, 10_000)).padStart(4, "0")}`;
+    const [resident, pending] = await Promise.all([
+      tx.penduduk.findUnique({ where: { nik }, select: { id: true } }),
+      tx.stagingChange.findFirst({ where: { nik, status: "PENDING" }, select: { id: true } }),
+    ]);
+    if (!resident && !pending) return nik;
+  }
+  throw new Error("NIK sementara gagal dibuat. Coba simpan kembali.");
+}
+
 export async function POST(req: NextRequest) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
@@ -91,6 +143,35 @@ export async function POST(req: NextRequest) {
       async (tx) => {
         const desa = await tx.desa.findUnique({ where: { id: ctx.desaId } });
         if (!desa) throw new Error("Desa pengguna tidak ditemukan");
+        const submittedData: Record<string, unknown> = { ...data };
+        const normalizedEventData: Record<string, unknown> | null = body.data.eventData
+          ? { ...body.data.eventData }
+          : null;
+        if (body.data.eventType === "KELAHIRAN") {
+          submittedData.status_dalam_keluarga = "Anak";
+          const generatedNik = !String(submittedData.nik ?? "").trim();
+          if (generatedNik) {
+            submittedData.nik = await generateProvisionalNik(tx, {
+              kodeWilayah: desa.kodeWilayah,
+              tanggalLahir: submittedData.tgl_lahir,
+              jenisKelamin: submittedData.jk,
+            });
+          }
+          if (normalizedEventData) {
+            normalizedEventData.nikSementaraDibuat = generatedNik;
+            normalizedEventData.nikBayi = submittedData.nik;
+          }
+        }
+        if (body.data.eventType === "MIGRASI_MASUK" && normalizedEventData) {
+          const region: MigrationRegion = {
+            desaKelurahan: String(normalizedEventData.desaKelurahan ?? ""),
+            kecamatan: String(normalizedEventData.kecamatan ?? ""),
+            kabupatenKota: String(normalizedEventData.kabupatenKota ?? ""),
+            provinsi: String(normalizedEventData.provinsi ?? ""),
+          };
+          normalizedEventData.asal = migrationRegionLabel(region);
+          normalizedEventData.wilayahKodeDeskel = generatedMigrationRegionKey(region);
+        }
 
         let authoritative: Record<string, unknown> = {};
         let nkk = "";
@@ -143,9 +224,9 @@ export async function POST(req: NextRequest) {
             kesediaan: "Ya",
             jml_keluarga: 1,
           };
-          nkk = typeof data.nkk === "string" ? data.nkk : "";
+          nkk = typeof submittedData.nkk === "string" ? submittedData.nkk : "";
           authoritative.nkk = nkk;
-          authoritative.nama_kepala_rumah = data.nama;
+          authoritative.nama_kepala_rumah = submittedData.nama;
           const existing = await tx.penduduk.count({ where: { desaId: ctx.desaId, nkk, statusAktif: true } });
           if (existing > 0) throw new Error("Nomor KK sudah disensus. Gunakan menu Tambah Anggota Keluarga.");
           const pending = await tx.stagingChange.findMany({
@@ -180,7 +261,7 @@ export async function POST(req: NextRequest) {
               throw new Error("Bangunan keluarga ini sedang diajukan untuk dihapus. Tunggu penggabungan atau batalkan penghapusan terlebih dahulu.");
             }
           }
-          if (!data.status_dalam_keluarga || data.status_dalam_keluarga === "Kepala Keluarga") {
+          if (!submittedData.status_dalam_keluarga || submittedData.status_dalam_keluarga === "Kepala Keluarga") {
             throw new Error("Pilih status anggota dalam keluarga");
           }
           const inherited = Object.fromEntries(
@@ -197,10 +278,10 @@ export async function POST(req: NextRequest) {
           ringkasan = `Anggota baru keluarga ${head.nama ?? nkk}`;
         }
 
-        const parsed = pendudukCreateSchema.safeParse({
-          ...data,
-          ...authoritative,
-          ...derivedFields(data),
+        const parsed = (role === "HEAD" ? pendudukCreateSchema : pendudukUpdateSchema).safeParse({
+          ...submittedData,
+          ...(role === "HEAD" ? authoritative : {}),
+          ...derivedFields(submittedData),
           enumerator: ctx.userName,
         });
         if (!parsed.success) {
@@ -208,9 +289,29 @@ export async function POST(req: NextRequest) {
           error.fields = flattenZodError(parsed.error);
           throw error;
         }
+        // Existing baselines can contain legacy enum labels no longer offered
+        // by the current questionnaire. Preserve those household values exactly
+        // instead of rejecting a new member because of historical head data.
+        const normalizedData: Record<string, unknown> =
+          role === "HEAD"
+            ? (parsed.data as Record<string, unknown>)
+            : { ...(parsed.data as Record<string, unknown>), ...authoritative };
+        const missingRequired = [...REQUIRED_FIELDS].filter((field) => {
+          const value = normalizedData[field];
+          return value === undefined || value === null || value === "";
+        });
+        if (missingRequired.length) {
+          const error = new Error("Data penduduk belum lengkap") as Error & {
+            fields?: Record<string, string>;
+          };
+          error.fields = Object.fromEntries(
+            missingRequired.map((field) => [field, "Wajib diisi"]),
+          );
+          throw error;
+        }
 
-        const nik = String(parsed.data.nik);
-        const nama = typeof parsed.data.nama === "string" ? parsed.data.nama : null;
+        const nik = String(normalizedData.nik);
+        const nama = typeof normalizedData.nama === "string" ? normalizedData.nama : null;
         const [baselineDupe, pendingDupe] = await Promise.all([
           tx.penduduk.findUnique({ where: { nik } }),
           tx.stagingChange.findFirst({
@@ -238,9 +339,9 @@ export async function POST(req: NextRequest) {
               : body.data.eventType === "MIGRASI_MASUK"
                 ? `Migrasi masuk: ${ringkasan}`
                 : ringkasan,
-            data: JSON.stringify(parsed.data),
+            data: JSON.stringify(normalizedData),
             eventType: body.data.eventType,
-            eventData: body.data.eventData ? JSON.stringify(body.data.eventData) : null,
+            eventData: normalizedEventData ? JSON.stringify(normalizedEventData) : null,
             createdBy: ctx.userId,
             createdByName: ctx.userName,
             createdByEmail: ctx.userEmail,

@@ -7,6 +7,7 @@ import { fromImportValue } from "@/lib/export-import";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 import { readExcelTextRows } from "@/lib/excel-server";
 import { normalizeVillageCode, normalizeVillageName, villageIdentityMatches } from "@/lib/village-identity";
+import { parameterIsDeprecated } from "@/lib/parameter-metadata";
 
 export const runtime = "nodejs";
 
@@ -55,6 +56,9 @@ export async function POST(req: NextRequest) {
   const dataRows = aoa.slice(1).filter((r) => r.some((c) => String(c ?? "").trim() !== ""));
 
   const unknownColumns = headerRow.filter((h) => h && !ALL_COLUMNS.includes(h));
+  const ignoredDeprecatedColumns = headerRow.filter(
+    (header) => ALL_COLUMNS.includes(header) && parameterIsDeprecated(header),
+  );
   const missingRequiredColumns = [...REQUIRED_FIELDS].filter((f) => !headerRow.includes(f));
 
   if (missingRequiredColumns.length > 0) {
@@ -70,7 +74,7 @@ export async function POST(req: NextRequest) {
 
   const knownIndexes = headerRow
     .map((h, idx) => ({ h, idx }))
-    .filter(({ h }) => ALL_COLUMNS.includes(h));
+    .filter(({ h }) => ALL_COLUMNS.includes(h) && !parameterIsDeprecated(h));
 
   const kodeDeskelIndex = headerRow.indexOf("kode_deskel");
   const deskelIndex = headerRow.indexOf("deskel");
@@ -184,6 +188,7 @@ export async function POST(req: NextRequest) {
     successCount: toCreate.length,
     failCount: rowErrors.length,
     unknownColumns,
+    ignoredDeprecatedColumns,
     rowErrors: rowErrors.slice(0, 200),
   });
 }

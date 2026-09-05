@@ -8,6 +8,7 @@ import { useCanWrite } from "@/components/providers/AuthInfo";
 import { uploadMedia } from "@/lib/client-media";
 
 type Template = { id: string; nama: string; kode: string; kategori: string; isi: string };
+type SettingsState = SuratSettings & { tanggalBaselineData?: string | null };
 
 const FIELDS: { key: keyof SuratSettings; label: string; textarea?: boolean }[] = [
   { key: "namaKepala", label: "Nama Kepala Desa" },
@@ -36,7 +37,7 @@ function imageError(error: unknown, fallback: string) {
 
 export function PengaturanView() {
   const canWrite = useCanWrite();
-  const [settings, setSettings] = useState<SuratSettings>({});
+  const [settings, setSettings] = useState<SettingsState>({});
   const [templates, setTemplates] = useState<Template[]>([]);
   const [previewId, setPreviewId] = useState("");
   const [saving, setSaving] = useState(false);
@@ -182,6 +183,44 @@ export function PengaturanView() {
             <div className="mx-auto flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 sm:mx-0">{settings.logoUrl ? <Image src={settings.logoUrl} alt="Logo desa saat ini" width={112} height={112} unoptimized className="h-full w-full object-contain p-2" /> : <div className="text-center text-xs text-slate-400"><Landmark className="mx-auto mb-1 h-9 w-9" />Belum ada logo</div>}</div>
             <div className="min-w-0 space-y-2"><p className="text-xs leading-relaxed text-slate-500">PNG, JPG, atau SVG aman. Maksimal 2 MB. Gunakan gambar tegak atau persegi agar kop tetap proporsional.</p>{settings.logoUpdatedAt ? <p className="text-xs text-slate-500">Diperbarui {new Date(settings.logoUpdatedAt).toLocaleString("id-ID")}</p> : null}{canWrite ? <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap"><label className={`inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700 sm:w-auto ${logoBusy ? "pointer-events-none opacity-60" : ""}`}><ImageUp className="h-4 w-4" /> {logoBusy ? "Memproses..." : settings.logoUrl ? "Ganti Logo" : "Unggah Logo"}<input type="file" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml" className="sr-only" disabled={logoBusy} onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) void replaceLogo(file, event.currentTarget); }} /></label>{settings.logoUrl ? <button type="button" disabled={logoBusy} onClick={removeLogo} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60 sm:w-auto"><Trash2 className="h-4 w-4" /> Hapus</button> : null}</div> : <p className="text-xs text-slate-400">Mode lihat. Penggantian logo hanya untuk operator.</p>}{logoError ? <p role="alert" className="text-sm text-rose-600">{logoError}</p> : null}</div>
           </div>
+        </section>
+
+        <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+          <h2 className="text-lg font-bold text-slate-900">Patokan Pembaruan Berkala</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Opsional. Tanggal ini dipakai sebagai patokan awal pengingat jika suatu parameter belum memiliki riwayat pembaruan.
+          </p>
+          <label className="mt-4 block text-xs font-medium text-slate-600">
+            Tanggal baseline data
+            <input
+              type="date"
+              value={settings.tanggalBaselineData?.slice(0, 10) ?? ""}
+              max={new Date().toISOString().slice(0, 10)}
+              disabled={!canWrite}
+              onChange={(event) => {
+                setSettings((current) => ({ ...current, tanggalBaselineData: event.target.value }));
+                setSaved(false);
+              }}
+              className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm disabled:bg-slate-50"
+            />
+          </label>
+          <p className="mt-2 text-xs text-slate-500">
+            Jika dikosongkan, sistem memakai snapshot terbaru yang memuat warga, lalu T0, dan terakhir tanggal warga dibuat.
+          </p>
+          {canWrite ? (
+            <div className="mt-4 flex items-center justify-end gap-3">
+              {saved ? <span className="text-sm font-medium text-emerald-600">Tersimpan.</span> : null}
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => void save()}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+              >
+                <Save className="h-4 w-4" />
+                {saving ? "Menyimpan..." : "Simpan Patokan"}
+              </button>
+            </div>
+          ) : null}
         </section>
 
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">

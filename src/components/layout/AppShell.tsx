@@ -1,30 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { RoleBanner } from "./RoleBanner";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  // Desktop: sidebar shown by default, collapsible. Mobile: off-canvas drawer.
-  const [desktopOpen, setDesktopOpen] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
 
   function toggleSidebar() {
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      setDesktopOpen((v) => !v);
-    } else {
-      setMobileOpen((v) => !v);
-    }
+    setSidebarOpen((open) => !open);
   }
 
-  function closeMobileSidebar() {
-    setMobileOpen(false);
+  function closeSidebar() {
+    setSidebarOpen(false);
   }
 
   useEffect(() => {
-    if (!mobileOpen) return;
+    if (!sidebarOpen) {
+      if (wasOpen.current) menuButtonRef.current?.focus();
+      wasOpen.current = false;
+      return;
+    }
+    wasOpen.current = true;
 
     const bodyOverflow = document.body.style.overflow;
     const htmlOverflow = document.documentElement.style.overflow;
@@ -35,30 +35,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       document.body.style.overflow = bodyOverflow;
       document.documentElement.style.overflow = htmlOverflow;
     };
-  }, [mobileOpen]);
-
-  useEffect(() => {
-    if (!mobileOpen) return;
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") closeMobileSidebar();
-    }
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [mobileOpen]);
+  }, [sidebarOpen]);
 
   return (
     <div className="min-h-screen bg-[#F7F7FB]">
-      <Sidebar desktopOpen={desktopOpen} mobileOpen={mobileOpen} onNavigate={closeMobileSidebar} />
+      {sidebarOpen ? (
+        <button
+          type="button"
+          aria-label="Tutup menu navigasi"
+          onClick={closeSidebar}
+          className="fixed inset-0 z-[1999] cursor-default bg-slate-900/40"
+        />
+      ) : null}
+      <Sidebar open={sidebarOpen} onNavigate={closeSidebar} onClose={closeSidebar} />
 
-      <div
-        className={clsx(
-          "flex min-h-screen flex-col transition-[padding] duration-200 ease-in-out",
-          desktopOpen ? "lg:pl-64" : "lg:pl-0"
-        )}
-      >
-        <Topbar onToggleSidebar={toggleSidebar} />
+      <div className="flex min-h-screen flex-col">
+        <Topbar onToggleSidebar={toggleSidebar} menuButtonRef={menuButtonRef} />
         <RoleBanner />
-        <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 py-6">{children}</main>
+        <main className="w-full flex-1 px-4 py-6 sm:px-6">{children}</main>
       </div>
     </div>
   );

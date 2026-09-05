@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
+import { loadPeriodicFamilies } from "@/lib/periodic-updating";
 
 export async function GET() {
   const ctx = await getAuthContext();
@@ -24,8 +25,11 @@ export async function GET() {
         lat: true,
         lng: true,
         status_dalam_keluarga: true,
-        miskin_bps: true,
-        miskin_ekstrem: true,
+        punya_ktp: true,
+        punya_aktalahir: true,
+        bpjs_kes: true,
+        rumah_pln: true,
+        airbersih: true,
       },
     }),
     prisma.bangunan.findMany({
@@ -70,8 +74,11 @@ export async function GET() {
       lat: number;
       lng: number;
       jumlahAnggota: number;
-      miskinBps: boolean;
-      miskinEkstrem: boolean;
+      anggotaPunyaKtp: number;
+      anggotaPunyaAktaLahir: number;
+      anggotaBpjsKesehatan: number;
+      rumahPln: string | null;
+      airBersih: string | null;
     }
   >();
 
@@ -101,16 +108,22 @@ export async function GET() {
         lat: latNum,
         lng: lngNum,
         jumlahAnggota: householdCountByNkk.get(key) ?? 1,
-        miskinBps: r.miskin_bps === "Ya",
-        miskinEkstrem: r.miskin_ekstrem === "Ya",
+        anggotaPunyaKtp: r.punya_ktp === "Ya" ? 1 : 0,
+        anggotaPunyaAktaLahir: r.punya_aktalahir === "Ya" ? 1 : 0,
+        anggotaBpjsKesehatan: r.bpjs_kes === "Ya" ? 1 : 0,
+        rumahPln: r.rumah_pln,
+        airBersih: r.airbersih,
       });
     } else {
+      if (r.punya_ktp === "Ya") existing.anggotaPunyaKtp += 1;
+      if (r.punya_aktalahir === "Ya") existing.anggotaPunyaAktaLahir += 1;
+      if (r.bpjs_kes === "Ya") existing.anggotaBpjsKesehatan += 1;
       if (r.status_dalam_keluarga === "Kepala Keluarga") {
         existing.id = r.id;
         existing.kodeBangunan = r.kode_bangunan ?? existing.kodeBangunan;
         existing.namaKepalaKeluarga = r.nama || "-";
-        existing.miskinBps = r.miskin_bps === "Ya";
-        existing.miskinEkstrem = r.miskin_ekstrem === "Ya";
+        existing.rumahPln = r.rumah_pln;
+        existing.airBersih = r.airbersih;
       }
       if (existing.kodeBangunan === null && r.kode_bangunan !== null) existing.kodeBangunan = r.kode_bangunan;
     }
@@ -167,9 +180,19 @@ export async function GET() {
       return [];
     }
   });
+  const [sixMonthFamilies, annualFamilies] = await Promise.all([
+    loadPeriodicFamilies(ctx.desaId, "SIX_MONTHS"),
+    loadPeriodicFamilies(ctx.desaId, "ANNUAL"),
+  ]);
+  const sixMonthStatus = new Map(sixMonthFamilies.map((family) => [family.nkk, family.status]));
+  const annualStatus = new Map(annualFamilies.map((family) => [family.nkk, family.status]));
 
   return NextResponse.json({
-    data: [...households.values()],
+    data: [...households.values()].map((household) => ({
+      ...household,
+      update6MonthStatus: sixMonthStatus.get(household.nkk) ?? "TERKINI",
+      updateAnnualStatus: annualStatus.get(household.nkk) ?? "TERKINI",
+    })),
     buildings: validBuildings,
     context: {
       droneTilePrefix: desa?.droneTilePrefix ?? formattedFallback,

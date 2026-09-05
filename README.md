@@ -24,8 +24,10 @@ statistik, dan peta sebaran.
   ("Data Perubahan Sementara"). Klik **Gabungkan** menerapkannya ke baseline lalu
   membekukan `Snapshot` baru (`T1`, `T2`, …) yang immutable. Kematian dipindahkan
   ke arsip khusus, sedangkan migrasi keluar mempertahankan penduduk sebagai data nonaktif.
-- **Jadwal parameter** — metadata 286 kolom menggabungkan periode insidentil, 6 bulanan,
-  tahunan, dan tidak berubah. Pengingat tidak mengunci pembaruan sebelum jatuh tempo.
+- **Jadwal parameter berbasis keluarga** — klasifikasi per peran dibangun dari
+  `config/sources/merge_pertanyaan.csv`. Jawaban tingkat rumah tangga diperbarui sekali
+  per NKK, jawaban individu tetap per jiwa, dan konfirmasi “tidak berubah” mempunyai
+  jurnal audit sendiri. Pengingat tidak pernah mengunci pembaruan insidental.
 - **Pembaruan spasial bangunan** — operator menggambar polygon atap pada peta
   OpenStreetMap/Esri/citra drone DDP; centroid dihitung server. Bangunan berpenghuni,
   kepala keluarga, dan seluruh anggotanya masuk staging sebagai satu grup atomik.
@@ -59,6 +61,8 @@ cp .env.example .env
 # ganti AUTH_SECRET:  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npx prisma migrate deploy   # terapkan migrasi ke database
 npm run db:seed             # hanya untuk lingkungan demo/nonproduksi
+npm run build:updating-metadata
+npm run verify:updating-contract
 npm run dev                 # http://localhost:3000
 ```
 

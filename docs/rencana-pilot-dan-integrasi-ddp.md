@@ -52,6 +52,52 @@ Tidak perlu mengunggah CSV berisi PII ke percakapan. Untuk pemetaan awal cukup b
 
 Ekstraksi ke repository backend terpisah baru layak dilakukan jika DDP Updating memiliki beberapa klien, membutuhkan worker/job independen, atau kontrak keamanan organisasi mengharuskannya.
 
+## Kontrak handoff DB induk untuk pembaruan berkala
+
+Perubahan September 2026 bersifat aditif. Migrasi
+`20260905150000_family_periodic_updates` tidak menghapus atau mengganti satu pun
+dari 286 kolom baseline. Migrasi hanya:
+
+- menambah metadata patokan pada `PengaturanDesa`;
+- memperkaya `FieldUpdate` dan menambah jurnal append-only `FieldUpdateLog`;
+- menambah lima kolom wilayah migrasi pada `PeristiwaKependudukan`.
+
+Empat puluh kolom yang dipensiunkan hanya disembunyikan dari UI dan ekspor baru.
+Nilai lama tetap berada pada database, staging, dan snapshot. Karena itu tim DB
+tidak perlu menjalankan `DROP COLUMN`.
+
+Ada dua sambungan yang tidak boleh dicampur:
+
+1. `DATABASE_URL` adalah database operasional aplikasi dan harus memiliki seluruh
+   tabel pada `prisma/schema.prisma`. Mengarahkannya langsung ke database yang
+   hanya mempunyai tabel produksi `ajaib` akan gagal karena aplikasi juga
+   membutuhkan `User`, `Desa`, `StagingChange`, `Snapshot`, dan tabel audit.
+2. `DDP_DATA_SOURCE=ruby` adalah adapter baca baseline DB induk. Token tetap di
+   server. Mode ini baru aman diaktifkan setelah kontrak endpoint disepakati.
+
+Strategi yang dipilih adalah mempertahankan database operasional DDP Updating dan
+menghubungkan baseline induk melalui API resmi. Mutasi baseline induk belum boleh
+diaktifkan hanya dengan mengganti variabel lingkungan: tim backend masih harus
+menyediakan endpoint batch, idempotency key, versi/ETag, respons konflik, dan
+acknowledgement. Sampai kontrak itu ada, penggabungan tetap menjadi transaksi
+lokal yang dapat diaudit dan tidak menulis secara spekulatif ke tabel induk.
+
+Kode wilayah migrasi berawalan `AUTO-` adalah kunci integrasi deterministik, bukan
+kode Kemendagri resmi. Empat nama wilayah disimpan dalam kolom terpisah sehingga
+tim induk dapat mengganti kunci tersebut melalui master wilayah tanpa membongkar
+JSON atau kehilangan data asal.
+
+### Urutan release database
+
+1. Backup database operasional.
+2. Jalankan `npm run build:updating-metadata` dan
+   `npm run verify:updating-contract`.
+3. Tinjau SQL migrasi dan jalankan `npm run db:deploy` menggunakan koneksi
+   langsung/non-pooling.
+4. Deploy aplikasi setelah migrasi sukses.
+5. Uji dua tenant, masing-masing dengan operator dan pemerintah desa.
+6. Aktifkan adapter induk hanya di sandbox; jangan langsung di produksi.
+
 ## Integrasi foto bangunan Core DDP
 
 Endpoint read-only `GET /api/v1/foto-bangunan?kode=...&kode_deskel=...` telah diverifikasi mengembalikan array metadata dan URL Google Cloud Storage bertanda tangan. DDP Updating tidak menyimpan URL `foto` karena URL tersebut kedaluwarsa. Route server mengambil `kode_deskel` dari tenant login, memastikan kode bangunan benar-benar milik tenant, meminta URL terbaru ke Core DDP, lalu mem-proxy byte gambar ke pengguna yang terautentikasi. Endpoint ini tidak dipakai untuk foto responden.

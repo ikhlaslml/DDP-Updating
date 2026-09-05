@@ -3,6 +3,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { ALL_COLUMNS } from "@/lib/indikator";
 import { buildPendudukWhere } from "@/lib/query";
+import { parameterIsDeprecated } from "@/lib/parameter-metadata";
 
 const COLUMN_SET = new Set(ALL_COLUMNS);
 
@@ -27,7 +28,14 @@ export type CensusListResult = {
 
 export function selectedResidentColumns(value: string | null) {
   if (!value) return [];
-  return [...new Set(value.split(",").map((column) => column.trim()).filter((column) => COLUMN_SET.has(column)))];
+  return [
+    ...new Set(
+      value
+        .split(",")
+        .map((column) => column.trim())
+        .filter((column) => COLUMN_SET.has(column) && !parameterIsDeprecated(column)),
+    ),
+  ];
 }
 
 function localSelect(columns: string[]): Record<string, true> | undefined {
@@ -89,7 +97,7 @@ async function listFromRubyApi(input: CensusListInput): Promise<CensusListResult
   if (!token) throw new Error("DDP_API_TOKEN belum dikonfigurasi");
 
   const endpoint = remoteEndpoint(input.kodeWilayah);
-  const passThrough = ["q", "dusun", "rw", "rt", "jk", "miskin_bps"];
+  const passThrough = ["q", "dusun", "rw", "rt", "jk"];
   for (const key of passThrough) {
     const value = input.searchParams.get(key);
     if (value) endpoint.searchParams.set(key, value);

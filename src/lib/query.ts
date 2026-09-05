@@ -7,8 +7,6 @@ export function buildPendudukWhere(sp: URLSearchParams, desaId?: string): Prisma
   const rw = sp.get("rw")?.trim();
   const rt = sp.get("rt")?.trim();
   const jk = sp.get("jk")?.trim();
-  const miskinBps = sp.get("miskin_bps");
-  const miskinEkstrem = sp.get("miskin_ekstrem");
 
   const where: Prisma.PendudukWhereInput = { statusAktif: true };
   if (desaId) where.desaId = desaId;
@@ -27,11 +25,6 @@ export function buildPendudukWhere(sp: URLSearchParams, desaId?: string): Prisma
   if (!Number.isNaN(rwNum)) where.rw = rwNum;
   if (!Number.isNaN(rtNum)) where.rt = rtNum;
   if (jk) where.jk = jk;
-  // miskin_* are "Ya"/"Tidak" strings (character varying) in the `ajaib` schema.
-  if (miskinBps === "true") where.miskin_bps = "Ya";
-  if (miskinBps === "false") where.miskin_bps = "Tidak";
-  if (miskinEkstrem === "true") where.miskin_ekstrem = "Ya";
-  if (miskinEkstrem === "false") where.miskin_ekstrem = "Tidak";
   return where;
 }
 

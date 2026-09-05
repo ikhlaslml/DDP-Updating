@@ -38,33 +38,61 @@ function NavLink({
 }
 
 export function Sidebar({
-  desktopOpen,
-  mobileOpen,
+  open,
   onNavigate,
+  onClose,
 }: {
-  desktopOpen: boolean;
-  mobileOpen: boolean;
+  open: boolean;
   onNavigate: () => void;
+  onClose: () => void;
 }) {
   const pathname = usePathname();
   const { desaNama } = useAuthInfo();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!mobileOpen) return;
+    if (!open) return;
     const frame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
-    return () => window.cancelAnimationFrame(frame);
-  }, [mobileOpen]);
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose, open]);
 
   return (
     <aside
-      role={mobileOpen ? "dialog" : undefined}
-      aria-modal={mobileOpen || undefined}
-      aria-label={mobileOpen ? "Menu navigasi" : undefined}
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu navigasi"
+      aria-hidden={!open}
+      inert={!open}
       className={clsx(
-        "fixed inset-0 z-[2000] flex w-full flex-col border-r border-slate-100 bg-white overscroll-contain transition-transform duration-200 ease-in-out lg:inset-y-0 lg:left-0 lg:right-auto lg:z-40 lg:w-64",
-        mobileOpen ? "translate-x-0" : "-translate-x-full",
-        desktopOpen ? "lg:translate-x-0" : "lg:-translate-x-full"
+        "fixed inset-y-0 left-0 right-auto z-[2000] flex w-full flex-col border-r border-slate-100 bg-white overscroll-contain transition-transform duration-200 ease-in-out lg:w-72",
+        open ? "translate-x-0" : "-translate-x-full",
       )}
     >
       <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-slate-100 px-5 sm:px-6">
@@ -75,9 +103,9 @@ export function Sidebar({
         <button
           ref={closeButtonRef}
           type="button"
-          onClick={onNavigate}
+          onClick={onClose}
           aria-label="Tutup menu"
-          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 lg:hidden"
+          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <X className="h-5 w-5" />
         </button>

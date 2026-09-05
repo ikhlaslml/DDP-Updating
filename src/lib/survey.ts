@@ -1,5 +1,11 @@
-import { ALL_COLUMNS, mapping } from "@/lib/indikator";
-import { parameterCondition, parameterIsEditable, type ParameterRole } from "@/lib/parameter-metadata";
+import { ALL_COLUMNS, isOperationalColumn, mapping } from "@/lib/indikator";
+import {
+  parameterAskedTo,
+  parameterCondition,
+  parameterIsConditionOnly,
+  parameterIsEditable,
+  type ParameterRole,
+} from "@/lib/parameter-metadata";
 
 export type SurveyRole = "HEAD" | "MEMBER";
 
@@ -39,179 +45,53 @@ export const LOCATION_INHERITED_FIELDS = [
   "alamat",
 ] as const;
 
-// Household-level answers are captured once from the head and inherited by
-// member rows in the denormalized ajaib schema.
+// Values calculated outside the questionnaire remain inherited so a newly
+// added member does not diverge from the rest of the denormalized household.
+export const DERIVED_HOUSEHOLD_FIELDS = [
+  "miskin_bps",
+  "miskin_ekstrem",
+  "miskin_uufm",
+  "miskin_wb",
+  "miskin_bpsd",
+  "skor_kls",
+  "ppkb",
+  "ppkt",
+  "pkb",
+] as const;
+
+// The reviewed CSV is authoritative: fields asked only to the head represent
+// one household answer and are inherited by new members.
 export const HOUSEHOLD_INHERITED_FIELDS = [
-  "punya_kk",
-  "nama_kepala_rumah",
-  "nama_tulang_punggung",
-  "jml_keluarga",
-  "dead_jml",
-  "akta_nikah",
-  "akta_cerai",
-  "pendidikan_anggota",
-  "rp_pendidikan",
-  "pekarangan",
-  "pekarangan_luas",
-  "pekarangan_air",
-  "pekarangan_tinggi",
-  "pekarangan_jenis",
-  "pekarangan_komoditas",
-  "sampah_buang",
-  "sampah_pilah",
-  "sampah_olah",
-  "rumah_pln",
-  "rp_listrik",
-  "wifi",
-  "airbersih",
-  "airminum",
-  "bahanbakar_masak",
-  "rumah_solar",
-  "par_organisasi",
-  "organisasi_nama",
-  "par_masyarakat",
-  "par_pemilu",
-  "par_kebijakan",
-  "bansos",
-  "rp_zakat",
-  "wakaf",
-  "rp_persepuluh",
-  "rp_dharma",
-  "rp_paramita",
-  "rp_sumbangan",
-  "hukum_bantuan",
-  "hukum_jenis",
-  "tanah_nama",
-  "tanah_nomor",
-  "nomor_objek_pajak",
-  "tanah_bukti",
-  "pbb_punya",
-  "pbb_tahunbayar",
-  // Frekuensi liburan adalah jawaban tingkat keluarga dan harus sama untuk
-  // seluruh anggota pada NKK yang sama di tabel penduduk terdenormalisasi.
-  "refreshing",
-  "kesediaan",
-  "media_informasi",
-  "aset_ekonomi",
-  "pinjaman",
-  "kb",
-  "kulkas",
-  "sepeda_jml",
-  "motor_jml",
-  "motor_merk",
-  "mobil_jml",
-  "mobil_merk",
-  "perahu_jml",
-  "perahu_motor_jml",
-  "kapal_jml",
-  "motorlistrik_jml",
-  "mobillistrik_jml",
-  "kendaraan_jml",
-  "rp_kendaraan",
-  "elektronik_rumah",
-  "rp_transportasi",
-  "rp_cicilan",
-  "lahan",
-  "lahan_guna",
-  "lahan_luasnon",
-  "lahan_status",
-  "lahan_luas_dikelola",
-  "lahan_luas_tidakdikelola",
-  "lahanmilik_irigasi",
-  "lahanmilik_bukti",
-  "lahanmilik_komoditas",
-  "lahanmilik_lokasi",
-  "lahangarap_luas",
-  "lahangarap_irigasi",
-  "lahangarap_komoditas",
-  "lahangarap_lokasi",
-  "lahansewa_luas",
-  "lahansewa_irigasi",
-  "lahansewa_komoditas",
-  "lahansewa_lokasi",
-  "baju_frek",
-  "rp_sph",
-  "makan_frek",
-  "makan_menu",
-  "tempat_belanja",
-  "rp_belanja",
-  "rp_pangan",
-  "rp_non_pangan",
-  ...ALL_COLUMNS.filter((name) => name.startsWith("kon_")),
-  "rumah_lantai",
-  "rumah_dinding",
-  "rumah_atap",
-  "rumah_jamban",
-  "rumah_kamar",
-  "rumah_milik",
-  "rumah_tingkat",
-  "rumah_luas",
-  "ternak",
-  "ternak_sapi",
-  "ternak_kerbau",
-  "ternak_domba",
-  "ternak_kambing",
-  "ternak_ayam",
-  "ternak_itik",
-  "ternak_kuda",
-  "ternak_babi",
-  "ternak_ikan",
+  ...new Set([
+    ...ALL_COLUMNS.filter((name) => {
+      const askedTo = parameterAskedTo(name);
+      return askedTo.length === 1 && askedTo[0] === "HEAD" && isOperationalColumn(name);
+    }),
+    ...DERIVED_HOUSEHOLD_FIELDS,
+  ]),
 ] as string[];
 
-const MEMBER_FIELDS = new Set([
-  "nama",
-  "nik",
-  "status_dalam_keluarga",
-  "status_kawin",
-  "punya_ktp",
-  "punya_aktalahir",
-  "tgl_lahir",
-  "jk",
-  "menetap",
-  "dinamika",
-  "agama",
-  "suku",
-  "partisipasi_sekolah",
-  "ijazah",
-  "bantuan_pendidikan",
-  "hp_punya",
-  "hp_jumlah",
-  "hp_merk",
-  "hp_provider",
-  "medsos",
-  "korban_kejahatan",
-  "disabilitas",
-  "keterampilan",
-  "pelatihan",
-  "pelatihan_ket",
-  "kerja_profesi",
-  "kerja_status",
-  "kerja_ket",
-  "kerja_lokusaha",
-  "kerja_sampingan",
-  "kerja_sampingan_ket",
-  "kerja_skalausaha",
-  "bpjs_kes",
-  "bpjs_tk",
-  "asuransi_kes",
-  "menabung",
-  "rp_tabungan",
-  "tki",
-  "tki_tujuan",
-  "penyakit_jumlah",
-  "penyakit_jenis",
-  "anak_asi",
-  "anak_periksa",
-  "anak_mpasi",
-  "anak_tb",
-  "anak_bb",
-  "perokok",
-  ...ALL_COLUMNS.filter((name) => name.startsWith("nel_")),
-]);
+export const MEMBER_FIELDS = new Set(
+  ALL_COLUMNS.filter(
+    (name) =>
+      (parameterAskedTo(name).includes("MEMBER") || parameterIsConditionOnly(name)) &&
+      isOperationalColumn(name),
+  ),
+);
+
+export function isHouseholdField(name: string) {
+  return HOUSEHOLD_INHERITED_FIELDS.includes(name);
+}
 
 export function surveyColumns(role: SurveyRole) {
-  if (role === "MEMBER") return ALL_COLUMNS.filter((name) => MEMBER_FIELDS.has(name) && parameterIsEditable(name, role));
-  return ALL_COLUMNS.filter((name) => !SYSTEM_FIELDS.has(name) && parameterIsEditable(name, role));
+  if (role === "MEMBER") {
+    return ALL_COLUMNS.filter(
+      (name) => MEMBER_FIELDS.has(name) && isOperationalColumn(name) && parameterIsEditable(name, role),
+    );
+  }
+  return ALL_COLUMNS.filter(
+    (name) => !SYSTEM_FIELDS.has(name) && isOperationalColumn(name) && parameterIsEditable(name, role),
+  );
 }
 
 export function surveyColumnsByGroup(role: SurveyRole) {

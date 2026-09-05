@@ -8,6 +8,7 @@ import { toExportValue } from "@/lib/export-import";
 import { fieldLabel } from "@/lib/field-labels";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 import { writeExcelRows } from "@/lib/excel-server";
+import { parameterIsDeprecated } from "@/lib/parameter-metadata";
 
 export async function GET(req: NextRequest) {
   const ctx = await getAuthContext();
@@ -20,9 +21,10 @@ export async function GET(req: NextRequest) {
   const requestedColumns = sp.has("aspek")
     ? columnsForKelompok(parseKelompokParam(sp.get("aspek")))
     : selectedResidentColumns(sp.get("columns"));
+  const exportableColumns = ALL_COLUMNS.filter((column) => !parameterIsDeprecated(column));
   const activeColumns = isTemplate || requestedColumns.length === 0 && !sp.has("aspek")
-    ? ALL_COLUMNS
-    : requestedColumns;
+    ? exportableColumns
+    : requestedColumns.filter((column) => !parameterIsDeprecated(column));
   const rows = isTemplate ? [] : await prisma.penduduk.findMany({
     where,
     select: Object.fromEntries(activeColumns.map((column) => [column, true])),
@@ -38,7 +40,7 @@ export async function GET(req: NextRequest) {
   // Keep the import template machine-compatible, while normal exports use
   // operator-friendly names rather than raw database identifiers.
   const headers = isTemplate
-    ? ALL_COLUMNS
+    ? exportableColumns
     : activeColumns.map((column) => fieldLabel(column, mapping.kolom[column]));
 
   if (format === "csv") {
