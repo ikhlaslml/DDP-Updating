@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { formatCell } from "@/lib/format";
 import { mapping } from "@/lib/indikator";
-import { fieldLabel } from "@/lib/field-labels";
+import { tableHeaderLabel } from "@/lib/field-labels";
+import { periodOptionLabel } from "@/lib/period-label";
 
-type Periode = { id: string; kode: string; label: string | null; jumlah: number; createdAt: string };
+type Periode = { id: string; kode: string; label: string | null; jumlah: number; createdAt: string; urutan?: number };
 type Row = Record<string, unknown>;
 type SnapshotMeta = {
   createdAt: string;
@@ -40,7 +41,7 @@ type ChangesResponse = {
 };
 
 const COLS: { key: string; label: string }[] = ["nkk", "nik", "nama", "jk", "dusun", "tgl_lahir", "alamat"].map(
-  (key) => ({ key, label: fieldLabel(key, mapping.kolom[key]) })
+  (key) => ({ key, label: tableHeaderLabel(key, mapping.kolom[key]) })
 );
 
 export function RiwayatView() {
@@ -157,7 +158,7 @@ export function RiwayatView() {
         </div>
         <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-end">
           <label className="text-xs font-medium text-slate-500">
-            Pilih Periode Data
+            Versi data
             <select
               value={selected}
               onChange={(e) => {
@@ -165,12 +166,11 @@ export function RiwayatView() {
                 setPage(1);
                 setChangesPage(1);
               }}
-              className="mt-1 block min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"
+              className="mt-1 block min-h-11 w-full max-w-md rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"
             >
               {periods.map((p) => (
                 <option key={p.kode} value={p.kode}>
-                  {p.kode}
-                  {p.label ? ` — ${p.label}` : ""} ({p.jumlah})
+                  {periodOptionLabel(p)}
                 </option>
               ))}
             </select>
@@ -186,22 +186,25 @@ export function RiwayatView() {
         </div>
       </div>
 
-      <input
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(1);
-        }}
-        placeholder="Cari nama / NIK / NKK..."
-        className="mt-4 w-full max-w-sm rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      />
+      <label className="mt-4 block max-w-sm text-xs font-medium text-slate-500">
+        Cari warga
+        <input
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          placeholder="Nama, NIK, atau No. KK"
+          className="mt-1 min-h-11 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </label>
 
       <section className="mt-4 overflow-hidden rounded-xl border border-indigo-100 bg-indigo-50/40">
         <div className="flex flex-col gap-2 border-b border-indigo-100 bg-white/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Perubahan pada Periode Ini</h3>
+            <h3 className="text-sm font-bold text-slate-800">Perubahan pada versi ini</h3>
           </div>
-          {changes?.previous ? <div className="flex flex-wrap gap-1.5 text-xs font-semibold"><span className="rounded-full bg-white px-2 py-1 text-emerald-700">{changes.summary.added} ditambahkan</span><span className="rounded-full bg-white px-2 py-1 text-indigo-700">{changes.summary.updated} diperbarui</span><span className="rounded-full bg-white px-2 py-1 text-rose-700">{changes.summary.removed} tidak lagi ada</span></div> : null}
+          {changes?.previous ? <div className="flex flex-wrap gap-1.5 text-xs font-semibold"><span className="rounded-full bg-white px-2 py-1 text-emerald-700">{changes.summary.added} ditambahkan</span><span className="rounded-full bg-white px-2 py-1 text-indigo-700">{changes.summary.updated} diperbarui</span><span className="rounded-full bg-white px-2 py-1 text-rose-700">{changes.summary.removed} tidak lagi tercatat</span></div> : null}
         </div>
         {changesLoading ? <p className="px-4 py-5 text-sm text-slate-500">Memuat perubahan...</p> : changes?.previous && changes.data.length ? (
           <>
@@ -213,8 +216,8 @@ export function RiwayatView() {
                     <tr key={change.key} className="border-t border-indigo-100/70 align-top">
                       <td className="min-w-48 px-4 py-3"><p className="font-semibold text-slate-800">{change.nama ?? "Tanpa nama"}</p><p className="mt-0.5 text-xs text-slate-500">NIK {change.nik ?? "-"}<br />No. KK {change.nkk ?? "-"}</p></td>
                       <td className="min-w-[28rem] px-4 py-3 text-slate-700">
-                        {change.kind === "ADDED" ? <span className="font-medium text-emerald-700">Data warga baru ditambahkan pada periode ini.</span> : null}
-                        {change.kind === "REMOVED" ? <span className="font-medium text-rose-700">Data warga tidak lagi berada pada daftar warga aktif di periode ini.</span> : null}
+                        {change.kind === "ADDED" ? <span className="font-medium text-emerald-700">Warga baru pada versi ini.</span> : null}
+                        {change.kind === "REMOVED" ? <span className="font-medium text-rose-700">Tidak lagi tercatat sebagai warga aktif.</span> : null}
                         {change.kind === "UPDATED" ? <ul className="space-y-1.5">{change.fields.map((field) => <li key={field.key} className="break-words"><strong>{field.label}:</strong> <span className="text-slate-500">{formatChangedValue(field, field.before)}</span> <span aria-hidden="true">→</span> <span className="font-medium text-slate-800">{formatChangedValue(field, field.after)}</span></li>)}</ul> : null}
                       </td>
                     </tr>
@@ -224,7 +227,7 @@ export function RiwayatView() {
             </div>
             {changes.pagination.totalPages > 1 ? <div className="flex items-center justify-end gap-2 border-t border-indigo-100 px-4 py-2 text-xs"><button type="button" disabled={changes.pagination.page <= 1} onClick={() => setChangesPage((current) => Math.max(1, current - 1))} className="rounded border border-slate-300 bg-white px-2 py-1 disabled:opacity-40">Sebelumnya</button><span>Halaman {changes.pagination.page} dari {changes.pagination.totalPages}</span><button type="button" disabled={changes.pagination.page >= changes.pagination.totalPages} onClick={() => setChangesPage((current) => current + 1)} className="rounded border border-slate-300 bg-white px-2 py-1 disabled:opacity-40">Berikutnya</button></div> : null}
           </>
-        ) : changes?.previous ? <p className="px-4 py-5 text-sm text-slate-500">Tidak ada perubahan data warga dibandingkan periode sebelumnya.</p> : null}
+        ) : changes?.previous ? <p className="px-4 py-5 text-sm text-slate-500">Tidak ada perubahan dibanding versi sebelumnya.</p> : null}
       </section>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-100">

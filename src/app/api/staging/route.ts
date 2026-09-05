@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     const data = { ...parsed.data } as Record<string, unknown>;
     if (!data.abs_id) data.abs_id = `ABS${Date.now()}${Math.floor(Math.random() * 1000)}`;
     const dupe = await prisma.penduduk.findUnique({ where: { nik: data.nik as string } });
-    if (dupe) return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah terdaftar di baseline" } }, { status: 400 });
+    if (dupe) return NextResponse.json({ error: "Validasi gagal", fields: { nik: "NIK sudah terdaftar" } }, { status: 400 });
     const pendingDupe = await prisma.stagingChange.findFirst({
       where: { entityType: "PENDUDUK", status: "PENDING", nik: data.nik as string },
     });
@@ -103,9 +103,9 @@ export async function POST(req: NextRequest) {
     const pendudukId = body.pendudukId as string | undefined;
     if (!pendudukId) return NextResponse.json({ error: "pendudukId wajib" }, { status: 400 });
     const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
-    if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
+    if (!existing) return NextResponse.json({ error: "Data warga tidak ditemukan" }, { status: 404 });
     const pendingEvent = await prisma.stagingChange.findFirst({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING", entityType: "PERISTIWA" } });
-    if (pendingEvent) return NextResponse.json({ error: "Penduduk memiliki peristiwa demografi yang masih menunggu penggabungan" }, { status: 409 });
+    if (pendingEvent) return NextResponse.json({ error: "Warga ini masih punya peristiwa yang menunggu diterapkan" }, { status: 409 });
 
     const parsed = pendudukUpdateSchema.safeParse(body.data);
     if (!parsed.success) {
@@ -147,9 +147,9 @@ export async function POST(req: NextRequest) {
     const pendudukId = body.pendudukId as string | undefined;
     if (!pendudukId) return NextResponse.json({ error: "pendudukId wajib" }, { status: 400 });
     const existing = await prisma.penduduk.findFirst({ where: { id: pendudukId, desaId: ctx.desaId } });
-    if (!existing) return NextResponse.json({ error: "Data baseline tidak ditemukan" }, { status: 404 });
+    if (!existing) return NextResponse.json({ error: "Data warga tidak ditemukan" }, { status: 404 });
     const pendingEvent = await prisma.stagingChange.findFirst({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING", entityType: "PERISTIWA" } });
-    if (pendingEvent) return NextResponse.json({ error: "Penduduk memiliki peristiwa demografi yang masih menunggu penggabungan" }, { status: 409 });
+    if (pendingEvent) return NextResponse.json({ error: "Warga ini masih punya peristiwa yang menunggu diterapkan" }, { status: 409 });
 
     const created = await prisma.$transaction(async (tx) => {
       await tx.stagingChange.deleteMany({ where: { pendudukId, desaId: ctx.desaId, status: "PENDING" } });

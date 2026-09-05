@@ -31,7 +31,7 @@ export default async function DetailPendudukPage({ params }: { params: Promise<{
           </Link>
           <h1 className="text-2xl font-bold text-slate-900 mt-1">{String(data.nama ?? "-")}</h1>
           <p className="text-sm text-slate-500">
-            NIK {String(data.nik ?? "-")} &middot; NKK {String(data.nkk ?? "-")} &middot; {String(data.dusun ?? "-")}
+            NIK {String(data.nik ?? "-")} &middot; No. KK {String(data.nkk ?? "-")} &middot; {String(data.dusun ?? "-")}
           </p>
           {typeof data.kode_bangunan === "number" && !deletedBuilding ? (
             <Link href={`/bangunan/${data.kode_bangunan}`} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">

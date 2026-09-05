@@ -89,7 +89,7 @@ export async function GET() {
       kode: head.kode_bangunan as number,
       jenis: "BERPENGHUNI",
       kategori: null,
-      keterangan: "Bangunan baseline sensus",
+      keterangan: "Bangunan dari data awal",
       polygon: null,
       centroidLat: parseCoordinate(head.lat, "lat"),
       centroidLng: parseCoordinate(head.lng, "lng"),

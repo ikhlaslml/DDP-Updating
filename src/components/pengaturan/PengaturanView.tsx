@@ -185,9 +185,9 @@ export function PengaturanView() {
         </section>
 
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-          <h2 className="text-lg font-bold text-slate-900">Patokan Pembaruan Berkala</h2>
+          <h2 className="text-lg font-bold text-slate-900">Acuan pengingat berkala</h2>
           <label className="mt-4 block text-xs font-medium text-slate-600">
-            Tanggal baseline data
+            Tanggal acuan pengingat
             <input
               type="date"
               value={settings.tanggalBaselineData?.slice(0, 10) ?? ""}

@@ -88,7 +88,7 @@ export function Topbar({
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Cari nama, NIK, NKK..."
+              placeholder="Cari nama, NIK, No. KK..."
               className="min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

@@ -78,7 +78,7 @@ async function snapshotWithClient(
       desaId,
       kode,
       urutan: nextUrutan,
-      label: options.label ?? `Baseline ${kode}`,
+      label: options.label ?? (nextUrutan === 0 ? "Data awal" : `Pembaruan ${nextUrutan}`),
       jumlah: baseline.length,
       // A migrated desa can still have legacy buildings represented only by
       // Penduduk.kode_bangunan. Count the union so history remains accurate.

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 
-// List all available periods (T0, T1, ...) for the Riwayat Data selector.
+// List frozen data versions for Riwayat Data and export selectors.
 export async function GET() {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
@@ -11,6 +11,7 @@ export async function GET() {
     data: snaps.map((s) => ({
       id: s.id,
       kode: s.kode,
+      urutan: s.urutan,
       label: s.label,
       jumlah: s.jumlah,
       jumlahBangunan: s.jumlahBangunan,

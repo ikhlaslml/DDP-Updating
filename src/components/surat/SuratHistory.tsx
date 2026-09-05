@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CalendarDays, Download, Printer, Search } from "lucide-react";
+import { Download, Printer, Search } from "lucide-react";
 
 type Template = { id: string; nama: string };
 type LetterRow = {
@@ -75,18 +75,57 @@ export function SuratHistory({ templates }: { templates: Template[] }) {
         <span className="rounded-full bg-indigo-50 px-3 py-1.5 text-sm font-bold text-indigo-700">{total} surat</span>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <label className="relative sm:col-span-2 xl:col-span-2"><span className="sr-only">Cari riwayat surat</span><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Nomor, nama, NIK, atau keperluan..." className="w-full rounded-xl border border-slate-300 py-2.5 pl-10 pr-3 text-sm" /></label>
-        <label className="relative"><span className="mb-1 block text-xs font-semibold text-slate-500">Dari tanggal</span><CalendarDays className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 text-slate-400" /><input type="date" value={dateFrom} max={dateTo || undefined} onChange={(event) => { setDateFrom(event.target.value); setPage(1); }} className="w-full rounded-xl border border-slate-300 py-2.5 pl-10 pr-3 text-sm" /></label>
-        <label className="relative"><span className="mb-1 block text-xs font-semibold text-slate-500">Sampai tanggal</span><CalendarDays className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 text-slate-400" /><input type="date" value={dateTo} min={dateFrom || undefined} onChange={(event) => { setDateTo(event.target.value); setPage(1); }} className="w-full rounded-xl border border-slate-300 py-2.5 pl-10 pr-3 text-sm" /></label>
-        <label><span className="mb-1 block text-xs font-semibold text-slate-500">Jenis surat</span><select value={templateId} onChange={(event) => { setTemplateId(event.target.value); setPage(1); }} className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm"><option value="">Semua jenis</option>{templates.map((template) => <option key={template.id} value={template.id}>{template.nama}</option>)}</select></label>
+      <div className="mt-5 grid items-end gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(10rem,1fr))]">
+        <label className="block text-xs font-semibold text-slate-500 sm:col-span-2 xl:col-span-1">
+          Cari
+          <span className="relative mt-1.5 block">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Nama, NIK, nomor, atau keperluan"
+              className="min-h-11 w-full rounded-xl border border-slate-300 bg-white py-2 pl-10 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </span>
+        </label>
+        <label className="block text-xs font-semibold text-slate-500">
+          Dari
+          <input
+            type="date"
+            value={dateFrom}
+            max={dateTo || undefined}
+            onChange={(event) => { setDateFrom(event.target.value); setPage(1); }}
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </label>
+        <label className="block text-xs font-semibold text-slate-500">
+          Sampai
+          <input
+            type="date"
+            value={dateTo}
+            min={dateFrom || undefined}
+            onChange={(event) => { setDateTo(event.target.value); setPage(1); }}
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </label>
+        <label className="block text-xs font-semibold text-slate-500">
+          Jenis surat
+          <select
+            value={templateId}
+            onChange={(event) => { setTemplateId(event.target.value); setPage(1); }}
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="">Semua jenis</option>
+            {templates.map((template) => <option key={template.id} value={template.id}>{template.nama}</option>)}
+          </select>
+        </label>
       </div>
       {(query || dateFrom || dateTo || templateId) ? <button type="button" onClick={clearFilters} className="mt-3 text-xs font-semibold text-indigo-600 hover:underline">Bersihkan filter</button> : null}
 
       {error ? <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
         <table className="min-w-[900px] w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase text-slate-500"><tr><th className="px-4 py-3">Tanggal</th><th className="px-4 py-3">Nomor / Jenis</th><th className="px-4 py-3">Penduduk</th><th className="px-4 py-3">Keperluan</th><th className="px-4 py-3">Penerbit</th><th className="px-4 py-3 text-right">Aksi</th></tr></thead>
+          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase text-slate-500"><tr><th className="px-4 py-3">Tanggal</th><th className="px-4 py-3">Nomor / Jenis</th><th className="px-4 py-3">Warga</th><th className="px-4 py-3">Keperluan</th><th className="px-4 py-3">Diterbitkan oleh</th><th className="px-4 py-3 text-right">Aksi</th></tr></thead>
           <tbody>
             {loading ? <tr><td colSpan={6} className="px-4 py-10 text-center text-slate-400">Memuat riwayat...</td></tr> : rows.length === 0 ? <tr><td colSpan={6} className="px-4 py-10 text-center text-slate-400">Tidak ada surat yang sesuai filter.</td></tr> : rows.map((row) => (
               <tr key={row.id} className="border-t border-slate-100 align-top hover:bg-slate-50/70">
@@ -94,7 +133,7 @@ export function SuratHistory({ templates }: { templates: Template[] }) {
                 <td className="px-4 py-3"><p className="font-semibold text-slate-900">{row.nomor}</p><p className="text-xs text-slate-500">{row.templateNama ?? "Surat"}</p></td>
                 <td className="px-4 py-3"><p className="font-semibold text-slate-800">{row.namaWarga ?? "-"}</p><p className="text-xs text-slate-500">NIK {row.nik ?? "-"}</p></td>
                 <td className="max-w-56 px-4 py-3 text-slate-600">{row.keperluan || "-"}</td>
-                <td className="px-4 py-3 text-slate-600">{row.issuedByName || "Data lama"}</td>
+                <td className="px-4 py-3 text-slate-600">{row.issuedByName || "Tidak tercatat"}</td>
                 <td className="px-4 py-3"><div className="flex justify-end gap-1"><button type="button" onClick={() => window.open(`/api/surat/${row.id}/pdf?mode=inline`, "_blank", "noopener,noreferrer")} title="Cetak ulang" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50"><Printer className="h-4 w-4" /></button><a href={`/api/surat/${row.id}/pdf`} title="Unduh ulang PDF" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-emerald-600 hover:bg-emerald-50"><Download className="h-4 w-4" /></a></div></td>
               </tr>
             ))}

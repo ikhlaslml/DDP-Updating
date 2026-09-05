@@ -245,7 +245,7 @@ export function PerubahanSementara() {
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-slate-900">Terapkan Perubahan Data</h3>
             <p className="mt-3 text-sm text-slate-600">Anda akan menerapkan <strong>{rows.length} perubahan</strong> sekaligus ke daftar data warga.</p>
-            <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800">Riwayat periode baru akan menyimpan nama operator, waktu, serta jumlah data warga dan bangunan yang berubah.</p>
+            <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800">Riwayat baru akan mencatat nama petugas, waktu, serta jumlah warga dan bangunan yang berubah.</p>
             <div className="mt-5 flex justify-end gap-2"><button type="button" onClick={() => setConfirmMerge(false)} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">Batal</button><button type="button" disabled={merging} onClick={merge} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">{merging ? "Menerapkan..." : "Ya, Terapkan"}</button></div>
           </div>
         </div>

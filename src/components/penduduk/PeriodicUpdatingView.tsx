@@ -64,7 +64,7 @@ const STATUS_VIEW = {
     Icon: AlertCircle,
   },
   MENUNGGU_PENGGABUNGAN: {
-    label: "Menunggu penggabungan",
+    label: "Menunggu diterapkan",
     className: "border-amber-200 bg-amber-50 text-amber-800",
     Icon: Clock3,
   },
@@ -490,33 +490,48 @@ export function PeriodicUpdatingView() {
       </section>
 
       <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
-          <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Cari NKK, nama, atau NIK..." className="min-h-11 rounded-xl border border-slate-300 px-3 text-sm xl:col-span-2" />
-          <select value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }} className="min-h-11 rounded-xl border border-slate-300 px-3 text-sm">
-            <option value="SEMUA">Semua status</option>
-            <option value="JATUH_TEMPO">Hanya jatuh tempo</option>
-            <option value="MENUNGGU_PENGGABUNGAN">Menunggu penggabungan</option>
-            <option value="TERKINI">Sudah terkini</option>
-          </select>
-          <select value={dusun} onChange={(event) => { setDusun(event.target.value); setPage(1); }} className="min-h-11 rounded-xl border border-slate-300 px-3 text-sm">
-            <option value="">Semua dusun</option>
-            {list?.facets.dusun.map((value) => <option key={value}>{value}</option>)}
-          </select>
-          <select value={rw} onChange={(event) => { setRw(event.target.value); setPage(1); }} className="min-h-11 rounded-xl border border-slate-300 px-3 text-sm">
-            <option value="">Semua RW</option>
-            {list?.facets.rw.map((value) => <option key={value} value={value}>RW {value}</option>)}
-          </select>
-          <select value={rt} onChange={(event) => { setRt(event.target.value); setPage(1); }} className="min-h-11 rounded-xl border border-slate-300 px-3 text-sm">
-            <option value="">Semua RT</option>
-            {list?.facets.rt.map((value) => <option key={value} value={value}>RT {value}</option>)}
-          </select>
+        <div className="grid items-end gap-3 md:grid-cols-2 xl:grid-cols-6">
+          <label className="block text-xs font-semibold text-slate-500 xl:col-span-2">
+            Cari
+            <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Nama, NIK, atau No. KK" className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </label>
+          <label className="block text-xs font-semibold text-slate-500">
+            Status
+            <select value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="SEMUA">Semua status</option>
+              <option value="JATUH_TEMPO">Jatuh tempo</option>
+              <option value="MENUNGGU_PENGGABUNGAN">Menunggu diterapkan</option>
+              <option value="TERKINI">Sudah mutakhir</option>
+            </select>
+          </label>
+          <label className="block text-xs font-semibold text-slate-500">
+            Dusun
+            <select value={dusun} onChange={(event) => { setDusun(event.target.value); setPage(1); }} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">Semua dusun</option>
+              {list?.facets.dusun.map((value) => <option key={value}>{value}</option>)}
+            </select>
+          </label>
+          <label className="block text-xs font-semibold text-slate-500">
+            RW
+            <select value={rw} onChange={(event) => { setRw(event.target.value); setPage(1); }} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">Semua RW</option>
+              {list?.facets.rw.map((value) => <option key={value} value={value}>RW {value}</option>)}
+            </select>
+          </label>
+          <label className="block text-xs font-semibold text-slate-500">
+            RT
+            <select value={rt} onChange={(event) => { setRt(event.target.value); setPage(1); }} className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">Semua RT</option>
+              {list?.facets.rt.map((value) => <option key={value} value={value}>RT {value}</option>)}
+            </select>
+          </label>
         </div>
       </section>
 
       {list?.summary ? (
         <p className="text-sm text-slate-600">
           <strong className="text-slate-900">{list.summary.dueFamilies}</strong> keluarga jatuh tempo
-          {list.summary.waitingFamilies ? ` · ${list.summary.waitingFamilies} menunggu penggabungan` : ""}
+          {list.summary.waitingFamilies ? ` · ${list.summary.waitingFamilies} menunggu diterapkan` : ""}
           {` · ${list.summary.total} keluarga pada filter ini`}
         </p>
       ) : null}

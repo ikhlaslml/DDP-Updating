@@ -23,7 +23,7 @@ import { DeleteButton } from "./DeleteButton";
 import { useCanWrite } from "@/components/providers/AuthInfo";
 import { AddDataMenu } from "./AddDataMenu";
 import { InlineEditableCell } from "./InlineEditableCell";
-import { fieldLabel } from "@/lib/field-labels";
+import { fieldLabel, tableHeaderLabel } from "@/lib/field-labels";
 import { LOCKED_IDENTITY_FIELDS } from "@/lib/updating-columns";
 
 const LOCKED_TABLE_FIELDS = new Set<string>(LOCKED_IDENTITY_FIELDS.filter((field) => field !== "nama"));
@@ -130,7 +130,7 @@ export function PendudukTable({
     const cols: ColumnDef<Row, unknown>[] = visible.map((name) =>
       columnHelper.accessor((row) => row[name], {
         id: name,
-        header: fieldLabel(name, mapping.kolom[name]),
+        header: tableHeaderLabel(name, mapping.kolom[name]),
         cell: (info) => {
           if (LOCKED_TABLE_FIELDS.has(name)) {
             return formatCell(info.getValue(), mapping.kolom[name]);
@@ -227,36 +227,51 @@ export function PendudukTable({
   return (
     <div className="space-y-4">
       <AspectFilterPanel selected={selectedAspects} onChange={changeAspects} />
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-100 bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Cari nama, NIK, NKK, alamat..."
-          className="min-h-10 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:w-56"
-        />
-        <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="min-h-10 max-w-full rounded-lg border border-slate-300 px-2 py-2 text-sm">
-          <option value="">Semua Dusun</option>
-          {facets.dusun.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select value={rw} onChange={(e) => setRw(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
-          <option value="">Semua RW</option>
-          {facets.rw.map((v) => (
-            <option key={v} value={v}>RW {v}</option>
-          ))}
-        </select>
-        <select value={rt} onChange={(e) => setRt(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
-          <option value="">Semua RT</option>
-          {facets.rt.map((v) => (
-            <option key={v} value={v}>RT {v}</option>
-          ))}
-        </select>
-        <select value={jk} onChange={(e) => setJk(e.target.value)} className="min-h-10 rounded-lg border border-slate-300 px-2 py-2 text-sm">
-          <option value="">Semua Jenis Kelamin</option>
-          <option value="L">Laki-laki</option>
-          <option value="P">Perempuan</option>
-        </select>
+      <div className="flex flex-wrap items-end gap-2 rounded-2xl border border-slate-100 bg-white p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+        <label className="min-w-0 flex-1 text-xs font-semibold text-slate-500 sm:max-w-64">
+          Cari
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Nama, NIK, No. KK, atau alamat"
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </label>
+        <label className="text-xs font-semibold text-slate-500">
+          Dusun
+          <select value={dusun} onChange={(e) => setDusun(e.target.value)} className="mt-1.5 min-h-11 max-w-full rounded-xl border border-slate-300 px-2 py-2 text-sm">
+            <option value="">Semua dusun</option>
+            {facets.dusun.map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+        </label>
+        <label className="text-xs font-semibold text-slate-500">
+          RW
+          <select value={rw} onChange={(e) => setRw(e.target.value)} className="mt-1.5 min-h-11 rounded-xl border border-slate-300 px-2 py-2 text-sm">
+            <option value="">Semua RW</option>
+            {facets.rw.map((v) => (
+              <option key={v} value={v}>RW {v}</option>
+            ))}
+          </select>
+        </label>
+        <label className="text-xs font-semibold text-slate-500">
+          RT
+          <select value={rt} onChange={(e) => setRt(e.target.value)} className="mt-1.5 min-h-11 rounded-xl border border-slate-300 px-2 py-2 text-sm">
+            <option value="">Semua RT</option>
+            {facets.rt.map((v) => (
+              <option key={v} value={v}>RT {v}</option>
+            ))}
+          </select>
+        </label>
+        <label className="text-xs font-semibold text-slate-500">
+          Jenis kelamin
+          <select value={jk} onChange={(e) => setJk(e.target.value)} className="mt-1.5 min-h-11 rounded-xl border border-slate-300 px-2 py-2 text-sm">
+            <option value="">Semua</option>
+            <option value="L">Laki-laki</option>
+            <option value="P">Perempuan</option>
+          </select>
+        </label>
         <div className="ml-auto flex flex-wrap items-center gap-2 max-sm:ml-0 max-sm:w-full">
           <a
             href={`/api/penduduk/export?${exportQuery}&format=xlsx`}
@@ -326,20 +341,22 @@ export function PendudukTable({
         ))}
       </div>
 
-      <div className="hidden max-h-[min(66vh,680px)] overscroll-contain overflow-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] md:block">
-        <table className="w-max min-w-full text-sm">
-          <thead className="bg-slate-50 border-b border-slate-200">
+      <div className="hidden isolate max-h-[min(66vh,680px)] overscroll-contain overflow-auto rounded-2xl border border-slate-100 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] md:block">
+        <table className="w-max min-w-full border-separate border-spacing-0 text-sm">
+          <thead>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
                 {hg.headers.map((header) => {
                   const sticky = STICKY_CORE[header.column.id];
                   const actions = header.column.id === "_actions";
+                  const fullLabel = header.column.id === "_actions" ? "Aksi" : fieldLabel(header.column.id, mapping.kolom[header.column.id]);
                   return (
                     <th
                       key={header.id}
+                      title={fullLabel}
                       onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
-                      style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
-                      className={`sticky top-0 z-20 px-3 py-2 text-left font-semibold text-slate-600 whitespace-nowrap select-none bg-slate-50 ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "z-30 shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "z-40 text-right shadow-[-1px_0_0_#e2e8f0] max-sm:hidden" : ""}`}
+                      style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 132 } : { minWidth: "9.5rem" }}
+                      className={`sticky top-0 bg-slate-50 px-3 py-2.5 text-left text-xs font-semibold leading-snug text-slate-600 shadow-[inset_0_-1px_0_#cbd5e1] select-none ${header.column.getCanSort() ? "cursor-pointer" : ""} ${sticky ? "z-30 whitespace-nowrap shadow-[1px_0_0_#e2e8f0,inset_0_-1px_0_#cbd5e1]" : actions ? "z-40 whitespace-nowrap text-right shadow-[-1px_0_0_#e2e8f0,inset_0_-1px_0_#cbd5e1]" : "z-20 whitespace-normal break-words"}`}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getIsSorted() === "asc" && " ▲"}
@@ -366,9 +383,8 @@ export function PendudukTable({
             ) : (
               table.getRowModel().rows.map((row) => {
                 const headRow = row.original.status_dalam_keluarga === "Kepala Keluarga";
-                const rowBg = headRow ? "bg-sky-50 hover:bg-sky-50" : "bg-white hover:bg-slate-50";
                 return (
-                <tr key={row.id} className={`group border-b border-slate-100 last:border-0 ${rowBg}`}>
+                <tr key={row.id} className="group">
                   {row.getVisibleCells().map((cell) => {
                     const sticky = STICKY_CORE[cell.column.id];
                     const actions = cell.column.id === "_actions";
@@ -383,8 +399,8 @@ export function PendudukTable({
                     return (
                       <td
                         key={cell.id}
-                        style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
-                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${baseBg} ${sticky ? `sticky z-10 overflow-hidden text-ellipsis shadow-[1px_0_0_#e2e8f0]` : ""} ${actions ? "sticky z-20 shadow-[-1px_0_0_#e2e8f0] max-sm:hidden" : ""}`}
+                        style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 132 } : undefined}
+                        className={`border-b border-slate-100 px-3 py-2 whitespace-nowrap text-slate-700 ${baseBg} ${sticky ? "sticky z-10 overflow-hidden text-ellipsis shadow-[1px_0_0_#e2e8f0]" : ""} ${actions ? "sticky z-20 shadow-[-1px_0_0_#e2e8f0]" : ""}`}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>

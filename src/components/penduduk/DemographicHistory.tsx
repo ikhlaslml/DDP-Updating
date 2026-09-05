@@ -21,7 +21,7 @@ export function DemographicHistory({ mode }: { mode: "DEATH" | "EVENT" }) {
   return (
     <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
       <div>
-        <h2 className="text-lg font-bold text-slate-900">{mode === "DEATH" ? "Tabel Arsip Kematian" : "Riwayat Peristiwa Kependudukan"}</h2>
+        <h2 className="text-lg font-bold text-slate-900">{mode === "DEATH" ? "Riwayat Kematian" : "Riwayat Peristiwa Kependudukan"}</h2>
       </div>
       <div className="mt-4 overflow-x-auto">
         <table className="min-w-full text-sm">

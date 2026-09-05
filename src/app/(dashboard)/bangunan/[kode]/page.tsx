@@ -57,7 +57,7 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
   type Family = { nkk: string; head: string; headId: string | null; count: number; pending: boolean; members: Member[] };
   const families = new Map<string, Family>();
   for (const resident of residents) {
-    const nkk = resident.nkk ?? "Tanpa NKK";
+    const nkk = resident.nkk ?? "Tanpa No. KK";
     const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: false, members: [] };
     current.count += 1;
     current.members.push({ ...resident, pending: false });
@@ -68,7 +68,7 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
     families.set(nkk, current);
   }
   for (const row of stagedResidents) {
-    const nkk = String(row.parsed.nkk ?? "Tanpa NKK");
+    const nkk = String(row.parsed.nkk ?? "Tanpa No. KK");
     const current = families.get(nkk) ?? { nkk, head: "Belum diketahui", headId: null, count: 0, pending: true, members: [] };
     current.count += 1;
     current.pending = true;
@@ -124,7 +124,7 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
                   <div className="min-w-0"><p className="break-words font-bold text-slate-900">{family.head}</p><p className="break-all text-sm text-slate-500">No. KK {family.nkk}</p></div>
                   <div className="flex flex-col items-start gap-1 sm:items-end">
                     {family.pending ? <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800">Menunggu diterapkan</span> : null}
-                    <span className={`rounded-full px-2 py-1 text-xs font-semibold ${incomplete ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800"}`}>{incomplete ? `Belum lengkap · Aspek ${progress.aspekTerakhir}/6` : "Data lengkap"}</span>
+                    <span className={`rounded-full px-2 py-1 text-xs font-semibold ${incomplete ? "bg-orange-100 text-orange-800" : "bg-emerald-100 text-emerald-800"}`}>{incomplete ? `Belum lengkap · Bagian ${progress.aspekTerakhir} dari 6` : "Data lengkap"}</span>
                   </div>
                 </div>
                 <ul className="mt-3 divide-y divide-slate-100 rounded-lg border border-slate-100 bg-slate-50 px-3">

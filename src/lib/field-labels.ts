@@ -288,6 +288,24 @@ function titleCase(word: string) {
   return word.length ? word[0].toUpperCase() + word.slice(1) : word;
 }
 
+const TABLE_HEADERS: Record<string, string> = {
+  nkk: "No. KK",
+  nik: "NIK",
+  nama: "Nama",
+  jk: "Jenis kelamin",
+  tgl_lahir: "Tanggal lahir",
+  dusun: "Dusun",
+  alamat: "Alamat",
+  punya_kk: "Punya KK",
+  menetap: "Tinggal menetap",
+  dead_jml: "Anggota meninggal",
+};
+
+/** Compact header for data tables. Hover still uses the full official label. */
+export function tableHeaderLabel(name: string, def?: Pick<KolomDef, "label">) {
+  return TABLE_HEADERS[name] ?? fieldLabel(name, def);
+}
+
 /** A single display-name source for every database-backed field in the UI. */
 export function fieldLabel(name: string, def?: Pick<KolomDef, "label">) {
   if (OVERRIDES[name]) return OVERRIDES[name];

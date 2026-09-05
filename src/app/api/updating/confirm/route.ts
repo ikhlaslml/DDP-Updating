@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
             select: { data: true },
           });
           if (pending.some((change) => fields.some((field) => pendingFields(change.data).has(field)))) {
-            throw new Error("Salah satu kolom sudah diedit dan menunggu penggabungan");
+            throw new Error("Salah satu isian sudah diubah dan menunggu diterapkan");
           }
           for (const resident of residents) {
             for (const field of fields) {
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
           select: { data: true },
         });
         if (pending && fields.some((field) => pendingFields(pending.data).has(field))) {
-          throw new Error("Salah satu kolom sudah diedit dan menunggu penggabungan");
+          throw new Error("Salah satu isian sudah diubah dan menunggu diterapkan");
         }
         for (const field of fields) {
           await recordFieldUpdate(tx, {

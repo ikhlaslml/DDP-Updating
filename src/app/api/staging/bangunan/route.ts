@@ -98,11 +98,11 @@ async function stageBuildingDeletion(
     const pendingForCode = pending.some((change) => {
       try { return Number((JSON.parse(change.data ?? "{}") as { kode?: unknown }).kode) === data.kode; } catch { return false; }
     });
-    if (pendingForCode) throw new Error("Penghapusan bangunan ini sudah menunggu penggabungan");
+    if (pendingForCode) throw new Error("Penghapusan bangunan ini sudah menunggu diterapkan");
     const pendingResidentChange = pendingResidents.some((change) => {
       try { return Number((JSON.parse(change.data ?? "{}") as { kode_bangunan?: unknown }).kode_bangunan) === data.kode; } catch { return false; }
     });
-    if (pendingResidentChange) throw new Error("Bangunan ini masih memiliki perubahan penghuni yang menunggu penggabungan. Selesaikan atau batalkan perubahan tersebut terlebih dahulu.");
+    if (pendingResidentChange) throw new Error("Bangunan ini masih punya perubahan penghuni yang menunggu diterapkan. Selesaikan atau batalkan perubahan tersebut terlebih dahulu.");
     if (!building && occupants.length === 0) throw new Error("Bangunan tidak ditemukan pada desa ini");
 
     const reference = building ?? occupants[0];
@@ -345,7 +345,7 @@ export async function POST(req: NextRequest) {
         const duplicateNik = baselineDupes[0]?.nik ?? stagingDupes[0]?.nik;
         if (duplicateNik) {
           const error = new Error("NIK sudah terdaftar") as Error & { fields?: Record<string, string> };
-          error.fields = { nik: `NIK ${duplicateNik} sudah ada di baseline/perubahan sementara` };
+          error.fields = { nik: `NIK ${duplicateNik} sudah terdaftar atau sedang menunggu diterapkan` };
           throw error;
         }
         if (existingNkk > 0) {
@@ -362,7 +362,7 @@ export async function POST(req: NextRequest) {
         });
         if (pendingNkk) {
           const error = new Error("Nomor KK sudah ada di perubahan sementara") as Error & { fields?: Record<string, string> };
-          error.fields = { nkk: "Periksa grup penambahan keluarga yang masih menunggu penggabungan" };
+          error.fields = { nkk: "Periksa penambahan keluarga yang masih menunggu diterapkan" };
           throw error;
         }
 

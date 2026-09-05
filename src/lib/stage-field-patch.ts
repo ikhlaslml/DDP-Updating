@@ -34,7 +34,7 @@ export async function stageFieldPatch(
       ],
     },
   });
-  if (pendingEvent) throw new Error("Penduduk memiliki peristiwa yang masih menunggu penggabungan");
+  if (pendingEvent) throw new Error("Warga ini masih punya peristiwa yang menunggu diterapkan");
   const existing = await tx.stagingChange.findMany({
     where: {
       desaId: input.desaId,
@@ -51,7 +51,7 @@ export async function stageFieldPatch(
       submittedFields.some((field) => Object.hasOwn(pendingData(change.data), field)),
     )
   ) {
-    throw new Error("Salah satu kolom sudah diedit dan menunggu penggabungan");
+    throw new Error("Salah satu isian sudah diubah dan menunggu diterapkan");
   }
   return tx.stagingChange.create({
     data: {

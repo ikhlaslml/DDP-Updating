@@ -197,7 +197,7 @@ export async function POST(req: NextRequest) {
           ]);
           if (deletedBuilding) throw new Error("Bangunan ini sudah dihapus dari peta aktif dan tidak dapat ditempati kembali");
           if (hasPendingBuildingDeletion(pendingBuildingDeletions, code)) {
-            throw new Error("Bangunan ini sedang diajukan untuk dihapus. Tunggu penggabungan atau batalkan penghapusan terlebih dahulu.");
+            throw new Error("Bangunan ini sedang diajukan untuk dihapus. Tunggu diterapkan atau batalkan penghapusan terlebih dahulu.");
           }
           if (!building && !legacy) throw new Error("Bangunan tidak ditemukan pada desa ini");
           if (building?.jenis === "TIDAK_BERPENGHUNI") {
@@ -263,7 +263,7 @@ export async function POST(req: NextRequest) {
             ]);
             if (deletedBuilding) throw new Error("Bangunan keluarga ini sudah dihapus dari peta aktif; pindahkan keluarga terlebih dahulu");
             if (hasPendingBuildingDeletion(pendingBuildingDeletions, head.kode_bangunan)) {
-              throw new Error("Bangunan keluarga ini sedang diajukan untuk dihapus. Tunggu penggabungan atau batalkan penghapusan terlebih dahulu.");
+              throw new Error("Bangunan keluarga ini sedang diajukan untuk dihapus. Tunggu diterapkan atau batalkan penghapusan terlebih dahulu.");
             }
           }
           if (!submittedData.status_dalam_keluarga || submittedData.status_dalam_keluarga === "Kepala Keluarga") {

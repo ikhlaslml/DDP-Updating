@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest) {
     const baseline = new Date(body.tanggalBaselineData);
     if (Number.isNaN(baseline.getTime()) || baseline > new Date()) {
       return NextResponse.json(
-        { error: "Tanggal baseline data tidak valid atau berada di masa depan" },
+        { error: "Tanggal acuan pengingat tidak valid atau berada di masa depan" },
         { status: 400 },
       );
     }

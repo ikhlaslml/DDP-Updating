@@ -107,7 +107,7 @@ function indicatorResult(household: Household, indicator: IndicatorKey, dusunCol
       indicator === "update_6" ? household.update6MonthStatus : household.updateAnnualStatus;
     if (status === "JATUH_TEMPO") return { color: STATUS.critical, label: "Jatuh tempo" };
     if (status === "MENUNGGU_PENGGABUNGAN") {
-      return { color: STATUS.warning, label: "Menunggu penggabungan" };
+      return { color: STATUS.warning, label: "Menunggu diterapkan" };
     }
     return { color: STATUS.good, label: "Terkini" };
   }
@@ -221,7 +221,7 @@ export function MapView() {
       return [[STATUS.good, "Keduanya tersedia"], [STATUS.warning, "Salah satu"], [STATUS.critical, "Belum tercatat"]];
     }
     if (indicator === "update_6" || indicator === "update_12") {
-      return [[STATUS.good, "Terkini"], [STATUS.warning, "Menunggu penggabungan"], [STATUS.critical, "Jatuh tempo"]];
+      return [[STATUS.good, "Terkini"], [STATUS.warning, "Menunggu diterapkan"], [STATUS.critical, "Jatuh tempo"]];
     }
     if (indicator === "dusun") return [...dusunColors].map(([name, color]) => [color, name]);
     return [[SERIES.blue, "Titik keluarga"]];

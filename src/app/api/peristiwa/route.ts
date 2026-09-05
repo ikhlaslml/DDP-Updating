@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
           OR: [{ pendudukId: { in: targetIds } }, { eventData: { contains: selected.id } }],
         },
       });
-      if (pending) throw new Error("Salah satu penduduk sudah memiliki perubahan yang menunggu penggabungan");
+      if (pending) throw new Error("Salah satu warga masih punya perubahan yang menunggu diterapkan");
 
       const region = parsed.data.type === "MIGRASI_KELUAR"
         ? {

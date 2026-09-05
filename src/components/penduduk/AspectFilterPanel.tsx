@@ -33,7 +33,7 @@ export function AspectFilterPanel({
           <h3 id="filter-aspek-title" className="text-sm font-bold text-slate-800">Pilih kelompok data</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} kolom aktif</span>
+          <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700 shadow-sm">{activeColumns} kolom ditampilkan</span>
           <button type="button" onClick={() => onChange(new Set(KELOMPOK_ORDER))} className="inline-flex min-h-9 items-center rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-50">Pilih semua</button>
           <button type="button" onClick={() => onChange(new Set())} className="inline-flex min-h-9 items-center rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50">Bersihkan</button>
         </div>

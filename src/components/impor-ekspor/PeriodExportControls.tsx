@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { periodOptionLabel } from "@/lib/period-label";
 
 type Period = {
   kode: string;
   label: string | null;
   jumlah: number;
+  createdAt?: string;
+  urutan?: number;
 };
 
 export function PeriodExportControls() {
@@ -47,19 +50,19 @@ export function PeriodExportControls() {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
-        <label className="min-w-0 text-sm font-medium text-slate-700 sm:min-w-72">
-          Pilih Periode Data
+        <label className="min-w-0 text-xs font-medium text-slate-500 sm:min-w-80">
+          Versi data
           <select
             value={selected}
             onChange={(event) => setSelected(event.target.value)}
             disabled={loading || periods.length === 0}
-            className="mt-1 block min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:bg-slate-50"
+            className="mt-1 block min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:bg-slate-50"
           >
-            {loading ? <option>Memuat periode...</option> : null}
-            {!loading && periods.length === 0 ? <option>Belum ada periode data</option> : null}
+            {loading ? <option>Memuat versi data...</option> : null}
+            {!loading && periods.length === 0 ? <option>Belum ada versi data</option> : null}
             {periods.map((period) => (
               <option key={period.kode} value={period.kode}>
-                {period.kode}{period.label ? ` — ${period.label}` : ""} ({period.jumlah.toLocaleString("id-ID")} penduduk)
+                {periodOptionLabel(period)}
               </option>
             ))}
           </select>
@@ -85,7 +88,7 @@ export function PeriodExportControls() {
       {error ? <p role="alert" className="text-xs font-medium text-red-600">{error}</p> : null}
       {!loading && !error && periods.length === 0 ? (
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
-          Belum ada periode data yang dapat diunduh. Impor data awal atau terapkan perubahan terlebih dahulu.
+          Belum ada versi data yang dapat diunduh. Impor data awal atau terapkan perubahan terlebih dahulu.
         </p>
       ) : null}
     </div>
