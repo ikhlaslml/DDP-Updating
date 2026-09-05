@@ -22,9 +22,14 @@ import { AspectFilterPanel } from "./AspectFilterPanel";
 import { DeleteButton } from "./DeleteButton";
 import { useCanWrite } from "@/components/providers/AuthInfo";
 import { AddDataMenu } from "./AddDataMenu";
+import { InlineEditableCell } from "./InlineEditableCell";
 import { fieldLabel } from "@/lib/field-labels";
+import { LOCKED_IDENTITY_FIELDS } from "@/lib/updating-columns";
+
+const LOCKED_TABLE_FIELDS = new Set<string>(LOCKED_IDENTITY_FIELDS);
 
 type Row = Record<string, unknown> & { id: string };
+type CellStatus = "JATUH_TEMPO" | "MENUNGGU_PENGGABUNGAN" | "TERKINI";
 type Facets = { dusun: string[]; rw: number[]; rt: number[] };
 
 const columnHelper = createColumnHelper<Row>();
@@ -44,6 +49,7 @@ export function PendudukTable({
 }) {
   const canWrite = useCanWrite();
   const [rows, setRows] = useState<Row[]>([]);
+  const [cellStatus, setCellStatus] = useState<Record<string, Record<string, CellStatus>>>({});
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -102,6 +108,7 @@ export function PendudukTable({
       if (!res.ok) throw new Error("Gagal memuat data");
       const json = await res.json();
       setRows(json.data);
+      setCellStatus(json.cellStatus ?? {});
       setTotal(json.pagination.total);
       setTotalPages(json.pagination.totalPages);
     } catch {
@@ -124,16 +131,35 @@ export function PendudukTable({
       columnHelper.accessor((row) => row[name], {
         id: name,
         header: fieldLabel(name, mapping.kolom[name]),
-        cell: (info) => name === "nama" ? (
-          <Link
-            href={`/penduduk/${info.row.original.id}`}
-            className="inline-flex items-center gap-1.5 font-semibold text-indigo-700 hover:underline"
-            title={`Buka detail ${String(info.row.original.nama ?? "penduduk")}`}
-          >
-            {formatCell(info.getValue(), mapping.kolom[name])}
-            <Eye className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-          </Link>
-        ) : formatCell(info.getValue(), mapping.kolom[name]),
+        cell: (info) => {
+          if (name === "nama") {
+            return (
+              <Link
+                href={`/penduduk/${info.row.original.id}`}
+                className="inline-flex items-center gap-1.5 font-semibold text-indigo-700 hover:underline"
+                title={`Buka detail ${String(info.row.original.nama ?? "penduduk")}`}
+              >
+                {formatCell(info.getValue(), mapping.kolom[name])}
+                <Eye className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              </Link>
+            );
+          }
+          if (LOCKED_TABLE_FIELDS.has(name)) {
+            return formatCell(info.getValue(), mapping.kolom[name]);
+          }
+          return (
+            <InlineEditableCell
+              pendudukId={info.row.original.id}
+              nkk={String(info.row.original.nkk ?? "")}
+              field={name}
+              value={info.getValue()}
+              status={cellStatus[info.row.original.id]?.[name]}
+              personRole={info.row.original.status_dalam_keluarga === "Kepala Keluarga" ? "HEAD" : "MEMBER"}
+              canWrite={canWrite}
+              onSaved={fetchData}
+            />
+          );
+        },
         enableSorting: true,
       })
     );
@@ -170,7 +196,7 @@ export function PendudukTable({
       })
     );
     return cols;
-  }, [visible, fetchData, canWrite]);
+  }, [visible, fetchData, canWrite, cellStatus]);
 
   const exportQuery = useMemo(() => {
     const params = new URLSearchParams({
@@ -265,8 +291,13 @@ export function PendudukTable({
 
       <p className="text-xs text-slate-500">
         <span className="md:hidden">Ketuk tombol <strong>Detail</strong> pada kartu warga untuk membuka data keluarga dan bangunan.</span>
-        <span className="hidden md:inline">Klik <strong>nama warga</strong> atau tombol <strong>Detail</strong> di sisi kanan tabel untuk membuka seluruh data warga, keluarga, serta tautan foto bangunannya.</span>
+        <span className="hidden md:inline">Klik sel untuk mengubah satu isian. Parameter keluarga berlaku untuk seluruh anggota KK. Pensil di kolom Aksi tetap membuka form lengkap.</span>
       </p>
+      <div className="hidden flex-wrap items-center gap-3 text-xs text-slate-600 md:flex">
+        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-red-100 ring-1 ring-red-300" /> Jatuh tempo</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-amber-100 ring-1 ring-amber-300" /> Menunggu penggabungan</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-3 rounded-sm bg-white ring-1 ring-slate-300" /> Terkini / insidentil</span>
+      </div>
 
       <div className="grid gap-3 md:hidden">
         {loading ? (
@@ -339,11 +370,18 @@ export function PendudukTable({
                   {row.getVisibleCells().map((cell) => {
                     const sticky = STICKY_CORE[cell.column.id];
                     const actions = cell.column.id === "_actions";
+                    const status = cellStatus[row.original.id]?.[cell.column.id];
+                    const statusBg =
+                      status === "JATUH_TEMPO"
+                        ? "bg-red-50 group-hover:bg-red-50"
+                        : status === "MENUNGGU_PENGGABUNGAN"
+                          ? "bg-amber-50 group-hover:bg-amber-50"
+                          : "";
                     return (
                       <td
                         key={cell.id}
                         style={sticky ? { left: sticky.left, width: sticky.width, minWidth: sticky.width, maxWidth: sticky.width } : actions ? { right: 0, minWidth: 150 } : undefined}
-                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${sticky ? "sticky z-10 overflow-hidden text-ellipsis bg-white shadow-[1px_0_0_#e2e8f0] group-hover:bg-slate-50" : ""} ${actions ? "sticky z-20 bg-white shadow-[-1px_0_0_#e2e8f0] group-hover:bg-slate-50 max-sm:hidden" : ""}`}
+                        className={`px-3 py-2 whitespace-nowrap text-slate-700 ${statusBg} ${sticky ? `sticky z-10 overflow-hidden text-ellipsis ${statusBg || "bg-white group-hover:bg-slate-50"} shadow-[1px_0_0_#e2e8f0]` : ""} ${actions ? "sticky z-20 bg-white shadow-[-1px_0_0_#e2e8f0] group-hover:bg-slate-50 max-sm:hidden" : ""}`}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>

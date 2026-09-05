@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { ALL_COLUMNS, columnsForKelompok, parseKelompokParam } from "@/lib/indikator";
 import { listCensusResidents, selectedResidentColumns } from "@/lib/census-source";
+import { cellStatusByResident } from "@/lib/updating-status";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
 const SORTABLE = new Set([...ALL_COLUMNS, "createdAt", "updatedAt"]);
@@ -28,14 +29,44 @@ export async function GET(req: NextRequest) {
       pageSize,
       sortBy,
       sortDir,
-      columns: sp.has("aspek")
-        ? columnsForKelompok(parseKelompokParam(sp.get("aspek")))
-        : selectedResidentColumns(sp.get("columns")),
+      columns: [
+        ...new Set([
+          ...(sp.has("aspek")
+            ? columnsForKelompok(parseKelompokParam(sp.get("aspek")))
+            : selectedResidentColumns(sp.get("columns"))),
+          "nkk",
+          "status_dalam_keluarga",
+        ]),
+      ],
     });
+    const ids = result.data
+      .map((row) => (typeof row.id === "string" ? row.id : null))
+      .filter((id): id is string => Boolean(id));
+    const locals = ids.length
+      ? await prisma.penduduk.findMany({
+          where: { desaId: ctx.desaId, id: { in: ids } },
+          select: {
+            id: true,
+            nik: true,
+            nkk: true,
+            createdAt: true,
+            datamasuk: true,
+            status_dalam_keluarga: true,
+          },
+        })
+      : [];
+    const cellStatus = locals.length
+      ? await cellStatusByResident(
+          ctx.desaId,
+          locals,
+          result.data[0] ? Object.keys(result.data[0]).filter((key) => key !== "id") : [],
+        )
+      : {};
     return NextResponse.json({
       data: result.data,
       pagination: { page, pageSize, total: result.total, totalPages: Math.max(1, Math.ceil(result.total / pageSize)) },
       source: result.source,
+      cellStatus,
     });
   } catch (error) {
     return NextResponse.json(

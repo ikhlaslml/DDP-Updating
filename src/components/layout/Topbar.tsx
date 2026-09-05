@@ -94,6 +94,7 @@ export function Topbar({
           </div>
         </form>
 
+        <div className="relative ml-auto flex shrink-0 items-center gap-1">
         <div className="relative shrink-0" ref={notificationRef}>
           <button
             type="button"
@@ -146,7 +147,7 @@ export function Topbar({
           ) : null}
         </div>
 
-        <div className="relative ml-auto shrink-0" ref={menuRef}>
+        <div className="relative shrink-0" ref={menuRef}>
           <button
             type="button"
             onClick={() => {
@@ -181,6 +182,7 @@ export function Topbar({
               </button>
             </div>
           )}
+        </div>
         </div>
       </div>
     </header>

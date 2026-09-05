@@ -4,6 +4,7 @@ import {
   parameterFrequency,
   parameterIsConditionOnly,
   parameterIsDeprecated,
+  parameterIsEditable,
   type ParameterRole,
 } from "@/lib/parameter-metadata";
 import { isHouseholdField } from "@/lib/survey";
@@ -70,4 +71,30 @@ export function cycleSlug(cycle: PeriodicCycle) {
 
 export function cycleLabel(cycle: PeriodicCycle) {
   return cycle === "ANNUAL" ? "1 Tahun" : "6 Bulan";
+}
+
+const TECHNICAL_INLINE_BLOCK = new Set<string>([
+  ...LOCKED_IDENTITY_FIELDS,
+  ...EXCLUDED_PERIODIC_FIELDS,
+  "abs_id",
+  "subjek",
+  "datamasuk",
+  "enumerator",
+  "usia",
+  "usia_dec",
+  "lama_tinggal",
+  "lat",
+  "lng",
+  "jml_keluarga",
+  "nama_kepala_rumah",
+  "responden",
+]);
+
+export function isInlineEditableField(field: string, role: ParameterRole) {
+  return (
+    !TECHNICAL_INLINE_BLOCK.has(field) &&
+    !parameterIsDeprecated(field) &&
+    !parameterIsConditionOnly(field) &&
+    parameterIsEditable(field, role)
+  );
 }

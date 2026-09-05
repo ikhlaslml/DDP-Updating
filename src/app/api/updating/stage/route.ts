@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { pendudukUpdateSchema, flattenZodError } from "@/lib/validation";
 import { periodicColumns, cycleFromSlug } from "@/lib/updating-columns";
 import { invalidatePeriodicUpdatingCache } from "@/lib/updating-cache";
+import { stageFieldPatch } from "@/lib/stage-field-patch";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
 const submissionSchema = z.object({
@@ -26,78 +26,6 @@ const submissionSchema = z.object({
   }
 });
 
-function pendingData(value: string | null) {
-  try {
-    const parsed = JSON.parse(value ?? "{}");
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
-      ? (parsed as Record<string, unknown>)
-      : {};
-  } catch {
-    return {};
-  }
-}
-
-async function stagePatch(
-  tx: Prisma.TransactionClient,
-  input: {
-    desaId: string;
-    groupId: string;
-    resident: { id: string; nik: string | null; nama: string | null };
-    data: Record<string, unknown>;
-    actor: { userId: string; userName: string; userEmail: string };
-    scope: "FAMILY" | "PERSON";
-  },
-) {
-  const pendingEvent = await tx.stagingChange.findFirst({
-    where: {
-      desaId: input.desaId,
-      status: "PENDING",
-      entityType: "PERISTIWA",
-      OR: [
-        { pendudukId: input.resident.id },
-        { eventData: { contains: input.resident.id } },
-      ],
-    },
-  });
-  if (pendingEvent) throw new Error("Penduduk memiliki peristiwa yang masih menunggu penggabungan");
-  const existing = await tx.stagingChange.findMany({
-    where: {
-      desaId: input.desaId,
-      pendudukId: input.resident.id,
-      status: "PENDING",
-      entityType: "PENDUDUK",
-      aksi: "UPDATE",
-    },
-    select: { data: true },
-  });
-  const submittedFields = Object.keys(input.data);
-  if (
-    existing.some((change) =>
-      submittedFields.some((field) => Object.hasOwn(pendingData(change.data), field)),
-    )
-  ) {
-    throw new Error("Salah satu kolom sudah diedit dan menunggu penggabungan");
-  }
-  return tx.stagingChange.create({
-    data: {
-      desaId: input.desaId,
-      entityType: "PENDUDUK",
-      groupId: input.groupId,
-      aksi: "UPDATE",
-      pendudukId: input.resident.id,
-      nik: input.resident.nik,
-      nama: input.resident.nama,
-      ringkasan:
-        input.scope === "FAMILY"
-          ? "Pembaruan berkala tingkat keluarga."
-          : "Pembaruan berkala anggota keluarga.",
-      data: JSON.stringify(input.data),
-      createdBy: input.actor.userId,
-      createdByName: input.actor.userName,
-      createdByEmail: input.actor.userEmail,
-    },
-  });
-}
 
 export async function POST(req: NextRequest) {
   const ctx = await getAuthContext();
@@ -140,13 +68,14 @@ export async function POST(req: NextRequest) {
         const changes = [];
         for (const resident of residents) {
           changes.push(
-            await stagePatch(tx, {
+            await stageFieldPatch(tx, {
               desaId: ctx.desaId,
               groupId,
               resident,
               data: validated.data as Record<string, unknown>,
               actor: ctx,
               scope: "FAMILY",
+              ringkasan: "Pembaruan berkala tingkat keluarga.",
             }),
           );
         }
@@ -180,13 +109,14 @@ export async function POST(req: NextRequest) {
         throw error;
       }
       return [
-        await stagePatch(tx, {
+        await stageFieldPatch(tx, {
           desaId: ctx.desaId,
           groupId,
           resident,
           data: validated.data as Record<string, unknown>,
           actor: ctx,
           scope: "PERSON",
+          ringkasan: "Pembaruan berkala anggota keluarga.",
         }),
       ];
     }, { isolationLevel: "Serializable", timeout: 30_000 });

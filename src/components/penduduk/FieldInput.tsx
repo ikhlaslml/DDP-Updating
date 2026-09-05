@@ -21,6 +21,7 @@ export function FieldInput({
   required,
   inputId,
   role,
+  hideLabel,
 }: {
   name: string;
   def: KolomDef;
@@ -30,6 +31,7 @@ export function FieldInput({
   required?: boolean;
   inputId?: string;
   role?: ParameterRole;
+  hideLabel?: boolean;
 }) {
   const [showHelp, setShowHelp] = useState(false);
   const id = inputId ?? name;
@@ -134,6 +136,7 @@ export function FieldInput({
 
   return (
     <div>
+      {hideLabel ? null : (
       <label htmlFor={id} className="block text-xs font-medium text-slate-600 mb-1">
         <span className="inline-flex flex-wrap items-center gap-1.5">
           <span>{label}</span>
@@ -151,6 +154,7 @@ export function FieldInput({
         </span>
         {required && <span className="text-red-500"> *</span>}
       </label>
+      )}
       {input}
       {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
       {showHelp && help ? <InfoPopup title={label} content={help} onClose={() => setShowHelp(false)} /> : null}
