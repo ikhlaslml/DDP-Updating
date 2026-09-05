@@ -4,6 +4,7 @@ import { pendudukCreateSchema, flattenZodError } from "@/lib/validation";
 import { ALL_COLUMNS, columnsForKelompok, parseKelompokParam } from "@/lib/indikator";
 import { listCensusResidents, selectedResidentColumns } from "@/lib/census-source";
 import { cellStatusByResident } from "@/lib/updating-status";
+import { compactLegacyDemoBuildingCodes } from "@/lib/compact-demo-building-codes";
 import { getAuthContext, isOperator, UNAUTHORIZED, FORBIDDEN } from "@/lib/tenant";
 
 const SORTABLE = new Set([...ALL_COLUMNS, "createdAt", "updatedAt"]);
@@ -11,6 +12,7 @@ const SORTABLE = new Set([...ALL_COLUMNS, "createdAt", "updatedAt"]);
 export async function GET(req: NextRequest) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
+  await compactLegacyDemoBuildingCodes(ctx.desaId);
   const sp = req.nextUrl.searchParams;
 
   const page = Math.max(1, Number(sp.get("page")) || 1);

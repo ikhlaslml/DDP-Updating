@@ -150,6 +150,10 @@ async function resequenceDesa(desaId: string, slug: string, apply: boolean) {
     console.log(`${slug}: tidak ada kode bangunan untuk diperiksa.`);
     return;
   }
+  if (oldCodes.every((code) => code < LEGACY_DEMO_MIN_CODE)) {
+    console.log(`${slug}: kode bangunan sudah 1..${Math.max(...oldCodes)}, dilewati.`);
+    return;
+  }
   if (oldCodes.some((code) => code < LEGACY_DEMO_MIN_CODE)) {
     throw new Error(
       `${slug}: ditemukan kode di bawah ${LEGACY_DEMO_MIN_CODE}; target tampak bercampur dengan data nyata/baru dan dibatalkan.`

@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { compactLegacyDemoBuildingCodes } from "@/lib/compact-demo-building-codes";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 import { loadPeriodicFamilies } from "@/lib/periodic-updating";
 
 export async function GET() {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
+  await compactLegacyDemoBuildingCodes(ctx.desaId);
   const [rows, buildings, desa, deletedBuildings] = await Promise.all([
     prisma.penduduk.findMany({
       // Count every resident. Coordinates are validated separately below so a

@@ -6,6 +6,7 @@ import { ALL_COLUMNS, columnsForKelompok, mapping, parseKelompokParam } from "@/
 import { selectedResidentColumns } from "@/lib/census-source";
 import { toExportValue } from "@/lib/export-import";
 import { fieldLabel } from "@/lib/field-labels";
+import { compactLegacyDemoBuildingCodes } from "@/lib/compact-demo-building-codes";
 import { getAuthContext, UNAUTHORIZED } from "@/lib/tenant";
 import { writeExcelRows } from "@/lib/excel-server";
 import { parameterIsDeprecated } from "@/lib/parameter-metadata";
@@ -13,6 +14,7 @@ import { parameterIsDeprecated } from "@/lib/parameter-metadata";
 export async function GET(req: NextRequest) {
   const ctx = await getAuthContext();
   if (!ctx) return UNAUTHORIZED;
+  await compactLegacyDemoBuildingCodes(ctx.desaId);
   const sp = req.nextUrl.searchParams;
   const format = sp.get("format") === "csv" ? "csv" : "xlsx";
   const where = buildPendudukWhere(sp, ctx.desaId);
